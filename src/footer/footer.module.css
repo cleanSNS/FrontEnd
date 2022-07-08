@@ -1,0 +1,41 @@
+.memberCover {
+    border-top : 10%;
+    display : grid;
+    grid-template-columns : repeat(3, 13rem);
+    grid-template-rows : 8rem;
+    grid-gap : 5%;
+    justify-content : center;
+
+    position : fixed;
+    bottom : 0px;
+    left : 0px;
+    width : 100%;
+    height : 15%;
+
+    background-color: #EDEDED;
+}
+
+.member {
+    position : relative;
+    top : 15%;
+    left : 10%;
+}
+
+.name{
+    font-size : 10px;
+    font-weight : bolder;
+    height : 13px;
+}
+
+.email{
+    font-size :1px;
+    height : 6px;
+    font-weight:lighter;
+    color : #5A5A5A;
+}
+
+.github{
+    font-size :1px;
+    font-weight:lighter;
+    color : #5A5A5A;
+}
