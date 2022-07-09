@@ -8,6 +8,7 @@ import {
 
 import Home from "./routes/Home/HomeMain"
 import Login from "./routes/Login/LoginMain"
+import Members from "./footer/footer"
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
           <Home />
         </Route>
       </Switch>
+      <footer>
+        <Members />
+      </footer>
     </Router>
   );
 }
