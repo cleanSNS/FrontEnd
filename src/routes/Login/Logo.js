@@ -1,10 +1,10 @@
 //로그인 전 페이지들의 로고부분
-import Style from "./Logo.module.css";
+import logo from "./tmp-logo.jpg"
 
 const Logo = () =>{
     return(
         <div>
-            <a className={Style.logo}><img src="./tmp.jpg"/></a>
+            <a href="/login"><img src={logo} /></a>
         </div>
     )
 }

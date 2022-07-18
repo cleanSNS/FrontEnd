@@ -27,15 +27,9 @@
     height : 13px;
 }
 
-.email{
-    font-size :1px;
-    height : 6px;
-    font-weight:lighter;
-    color : #5A5A5A;
-}
-
-.github{
+.email, .github{
     font-size :1px;
     font-weight:lighter;
+    height: 0px;
     color : #5A5A5A;
 }

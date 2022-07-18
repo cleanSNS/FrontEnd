@@ -7,7 +7,9 @@ import FindPW from "./inner/innerFindPW"
 const MainInnerStuff = () =>{
     const [content, setContent] = useState("0");//0:초기화면 1:회원 가입 2:비번 찾기
     const changeContent = (event) => {
-        setContent(event.target.value);
+        event.preventDefault()
+        if(event.target.name == "") setContent(event.target.value);
+        else setContent(event.target.name);
     }
     return(
         <div>

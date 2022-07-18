@@ -10,9 +10,15 @@ const Book = () => {
             <div className={Style.clip2}></div>
             <div className={Style.clip3}></div>
             <div className={Style.clip4}></div>
-            <div className={Style.book}>
-                <Logo />
-                <MainInnerStuff />
+            <div className="container h-100">
+                <div className="row h-100">
+                    <div className="h-25 col-12 d-flex flex-row justify-content-center align-items-center">
+                         <Logo />
+                    </div>
+                    <div className="h-75 col-12">
+                        <MainInnerStuff />
+                    </div>
+                </div>
             </div>
         </div>
     );

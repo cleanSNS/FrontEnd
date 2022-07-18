@@ -65,9 +65,8 @@ body{
     top : 50%;
     left : 50%;
     transform: translate(-50%, 3%);
-    text-align : center;
     width : 800px;
-    height : 1000px;
+    height : 80vh;
 
     /* main color */
     background: #F4DEDE;
@@ -75,11 +74,7 @@ body{
     border-radius: 0px 45px 45px 0px;
 }
 
-.book{
-    height : 100%;
-    display : grid;
-    grid-template-columns : 85%;
-    grid-template-rows : 20% 75%;
-    grid-gap : 5%;
-    justify-content : center;
+.logosize {
+    height : 40%;
+    background-color: black;
 }
