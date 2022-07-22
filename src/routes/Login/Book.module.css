@@ -65,7 +65,9 @@ body{
     top : 50%;
     left : 50%;
     transform: translate(-50%, 3%);
-    width : 60vh;
+    width : 40vw;
+    min-width : 500px;
+    max-width : 1000px;
     height : 80vh;
 
     /* main color */

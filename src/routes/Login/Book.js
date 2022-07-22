@@ -13,7 +13,7 @@ const Book = () => {
             <div className="container h-100">
                 <div className="row h-100">
                     <div className="h-25 col-12 d-flex flex-row justify-content-center align-items-center">
-                         <Logo />
+                        <Logo />
                     </div>
                     <div className="h-75 col-12">
                         <MainInnerStuff />

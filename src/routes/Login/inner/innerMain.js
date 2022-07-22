@@ -1,5 +1,5 @@
 //로그인의 초기 화면. id, 비번을 쓰는 곳이 있다.
-import { useState } from 'react'
+import { useState } from 'react';
 
 const Main = ({changeContent}) => {
     const [email, setEmail] = useState("");
@@ -35,7 +35,7 @@ const Main = ({changeContent}) => {
             <div className="row w-75">
                 <form onSubmit={submitHandler}>
                     <div className="col-12">
-                        <input type="text" placeholder="Email" className="form-control my-1" value={email} onChange={emailHandler}/>
+                        <input type="email" placeholder="Email" className="form-control my-1" value={email} onChange={emailHandler}/>
                     </div>
                     <div className="col-12">
                         <input type="password" placeholder="Password" className="form-control my-1" value={password} onChange={passwordHandler}/>
