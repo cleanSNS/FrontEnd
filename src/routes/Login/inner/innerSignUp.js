@@ -128,10 +128,10 @@ const SignUp = ({changeContent}) => {
             </fieldset>
             <div className="row my-xxl-4 my-3">
                 <div className="col-3" />
-                <div className="col-3">
+                <div className="col-3 d-flex flex-column justify-content-center align-items-center">
                     <button className="btn btn-light shadow-sm" onClick={changeContent} value="0">취소</button>
                 </div>
-                <div className="col-3">
+                <div className="col-3 d-flex flex-column justify-content-center align-items-center">
                     <button type="submit" className="btn btn-dark shadow-sm">가입</button>
                 </div>
                 <div className="col-3" />

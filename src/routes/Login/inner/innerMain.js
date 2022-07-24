@@ -46,11 +46,11 @@ const Main = ({changeContent}) => {
                 </form>
             </div>
             <div className="row w-75">
-                <div className="col-6 position-relative">
-                    <a href="" className="w-auto mx-3 text-dark text-center position-absolute text-decoration-none top-50 end-0 translate-middle-y" onClick={changeContent} name="1">비밀번호 찾기</a>
+                <div className="col-6 d-flex flex-column justify-content-center align-items-center">
+                    <a href="" className="text-dark text-center text-decoration-none" onClick={changeContent} name="1">비밀번호 찾기</a>
                 </div>
-                <div className='col-6 position-relative'>
-                    <a href="" className="w-auto mx-3 text-dark text-center position-absolute text-decoration-none top-50 start-0 translate-middle-y" onClick={changeContent} name="2">회원 가입</a>
+                <div className="col-6 d-flex flex-column justify-content-center align-items-center">
+                    <a href="" className="text-dark text-center text-decoration-none" onClick={changeContent} name="2">회원 가입</a>
                 </div>
             </div>
         </div>
