@@ -1,0 +1,52 @@
+.kakao{
+  background-color: #FEE500;
+  width: 150px;
+  height: 45px;
+  border-radius: 12px;
+
+  position: relative;
+}
+
+.kakaoSymbol {
+  display: inline;
+  height: 30px;
+
+  position: absolute;
+  top: 13%;
+  left: 20%;
+}
+
+.kakaoLabel {
+  color: rgba(0,0,0, 0.85);
+  font-weight: 900;
+
+  position: absolute;
+  top: 21%;
+  right: 25%;
+}
+
+.naver{
+  background-color: #03C75A;
+  width: 150px;
+  height: 45px;
+  border-radius: 12px;
+
+  position: relative;
+}
+
+.naverSymbol {
+  display: inline;
+  height: 45px;
+
+  position: absolute;
+  left: 15%;
+}
+
+.naverLabel {
+  color: #FFFFFF;
+  font-weight: 900;
+
+  position: relative;
+  top: 21%;
+  right: -9%;
+}

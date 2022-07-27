@@ -72,10 +72,10 @@
     left : 50%;
     transform: translate(-50%, 3%);
     width : 40vw;
-    min-width : 500px;
+    min-width : 600px;
     max-width : 1000px;
     height : 80vh;
-    min-height : 850px;
+    min-height : 900px;
 
     /* main color */
     background: #F4DEDE;
