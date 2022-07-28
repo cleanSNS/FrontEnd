@@ -5,14 +5,17 @@ import KakaoImg from '../socialImg/Kakao.png';
 import NaverImg from '../socialImg/Naver.png';
 import axios from 'axios';
 
-const loginApiUrl = 'http://13.209.50.133:8080/user/auth/login';
-const kakaoLoginApiUrl = 'http://13.209.50.133:8080/social/login/kakao/code';
-const naverLoginApiUrl = 'http://13.209.50.133:8080/social/login/naver/code';
+const loginApiUrl = 'http://52.78.49.137:8080/user/auth/login';
+const kakaoLoginApiUrl = 'http://52.78.49.137:8080/social/login/kakao/code';
+const naverLoginApiUrl = 'http://52.78.49.137:8080/social/login/naver/code';
 
 const Main = ({changeContent}) => {
+    //변수 선언
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [wrong, setWrong] = useState("0");
+
+    //input 변경시 반영해주는 함수
     const emailHandler = (event) =>{
         event.preventDefault();
         setEmail(event.target.value);
@@ -21,6 +24,8 @@ const Main = ({changeContent}) => {
         event.preventDefault();
         setPassword(event.target.value);
     };
+
+    //로그인 클릭 처리 함수
     const submitHandler = (event) => {
         event.preventDefault();
         if(email === '' || password === '') return;
@@ -29,39 +34,32 @@ const Main = ({changeContent}) => {
             email: email,
             password: password,
         })
-            .then((response) => response.json())
             .then((res) => {
+                setWrong("0");
                 console.log(res);
-                if(res.message === undefined){
-                    setWrong("0");
-                    window.location.href = '/home';
-                }
-                else{
+            })
+            .catch((res) => {
+                if(res.response.status === 400){
                     setWrong("1");
+                }
+                else if(res.response.status === 401){
                     setWrong("2");
                 }
             });
     };
+
+    //카카오 로그인 처리 함수
     const kakaoLoginHandler = (event) => {
         event.preventDefault();
-        console.log("kakao");
+        window.location.href = kakaoLoginApiUrl;
+    };
 
-        axios.get(kakaoLoginApiUrl)
-            .then((response) => response.json())
-            .then((res) => {
-                console.log(res);
-            })
-
-    }
+    //네이버 로그인 처리 함수
     const naverLoginHandler = (event) => {
         event.preventDefault();
-        console.log("naver");
-        axios.get(naverLoginApiUrl)
-            .then((response) => response.json())
-            .then((res) => {
-                console.log(res);
-            })
-    }
+        window.location.href = naverLoginApiUrl;
+    };
+
     return(
         <div className="container d-flex flex-column justify-content-center align-items-center">
             <div className="row w-75">
@@ -89,8 +87,8 @@ const Main = ({changeContent}) => {
                     <a href="" className="text-dark text-center text-decoration-none" onClick={changeContent} name="2">회원 가입</a>
                 </div>
             </div>
-            <div className="row w-75 my-5">
-                <div className="col-6">
+            <div className="row w-75 my-5 ">
+                <div className="col-6 d-flex flex-column justify-content-center align-items-center">
                     <button className="btn btn-transparent p-0 border border-0 ">
                         <div id="KakaoContainer" className={Style.kakao}>
                             <img id="symbol" src={KakaoImg} className={Style.kakaoSymbol}/>
@@ -98,7 +96,7 @@ const Main = ({changeContent}) => {
                         </div>
                     </button>
                 </div>
-                <div className="col-6">
+                <div className="col-6 d-flex flex-column justify-content-center align-items-center">
                     <button className="btn btn-transparent p-0 border border-0 ">
                         <div id="NaverContainer" className={Style.naver}>
                             <img id="symbol" src={NaverImg} className={Style.naverSymbol}/>

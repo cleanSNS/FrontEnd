@@ -1,8 +1,13 @@
 //회원가입 부분
 import {useState, useEffect} from 'react';
-const signUpApiUrl = 'http://13.209.50.133:8080/user/auth/signup';
+import axios from 'axios';
+
+const signUpApiUrl = 'http://52.78.49.137:8080/user/auth/signup';
+const emailApiUrl = 'http://52.78.49.137:8080/user/auth/signup/request';
+const loginApiUrl = 'http://52.78.49.137:8080/user/auth/login';
 
 const SignUp = ({changeContent}) => {
+    //변수 선언
     const [email, setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [passwordCheck, setPasswordCheck] = useState("");
@@ -11,21 +16,45 @@ const SignUp = ({changeContent}) => {
     const [ageAgree, setAgeAgree] = useState(false);
     const [gender, setGender] = useState("");
     const [genderAgree, setGenderAgree] = useState(false);
+    const [emailAccept, setEmailAccept] = useState(false);
+
+    //input변경 처리
     const emailHandler = (event) => {
         event.preventDefault();
         setEmail(event.target.value);
-    }
+    };
     const passwordHandler = (event) => {
         event.preventDefault();
         setPassword(event.target.value);
         setPasswordCheck("");
-    }
+    };
     const passwordCheckHandler = (event) => {
         event.preventDefault();
         setPasswordCheck(event.target.value);
-    }
+    };
+    const nicknameHandler = (event) => {
+        event.preventDefault();
+        setNickname(event.target.value);
+    };
+    const ageHandler = (event) => {
+        event.preventDefault();
+        if(event.target.value >= 0){
+            setAge(event.target.value);
+        }
+    };
+    const ageAgreeHandler = () => {
+        setAgeAgree((current)=> !current);
+    };
+    const genderHandler = (event) => {
+        setGender(event.target.id);
+    };
+    const genderAgreeHandler = () => {
+        setGenderAgree((current)=> !current);
+    };
+
+    //비밀번호 check확인 함수
     const passwordCheckFunc = () => {
-         if(password !== passwordCheck){
+        if(password !== passwordCheck){
             if(!document.querySelector("#passwordCheckInput").className.includes(' is-invalid')){
                 document.querySelector("#passwordCheckInput").className += ' is-invalid';
             }
@@ -35,39 +64,44 @@ const SignUp = ({changeContent}) => {
                 document.querySelector("#passwordCheckInput").className = document.querySelector("#passwordCheckInput").className.replace(' is-invalid', '');
             }
         }
-    }
+    };
     useEffect(passwordCheckFunc, [passwordCheck]);
 
-    const nicknameHandler = (event) => {
-        event.preventDefault();
-        setNickname(event.target.value);
-    }
-    const ageHandler = (event) => {
-        event.preventDefault();
-        if(event.target.value >= 0){
-            setAge(event.target.value);
-        }
-    }
-    const ageAgreeHandler = () => {
-        setAgeAgree((current)=> !current);
-    }
-    const genderHandler = (event) => {
-        setGender(event.target.id);
-    }
-    const genderAgreeHandler = () => {
-        setGenderAgree((current)=> !current);
-    }
+    //input재클릭 시 자동으로 전체선택 해주는 함수
     const onfocusHandler = (event) => {
         event.target.select();
-    }
+    };
+
+    //이메일 인증처리 함수
+    const emailSubmitHandler = (event) => {
+        event.preventDefault();
+        if(email === '') return;
+
+        axios.get(emailApiUrl, {
+            params: {
+                email: email
+            }
+        })
+            .then((res) => {
+                //console.log(res);
+                document.querySelector("#emailInput").disabled = true;
+                setEmailAccept(true);
+            })
+            .catch((res)=> {
+                console.log(res);
+                alert("에러 발생 다시 시도해주십시오");
+                document.querySelector("#emailInput").select();
+            })
+    };
+
+    //회원가입 처리 함수
     const submitHandler = (event) => {
         event.preventDefault();
         if(email === '' || password === '' || passwordCheck === '' || nickname === '' || age === 0 || gender === '') return;
         if(password !== passwordCheck) return;
+        if(!emailAccept) return;
 
-        fetch(signUpApiUrl, {
-            method: 'POST',
-            body: JSON.stringify({
+        axios.post(signUpApiUrl, {
                 email: email,
                 password: password,
                 nickname: nickname,
@@ -75,20 +109,37 @@ const SignUp = ({changeContent}) => {
                 gender: gender,
                 ageVisible: ageAgree,
                 genderVisible: genderAgree,
-            }),
         })
-            .then((response) => response.json())
             .then((res) => {
-                console.log(res);
-                if(res.message === undefined){
-                    //지금은 로그인 화면으로 이동 나중에 달라질 수 있음
-                    window.location.href = '/login';
+                alert("회원가입 되셨습니다.");
+                //console.log(res.status);
+                //즉시 로그인 Api호출
+                axios.post(loginApiUrl, {
+                    email: email,
+                    passwor: password,
+                })
+                    .then((res) => {
+                        window.location.href ='/';
+                    })
+                    .catch((res) => {
+                        alert("문제 발생. 다시 로그인 시도해주십시오.");
+                        window.location.href ='/login';
+                    });
+            })
+            .catch((res) =>{
+                if(res.response.status === 400){
+                    alert("이미 가입된 이메일입니다.");
+                    document.querySelector("#emailInput").disabled = false;
+                    setEmailAccept(false);
+                    document.querySelector("#emailInput").select();
                 }
                 else{
-                    alert("제출 정보에 문제가 있습니다. 다시 한 번 확인해주십시오.");
+                    console.log("error");
+                    console.log(res);
                 }
             });
-    }
+    };
+
     return(
         <div className="container bg-light border rounded-3 shadow">
            <form onSubmit={submitHandler}>
@@ -96,8 +147,11 @@ const SignUp = ({changeContent}) => {
                 <legend>
                     <p className="my-1 my-xxl-4 d-flex flex-column justify-content-center align-items-center fw-bold">회 원 가 입</p>
                 </legend>
-                <div className="col-12 my-xxl-3 my-1">
+                <div className="col-9 my-xxl-3 my-1">
                     <input id="emailInput" className="form-control shadow-sm" type="email" placeholder="Email" value={email} onChange={emailHandler} onFocus={onfocusHandler} />
+                </div>
+                <div className="col-3 my-xxl-3 my-1">
+                    <button className="btn btn-light shadow-sm" onClick={emailSubmitHandler}>인증 요청</button>
                 </div>
                 <div className="col-12 my-xxl-3 my-1">
                     <input id="passwordInput" className="form-control shadow-sm" type="password" placeholder="Password" value={password} onChange={passwordHandler} onFocus={onfocusHandler} />
