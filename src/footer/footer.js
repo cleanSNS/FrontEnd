@@ -18,10 +18,16 @@ Member.propTypes = {
 
 const Members = () => {
     return(
-        <div className={Style.memberCover}>
-            <Member name="성의현" email="luckhome1020@gmail.com" github="https://github.com/SungIII" />
+        <div className={Style.footerStyle}>
+            <div className={Style.memberCover}>
+                <Member name="성의현" email="luckhome1020@gmail.com" github="https://github.com/SungIII" />
+            </div>
+            <div className={Style.memberCover}>
             <Member name="이종찬" email="reljacer@gmail.com" github="https://github.com/Lipeya" />
-            <Member name="임채민" email="chemin9898@gmail.com" github="https://github.com/lacram" />
+            </div>
+            <div className={Style.memberCover}>
+                <Member name="임채민" email="chemin9898@gmail.com" github="https://github.com/lacram" />
+            </div>
         </div>
     );
 }

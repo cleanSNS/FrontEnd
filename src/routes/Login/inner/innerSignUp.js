@@ -17,6 +17,7 @@ const SignUp = ({changeContent}) => {
     const [gender, setGender] = useState("");
     const [genderAgree, setGenderAgree] = useState(false);
     const [emailAccept, setEmailAccept] = useState(false);
+    const [passwordInvalid, setPasswordInvalid] = useState(false);
 
     //input변경 처리
     const emailHandler = (event) => {
@@ -52,6 +53,20 @@ const SignUp = ({changeContent}) => {
         setGenderAgree((current)=> !current);
     };
 
+    //비밀번호 유효성 확인 함수
+    function passwordValidCheck(str){
+        const PWD_RULE =  /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,16}$/;
+        return str.match(PWD_RULE);
+    }
+    //비밀번호 유효성 확인함수 실행부분
+    const passwordValid = () => {
+        if(passwordValidCheck(password))
+            setPasswordInvalid(true);
+        else{
+            setPasswordInvalid(false);
+        }
+    }
+    useEffect(passwordValid, [password]);
     //비밀번호 check확인 함수
     const passwordCheckFunc = () => {
         if(password !== passwordCheck){
@@ -77,10 +92,8 @@ const SignUp = ({changeContent}) => {
         event.preventDefault();
         if(email === '') return;
 
-        axios.get(emailApiUrl, {
-            params: {
-                email: email
-            }
+        axios.post(emailApiUrl, {
+            email: email,
         })
             .then((res) => {
                 //console.log(res);
@@ -156,6 +169,13 @@ const SignUp = ({changeContent}) => {
                 <div className="col-12 my-xxl-3 my-1">
                     <input id="passwordInput" className="form-control shadow-sm" type="password" placeholder="Password" value={password} onChange={passwordHandler} onFocus={onfocusHandler} />
                 </div>
+                {
+                    passwordInvalid ?
+                    null :
+                    <div className="col-12 my-xxl-3 my-1 d-flex flex-column justify-content-center align-items-center">
+                        <p>8~16자리, 소문자와 특수문자를 하나이상 포함해야합니다.</p>
+                    </div>
+                }
                 <div className="col-12 my-xxl-3 my-1">
                     <input id="passwordCheckInput" className="form-control shadow-sm" type="password" placeholder="Password 확인" value={passwordCheck} onChange={passwordCheckHandler} onFocus={onfocusHandler} />
                 </div>

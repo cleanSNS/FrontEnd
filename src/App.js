@@ -6,14 +6,17 @@ import {
   Link
 } from "react-router-dom";
 
-import Home from "./routes/Home/HomeMain"
-import Login from "./routes/Login/LoginMain"
-import Members from "./footer/footer"
+import Home from "./routes/Home/HomeMain";
+import Login from "./routes/Login/LoginMain";
+import SocialLogin from "./routes/Login/SocialLogin";
 
 function App() {
   return (
     <Router>
       <Switch>
+        <Route path="/social">
+          <SocialLogin />
+        </Route>
         <Route path="/login">
           <Login />
         </Route>
@@ -21,9 +24,6 @@ function App() {
           <Home />
         </Route>
       </Switch>
-      <footer>
-        <Members />
-      </footer>
     </Router>
   );
 }

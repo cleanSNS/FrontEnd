@@ -6,8 +6,12 @@ import NaverImg from '../socialImg/Naver.png';
 import axios from 'axios';
 
 const loginApiUrl = 'http://52.78.49.137:8080/user/auth/login';
-const kakaoLoginApiUrl = 'http://52.78.49.137:8080/social/login/kakao/code';
-const naverLoginApiUrl = 'http://52.78.49.137:8080/social/login/naver/code';
+
+const REST_API_KEY = '75670ae520e9b0c56500f349b16c3c68';
+const REDIRECT_URI = 'http://localhost:3000/social';
+const kakaoLoginApiUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+const naverLoginApiUrl = 'https://nid.naver.com/oauth2.0/authorize';
 
 const Main = ({changeContent}) => {
     //변수 선언

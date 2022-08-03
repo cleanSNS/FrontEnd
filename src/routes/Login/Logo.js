@@ -1,8 +1,10 @@
-//로그인 전 페이지들의 로고부분
+import Style from "./Logo.module.css";
+
+//나중에 a안에 이미지로 변경하기. 그 이미지 스타일도 만들어야함 반응형으로 만들면 좋을듯
 const Logo = () =>{
     return(
-        <div>
-            <a href="/login">Logo</a>
+        <div className={Style.logoCover}>
+            <a className={Style.logo} href="/login">Logo</a>
         </div>
     )
 }

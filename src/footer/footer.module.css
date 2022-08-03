@@ -1,27 +1,26 @@
-.memberCover {
-    border-top : 10%;
+.footerStyle {
+    padding-top : 1%;
     display : grid;
-    grid-template-columns : repeat(3, 13rem);
-    grid-template-rows : 8rem;
-    grid-gap : 5%;
-    justify-content : center;
+    grid-template-columns : repeat(3, 10rem);
+    grid-template-rows : 5rem;
+    grid-gap : 3%;
+    justify-content: center;
 
     position : fixed;
-    bottom : 0px;
-    left : 0px;
+    bottom : 0;
     width : 100%;
-    height : 10vh;
-    min-height:100px;
+    height : 15%;
+    min-height: 80px;
 
     background-color: #EDEDED;
+}
 
-    overflow:hidden;
+.memberCover{
+    position: relative;
 }
 
 .member {
-    position : relative;
-    top : 15%;
-    left : 10%;
+    position : absolute;
 }
 
 .name{
