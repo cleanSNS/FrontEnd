@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Style from "./HomeMain.module.css";
 import Members from "../../footer/footer";
 
-const Home = () => {
+const Home = ({changeState}) => {
     return(
       <div className={Style.pageCover}>
         <div />

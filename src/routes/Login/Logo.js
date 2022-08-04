@@ -4,7 +4,7 @@ import Style from "./Logo.module.css";
 const Logo = () =>{
     return(
         <div className={Style.logoCover}>
-            <a className={Style.logo} href="/login">Logo</a>
+            <a className={Style.logo} href="/">Logo</a>
         </div>
     )
 }

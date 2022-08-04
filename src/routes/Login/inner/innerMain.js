@@ -1,5 +1,5 @@
 //로그인의 초기 화면. id, 비번을 쓰는 곳이 있다.
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Style from './innerMain.module.css';
 import KakaoImg from '../socialImg/Kakao.png';
 import NaverImg from '../socialImg/Naver.png';
@@ -8,16 +8,20 @@ import axios from 'axios';
 const loginApiUrl = 'http://52.78.49.137:8080/user/auth/login';
 
 const REST_API_KEY = '75670ae520e9b0c56500f349b16c3c68';
-const REDIRECT_URI = 'http://localhost:3000/social';
+const REDIRECT_URI = 'http://localhost:3000';
 const kakaoLoginApiUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 const naverLoginApiUrl = 'https://nid.naver.com/oauth2.0/authorize';
 
-const Main = ({changeContent}) => {
+const kakaotokenUrl = 'http://52.78.49.137:8080/social/login/kakao';
+const navertokenUrl = 'http://52.78.49.137:8080/social/login/naver';
+
+const Main = ({changeContent, changeState}) => {
     //변수 선언
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [wrong, setWrong] = useState("0");
+    const [userCode, setUserCode] = useState("");
 
     //input 변경시 반영해주는 함수
     const emailHandler = (event) =>{
@@ -41,6 +45,7 @@ const Main = ({changeContent}) => {
             .then((res) => {
                 setWrong("0");
                 console.log(res);
+                changeState("1");//메인화면으로 전환
             })
             .catch((res) => {
                 if(res.response.status === 400){
@@ -63,6 +68,26 @@ const Main = ({changeContent}) => {
         event.preventDefault();
         window.location.href = naverLoginApiUrl;
     };
+
+    //카카오 로그인 코드 보내는 함수
+    const sendCode = () => {
+        let url = new URL(window.location.href);
+        if(url.searchParams.get('code') == null) return;
+        setUserCode(url.searchParams.get('code'));
+
+        axios.post(kakaotokenUrl,{
+            code : userCode,
+        })
+            .then((res)=>{
+                console.log(res);
+                changeState("2");//홈화면으로 이동
+            })
+            .catch((res)=>{
+                console.log(res);
+                //changeState("0");//로그인화면으로 이동
+            });
+    }
+    useEffect(sendCode, [userCode]);
 
     return(
         <div className="container d-flex flex-column justify-content-center align-items-center">

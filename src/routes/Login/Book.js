@@ -4,7 +4,7 @@ import Logo from "./Logo";
 import MainInnerStuff from "./mainInnerStuff";
 import Members from "../../footer/footer";
 
-const Book = () => {
+const Book = ({changeState}) => {
     return(
         <div className={Style.bookCover}>
             <div />
@@ -17,7 +17,7 @@ const Book = () => {
                             <Logo />
                         </div>
                         <div>
-                            <MainInnerStuff />
+                            <MainInnerStuff changeState={changeState} />
                         </div>
                     </div>
                 </div>

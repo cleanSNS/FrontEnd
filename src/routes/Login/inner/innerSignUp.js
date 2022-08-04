@@ -132,11 +132,11 @@ const SignUp = ({changeContent}) => {
                     passwor: password,
                 })
                     .then((res) => {
-                        window.location.href ='/';
+                        window.location.href ='/main';
                     })
                     .catch((res) => {
                         alert("문제 발생. 다시 로그인 시도해주십시오.");
-                        window.location.href ='/login';
+                        window.location.href ='/';
                     });
             })
             .catch((res) =>{
