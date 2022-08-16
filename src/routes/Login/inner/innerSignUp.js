@@ -6,7 +6,7 @@ const signUpApiUrl = 'http://52.78.49.137:8080/user/auth/signup';
 const emailApiUrl = 'http://52.78.49.137:8080/user/auth/signup/request';
 const loginApiUrl = 'http://52.78.49.137:8080/user/auth/login';
 
-const SignUp = ({changeContent}) => {
+const SignUp = ({login, toLoginPage}) => {
     //변수 선언
     const [email, setEmail] = useState("");
     const [password,setPassword] = useState("");
@@ -104,7 +104,7 @@ const SignUp = ({changeContent}) => {
                 console.log(res);
                 alert("에러 발생 다시 시도해주십시오");
                 document.querySelector("#emailInput").select();
-            })
+            });
     };
 
     //회원가입 처리 함수
@@ -123,34 +123,34 @@ const SignUp = ({changeContent}) => {
                 ageVisible: ageAgree,
                 genderVisible: genderAgree,
         })
-            .then((res) => {
-                alert("회원가입 되셨습니다.");
-                //console.log(res.status);
-                //즉시 로그인 Api호출
-                axios.post(loginApiUrl, {
-                    email: email,
-                    passwor: password,
-                })
-                    .then((res) => {
-                        window.location.href ='/main';
-                    })
-                    .catch((res) => {
-                        alert("문제 발생. 다시 로그인 시도해주십시오.");
-                        window.location.href ='/';
-                    });
+        .then((res) => {
+            alert("회원가입 되셨습니다.");
+            //즉시 로그인 Api호출
+            axios.post(loginApiUrl, {
+                email: email,
+                password: password,
             })
-            .catch((res) =>{
-                if(res.response.status === 400){
-                    alert("이미 가입된 이메일입니다.");
-                    document.querySelector("#emailInput").disabled = false;
-                    setEmailAccept(false);
-                    document.querySelector("#emailInput").select();
-                }
-                else{
-                    console.log("error");
-                    console.log(res);
-                }
+            .then((res) => {
+                login(res);
+                window.location.href="/main";
+            })
+            .catch((res) => {
+                alert("문제 발생. 다시 로그인 시도해주십시오.");
+                toLoginPage();//로그인화면으로 이동
             });
+        })
+        .catch((res) =>{
+            if(res.response.status === 400){
+                alert("이미 가입된 이메일입니다.");
+                document.querySelector("#emailInput").disabled = false;
+                setEmailAccept(false);
+                document.querySelector("#emailInput").select();
+            }
+            else{
+                console.log("error");
+                console.log(res);
+            }
+        });
     };
 
     return(
@@ -193,11 +193,11 @@ const SignUp = ({changeContent}) => {
                 <div className="d-xxl-none col-1" />
                 <div className="form-check col-2 col-xxl-1 my-xxl-3 my-1">
                     <input id="MALE" className="form-check-input shadow-sm" type="radio" name="gender" onChange={genderHandler}/>
-                    <label className="form-check-label" htmlFor="male">남</label>
+                    <label className="form-check-label" htmlFor="MALE">남</label>
                 </div>
                 <div className="form-check col-2 col-xxl-1 my-xxl-3 my-1">
                     <input id="FEMALE" className="form-check-input shadow-sm" type="radio" name="gender" onChange={genderHandler} />
-                    <label className="form-check-label" htmlFor="female">여</label>
+                    <label className="form-check-label" htmlFor="FEMALE">여</label>
                 </div>
                 <div className="d-xxl-none col-1" />
                 <div className="form-check col-6 col-xxl-3 my-xxl-3 my-1">
@@ -208,7 +208,7 @@ const SignUp = ({changeContent}) => {
             <div className="row my-xxl-4 my-3 my-1">
                 <div className="col-3" />
                 <div className="col-3 d-flex flex-column justify-content-center align-items-center">
-                    <button className="btn btn-light shadow-sm" onClick={changeContent} value="0">취소</button>
+                    <button className="btn btn-light shadow-sm" onClick={toLoginPage} value="0">취소</button>
                 </div>
                 <div className="col-3 d-flex flex-column justify-content-center align-items-center">
                     <button type="submit" className="btn btn-dark shadow-sm">가입</button>

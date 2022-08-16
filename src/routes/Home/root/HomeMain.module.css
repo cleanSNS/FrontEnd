@@ -1,0 +1,123 @@
+.pageCover{
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    grid-template-rows: 1fr;
+
+    width: 100%;
+    min-width: 1000px;
+    height: 85%;
+    min-height: 500px;
+    position: fixed;
+    top: 0;
+}
+
+.mainPage{
+    position: relative;
+}
+
+.bookCover{
+    position: absolute;
+
+    display: grid;
+    grid-template-columns: 9fr 1fr 6fr;
+    grid-template-rows: 1fr;
+
+    height: 100%;
+    width: 100%;
+}
+
+.leftBook{
+    position: relative;
+}
+
+.rightBook{
+    position: relative
+}
+
+.splitBookCover{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1.2fr 9fr;
+}
+
+.leftHeader{
+    position: relative;
+}
+
+.leftHeaderCover{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 2fr 2fr 5fr;
+    grid-template-rows: 1fr;
+}
+
+.leftMain{
+    position: relative;
+
+    margin-bottom: 10px;
+    border: 1px solid rgb(168, 168, 168);
+    border-radius: 0.5rem;
+    background-color: #fff7f7;
+    box-shadow: 2px 2px 5px rgb(132, 106, 106);
+}
+
+.rightHeader{
+    position: relative;
+}
+
+.rightHeaderCover{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 1fr;
+}
+
+.tag{
+    position: relative;
+}
+
+.activeTag{
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    width: 40px;
+    height: 50px;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    background-color: gray;
+}
+
+.inactiveTag{
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    width: 40px;
+    height: 50px;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    background-color: rgb(189, 189, 189);
+}
+
+.rightMain{
+    position: relative;
+
+    margin-bottom: 10px;
+    border: 1px solid rgb(168, 168, 168);
+    border-radius: 0.5rem;
+    background-color: #fff7f7;
+    box-shadow: 2px 2px 5px rgb(132, 106, 106);
+}

@@ -3,10 +3,10 @@ import React from 'react';
 import Book from "./Book";
 
 
-const Login = ( {changeState} ) => {
+const Login = ( {login} ) => {
     return (
       <div>
-        <Book changeState={changeState}/>
+        <Book login={login} />
       </div>
     );
   }

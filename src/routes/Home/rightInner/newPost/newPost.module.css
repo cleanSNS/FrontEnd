@@ -1,0 +1,104 @@
+.WholeCover{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 2fr 3fr 3fr 3fr 3fr;
+}
+
+.eachSettingCover{
+    position: relative;
+}
+
+.settingCover{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 5fr 6fr;
+    grid-template-rows: 1fr;
+
+    border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.settingCoverLast{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 5fr 6fr;
+    grid-template-rows: 1fr;
+}
+
+.settingNameCover{
+    position: relative;
+}
+
+.settingName{
+    position: absolute;
+    top: 20%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+
+    font-size:small;
+    font-weight: bolder;
+    width: 100%;
+    text-align: left;
+}
+
+.settingsCover{
+    position: relative;
+}
+
+.threeSetting{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.twoSetting{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+}
+
+.setCover{
+    position: relative;
+}
+
+.pickedSetting{
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    text-align: left;
+    font-weight: bolder;
+    font-size:small;
+    width: 100%;
+    height: 100%;
+}
+
+.notPickedSetting{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    text-align: left;
+    font-size:small;
+    width: 100%;
+    height: 100%;
+}

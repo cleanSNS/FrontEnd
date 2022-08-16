@@ -1,7 +1,7 @@
 //비밀번호 찾기 창의 비밀번호 찾는 부분
 import { useState } from 'react';
 
-const FindPW = ({changeContent}) => {
+const FindPW = ({toLoginPage, toSignUpPage}) => {
     const [email, setEmail] = useState();
     const emailHandler = (event) => {
         event.preventDefault();
@@ -38,10 +38,10 @@ const FindPW = ({changeContent}) => {
                     </div>
                 </form>
                 <div className="col-12 my-2">
-                    <button className=" btn btn-dark w-100 shadow" onClick={changeContent} value="2">회원가입 하기</button>
+                    <button className=" btn btn-dark w-100 shadow" onClick={toSignUpPage} value="2">회원가입 하기</button>
                 </div>
                 <div className="col-12 mt-2">
-                    <button className="col-12 btn btn-dark w-100 shadow" onClick={changeContent} value="0">로그인으로 돌아가기</button>
+                    <button className="col-12 btn btn-dark w-100 shadow" onClick={toLoginPage} value="0">로그인으로 돌아가기</button>
                 </div>
             </div>
         </div>

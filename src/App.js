@@ -1,19 +1,60 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from 'react-router-dom';
+import Home from "./routes/Home/root/HomeMain";
+import Login from "./routes/Login/root/LoginMain";
 
-import Home from "./routes/Home/HomeMain";
-import Login from "./routes/Login/LoginMain";
+const logoutApiUrl = 'http://52.78.49.137:8080/user/auth/logout';
+
+const kakaotokenUrl = 'http://52.78.49.137:8080/social/login/kakao?code=';
+//const navertokenUrl = 'http://52.78.49.137:8080/social/login/naver';
 
 function App() {
-  const [state, setState] = useState("0")// 0: 로그인 화면 // 1: 메인화면이다.
-  const changeState = (val) => {
-    setState(val);
-  }
+
+  //로그인시 refresh token을 local Storage에 저장하는 기능
+  const loginFunc = (res) => {
+    localStorage.setItem("rft", res.headers.authorization);
+    window.location.href="/main";
+  };
+
+  //로그아웃 함수
+  const logoutFunc = () => {
+    axios.get(logoutApiUrl)
+    .then((res) => {
+      alert("logout success");
+      localStorage.removeItem("rft");//refresh token 지우기
+      window.location.href="/";
+    })
+    .catch((res)=>{
+      console.log("error")
+      console.log(res);
+    });
+  };
+
+  //카카오톡 로그인 함수
+
+
   return (
-    <div>
-      {state === "0" ? <Login changeState={changeState} /> : null}
-      {state === "1" ? <Home changeState={changeState} /> : null}
-    </div>
+    <Router>
+      {localStorage.getItem("rft") === null ? <Redirect to='/' /> : null}
+      {localStorage.getItem("rft") !== "social" && localStorage.getItem("rft") !== null ?
+        <Redirect to="/main" /> : null 
+      }
+      <Switch>
+        <Route path="/main">
+          <Home logout={logoutFunc} />
+        </Route>
+        <Route path="/">
+          <Login login={loginFunc} />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
-//로그인 화면에서는 로그인만 해주면 되고, Home에서는 현재의 login상태를 확인하고, login안되어있으면 login화면으로 보내줘야한다.
+
 export default App;

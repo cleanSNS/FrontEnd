@@ -1,10 +1,10 @@
 //로그인 화면의 책 전체
 import Style from "./Book.module.css";
-import Logo from "./Logo";
+import Logo from "../../../logo/loginLogo";
 import MainInnerStuff from "./mainInnerStuff";
-import Members from "../../footer/footer";
+import Members from "../../../footer/footer";
 
-const Book = ({changeState}) => {
+const Book = ({login}) => {
     return(
         <div className={Style.bookCover}>
             <div />
@@ -17,7 +17,7 @@ const Book = ({changeState}) => {
                             <Logo />
                         </div>
                         <div>
-                            <MainInnerStuff changeState={changeState} />
+                            <MainInnerStuff login={login} />
                         </div>
                     </div>
                 </div>
