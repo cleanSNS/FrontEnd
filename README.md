@@ -1,70 +1,109 @@
-# Getting Started with Create React App
+# FrontEnd
+# 작업을 진행하며 발생한 문제와 해결방안을 작성했습니다.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. CSS에 대하여
+	: 원래 범위를 지정하고 위치를 잡는데 어려움이 있었다.
+	: 계속해서 div로 어떤 요소를 감싸준다고 생각해보니 편해졌다.
+	=> 그 요소의 속성을 position : relative;를 해서 하위 요소를 하위요소로 확실히 인지 시킨다.
+	=> 그 아래의 요소는 position: absolute;를 한다.
+		=> 그 아래 요소는 display: grid를 하든 뭘 하든 상관없다.
 
-## Available Scripts
+2. 페이지 전환에 대하여
+	: 원래 route를 통해 진행중이었다
+		=> 로그인 하지 않은 상황에서 url을 통해 페이지를 확인하는 것이 가능할 수도 있다.
+		=> 그래서 route를 쓰지 않고 useState로 변경했다.
+	=> useState로 변경하고나니 문제가 발생했다.
+		ex) Login화면에서 로그인메인 - 비밀번호찾기 - 회원가입 이 3가지 페이지의 전환이 원래 잘 이루어졌으나
+		     클릭하면 로드후 1초 뒤 다시 원래 로그인 화면으로 돌아가는 문제가 발생
+	=> 원인을 생각해 봤다.
+		그 결과 그럴수밖에 없음을 인지했다.
+		=> useState의 값을 설정된 함수로 변화시키면 화면의 렌더링이 발생한다. 즉, 과정은 이러하다
+		=> 여기서 로그인 전과 후를 나누는 변수는 state, login페이지에서 사용할 화면은 content로 조절한다.
+		1. state가 로그인 이전인 상태
+		2. login페이지가 render된다
+		3. 회원가입버튼 클릭
+		4. 화면에 render발생
+		5. 당연하게도 외부부터 render되는데, 이 때, 내부 요소는 다시 초기상태로 render된다. 즉, 그래서 content가 초기값으로 다시 돌아오게 된다.
+	=> 그래서 이를 막기 위해 react-route를 쓰는 것임을 알 수 있었다.
+	=> 그럼 아에 다시 원래대로 돌아가면 /를 이용해서 마음대로들어오는 것이 가능하다. 어떻게 해결할 수있을까?
+	: 나는 react-route의 기능을 온전히 사용하지 못하고 있었다.
+		{!isAuthorized ? <Redirect to="/login" /> : <Redirect to="/" />}처럼 Redirect 태그를 이용했어했다.
 
-In the project directory, you can run:
+3. api이용에 대하여
+	: fetch를 이용해서 데이터를 가져오는데, 여러 문제들이 발생했었다.
+	=> header에서 내가 받으려는 데이터의 형식이 무엇인지 명시해줄 필요가 있었다.
+		=> 이것을 하는 이유는 데이터가 통신되는데 있어서 프로토콜의 규칙을 지켜야하기 때문이다.
+		=> 프로토콜을 지키지 않은 패킷은 신뢰가 불가하므로 네트워크상에서 제외되기 때문에 이런 문제들이 발생하는 것으로 보였다.
+	=> 이런 세부 설정들이 복잡해서 axios를 일단 이용중이지만. 이에 대해서 공부할 필요가 조금 있을 것 같다.
+	: 또한 axios로 구현하다보니 GET메소드에서 body가 없다고 되어있다.
+		=> GET메소드는 사실 body를 가질 수 있다. 다만, client의 브라우저가 이를 무시하는 경우가 있을 수 있기 때문에 body를 서버에 넘겨야 하는 경우, post를 이용하는 것이 좋아보인다.
 
-### `npm start`
+4. 비밀번호 확인을 구현하며..
+	: useEffect를 이용해서 작업할 필요가 있었다.
+	=> useState로만 작업을 진행했더니 뭔가 한템포씩 늦게 업데이트가 진행되었다.
+	이유를 생각해보았다.
+		1. onChange를 통해서 value변경
+		2. useState의 값이 변경되었으므로 render발생( 스타일 변경 이전이므로 변동 X)
+		3. 값을 확인해서 요소에 className을 변경해서 스타일 변경
+		=> 여기서 함수가 종료되는데, render가 한번 더 발생해야 3에서 변경된 스타일이 화면에 반영된다.
+	=> 즉, 위 이유로 인해서 화면의 변화가 한템포씩 늦게 되는 것이었다.
+	=> 이를 막기 위해서 useEffect를 사용해보았다.
+		1. onChange를 통해서 value변경
+		2. useState의 값이 변경되었으므로 render발생(스타일 변경 이전이므로 변동 X)
+		3. useEffect에서 지정한 useState의 값이 변경되었으므로 내부 함수 실행
+		4. uesEffect에 의해서 render한번 더 발생
+	=> 사실 조금 불필요한 render를 줄일 수 있는 방법도 있을 것 같다.
+		1. onChange를 통해서 event.target.value를 먼저 가져온다. => 앞으로 바뀔 값이다.
+		2. 그 바뀔 값을 이용해서 비밀번호 확인진행
+		3. 2의 결과에 따라 스타일 변경
+		4. setAAA를 통해서 useState의 값 변경 => 스타일과 값이 동시에 반영되어 render된다.
+		=> 즉, useState를 안써도 된다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+5. 비밀번호 유효성 확인
+	: 원래는 jQuery를 이용해서 .test를 하는 경우가 많았다고 한다.
+	=> 그런데 이거 하나 하자고 jQuery를 불러오는 것은 너무 불필요했다. 그래서 어떻게 해야할지 고민 끝에 방법을 찾았다.
+	: 이를 위해서 Rule에 해당하는 부분을 변수로 만들고, 다음 명령을 실행하면 된다.
+		(원하는 문자열).match(지정한 Rule) => rule에 맞으면 true를 맞지 않으면 false를 return한다.
+	=> 이를 통해서 jQuery를 이용하지 않고 유효성 확인을 할 수 있었다.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+6. input클릭시 입력 내용 클릭하게 만들기
+	event.target.select();를 이용했다.
 
-### `npm test`
+7. 소셜 로그인만들기
+	: 여전히 진행중이다.
+	1. useEffect로 변수 값을 확인한다.
+	2. 해당 변수값은 url을 보다가 code 요소가 생기면
+	=> 이것에 관해서는 생각을 더 해보자.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+8. 어떤 요소 안에 내가 지정한 컴포넌트를 아래로 쭉 이어지게 만들기
+	첫 div안에 overflow: auto;를 넣고 크기를 가로,세로 100%로 지정한다.
+	그 안에 이제 내가 만들 특정 요소의 크기를 지정하고, display: block;으로 해준다.
+	이후 그 안에는 내가 만들고 싶은 요소를 넣으면 된다.
 
-### `npm run build`
+9. 쿠키 접근
+	document.cookie로 접근 가능하다.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+10. GET 데이터 보내기
+	GET방식은 원칙적으로 body를 가지지 않는다. 대신 url을 바꿔서 보낸다.
+	?로 url을 마무리하고 이후에 key=value의 형식을 주고, 여러개인 경우 &로 연결한다.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+11. Set-Cookie 문제발생
+	로그인 시에 Access Token을 Set-Cookie로 전달하여, 이후에 통신에 자동으로 해당 토큰이 쿠키로 헤더에 들어가 있도록 세팅했다.
+	하지만 Response로 받은 패킷의 Set-Cookie에 에러가 발생했다.
+	에러의 내용은 Set-Cookie에 samesite속성이 설정되지 않았고 이로 인해 samesite=lax로 설정되었으며,
+	이에 따라 쿠키를 설정하지 않는다고 되어있었다.
+	그래서 백엔드를 작업하는 친구에게 이를 이야기 해서 samesite=default로 설정했다.
+	하지만 최근 보안성 업데이트로 인해서 samesite=default를 설정하려면 Secure설정을 해야한다.
+	그리고 Secure설정을 하려면 https프로토콜을 사용해야하는데, 현재 도메인 없이 작업중이어서 https로 설정이 불가했다.
+	그래서 이제 도메인을 열어, 백엔드와 동일한 IP를 사용하고 https프로토콜을 사용해서 작업을 진행하려고 한다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# To Do List
+1. 카카오 로그인 - 도메인 작업 선행 필요
+2. 네이버 로그인 - 도메인 작업 선행 필요
+3. 채팅방과 채팅방리스트 틀 짜기
+4. 기본 피드 틀 짜기
+5. 각 설정의 left디자인 하기
+6. API연결을 위해서 드래그 앤드랍으로 사진 업로드 하는 방법 알아내기
+7. 무한스크롤 기능 만들기
