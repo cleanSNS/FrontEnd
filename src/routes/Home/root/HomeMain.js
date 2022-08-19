@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Style from "./HomeMain.module.css";
-import Members from "../../../footer/footer";
 import Logo from "../../../logo/mainLogo";
 import SearchBar from "./searchBar";
 import NumberNotice from "./numberNotice";
@@ -157,7 +156,6 @@ const Home = ({ logout }) => {
         </div>
       </div>
       <div />
-      <Members />
     </div>
   );
 }

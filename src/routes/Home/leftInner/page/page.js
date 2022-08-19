@@ -1,7 +1,53 @@
-const LeftPage = () => {
+import { useState, useEffect } from 'react';
+import { useInView } from "react-intersection-observer";
+import axios from 'axios';
+import Style from './page.module.css';
+
+const pageloadUrl = 'http://52.78.49.137:8080/page/main';
+
+const pageList = [1,2,3,4,5];
+const currentStartId = 987654321;
+
+const Pages = ({ obj, lastRef }) => {
     return(
-        <p>Page</p>
+        <div className={Style.singlePageCover}>
+            {
+                obj.map((data, index) => (
+                    index === (obj.length - 1) ? 
+                    <p key={index} ref={lastRef}>last obj</p>
+                    :
+                    <p key={index}>{data}</p>
+                ))
+            }
+        </div>
+    );
+}
+
+
+const LeftPage = () => {
+    const [ref, inView] = useInView();//ref를 {ref}로 설정한요소가 화면에 보이는 상황이면 true가 나오고, 아닌 경우 false이다.
+
+    const pageLoadFunc = () => {
+        if(inView){
+            axios.get(pageloadUrl + "?startId=" + currentStartId)
+            .then((res) => {
+                console.log("데이터 추가");
+                pageList = [...res.data];//추가 데이터 저장
+                currentStartId = res.startId;
+            })
+            .catch((res) => {
+                console.log("error");
+                console.log(res);
+            })
+        }
+    };
+    useEffect(pageLoadFunc, [inView]);
+    return(
+        <div className={Style.pageCover}>
+            <Pages obj={pageList} lastRef={ref}/>
+        </div>
     );
 }
 
 export default LeftPage;
+

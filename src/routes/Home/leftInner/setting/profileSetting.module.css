@@ -1,0 +1,93 @@
+.profileSettingCover{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    height: 90%;
+    width: 90%;
+    background-color: white;
+    border-radius: 0.25rem;
+    box-shadow: 1px 1px 3px rgb(209, 209, 209);
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 2fr 1fr;
+}
+
+.Cover{
+    position: relative;
+}
+
+.MyprofileExample{
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.profileSettingDetail{
+    position: absolute;
+    height: 80%;
+    width: 75%;
+
+    top:50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: grid;
+    grid-template-columns: 3fr 4fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+.profileSettingLabel{
+    position: absolute;
+    top: 50%;
+    right: 3%;
+    transform: translate(0, -50%);
+
+    font-weight: bolder;
+}
+
+.profileSettingInput{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 90%;
+    height: 80%;
+    font-weight: bolder;
+}
+
+.profileEmailButton{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border-radius: 0.25rem;
+    border: none;
+    background-color: rgb(209, 209, 209);
+    box-shadow: 1px 1px 3px rgb(152, 152, 152);
+
+}
+
+.submitButton{
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    height: 25%;
+    width: 40%;
+    font-weight: bold;
+
+    background-color: rgb(255, 197, 250);
+    color: white;
+    border-radius: 0.25rem;
+    box-shadow: 1px 1px 3px rgb(178, 137, 175);
+    border: none;
+}

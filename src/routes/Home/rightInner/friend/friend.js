@@ -1,47 +1,40 @@
 import Style from './friend.module.css';
-import FriendProfile from './friendProfile';
+import Profile from '../../root/profile';
 
 const RightFriend = () => {
     return(
         <div className={Style.wholeCover}>
-            <div className={Style.myProfileCover}>
-                <div className={Style.myProfile}>
-                    <div className={Style.myProfilePicCover}>
-                        <p className={Style.myProfilePic}>이미지</p>
-                    </div>
-                    <div className={Style.myProfileNameCover}>
-                        <p className={Style.myProfileName}>내 이름</p>
-                    </div>
-                </div>
+            <div className={Style.Cover}>
+                <Profile img={'내사진'} name={'내 이름'} />
             </div>
             <div className={Style.friendList}>
                 <div className={Style.friendProfileCover}>
-                    <FriendProfile img={'img'} name={'nnnnnnnnnnnn'} />
+                    <Profile img={'img'} name={'nnnnnnnnnnnn'} />
                 </div>
                 <div className={Style.friendProfileCover}>
-                    <FriendProfile img={'img2'} name={'mmmmmmmmmmmm'} />
+                    <Profile img={'img2'} name={'mmmmmmmmmmmm'} />
                 </div>
                 <div className={Style.friendProfileCover}>
-                    <FriendProfile img={'img3'} name={'mmmmmmmmmmmm'} />
+                    <Profile img={'img3'} name={'mmmmmmmmmmmm'} />
                 </div>
                 <div className={Style.friendProfileCover}>
-                    <FriendProfile img={'img4'} name={'mmmmmmmmmmmm'} />
+                    <Profile img={'img4'} name={'mmmmmmmmmmmm'} />
                 </div>
                 <div className={Style.friendProfileCover}>
-                    <FriendProfile img={'img5'} name={'mmmmmmmmmmmm'} />
+                    <Profile img={'img5'} name={'mmmmmmmmmmmm'} />
                 </div>
                 <div className={Style.friendProfileCover}>
-                    <FriendProfile img={'img6'} name={'mmmmmmmmmmmm'} />
+                    <Profile img={'img6'} name={'mmmmmmmmmmmm'} />
                 </div>
                 <div className={Style.friendProfileCover}>
-                    <FriendProfile img={'img7'} name={'mmmmmmmmmmmm'} />
+                    <Profile img={'img7'} name={'mmmmmmmmmmmm'} />
                 </div>
                 <div className={Style.friendProfileCover}>
-                    <FriendProfile img={'img8'} name={'mmmmmmmmmmmm'} />
+                    <Profile img={'img8'} name={'mmmmmmmmmmmm'} />
                 </div>
             </div>
         </div>
     );
 }
 
-export default RightFriend
+export default RightFriend;

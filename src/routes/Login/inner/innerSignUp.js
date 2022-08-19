@@ -1,6 +1,7 @@
 //회원가입 부분
 import {useState, useEffect} from 'react';
 import axios from 'axios';
+import Style from './innerSignUp.module.css';
 
 const signUpApiUrl = 'http://52.78.49.137:8080/user/auth/signup';
 const emailApiUrl = 'http://52.78.49.137:8080/user/auth/signup/request';
@@ -60,24 +61,24 @@ const SignUp = ({login, toLoginPage}) => {
     }
     //비밀번호 유효성 확인함수 실행부분
     const passwordValid = () => {
-        if(passwordValidCheck(password))
+        if(passwordValidCheck(password)){
             setPasswordInvalid(true);
+            document.querySelector("#validPasswordColorWord").style.color = "rgb(31, 109, 255)";
+        }
         else{
             setPasswordInvalid(false);
+            document.querySelector("#validPasswordColorWord").style.color = "rgb(255, 102, 102)";
         }
     }
     useEffect(passwordValid, [password]);
+
     //비밀번호 check확인 함수
     const passwordCheckFunc = () => {
         if(password !== passwordCheck){
-            if(!document.querySelector("#passwordCheckInput").className.includes(' is-invalid')){
-                document.querySelector("#passwordCheckInput").className += ' is-invalid';
-            }
+            document.querySelector("#passwordCheckInput").style.border = "solid 2px rgb(255, 102, 102)";
         }
         else{
-            if(document.querySelector("#passwordCheckInput").className.includes(' is-invalid')){
-                document.querySelector("#passwordCheckInput").className = document.querySelector("#passwordCheckInput").className.replace(' is-invalid', '');
-            }
+            document.querySelector("#passwordCheckInput").style.border = "solid 1px rgb(186, 186, 186)";
         }
     };
     useEffect(passwordCheckFunc, [passwordCheck]);
@@ -90,7 +91,14 @@ const SignUp = ({login, toLoginPage}) => {
     //이메일 인증처리 함수
     const emailSubmitHandler = (event) => {
         event.preventDefault();
-        if(email === '') return;
+        if(email === '') {
+            alert("이메일을 입력해 주세요");
+            return;
+        }
+        if(!email.includes("@") || !email.includes(".")){
+            alert("올바른 이메일을 입력해 주세요");
+            return;
+        }
 
         axios.post(emailApiUrl, {
             email: email,
@@ -110,9 +118,22 @@ const SignUp = ({login, toLoginPage}) => {
     //회원가입 처리 함수
     const submitHandler = (event) => {
         event.preventDefault();
-        if(email === '' || password === '' || passwordCheck === '' || nickname === '' || age === 0 || gender === '') return;
-        if(password !== passwordCheck) return;
-        if(!emailAccept) return;
+        if(email === '' || password === '' || passwordCheck === '' || nickname === '' || age === 0 || gender === ''){
+            alert("정보를 모두 입력해 주십시오.")
+            return;
+        }
+        if(password !== passwordCheck) {
+            alert("비밀번호를 다시 확인해 주십시오.");
+            return;
+        }
+        if(!emailAccept) {
+            alert("이메일 인증을 먼저 해주십시오.");
+            return;
+        }
+        if(!passwordInvalid) { 
+            alert("비밀번호의 조건을 맞춰주십시오.");
+            return;
+        }
 
         axios.post(signUpApiUrl, {
                 email: email,
@@ -154,68 +175,196 @@ const SignUp = ({login, toLoginPage}) => {
     };
 
     return(
-        <div className="container bg-light border rounded-3 shadow">
-           <form onSubmit={submitHandler}>
-            <fieldset className="row">
-                <legend>
-                    <p className="my-1 my-xxl-4 d-flex flex-column justify-content-center align-items-center fw-bold">회 원 가 입</p>
-                </legend>
-                <div className="col-9 my-xxl-3 my-1">
-                    <input id="emailInput" className="form-control shadow-sm" type="email" placeholder="Email" value={email} onChange={emailHandler} onFocus={onfocusHandler} />
-                </div>
-                <div className="col-3 my-xxl-3 my-1">
-                    <button className="btn btn-light shadow-sm" onClick={emailSubmitHandler}>인증 요청</button>
-                </div>
-                <div className="col-12 my-xxl-3 my-1">
-                    <input id="passwordInput" className="form-control shadow-sm" type="password" placeholder="Password" value={password} onChange={passwordHandler} onFocus={onfocusHandler} />
-                </div>
-                {
-                    passwordInvalid ?
-                    null :
-                    <div className="col-12 my-xxl-3 my-1 d-flex flex-column justify-content-center align-items-center">
-                        <p>8~16자리, 소문자와 특수문자를 하나이상 포함해야합니다.</p>
-                    </div>
-                }
-                <div className="col-12 my-xxl-3 my-1">
-                    <input id="passwordCheckInput" className="form-control shadow-sm" type="password" placeholder="Password 확인" value={passwordCheck} onChange={passwordCheckHandler} onFocus={onfocusHandler} />
-                </div>
-                <div className="col-12 my-xxl-3 my-1">
-                    <input id="nicknameInput" className="form-control shadow-sm" type="text" placeholder="닉네임" value={nickname} onChange={nicknameHandler} onFocus={onfocusHandler} />
-                </div>
-
-                <div className="col-6 col-xxl-4 my-xxl-3 my-1">
-                    <input id="ageInput" className="form-control shadow-sm" type="number" placeholder="나이" value={age} onChange={ageHandler} onFocus={onfocusHandler} />
-                </div>
-                <div className="form-check col-6 col-xxl-3 my-xxl-3 my-1">
-                    <input id="ageAgree" type="checkbox" className="form-check-input shadow-sm" onChange={ageAgreeHandler}/>
-                    <label className="form-check-label " htmlFor="ageAgree">공개 여부</label>
-                </div>
-                <div className="d-xxl-none col-1" />
-                <div className="form-check col-2 col-xxl-1 my-xxl-3 my-1">
-                    <input id="MALE" className="form-check-input shadow-sm" type="radio" name="gender" onChange={genderHandler}/>
-                    <label className="form-check-label" htmlFor="MALE">남</label>
-                </div>
-                <div className="form-check col-2 col-xxl-1 my-xxl-3 my-1">
-                    <input id="FEMALE" className="form-check-input shadow-sm" type="radio" name="gender" onChange={genderHandler} />
-                    <label className="form-check-label" htmlFor="FEMALE">여</label>
-                </div>
-                <div className="d-xxl-none col-1" />
-                <div className="form-check col-6 col-xxl-3 my-xxl-3 my-1">
-                    <input id="genderAgree" type="checkbox" className="form-check-input shadow-sm" onChange={genderAgreeHandler}/>
-                    <label className="form-check-label" htmlFor="genderAgree">공개 여부</label>
-                </div>
-            </fieldset>
-            <div className="row my-xxl-4 my-3 my-1">
-                <div className="col-3" />
-                <div className="col-3 d-flex flex-column justify-content-center align-items-center">
-                    <button className="btn btn-light shadow-sm" onClick={toLoginPage} value="0">취소</button>
-                </div>
-                <div className="col-3 d-flex flex-column justify-content-center align-items-center">
-                    <button type="submit" className="btn btn-dark shadow-sm">가입</button>
-                </div>
-                <div className="col-3" />
+        <div className={Style.SignUpCover}>
+            <div className={Style.Cover}>
+                <label 
+                    className={Style.formLabel}
+                    htmlFor="emailInput">
+                    Email
+                </label>
             </div>
-           </form>
+            <div className={Style.Cover}>
+                <div className={Style.emailInput}>
+                    <div className={Style.Cover}>
+                        <input 
+                            id="emailInput"
+                            type="email"
+                            className={Style.formInput}
+                            value={email}
+                            onChange={emailHandler}
+                            onFocus={onfocusHandler}
+                        />
+                    </div>
+                    <div className={Style.Cover}>
+                        <button
+                            className={Style.emailButton}
+                            onClick={emailSubmitHandler}>
+                            인증
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div className={Style.Cover}>
+                <label 
+                    className={Style.formLabel}
+                    htmlFor="passwordInput">
+                    Password  
+                    <p id="validPasswordColorWord" className={Style.smallWord}>  (8~16자리, 소문자, 특수문자를 하나이상 포함.)</p>
+                </label>
+            </div>
+            <div className={Style.Cover}>
+                <input
+                    id="passwordInput"
+                    type="password"
+                    className={Style.formInput}
+                    value={password}
+                    onChange={passwordHandler}
+                    onFocus={onfocusHandler}
+                />
+            </div>
+            <div className={Style.Cover}>
+                <label 
+                    className={Style.formLabel}
+                    htmlFor="passwordCheckInput">
+                    Password 확인
+                </label>
+            </div>
+            <div className={Style.Cover}>
+                <input
+                    id="passwordCheckInput"
+                    type="password"
+                    className={Style.formInput}
+                    value={passwordCheck}
+                    onChange={passwordCheckHandler}
+                    onFocus={onfocusHandler}
+                />
+            </div>
+            <div className={Style.Cover}>
+                <label 
+                    className={Style.formLabel}
+                    htmlFor="nicknameInput">
+                    Nickname
+                </label>
+            </div>
+            <div className={Style.Cover}>
+                <input
+                    id="nicknameInput"
+                    type="text"
+                    className={Style.formInput}
+                    value={nickname}
+                    onChange={nicknameHandler}
+                    onFocus={onfocusHandler}
+                />
+            </div>
+            <div className={Style.Cover}>
+                <div className={Style.ageGenderLabelArea}>
+                    <div className={Style.Cover}>
+                        <label 
+                            className={Style.formLabel}
+                            htmlFor="ageInput">
+                            나이
+                        </label>
+                    </div>
+                    <div className={Style.Cover}>
+                        <label 
+                            htmlFor="ageAgree"
+                            className={Style.formAgreeLabel}>
+                            공개
+                        </label>
+                    </div>
+                    <div className={Style.Cover}>
+                        <label 
+                            className={Style.formLabel}
+                            >
+                            성별
+                        </label>
+                    </div>
+                    <div className={Style.Cover}>
+                        <label 
+                            htmlFor="genderAgree"
+                            className={Style.formAgreeLabel}>
+                            공개
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div className={Style.Cover}>
+                <div className={Style.ageGenderInputArea}>
+                    <div className={Style.Cover}>
+                        <input
+                            id="ageInput"
+                            type="number"
+                            className={Style.formInput}
+                            value={age}
+                            onChange={ageHandler}
+                            onFocus={onfocusHandler}
+                        />
+                    </div>
+                    <div className={Style.Cover}>
+                        <input
+                            id="ageAgree"
+                            type="checkbox"
+                            className={Style.agreeInput}
+                            onChange={ageAgreeHandler}
+                        />
+                    </div>
+                    <div className={Style.Cover}>
+                        <div className={Style.genderInputArea}>
+                            <div className={Style.Cover}>
+                                <div className={Style.genderInputArea}>
+                                    <input
+                                        id="MALE"
+                                        type="radio"
+                                        name="gender"
+                                        className={Style.genderInput}
+                                        onChange={genderHandler}
+                                    /><label htmlFor="MALE" className={Style.genderLabel}>남</label>
+                                </div>
+                            </div>
+                            <div className={Style.Cover}>
+                                <div className={Style.genderInputArea}>
+                                    <input
+                                        id="FEMALE"
+                                        type="radio"
+                                        name="gender"
+                                        className={Style.genderInput}
+                                        onChange={genderHandler}
+                                    /><label htmlFor="FEMALE" className={Style.genderLabel}>여</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={Style.Cover}>
+                        <input
+                            id="genderAgree"
+                            type="checkbox"
+                            className={Style.agreeInput}
+                            onChange={genderAgreeHandler}
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className={Style.Cover}>
+                <div className={Style.btnArea}>
+                    <div />
+                    <div className={Style.Cover}>
+                        <button 
+                            onClick={toLoginPage}
+                            className={Style.cancelBtn}
+                            value="0">
+                            취소
+                        </button>
+                    </div>
+                    <div className={Style.Cover}>
+                        <button 
+                            onClick={submitHandler}
+                            className={Style.submitBtn}>
+                            가입
+                        </button>
+                    </div>
+                    <div />
+                </div>
+            </div>
         </div>
     );
 }

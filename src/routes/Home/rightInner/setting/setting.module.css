@@ -70,10 +70,10 @@
     
     width: 50%;
     border: 0;
-    background-color: rgb(252, 162, 219);
+    background-color: rgb(255, 197, 250);
     border-radius: 0.25rem;
     font-size: large;
     font-weight: bold;
     color: white;
-    box-shadow: 2px 2px 2px rgb(184, 121, 161);
+    box-shadow: 1px 1px 3px rgb(178, 137, 175);
 }

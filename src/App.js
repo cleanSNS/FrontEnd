@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -9,15 +8,16 @@ import {
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
 
-const logoutApiUrl = 'http://52.78.49.137:8080/user/auth/logout';
+axios.defaults.withCredentials = true;
 
-const kakaotokenUrl = 'http://52.78.49.137:8080/social/login/kakao?code=';
-//const navertokenUrl = 'http://52.78.49.137:8080/social/login/naver';
+const logoutApiUrl = 'http://52.78.49.137:8080/user/auth/logout';
 
 function App() {
 
-  //로그인시 refresh token을 local Storage에 저장하는 기능
+  //로그인시 refresh token을 local Storage에 저장하는 기능 앞에 Bearer 가 붙어있다.
   const loginFunc = (res) => {
+    console.log(res);
+    alert("Welcome");
     localStorage.setItem("rft", res.headers.authorization);
     window.location.href="/main";
   };
@@ -26,6 +26,7 @@ function App() {
   const logoutFunc = () => {
     axios.get(logoutApiUrl)
     .then((res) => {
+      console.log(res);
       alert("logout success");
       localStorage.removeItem("rft");//refresh token 지우기
       window.location.href="/";
@@ -35,9 +36,6 @@ function App() {
       console.log(res);
     });
   };
-
-  //카카오톡 로그인 함수
-
 
   return (
     <Router>

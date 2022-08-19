@@ -1,14 +1,21 @@
-//로그인 메인 화면
-import React from 'react';
-import Book from "./Book";
+//로그인 화면의 책 전체
+import Style from "./LoginMain.module.css";
+import Logo from "../../../logo/loginLogo";
+import MainInnerStuff from "./mainInnerStuff";
 
-
-const Login = ( {login} ) => {
-    return (
-      <div>
-        <Book login={login} />
-      </div>
+const Login = ({login}) => {
+    return(
+        <div className={Style.Cover}>
+            <div className={Style.book}>
+                <div className={Style.clip1} />
+                <div className={Style.clip2} />
+                <div className={Style.bookinnerCover}>
+                    <Logo />
+                    <MainInnerStuff login={login} />
+                </div>
+            </div>
+        </div>
     );
-  }
+}
 
-  export default Login;
+export default Login;

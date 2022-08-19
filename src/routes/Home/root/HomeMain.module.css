@@ -1,14 +1,13 @@
 .pageCover{
     display: grid;
-    grid-template-columns: 1fr 5fr 1fr;
+    grid-template-columns: 1fr 9fr 1fr;
     grid-template-rows: 1fr;
 
     width: 100%;
-    min-width: 1000px;
-    height: 85%;
-    min-height: 500px;
-    position: fixed;
-    top: 0;
+    height: 95%;
+    min-width: 1200px;
+    min-height: 650px;
+    position: absolute;
 }
 
 .mainPage{
@@ -19,7 +18,7 @@
     position: absolute;
 
     display: grid;
-    grid-template-columns: 9fr 1fr 6fr;
+    grid-template-columns: 18fr 1fr 8fr;
     grid-template-rows: 1fr;
 
     height: 100%;

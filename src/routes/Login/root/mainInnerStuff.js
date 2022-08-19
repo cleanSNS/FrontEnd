@@ -3,6 +3,7 @@ import { useState } from  "react";
 import Main from "../inner/innerMain";
 import SignUp from "../inner/innerSignUp";
 import FindPW from "../inner/innerFindPW";
+import Style from "./mainInnerStuff.module.css";
 
 const MainInnerStuff = ({login}) =>{
     //가능한 경우 : LoginMain, FindPassword, SignUp
@@ -17,7 +18,7 @@ const MainInnerStuff = ({login}) =>{
         setContent("signUp");
     };
     return(
-        <div>
+        <div className={Style.Cover}>
             {content === "loginMain" ? <Main login={login} toFindPasswordPage={toFindPasswordPage} toSignUpPage={toSignUpPage} /> : null}
             {content === "findPassword" ? <FindPW toLoginPage={toLoginPage} toSignUpPage={toSignUpPage} /> : null}
             {content === "signUp" ? <SignUp login={login} toLoginPage={toLoginPage} /> : null}
