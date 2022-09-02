@@ -1,4 +1,4 @@
-export const apiUrl = "http://cleanbook.site";
+export const apiUrl = "http://cleanbook.site:8080";
 
 /***************************로그인 관련 URl***********************************/
 //기본 로그인 Url
