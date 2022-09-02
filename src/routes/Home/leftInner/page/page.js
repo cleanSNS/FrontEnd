@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { useInView } from "react-intersection-observer";
 import axios from 'axios';
 import Style from './page.module.css';
-
-const pageloadUrl = 'http://52.78.49.137:8080/page/main';
+import {
+    pageloadUrl,
+} from "../../../../apiUrl";
 
 const pageList = [1,2,3,4,5];
 const currentStartId = 987654321;

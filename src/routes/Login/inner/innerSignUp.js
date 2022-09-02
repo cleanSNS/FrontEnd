@@ -2,10 +2,11 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 import Style from './innerSignUp.module.css';
-
-const signUpApiUrl = 'http://52.78.49.137:8080/user/auth/signup';
-const emailApiUrl = 'http://52.78.49.137:8080/user/auth/signup/request';
-const loginApiUrl = 'http://52.78.49.137:8080/user/auth/login';
+import {
+    signUpApiUrl,
+    emailApiUrl,
+    loginApiUrl
+} from "../../../apiUrl";
 
 const SignUp = ({login, toLoginPage}) => {
     //변수 선언

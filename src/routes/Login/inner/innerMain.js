@@ -4,14 +4,11 @@ import Style from './innerMain.module.css';
 import KakaoImg from '../socialImg/Kakao.png';
 import NaverImg from '../socialImg/Naver.png';
 import axios from 'axios';
-
-
-//기본 로그인 Url
-const loginApiUrl = 'http://52.78.49.137:8080/user/auth/login';
-
-//카카오 소셜 로그인 Url
-const kakaoLoginUrl = 'http://52.78.49.137:8080/social/login/kakao/code';
-const naverLoginApiUrl = 'http://52.78.49.137:8080/social/login/naver/code';
+import {
+    loginApiUrl,
+    kakaoLoginUrl,
+    naverLoginApiUrl
+} from "../../../apiUrl";
 
 const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
     //변수 선언
