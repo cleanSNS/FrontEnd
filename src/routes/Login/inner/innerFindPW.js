@@ -1,5 +1,6 @@
 //비밀번호 찾기 창의 비밀번호 찾는 부분
 import { useState } from 'react';
+import Style from './innerFindPW.module.css';
 
 const FindPW = ({toLoginPage, toSignUpPage}) => {
     const [email, setEmail] = useState();
@@ -24,27 +25,42 @@ const FindPW = ({toLoginPage, toSignUpPage}) => {
 //            });
     }
     return(
-        <div className="container w-75">
-            <div className="row text-center">
-                <p>로그인에 문제가 있나요?<br />가입했을 때의 이메일을 입력해 주세요.</p>
+        <form className={Style.WholeCover}>
+            <div className={Style.Cover}>
+                <p className={Style.text}>로그인에 문제가 있나요?<br />가입했을 때의 이메일을 입력해 주세요.</p>
             </div>
-            <div className="row">
-                <form onSubmit={submitHandler} name="0">
-                    <div className="col-12 my-5">
-                        <input className="form-control shadow" type="email" placeholder="Email" value={email} onChange={emailHandler} />
-                    </div>
-                    <div className="col-12 my-2">
-                        <button className="btn btn-dark w-100 shadow" type="submit">비밀번호 초기화 링크 보내기</button>
-                    </div>
-                </form>
-                <div className="col-12 my-2">
-                    <button className=" btn btn-dark w-100 shadow" onClick={toSignUpPage} value="2">회원가입 하기</button>
-                </div>
-                <div className="col-12 mt-2">
-                    <button className="col-12 btn btn-dark w-100 shadow" onClick={toLoginPage} value="0">로그인으로 돌아가기</button>
-                </div>
+            <div className={Style.Cover}>
+            <input 
+                className={Style.formInput}
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={emailHandler} />
             </div>
-        </div>
+            <div className={Style.Cover}>
+                <button 
+                    className={Style.btn}
+                    type="submit">
+                    비밀번호 초기화 링크 보내기
+                </button>
+            </div>
+            <div className={Style.Cover}>
+                <button 
+                    className={Style.btn}
+                    onClick={toSignUpPage}
+                    value="2">
+                    회원가입 하기
+                </button>
+            </div>
+            <div className={Style.Cover}>
+                <button
+                    className={Style.btn}
+                    onClick={toLoginPage}
+                    value="0">
+                    로그인으로 돌아가기
+                </button>
+            </div>
+        </form>
     );
 }
 

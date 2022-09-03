@@ -72,50 +72,78 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
     };
 
     return(
-        <div className="container d-flex flex-column justify-content-center align-items-center">
-            <div className="row w-75">
-                <form onSubmit={submitHandler}>
-                    <div className="col-12">
-                        <input type="email" placeholder="Email" className="form-control my-1" value={email} onChange={emailHandler}/>
-                    </div>
-                    <div className="col-12">
-                        <input type="password" placeholder="Password" className="form-control my-1" value={password} onChange={passwordHandler}/>
-                    </div>
-                    <div className="col-12 d-flex flex-column justify-content-center align-items-center my-4">
-                        {wrong === "not user" ? <p className="text-danger">잘못된 이메일 혹은 비밀번호입니다.</p> : null}
-                    </div>
-                    <div className="col-12 d-flex flex-column justify-content-center align-items-center my-4">
-                        <button className="btn btn-dark w-50 shadow" type="submit">로그인</button>
-                    </div>
-                </form>
+        <form className={Style.loginInnerCover}>
+            {/* 아이디 */}
+            <div className={Style.Cover}>
+            <input 
+                type="email"
+                placeholder="Email"
+                className={Style.formInput}
+                value={email}
+                onChange={emailHandler}/>
             </div>
-            <div className="row w-75">
-                <div className="col-6 d-flex flex-column justify-content-center align-items-center">
-                    <div className="text-dark text-center text-decoration-none" onClick={toFindPasswordPage}>비밀번호 찾기</div>
-                </div>
-                <div className="col-6 d-flex flex-column justify-content-center align-items-center">
-                    <div className="text-dark text-center text-decoration-none" onClick={toSignUpPage}>회원 가입</div>
+            {/* 비밀번호 */}
+            <div className={Style.Cover}>
+            <input 
+                type="password"
+                placeholder="Password"
+                className={Style.formInput}
+                value={password}
+                onChange={passwordHandler}/>
+            </div>
+            {/* 경고문 */}
+            <div className={Style.Cover}>
+                {wrong === "not user" ? <p className={Style.errorMes}>잘못된 이메일 혹은 비밀번호입니다.</p> : null}
+            </div>
+            {/* 로그인버튼 */}
+            <div className={Style.Cover}>
+                <button 
+                    className={Style.loginbtn}
+                    type="submit">
+                    로 그 인
+                </button>
+            </div>
+            {/* 찾기와 회원가입 */}
+            <div className={Style.Cover}>
+                <div className={Style.splitCover}>
+                    <div className={Style.Cover}>
+                        <p
+                            className={Style.word}
+                            onClick={toFindPasswordPage}>
+                            비밀번호 찾기
+                        </p>
+                    </div>
+                    <div className={Style.Cover}>
+                        <p
+                            className={Style.word}
+                            onClick={toSignUpPage}>
+                            회원 가입
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div className="row w-75 my-5 ">
-                <div className="col-6 d-flex flex-column justify-content-center align-items-center">
-                    <button className="btn btn-transparent p-0 border border-0 ">
-                        <div id="KakaoContainer" className={Style.kakao}>
-                            <img id="symbol" src={KakaoImg} className={Style.kakaoSymbol}/>
-                            <span id="label" className={Style.kakaoLabel} onClick={kakaoLoginHandler}>로그인</span>
-                        </div>
-                    </button>
-                </div>
-                <div className="col-6 d-flex flex-column justify-content-center align-items-center">
-                    <button className="btn btn-transparent p-0 border border-0 ">
-                        <div id="NaverContainer" className={Style.naver}>
-                            <img id="symbol" src={NaverImg} className={Style.naverSymbol}/>
-                            <span id="label" className={Style.naverLabel} onClick={naverLoginHandler}>로그인</span>
-                        </div>
-                    </button>
+            {/* 소셜 로그인 */}
+            <div className={Style.Cover}>
+                <div className={Style.splitCover}>
+                    <div className={Style.Cover}>
+                        <button className={Style.Socialbtn}>
+                            <div id="KakaoContainer" className={Style.kakao}>
+                                <img id="symbol" src={KakaoImg} className={Style.kakaoSymbol}/>
+                                <span id="label" className={Style.kakaoLabel} onClick={kakaoLoginHandler}>로그인</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div className={Style.Cover}>
+                        <button className={Style.Socialbtn}>
+                            <div id="NaverContainer" className={Style.naver}>
+                                <img id="symbol" src={NaverImg} className={Style.naverSymbol}/>
+                                <span id="label" className={Style.naverLabel} onClick={naverLoginHandler}>로그인</span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     );
 }
 

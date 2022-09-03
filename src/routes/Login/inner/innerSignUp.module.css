@@ -2,6 +2,7 @@
     position: relative;
 }
 
+/*모든 커버*/
 .SignUpCover{
     position: absolute;
     top: 50%;
@@ -10,10 +11,10 @@
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 5fr;
+    grid-template-rows: 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 5fr;
 
     width: 100%;
-    height: 100%;
+    height: 90%;
     background-Color: white;
     box-shadow: 2px 2px 3px rgb(137, 137, 137);
     border: 1px solid rgb(186, 186, 186);
@@ -21,24 +22,36 @@
     padding: 10px 30px;
 }
 
-.formLabel{
-    position: absolute;
-    top: 50%;
-    left: 6px;
-    transform: translate(0, -50%);
-
-    font-weight: bolder;
-    display: inline;
+/*두개로 분리하는 Input*/
+.splitInput{
+    display: grid;
+    grid-template-columns: 6fr 1fr;
+    grid-template-rows: 1fr;
+    width: 100%;
+    height: 100%;
 }
 
-.formAgreeLabel{
+/* 최하단 버튼 영역*/
+.btnArea{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
     width: 100%;
-    text-align:center;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+/*Form 관련 label, input*/
+.formLabel{
+    position: absolute;
+    top: 50%;
+    left: 6px;
+    transform: translate(0, -50%);
 
     font-weight: bolder;
     display: inline;
@@ -60,14 +73,7 @@
     outline: 1px solid rgb(153, 221, 255);
 }
 
-.emailInput{
-    display: grid;
-    grid-template-columns: 6fr 1fr;
-    grid-template-rows: 1fr;
-    width: 100%;
-    height: 100%;
-}
-
+/*이메일 인증 버튼*/
 .emailButton{
     position: absolute;
     top: 50%;
@@ -82,26 +88,33 @@
     background-color:white;
 }
 
-.smallWord{
+/*비밀번호 조건 알려주는 글*/
+.smallAlertWord{
+    position: absolute;
+    top: 50%;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    width: 100%;
     font-weight: lighter;
     display: inline;
     font-size: small;
     color: rgb(255, 102, 102);
 }
 
-.ageGenderLabelArea{
+/*정보 공개 뭐시깽이*/
+.smallCommentWord{
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 58%;
     transform: translate(-50%, -50%);
     width: 100%;
-    height: 100%;
-
-    display: grid;
-    grid-template-columns: 3fr 1fr 3fr 1fr;
-    grid-template-rows: 1fr;
+    font-weight: lighter;
+    display: inline;
+    font-size: small;
+    color: rgb(102, 181, 255);
 }
 
+/*성별 Input관련*/
 .genderInputArea{
     position: absolute;
     top: 50%;
@@ -110,7 +123,7 @@
     width: 100%;
 
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 3fr;
     grid-template-rows: 1fr;
 }
 
@@ -128,33 +141,17 @@
     transform: translate(0, -50%);
 }
 
-.ageGenderInputArea{
+
+/*동의 체크박스*/
+.agreeInput{
     position: absolute;
-    top: 50%;
+    top : 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-
-    display: grid;
-    grid-template-columns: 3fr 1fr 3fr 1fr;
-    grid-template-rows: 1fr;
+    zoom: 1.5;
 }
 
-.btnArea{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    width: 100%;
-    height: 100%;
-
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
-}
-
+/*취소 버튼*/
 .cancelBtn{
     position: absolute;
     top : 40%;
@@ -170,6 +167,7 @@
     box-shadow: 1px 1px 3px rgb(137, 137, 137);
 }
 
+/*가입 버튼*/
 .submitBtn{
     position: absolute;
     top : 40%;
@@ -183,13 +181,4 @@
     background-color: black;
     color: white;
     box-shadow: 1px 1px 3px rgb(137, 137, 137);
-}
-
-.agreeInput{
-    position: absolute;
-    top : 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    width: 50%;
 }

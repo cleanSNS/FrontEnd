@@ -1,0 +1,60 @@
+.Cover{
+    position: relative;
+}
+
+.WholeCover{
+    position : absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 1fr 1fr 1fr 1fr;
+    height: 65%;
+    width : 80%;
+
+    box-shadow: 2px 2px 5px rgb(137, 137, 137);
+    padding: 30px;
+}
+
+.text{
+    position: absolute;
+    top : 40%;
+    left : 50%;
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+    text-align: center;
+}
+
+.formInput{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 80%;
+    height: 60%;
+    border: solid 1px rgb(186, 186, 186);
+    border-radius: 0.25rem;
+    box-shadow: 1px 1px 3px rgb(137, 137, 137);
+}
+.formInput:focus{
+    outline: 1px solid rgb(153, 221, 255);
+}
+
+.btn{
+    position: absolute;
+    top : 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border: none;
+    width : 80%;
+    height: 70%;
+    border-radius: 0.25rem;
+    background-color: black;
+    color: white;
+    box-shadow: 1px 1px 3px rgb(137, 137, 137);
+}

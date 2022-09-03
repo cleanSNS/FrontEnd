@@ -64,7 +64,7 @@ const SignUp = ({login, toLoginPage}) => {
     const passwordValid = () => {
         if(passwordValidCheck(password)){
             setPasswordInvalid(true);
-            document.querySelector("#validPasswordColorWord").style.color = "rgb(31, 109, 255)";
+            document.querySelector("#validPasswordColorWord").style.color = "rgb(102, 181, 255)";
         }
         else{
             setPasswordInvalid(false);
@@ -177,6 +177,7 @@ const SignUp = ({login, toLoginPage}) => {
 
     return(
         <div className={Style.SignUpCover}>
+            {/* 이메일 Label */}
             <div className={Style.Cover}>
                 <label 
                     className={Style.formLabel}
@@ -184,8 +185,9 @@ const SignUp = ({login, toLoginPage}) => {
                     Email
                 </label>
             </div>
+            {/* 이메일 Input */}
             <div className={Style.Cover}>
-                <div className={Style.emailInput}>
+                <div className={Style.splitInput}>
                     <div className={Style.Cover}>
                         <input 
                             id="emailInput"
@@ -205,14 +207,16 @@ const SignUp = ({login, toLoginPage}) => {
                     </div>
                 </div>
             </div>
+            {/* 비밀번호 Label */}
             <div className={Style.Cover}>
                 <label 
                     className={Style.formLabel}
                     htmlFor="passwordInput">
                     Password  
-                    <p id="validPasswordColorWord" className={Style.smallWord}>  (8~16자리, 소문자, 특수문자를 하나이상 포함.)</p>
                 </label>
+                <p id="validPasswordColorWord" className={Style.smallAlertWord}>  (8~16자리, 소문자, 특수문자를 하나이상 포함.)</p>
             </div>
+            {/* 비밀번호 Input */}
             <div className={Style.Cover}>
                 <input
                     id="passwordInput"
@@ -223,6 +227,7 @@ const SignUp = ({login, toLoginPage}) => {
                     onFocus={onfocusHandler}
                 />
             </div>
+            {/* 비밀번호 확인 Label */}
             <div className={Style.Cover}>
                 <label 
                     className={Style.formLabel}
@@ -230,6 +235,7 @@ const SignUp = ({login, toLoginPage}) => {
                     Password 확인
                 </label>
             </div>
+            {/* 비밀번호 확인 Input */}
             <div className={Style.Cover}>
                 <input
                     id="passwordCheckInput"
@@ -240,6 +246,7 @@ const SignUp = ({login, toLoginPage}) => {
                     onFocus={onfocusHandler}
                 />
             </div>
+            {/* 닉네임 Label */}
             <div className={Style.Cover}>
                 <label 
                     className={Style.formLabel}
@@ -247,6 +254,7 @@ const SignUp = ({login, toLoginPage}) => {
                     Nickname
                 </label>
             </div>
+            {/* 닉네임 Input */}
             <div className={Style.Cover}>
                 <input
                     id="nicknameInput"
@@ -257,40 +265,18 @@ const SignUp = ({login, toLoginPage}) => {
                     onFocus={onfocusHandler}
                 />
             </div>
+            {/* 나이 Label */}
             <div className={Style.Cover}>
-                <div className={Style.ageGenderLabelArea}>
-                    <div className={Style.Cover}>
-                        <label 
-                            className={Style.formLabel}
-                            htmlFor="ageInput">
-                            나이
-                        </label>
-                    </div>
-                    <div className={Style.Cover}>
-                        <label 
-                            htmlFor="ageAgree"
-                            className={Style.formAgreeLabel}>
-                            공개
-                        </label>
-                    </div>
-                    <div className={Style.Cover}>
-                        <label 
-                            className={Style.formLabel}
-                            >
-                            성별
-                        </label>
-                    </div>
-                    <div className={Style.Cover}>
-                        <label 
-                            htmlFor="genderAgree"
-                            className={Style.formAgreeLabel}>
-                            공개
-                        </label>
-                    </div>
-                </div>
+                <label 
+                    className={Style.formLabel}
+                    htmlFor="ageInput">
+                    나이
+                </label>
+                <p className={Style.smallCommentWord}> 해당 정보를 공개하려면 체크해주세요.</p>
             </div>
+            {/* 나이 Input */}
             <div className={Style.Cover}>
-                <div className={Style.ageGenderInputArea}>
+                <div className={Style.splitInput}>
                     <div className={Style.Cover}>
                         <input
                             id="ageInput"
@@ -309,6 +295,19 @@ const SignUp = ({login, toLoginPage}) => {
                             onChange={ageAgreeHandler}
                         />
                     </div>
+                </div>
+            </div>
+            {/* 성별 Label */}
+            <div className={Style.Cover}>
+                <label 
+                    className={Style.formLabel}>
+                    성별
+                </label>
+                <p className={Style.smallCommentWord}> 해당 정보를 공개하려면 체크해주세요.</p>
+            </div>
+            {/* 성별 Input */}
+            <div className={Style.Cover}>
+                <div className={Style.splitInput}>
                     <div className={Style.Cover}>
                         <div className={Style.genderInputArea}>
                             <div className={Style.Cover}>
@@ -333,6 +332,7 @@ const SignUp = ({login, toLoginPage}) => {
                                     /><label htmlFor="FEMALE" className={Style.genderLabel}>여</label>
                                 </div>
                             </div>
+                            <div />
                         </div>
                     </div>
                     <div className={Style.Cover}>

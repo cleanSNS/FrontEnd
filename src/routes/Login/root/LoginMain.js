@@ -7,8 +7,6 @@ const Login = ({login}) => {
     return(
         <div className={Style.Cover}>
             <div className={Style.book}>
-                <div className={Style.clip1} />
-                <div className={Style.clip2} />
                 <div className={Style.bookinnerCover}>
                     <Logo />
                     <MainInnerStuff login={login} />
