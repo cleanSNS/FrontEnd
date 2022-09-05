@@ -72,7 +72,7 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
     };
 
     return(
-        <form className={Style.loginInnerCover}>
+        <form className={Style.loginInnerCover} onSubmit={submitHandler}>
             {/* 아이디 */}
             <div className={Style.Cover}>
             <input 
