@@ -1,7 +1,7 @@
 /*페이지 디자인*/
 .loginInnerCover {
   position : absolute;
-  top: 48%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 
@@ -9,8 +9,8 @@
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 2fr;
 
-  width: 90%;
-  height: 80%;
+  width: 95%;
+  height: 70%;
 
   box-shadow: 2px 2px 5px rgb(137, 137, 137);
   border-radius: 0.25rem;
@@ -105,8 +105,8 @@
   height: 30px;
 
   position: absolute;
-  top: 13%;
-  left: 20%;
+  top: 14%;
+  left: 18%;
 }
 
 .kakaoLabel {
@@ -114,7 +114,7 @@
   font-weight: 900;
 
   position: absolute;
-  top: 21%;
+  top: 28%;
   right: 25%;
 }
 
@@ -140,6 +140,6 @@
   font-weight: 900;
 
   position: relative;
-  top: 21%;
-  right: -9%;
+  top: 27%;
+  right: -10%;
 }

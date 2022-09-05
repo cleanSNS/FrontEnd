@@ -4,18 +4,18 @@
 
 .WholeCover{
     position : absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 2fr 1fr 1fr 1fr 1fr;
-    height: 65%;
-    width : 80%;
+    height: 70%;
+    width : 95%;
+    padding: 40px 10px;
 
     box-shadow: 2px 2px 5px rgb(137, 137, 137);
-    padding: 30px;
 }
 
 .text{
@@ -53,6 +53,7 @@
     border: none;
     width : 80%;
     height: 70%;
+    font-size: medium;
     border-radius: 0.25rem;
     background-color: black;
     color: white;

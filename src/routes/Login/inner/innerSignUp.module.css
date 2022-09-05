@@ -5,7 +5,7 @@
 /*모든 커버*/
 .SignUpCover{
     position: absolute;
-    top: 50%;
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
 
@@ -13,13 +13,13 @@
     grid-template-columns: 1fr;
     grid-template-rows: 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 5fr;
 
-    width: 100%;
+    width: 95%;
     height: 90%;
     background-Color: white;
     box-shadow: 2px 2px 3px rgb(137, 137, 137);
     border: 1px solid rgb(186, 186, 186);
     border-radius: 0.5rem;
-    padding: 10px 30px;
+    padding: 40px 20px;
 }
 
 /*두개로 분리하는 Input*/
@@ -81,6 +81,7 @@
     transform: translate(-50%, -50%);
 
     border: none;
+    font-weight: bold;
     border-radius: 0.25rem;
     width: 50px;
     height: 90%;
@@ -91,7 +92,7 @@
 /*비밀번호 조건 알려주는 글*/
 .smallAlertWord{
     position: absolute;
-    top: 50%;
+    top: 12%;
     left: 65%;
     transform: translate(-50%, -50%);
     width: 100%;
@@ -104,7 +105,7 @@
 /*정보 공개 뭐시깽이*/
 .smallCommentWord{
     position: absolute;
-    top: 50%;
+    top: 12%;
     left: 58%;
     transform: translate(-50%, -50%);
     width: 100%;
@@ -123,22 +124,20 @@
     width: 100%;
 
     display: grid;
-    grid-template-columns: 1fr 1fr 3fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 5fr;
     grid-template-rows: 1fr;
 }
 
 .genderInput{
     position: absolute;
-    top: 50%;
-    left: 10%;
-    transform: translate(0, -50%);
+    transform: translate(50%, -70%);
+    zoom: 1.5;
 }
 
 .genderLabel{
     position: absolute;
     top: 50%;
-    left: 30%;
-    transform: translate(0, -50%);
+    transform: translate(-50%, -50%);
 }
 
 
@@ -159,6 +158,7 @@
     transform: translate(-50%, -50%);
 
     border: none;
+    font-weight: bold;
     width : 60%;
     height: 50%;
     border-radius: 0.25rem;
@@ -175,6 +175,7 @@
     transform: translate(-50%, -50%);
 
     border: none;
+    font-weight: bold;
     width : 60%;
     height: 50%;
     border-radius: 0.25rem;

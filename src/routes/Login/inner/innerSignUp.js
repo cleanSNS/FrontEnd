@@ -311,26 +311,28 @@ const SignUp = ({login, toLoginPage}) => {
                     <div className={Style.Cover}>
                         <div className={Style.genderInputArea}>
                             <div className={Style.Cover}>
-                                <div className={Style.genderInputArea}>
-                                    <input
-                                        id="MALE"
-                                        type="radio"
-                                        name="gender"
-                                        className={Style.genderInput}
-                                        onChange={genderHandler}
-                                    /><label htmlFor="MALE" className={Style.genderLabel}>남</label>
-                                </div>
+                                <input
+                                    id="MALE"
+                                    type="radio"
+                                    name="gender"
+                                    className={Style.genderInput}
+                                    onChange={genderHandler}
+                                />
                             </div>
                             <div className={Style.Cover}>
-                                <div className={Style.genderInputArea}>
-                                    <input
-                                        id="FEMALE"
-                                        type="radio"
-                                        name="gender"
-                                        className={Style.genderInput}
-                                        onChange={genderHandler}
-                                    /><label htmlFor="FEMALE" className={Style.genderLabel}>여</label>
-                                </div>
+                                <label htmlFor="MALE" className={Style.genderLabel}>남</label>
+                            </div>
+                            <div className={Style.Cover}>
+                                <input
+                                    id="FEMALE"
+                                    type="radio"
+                                    name="gender"
+                                    className={Style.genderInput}
+                                    onChange={genderHandler}
+                                />
+                            </div>
+                            <div className={Style.Cover}>
+                                <label htmlFor="FEMALE" className={Style.genderLabel}>여</label>
                             </div>
                             <div />
                         </div>
@@ -353,14 +355,14 @@ const SignUp = ({login, toLoginPage}) => {
                             onClick={toLoginPage}
                             className={Style.cancelBtn}
                             value="0">
-                            취소
+                            취 소
                         </button>
                     </div>
                     <div className={Style.Cover}>
                         <button 
                             onClick={submitHandler}
                             className={Style.submitBtn}>
-                            가입
+                            가 입
                         </button>
                     </div>
                     <div />
