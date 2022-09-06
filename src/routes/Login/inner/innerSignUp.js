@@ -105,7 +105,8 @@ const SignUp = ({login, toLoginPage}) => {
             email: email,
         })
             .then((res) => {
-                //console.log(res);
+                console.log(res);
+                alert("인증 메일을 보냈습니다.");
                 document.querySelector("#emailInput").disabled = true;
                 setEmailAccept(true);
             })
@@ -176,7 +177,7 @@ const SignUp = ({login, toLoginPage}) => {
     };
 
     return(
-        <div className={Style.SignUpCover}>
+        <div className={Style.SignUpCover} onSubmit={submitHandler}>
             {/* 이메일 Label */}
             <div className={Style.Cover}>
                 <label 
@@ -353,14 +354,15 @@ const SignUp = ({login, toLoginPage}) => {
                     <div className={Style.Cover}>
                         <button 
                             onClick={toLoginPage}
+                            type="button"
                             className={Style.cancelBtn}
                             value="0">
                             취 소
                         </button>
                     </div>
                     <div className={Style.Cover}>
-                        <button 
-                            onClick={submitHandler}
+                        <button
+                            type="submit"
                             className={Style.submitBtn}>
                             가 입
                         </button>
