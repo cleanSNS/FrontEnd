@@ -124,7 +124,8 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
             </div>
             {/* 소셜 로그인 */}
             <div className={Style.Cover}>
-                <div className={Style.splitCover}>
+                <div className={Style.split4Cover}>
+                    <div />
                     <div className={Style.Cover}>
                         <button className={Style.Socialbtn}>
                             <div id="KakaoContainer" className={Style.kakao}>
@@ -141,6 +142,7 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
                             </div>
                         </button>
                     </div>
+                    <div />
                 </div>
             </div>
         </form>
