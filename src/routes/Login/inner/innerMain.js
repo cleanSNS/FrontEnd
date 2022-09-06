@@ -52,7 +52,7 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
         //App.js에서 로그인 되지 않은 상황에서 login페이지를 벗어나는 것을 막는 과정에서 카카오 로그인중에 강제로 redirction이 발생할 수 있다.
         //이를 막기 위해서 rft를 social로 변경. 해당 상태에서는 redirection이 발생하지 않게 한다
         localStorage.setItem("rft", "social");
-        window.open(kakaoLoginUrl);
+        window.location.href = kakaoLoginUrl;
         /*
             해당 Url로 들어가면 서버에서 자동으로 redirect를 해서 카카오 로그인 페이지로 이동시켜준다.
             사용자가 카카오 로그인을 하면 카카오에서 사전에 동의된 대로 서버에게 데이터를 넘겨준다.
