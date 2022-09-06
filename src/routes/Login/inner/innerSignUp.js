@@ -177,7 +177,7 @@ const SignUp = ({login, toLoginPage}) => {
     };
 
     return(
-        <div className={Style.SignUpCover} onSubmit={submitHandler}>
+        <form className={Style.SignUpCover} onSubmit={submitHandler}>
             {/* 이메일 Label */}
             <div className={Style.Cover}>
                 <label 
@@ -370,7 +370,7 @@ const SignUp = ({login, toLoginPage}) => {
                     <div />
                 </div>
             </div>
-        </div>
+        </form>
     );
 }
 
