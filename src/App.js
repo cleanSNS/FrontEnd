@@ -5,12 +5,12 @@ import {
   Switch,
   Redirect
 } from 'react-router-dom';
+import { useEffect } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
+import { logoutApiUrl, KakaoTokenUrl } from './apiUrl';
 
 axios.defaults.withCredentials = true;
-
-const logoutApiUrl = 'http://52.78.49.137:8080/user/auth/logout';
 
 function App() {
 
@@ -36,6 +36,32 @@ function App() {
       console.log(res);
     });
   };
+
+  //카카오 로그인 시 토큰을 프론트로 받게 되는 경우 처리하는 함수
+  const socialLogin = () => {
+    if(localStorage.getItem("rft") === "social"){//소셜 처리중인 경우
+      const params = new URL(window.location.href).searchParams;
+      const code = params.get("code");
+      axios.post(KakaoTokenUrl,{
+
+      })
+      .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
+        console.lor(res);
+        alert("로그인 되었습니다.");
+        /*
+              여기 작업해야함
+        */
+        //토큰 처리 해야하는데 어떻게 하냐..? 만약 일반 로그인이랑 응답이 비슷하면 loginFunc호출하면 될듯 아니라면 이제 따로 작업.
+      })
+      .catch((res) => {
+        console.log(res);
+        alert("소셜 로그인에 문제가 발생했습니다.");
+        localStorage.removeItem("rft");//소셜 상태를 종료한다.
+        window.location.href = "/";//다시 원래의 로그인 url로 이동한다.
+      });
+    }
+  };
+  useEffect(socialLogin, []);
 
   return (
     <Router>
