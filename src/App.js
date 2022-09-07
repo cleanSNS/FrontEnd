@@ -63,10 +63,10 @@ function App() {
 
   return (
     <Router>
-      {localStorage.getItem("rft") === null ? <Redirect to='/' /> : null}
-      {localStorage.getItem("rft") !== "social" && localStorage.getItem("rft") !== null ?
+      {/*localStorage.getItem("rft") === null ? <Redirect to='/' /> : null*/}
+      {/*localStorage.getItem("rft") !== "social" && localStorage.getItem("rft") !== null ?
         <Redirect to="/main" /> : null 
-      }
+      */}
       <Switch>
         <Route path="/main">
           <Home logout={logoutFunc} />
