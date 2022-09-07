@@ -2,89 +2,92 @@
     position: relative;
 }
 
+/*전체 커버*/
 .pageCover{
-    display: grid;
-    grid-template-columns: 1fr 9fr 1fr;
-    grid-template-rows: 1fr;
-
+    position: absolute;
+    min-height: 100vh;
     width: 100%;
-    height: 95%;
     min-width: 1200px;
-    min-height: 650px;
-    position: absolute;
-}
-
-.bookCover{
-    position: absolute;
-
-    display: grid;
-    grid-template-columns: 18fr 1fr 8fr;
-    grid-template-rows: 1fr;
-
-    height: 100%;
-    width: 100%;
-}
-
-.splitBookCover{
-    position: absolute;
-    height: 100%;
-    width: 100%;
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1.2fr 9fr;
+    grid-template-rows: 1fr 7fr;
 }
 
-.leftHeaderCover{
-    position: absolute;
-    height: 100%;
+/*로고, 검색버튼, 메뉴를 넣을 공간이다.*/
+.header{
+    position: fixed;
+    top: 0;
     width: 100%;
+    height: 100px;
 
     display: grid;
-    grid-template-columns: 2fr 2fr 5fr;
+    grid-template-columns: 1fr 3fr 3fr 3fr;
     grid-template-rows: 1fr;
+    border-bottom: 1px solid rgb(190, 190, 190);
+    background-color: white;
 }
 
-.leftMain{
-    position: relative;
-
-    margin-bottom: 10px;
-    border: 1px solid rgb(168, 168, 168);
-    border-radius: 0.5rem;
-    background-color: #fff7f7;
-    box-shadow: 2px 2px 5px rgb(132, 106, 106);
-}
-
-.rightHeaderCover{
+/*태그 관련*//*태그 선택시 rgb(277,277,277)로*/
+.tagArea{
     position: absolute;
-    height: 100%;
-    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 275px;
+    height: 70px;
 
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: 1fr;
+    gap: 1px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 4px rgb(190, 190, 190);
 }
 
-/*active한 경우 gray로, inactive한 경우 rgb(189, 189, 189)로 한다. */
-.tag{
+.lefttag{
     position: absolute;
-    bottom: 0%;
-    left: 50%;
-    transform: translate(-50%, 0);
-
-    width: 40px;
-    height: 50px;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-    background-color: rgb(189, 189, 189);
+    width: 100%;
+    height: 100%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-right: 1px solid rgb(190, 190, 190);
+    background-color: white;
 }
 
-.rightMain{
-    position: relative;
+.midtag{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid rgb(190, 190, 190);
+    background-color: white;
+}
 
-    margin-bottom: 10px;
-    border: 1px solid rgb(168, 168, 168);
-    border-radius: 0.5rem;
-    background-color: #fff7f7;
-    box-shadow: 2px 2px 5px rgb(132, 106, 106);
+.righttag{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: white;
+}
+
+/*글 등 들어갈 박스*/
+.mainStuff{
+    position: relative;
+    top: 110px;
+    left: 10%;
+    background-color: blue;
+    width: 600px;
+    height: 3000px;
+}
+
+/*메뉴 등 들어갈 박스*/
+.menuCard{
+    position: fixed;
+    top: 110px;
+    left: 75%;
+    width: 300px;
+    height: 500px;
+    background-color: black;
 }

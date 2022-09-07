@@ -26,7 +26,7 @@ const Home = ({ logout }) => {
 
   //첫 render시 친구 tag를 칠해준다.
   const firstRender = () => {
-    document.querySelector("#friend").style.backgroundColor = "gray";
+    document.querySelector("#friend").style.backgroundColor = "rgb(227, 227, 227)";
   };
   useEffect(firstRender, []);
 
@@ -37,8 +37,8 @@ const Home = ({ logout }) => {
     if(targetID === rightBookState) return; //같은 태그를 여러번 누르는 경우 아무 변화도 주지 않는다.
     
     //태그 색상 변경
-    document.querySelector(`#${targetID}`).style.backgroundColor = "gray";//누른 버튼 어둡게 변경
-    document.querySelector(`#${rightBookState}`).style.backgroundColor = "rgb(189, 189, 189)";;//원래 눌려있던 버튼 밝게 변경
+    document.querySelector(`#${targetID}`).style.backgroundColor = "rgb(227, 227, 227)";//누른 버튼 어둡게 변경
+    document.querySelector(`#${rightBookState}`).style.backgroundColor = "white";//원래 눌려있던 버튼 밝게 변경
 
     if(targetID === "setting" || targetID === 'newPost'){
       setRightBookState(targetID);
@@ -67,61 +67,37 @@ const Home = ({ logout }) => {
 
   return(
     <div className={Style.pageCover}>
-      <div />
+      {/*  헤더  */}
       <div className={Style.Cover}>
-        <div className={Style.bookCover}>
+        <div className={Style.header}>
+          <Logo />
+          <div />
+          <SearchBar />
           <div className={Style.Cover}>
-            <div className={Style.splitBookCover}>
+            <div className={Style.tagArea}>
               <div className={Style.Cover}>
-                <div className={Style.leftHeaderCover}>
-                    <Logo />
-                    <div />
-                    <SearchBar />
-                </div>
+                <div className={Style.lefttag} onClick={tagClickHandler} id="newPost">글</div>
               </div>
-              <div className={Style.leftMain}>
-                {leftBookState === "page" ? <LeftPage /> : null}
-                {leftBookState === "pageList" ? <LeftPageList /> : null}
-                {leftBookState === "chat" ? <LeftChat /> : null}
-                {leftBookState === "newPost" ? <LeftNewPost /> : null}
-                {leftBookState === "setting" ? <LeftSetting settingState={settingState} /> : null}
-              </div>
-            </div>
-          </div>
-          <div className={Style.leftRightGap} />
-          <div className={Style.Cover}>
-            <div className={Style.splitBookCover}>
               <div className={Style.Cover}>
-                <div className={Style.rightHeaderCover}>
-                  <div className={Style.Cover}>
-                    <div className={Style.tag} onClick={tagClickHandler} id="newPost">글</div>
-                  </div>
-                  <div className={Style.Cover}>
-                      <div className={Style.tag} onClick={tagClickHandler} id="chat">챗</div>
-                  </div>
-                  <div className={Style.Cover}>
-                      <div className={Style.tag} onClick={tagClickHandler} id="notice">알</div>
-                  </div>
-                  <div className={Style.Cover}>
-                      <div className={Style.tag} onClick={tagClickHandler} id="friend">친</div>
-                  </div>
-                  <div className={Style.Cover}>
-                      <div className={Style.tag} onClick={tagClickHandler} id="setting">설</div>
-                  </div>
-                </div>
+                <div className={Style.midtag} onClick={tagClickHandler} id="chat">챗</div>
               </div>
-              <div className={Style.rightMain}>
-                { rightBookState === "newPost" ? <RightNewPost /> :  null}
-                { rightBookState === "chat" ? <RightChat /> : null}
-                { rightBookState === "notice" ? <RightNotice /> : null}
-                { rightBookState === "friend" ? <RightFriend /> : null}
-                { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout} /> : null}
+              <div className={Style.Cover}>
+                <div className={Style.midtag} onClick={tagClickHandler} id="notice">알</div>
+              </div>
+              <div className={Style.Cover}>
+                <div className={Style.midtag} onClick={tagClickHandler} id="friend">친</div>
+              </div>
+              <div className={Style.Cover}>
+                <div className={Style.righttag} onClick={tagClickHandler} id="setting">설</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div />
+      {/*  바디  */}
+      <div className={Style.Cover}>
+        <div className={Style.mainStuff}></div>
+      </div>
     </div>
   );
 }
