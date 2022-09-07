@@ -42,9 +42,7 @@ function App() {
     if(localStorage.getItem("rft") === "social"){//소셜 처리중인 경우
       const params = new URL(window.location.href).searchParams;
       const code = params.get("code");
-      axios.post(KakaoTokenUrl,{
-
-      })
+      axios.get(KakaoTokenUrl + code)
       .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
         console.lor(res);
         alert("로그인 되었습니다.");

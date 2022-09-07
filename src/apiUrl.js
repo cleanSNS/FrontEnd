@@ -9,7 +9,7 @@ export const loginApiUrl = `${apiUrl}/user/auth/login`;
 export const kakaoLoginUrl = `${apiUrl}/social/login/kakao/code`;
 
 //카카오 소셜 로그인 토큰 인증
-export const KakaoTokenUrl = `${apiUrl}`;//변동될 수 있음
+export const KakaoTokenUrl = `${apiUrl}/social/login/kakao?code=`;//변동될 수 있음
 
 //네이버 소셜 로그인 Url
 export const naverLoginApiUrl = `${apiUrl}/social/login/naver/code`;
