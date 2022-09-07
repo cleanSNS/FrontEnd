@@ -126,7 +126,8 @@
 	http로 하기 위해서는 AWS기기에서 80번 포트를 열고 sudo su를 한 뒤(1024번 이하 포트는 관리자 권한이 필요하다.)npm start를 80번 포트로 켜면 문제없이 켜진다.
 	https가 문제다. https로 켜기 위해서 일단 포트번호는 443번으로 해야한다. 그래서 위 작업을 진행했으나 사이트가 켜지지 않았다.
 	- 해결법
-		1. 일단 HTTPS=true를 해줘야한다. 그래서 package.json파일을 수정한다.
+		1. 일단 HTTPS=true를 해줘야한다. 즉, npm start전에 HTTPS=true npm start로 실행한다.(package.json 수정하면 될거같긴 하다.)
+		2. 1번만 실행하면 브라우저에서 위험을 감지한다. 이걸 해결하기 위해서 ?
 		
 
 # To Do List
