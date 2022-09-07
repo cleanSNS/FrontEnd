@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Style from "./HomeMain.module.css";
 import Logo from "../../../logo/mainLogo";
 import SearchBar from "./searchBar";
@@ -24,18 +24,31 @@ const Home = ({ logout }) => {
   //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
   const [settingState, setSettingState] = useState("initial");
 
+  //첫 render시 친구 tag를 칠해준다.
+  const firstRender = () => {
+    document.querySelector("#friend").style.backgroundColor = "gray";
+  };
+  useEffect(firstRender, []);
+
   //우측 태그 클릭 hander
   const tagClickHandler = (event) =>{
     event.preventDefault();
-    const tmp = event.target.id;
-    if(tmp === "setting" || tmp === 'newPost'){
-      setRightBookState(event.target.id);
-      setLeftBookState(event.target.id);
+    const targetID = event.target.id;//누른 위치
+    if(targetID === rightBookState) return; //같은 태그를 여러번 누르는 경우 아무 변화도 주지 않는다.
+    
+    //태그 색상 변경
+    document.querySelector(`#${targetID}`).style.backgroundColor = "gray";//누른 버튼 어둡게 변경
+    document.querySelector(`#${rightBookState}`).style.backgroundColor = "rgb(189, 189, 189)";;//원래 눌려있던 버튼 밝게 변경
+
+    if(targetID === "setting" || targetID === 'newPost'){
+      setRightBookState(targetID);
+      setLeftBookState(targetID);
     }
     else{
       if(leftBookState === 'setting' || leftBookState === 'newPost') setLeftBookState("page");
-      setRightBookState(event.target.id);
+      setRightBookState(targetID);
     }
+
     if(settingState !== 'initial'){//다른 태그 클릭 시 설정을 다시 원래대로 돌린다.
       setSettingState('initial');
     }
@@ -51,38 +64,15 @@ const Home = ({ logout }) => {
   const SettingChangeHandler = (val) => {
     setSettingState(val);
   }
-  
-  //글 읽어오기 함수
-
-  //세부 글 읽어오기 함수
-
-  //댓글 읽어오기 함수
-
-  //대댓글 읽어오기 함수
-
-  //유저 정보 조회 함수
-
-  //친구 정보 조회 함수
-
-  //채팅방 정보 읽어오기 함수
-
-  //알림 정보 읽어오기 함수
-
-  //내 게시글 읽어오기 함수
-
-  //친구 게시글 읽어오기 함수
-
-  //글 게시 함수
-
 
   return(
     <div className={Style.pageCover}>
       <div />
-      <div className={Style.mainPage}>
+      <div className={Style.Cover}>
         <div className={Style.bookCover}>
-          <div className={Style.leftBook}>
+          <div className={Style.Cover}>
             <div className={Style.splitBookCover}>
-              <div className={Style.leftHeader}>
+              <div className={Style.Cover}>
                 <div className={Style.leftHeaderCover}>
                     <Logo />
                     <div />
@@ -99,48 +89,24 @@ const Home = ({ logout }) => {
             </div>
           </div>
           <div className={Style.leftRightGap} />
-          <div className={Style.rightBook}>
+          <div className={Style.Cover}>
             <div className={Style.splitBookCover}>
-              <div className={Style.rightHeader}>
+              <div className={Style.Cover}>
                 <div className={Style.rightHeaderCover}>
-                  <div className={Style.tag}>
-                    { rightBookState === "newPost" ?
-                      <div className={Style.activeTag} onClick={tagClickHandler} id="newPost" >글</div>
-                      :
-                      <div className={Style.inactiveTag} onClick={tagClickHandler} id="newPost">글</div>
-                    }
+                  <div className={Style.Cover}>
+                    <div className={Style.tag} onClick={tagClickHandler} id="newPost">글</div>
                   </div>
-                  <div className={Style.tag}>
-                    {
-                      rightBookState === "chat" ?
-                      <div className={Style.activeTag} onClick={tagClickHandler} id="chat">챗</div>
-                      :
-                      <div className={Style.inactiveTag} onClick={tagClickHandler} id="chat">챗</div>
-                    }
+                  <div className={Style.Cover}>
+                      <div className={Style.tag} onClick={tagClickHandler} id="chat">챗</div>
                   </div>
-                  <div className={Style.tag}>
-                    {
-                      rightBookState === "notice" ?
-                      <div className={Style.activeTag} onClick={tagClickHandler} id="notice">알</div>
-                      :
-                      <div className={Style.inactiveTag} onClick={tagClickHandler} id="notice">알</div>
-                    }
+                  <div className={Style.Cover}>
+                      <div className={Style.tag} onClick={tagClickHandler} id="notice">알</div>
                   </div>
-                  <div className={Style.tag}>
-                    {
-                      rightBookState === "friend" ?
-                      <div className={Style.activeTag} onClick={tagClickHandler} id="friend">친</div>
-                      :
-                      <div className={Style.inactiveTag} onClick={tagClickHandler} id="friend">친</div>
-                    }
+                  <div className={Style.Cover}>
+                      <div className={Style.tag} onClick={tagClickHandler} id="friend">친</div>
                   </div>
-                  <div className={Style.tag}>
-                    {
-                      rightBookState === "setting" ?
-                      <div className={Style.activeTag} onClick={tagClickHandler} id="setting">설</div>
-                      :
-                      <div className={Style.inactiveTag} onClick={tagClickHandler} id="setting">설</div>
-                    }
+                  <div className={Style.Cover}>
+                      <div className={Style.tag} onClick={tagClickHandler} id="setting">설</div>
                   </div>
                 </div>
               </div>

@@ -1,3 +1,4 @@
+//프로필을 보여주는 JS
 import Style from './profile.module.css';
 
 const Profile = ({img, name}) => {

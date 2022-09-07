@@ -1,3 +1,4 @@
+//빨간색 알림이고 숫자 있는 친구
 import Style from './numberNotice.module.css';
 
 const NumberNotice = ({number}) => {

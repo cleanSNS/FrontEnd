@@ -1,3 +1,7 @@
+.Cover{
+    position: relative;
+}
+
 .pageCover{
     display: grid;
     grid-template-columns: 1fr 9fr 1fr;
@@ -8,10 +12,6 @@
     min-width: 1200px;
     min-height: 650px;
     position: absolute;
-}
-
-.mainPage{
-    position: relative;
 }
 
 .bookCover{
@@ -25,14 +25,6 @@
     width: 100%;
 }
 
-.leftBook{
-    position: relative;
-}
-
-.rightBook{
-    position: relative
-}
-
 .splitBookCover{
     position: absolute;
     height: 100%;
@@ -41,10 +33,6 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1.2fr 9fr;
-}
-
-.leftHeader{
-    position: relative;
 }
 
 .leftHeaderCover{
@@ -67,10 +55,6 @@
     box-shadow: 2px 2px 5px rgb(132, 106, 106);
 }
 
-.rightHeader{
-    position: relative;
-}
-
 .rightHeaderCover{
     position: absolute;
     height: 100%;
@@ -81,24 +65,8 @@
     grid-template-rows: 1fr;
 }
 
+/*active한 경우 gray로, inactive한 경우 rgb(189, 189, 189)로 한다. */
 .tag{
-    position: relative;
-}
-
-.activeTag{
-    position: absolute;
-    bottom: 0%;
-    left: 50%;
-    transform: translate(-50%, 0);
-
-    width: 40px;
-    height: 50px;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-    background-color: gray;
-}
-
-.inactiveTag{
     position: absolute;
     bottom: 0%;
     left: 50%;
