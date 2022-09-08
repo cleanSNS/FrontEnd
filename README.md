@@ -139,7 +139,9 @@
 				=> 이 명령어를 통해 진행했다.
 			3. 이후 확인을 위해 HTTPS=true SSL_CRT_FILE=(인증서명).crt SSL_KEY_FILE=(키명).key npm start 명령으로 실행. 정상적으로 https가 적용되었다.
 			4. 이제 package.json파일을 수정한다.
-		
+				=> 일단은 npm start로 테스트중이므로 해당 부분을 아래와 같이 변경했다.
+				export PORT=443 && HTTPS=true SSL_CRT_FILE=(인증서명).crt SSL_KEY_FILE=(키명).key react-scripts start
+			5. 또한 github에 인증서와 키가 올라가는 것을 막기 위해 보낸 파일들은 frontend의 상위 폴더에 위치시켰다.
 
 # To Do List
 1. 카카오 로그인 - 도메인 작업 선행 필요
