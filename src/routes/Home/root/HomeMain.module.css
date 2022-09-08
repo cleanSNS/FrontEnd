@@ -1,93 +1,100 @@
 .Cover{
     position: relative;
+    height: 100%;
+    width: 100%;
 }
 
 /*전체 커버*/
 .pageCover{
     position: absolute;
-    min-height: 100vh;
-    width: 100%;
+    min-height: 98%;
+    width: 98%;
     min-width: 1200px;
 
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 7fr 3fr;
     grid-template-rows: 1fr 7fr;
 }
 
-/*로고, 검색버튼, 메뉴를 넣을 공간이다.*/
-.header{
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 100px;
+/*로고, 검색버튼을 넣을 공간이다.*/
+.leftHeader{
+    position : absolute;
+    width : 100%;
+    height: 100%;
 
     display: grid;
-    grid-template-columns: 1fr 3fr 3fr 3fr;
+    grid-template-columns: 2fr 2fr 3fr;
     grid-template-rows: 1fr;
-    border-bottom: 1px solid rgb(190, 190, 190);
-    background-color: white;
 }
 
-/*태그 관련*//*태그 선택시 rgb(277,277,277)로*/
+/*태그를 넣을 공간이다.*/
 .tagArea{
-    position: absolute;
-    top: 50%;
+    position : absolute;
+    bottom: 0;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 275px;
-    height: 70px;
+    transform: translate(-50%, 0);
+    width : 80%;
+    height: 70%;
 
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: 1fr;
-    gap: 1px;
-    border-radius: 5px;
-    box-shadow: 1px 1px 4px rgb(190, 190, 190);
+    gap: 30px;
 }
 
-.lefttag{
+/*태그이다.*/
+.tag{
+    position : absolute;
+    bottom: -5%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width : 42px;
+    height: 53px;
+
+    background-color: rgb(190, 190, 190);
+    border: 1px solid rgb(160, 160, 160);
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+
+/* 책 커버 */
+.bookCover{
     position: absolute;
-    width: 100%;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 90%;
     height: 100%;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-right: 1px solid rgb(190, 190, 190);
+
+    border-top: 5px solid rgb(160, 160, 160);
+    border-right: 5px solid rgb(160, 160, 160);
+    border-left: 5px solid rgb(160, 160, 160);
+    border-top-right-radius: 30px;
+    border-top-left-radius: 30px;
+    background-color: #F4DEDE;
+}
+
+/* 책 종이 부분 */
+.leftbook{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 98%;
+    height: 99%;
+    border-top-right-radius: 25px;
+    border-top-left-radius: 25px;
     background-color: white;
 }
 
-.midtag{
+.rightbook{
     position: absolute;
-    width: 100%;
-    height: 100%;
-    border-right: 1px solid rgb(190, 190, 190);
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 95.5%;
+    height: 98.7%;
+    border-top-right-radius: 21px;
+    border-top-left-radius: 21px;
     background-color: white;
-}
-
-.righttag{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    background-color: white;
-}
-
-/*글 등 들어갈 박스*/
-.mainStuff{
-    position: relative;
-    top: 110px;
-    left: 10%;
-    background-color: blue;
-    width: 600px;
-    height: 3000px;
-}
-
-/*메뉴 등 들어갈 박스*/
-.menuCard{
-    position: fixed;
-    top: 110px;
-    left: 75%;
-    width: 300px;
-    height: 500px;
-    background-color: black;
 }

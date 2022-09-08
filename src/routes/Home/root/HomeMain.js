@@ -17,6 +17,7 @@ import RightFriend from "../rightInner/friend/friend";
 import RightSetting from "../rightInner/setting/setting";
 
 const Home = ({ logout }) => {
+  
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pageList //chat // newPost // setting
@@ -26,7 +27,7 @@ const Home = ({ logout }) => {
 
   //첫 render시 친구 tag를 칠해준다.
   const firstRender = () => {
-    document.querySelector("#friend").style.backgroundColor = "rgb(227, 227, 227)";
+    document.querySelector("#friend").style.backgroundColor = "rgb(145, 145, 145)";
   };
   useEffect(firstRender, []);
 
@@ -37,8 +38,8 @@ const Home = ({ logout }) => {
     if(targetID === rightBookState) return; //같은 태그를 여러번 누르는 경우 아무 변화도 주지 않는다.
     
     //태그 색상 변경
-    document.querySelector(`#${targetID}`).style.backgroundColor = "rgb(227, 227, 227)";//누른 버튼 어둡게 변경
-    document.querySelector(`#${rightBookState}`).style.backgroundColor = "white";//원래 눌려있던 버튼 밝게 변경
+    document.querySelector(`#${targetID}`).style.backgroundColor = "rgb(145, 145, 145)";//누른 버튼 어둡게 변경
+    document.querySelector(`#${rightBookState}`).style.backgroundColor = "rgb(190, 190, 190)";//원래 눌려있던 버튼 밝게 변경
 
     if(targetID === "setting" || targetID === 'newPost'){
       setRightBookState(targetID);
@@ -67,36 +68,61 @@ const Home = ({ logout }) => {
 
   return(
     <div className={Style.pageCover}>
-      {/*  헤더  */}
+      {/* 좌 상단 - 로고와 검색창 */}
       <div className={Style.Cover}>
-        <div className={Style.header}>
+        <div className={Style.leftHeader}>
           <Logo />
           <div />
           <SearchBar />
+        </div>
+      </div>
+      {/* 우 상단 - 태그 */}
+      <div className={Style.Cover}>
+        <div className={Style.tagArea}>
           <div className={Style.Cover}>
-            <div className={Style.tagArea}>
-              <div className={Style.Cover}>
-                <div className={Style.lefttag} onClick={tagClickHandler} id="newPost">글</div>
-              </div>
-              <div className={Style.Cover}>
-                <div className={Style.midtag} onClick={tagClickHandler} id="chat">챗</div>
-              </div>
-              <div className={Style.Cover}>
-                <div className={Style.midtag} onClick={tagClickHandler} id="notice">알</div>
-              </div>
-              <div className={Style.Cover}>
-                <div className={Style.midtag} onClick={tagClickHandler} id="friend">친</div>
-              </div>
-              <div className={Style.Cover}>
-                <div className={Style.righttag} onClick={tagClickHandler} id="setting">설</div>
-              </div>
+            <div className={Style.tag} onClick={tagClickHandler} id="newPost">글</div>
+          </div>
+          <div className={Style.Cover}>
+            <div className={Style.tag} onClick={tagClickHandler} id="chat">챗</div>
+          </div>
+          <div className={Style.Cover}>
+            <div className={Style.tag} onClick={tagClickHandler} id="notice">알</div>
+          </div>
+          <div className={Style.Cover}>
+            <div className={Style.tag} onClick={tagClickHandler} id="friend">친</div>
+          </div>
+          <div className={Style.Cover}>
+            <div className={Style.tag} onClick={tagClickHandler} id="setting">설</div>
+          </div>
+        </div>
+      </div>
+      {/* 좌측 페이지 */}
+      <div className={Style.Cover}>
+        <div className={Style.bookCover}>
+          <div className={Style.leftbook}>
+            <div className={Style.Cover}>
+                {leftBookState === "page" ? <LeftPage /> : null}
+                {leftBookState === "pageList" ? <LeftPageList /> : null}
+                {leftBookState === "chat" ? <LeftChat /> : null}
+                {leftBookState === "newPost" ? <LeftNewPost /> : null}
+                {leftBookState === "setting" ? <LeftSetting settingState={settingState} /> : null}
             </div>
           </div>
         </div>
       </div>
-      {/*  바디  */}
+      {/* 우측 페이지 */}
       <div className={Style.Cover}>
-        <div className={Style.mainStuff}></div>
+      <div className={Style.bookCover}>
+          <div className={Style.rightbook}>
+            <div className={Style.Cover}>
+              { rightBookState === "newPost" ? <RightNewPost /> :  null}
+              { rightBookState === "chat" ? <RightChat /> : null}
+              { rightBookState === "notice" ? <RightNotice /> : null}
+              { rightBookState === "friend" ? <RightFriend /> : null}
+              { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout} /> : null}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

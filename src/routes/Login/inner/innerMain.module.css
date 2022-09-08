@@ -1,20 +1,21 @@
 /*페이지 디자인*/
 .loginInnerCover {
   position : absolute;
-  top: 50%;
+  top: 10%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
 
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 2fr;
 
-  width: 95%;
-  height: 70%;
+  width: 90%;
+  height: 75%;
 
-  box-shadow: 2px 2px 5px rgb(137, 137, 137);
+  box-shadow: 2px 2px 3px rgb(137, 137, 137);
+  border: 1px solid rgb(186, 186, 186);
   border-radius: 0.25rem;
-  padding: 40px 10px;
+  padding: 40px 20px;
 }
 
 .splitCover{

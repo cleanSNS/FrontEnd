@@ -5,16 +5,16 @@
 /*모든 커버*/
 .SignUpCover{
     position: absolute;
-    top: 60%;
+    top: 10%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
 
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 5fr;
 
-    width: 95%;
-    height: 90%;
+    width: 90%;
+    height: 75%;
     background-Color: white;
     box-shadow: 2px 2px 3px rgb(137, 137, 137);
     border: 1px solid rgb(186, 186, 186);
@@ -105,7 +105,7 @@
 /*정보 공개 뭐시깽이*/
 .smallCommentWord{
     position: absolute;
-    top: 12%;
+    top: 8%;
     left: 58%;
     transform: translate(-50%, -50%);
     width: 100%;
