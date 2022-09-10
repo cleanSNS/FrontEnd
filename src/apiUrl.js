@@ -6,7 +6,7 @@ export const siteUrl = "https://cleanbook.site";
 export const loginApiUrl = `${apiUrl}/user/auth/login`;
 
 //카카오 소셜 로그인 Url
-export const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=75670ae520e9b0c56500f349b16c3c68&redirect_uri=http://52.78.49.137:8080/social/login/kakao`;
+export const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=75670ae520e9b0c56500f349b16c3c68&redirect_uri=${siteUrl}`;
 
 //카카오 소셜 로그인 토큰 인증
 export const KakaoTokenUrl = `${apiUrl}/social/login/kakao?code=`;
