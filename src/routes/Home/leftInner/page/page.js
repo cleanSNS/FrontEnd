@@ -37,7 +37,7 @@ const LeftPage = () => {
                 currentStartId = res.startId;
             })
             .catch((res) => {
-                console.log("error");
+                console.log("더이상 글이 없습니다.");
                 console.log(res);
             })
         }

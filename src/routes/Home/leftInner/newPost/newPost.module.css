@@ -1,3 +1,8 @@
+.Cover{
+    position: relative;
+}
+
+/*전체*/
 .WholeCover{
     position: absolute;
     top: 50%;
@@ -8,69 +13,110 @@
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 10fr 2fr 6fr 6fr;
+    grid-template-rows: 5fr 1fr 1fr 1fr 1fr 3fr 3fr;
 }
 
-.pictureCover{
-    position: relative;
-}
-
+/*드래그 앤 드롭 하는 곳*/
 .picture{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
-    border: 5px dotted black;
+    border: 5px dashed rgb(190, 190, 190);
     width: 80%;
     height: 80%;
-
+    border-radius: 0.75rem;
 }
 
-.hashtagCover{
-    position: relative;
-}
-
+/*해시태그 Label*/
 .hashtag{
     position: absolute;
-    top: 50%;
+    bottom: 0;
+    left: 60%;
+    transform: translate(-50%, 0);
+    width: 100%;
+}
+
+/*해시태그 input*/
+.hashtagInput{
+    position: absolute;
+    top: 0;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
 
     width : 80%;
+    height: 50%;
     border: 0;
     border-radius: 0.25rem;
     background-color: rgb(236, 236, 236);
+    box-shadow: 1px 1px 4px rgb(190, 190, 190);
+}
+.hashtagInput:focus{
+    outline: 1px solid rgb(153, 221, 255);
 }
 
-.wordCover{
+/*해시태그 list가 들어가는 영역*/
+.tagListArea{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 80%;
+    line-height: 45px;
+}
+
+/*하나의 해시태그 들어있는 영역*/
+.singleHashTag{
     position: relative;
+    border: none;
+    background-color: rgb(153, 221, 255);
+    margin: 5px;
+    padding: 10px;
+    border-radius: 0.5rem;
+    box-shadow: 2px 2px 2px rgb(236, 236, 236);
+    font-weight: 700;
 }
 
+/*글 label*/
 .word{
     position: absolute;
-    top: 50%;
+    bottom: 0;
+    left: 60%;
+    transform: translate(-50%, 0);
+    width: 100%;
+}
+
+/*글 input*/
+.wordInput{
+    position: absolute;
+    top: 0;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
     
     width : 80%;
     height: 80%;
     border: 0;
     border-radius: 0.25rem;
     background-color: rgb(236, 236, 236);
+    box-shadow: 1px 1px 4px rgb(190, 190, 190);
+}
+.wordInput:focus{
+    outline: 1px solid rgb(153, 221, 255);
 }
 
-.buttonCover{
-    position: relative;
-}
-
-.buttonn{
+/*제출 버튼*/
+.submitButton{
     position: absolute;
     top: 10%;
     left: 50%;
     transform: translate(-50%, -50%);
 
     background-color: rgb(158, 245, 255);
+    color: white;
+    font-weight: 600;
+    font-size: x-large;
+    letter-spacing: 3px;
     border: 0;
     border-radius: 0.25rem;
     box-shadow: 2px 2px 2px rgb(236, 236, 236);
