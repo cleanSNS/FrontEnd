@@ -43,7 +43,7 @@ function App() {
       const params = new URL(window.location.href).searchParams;
       const code = params.get("code");
       console.log(code);
-      axios.get(KakaoTokenUrl + code)
+      axios.post(KakaoTokenUrl + code)
       .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
         console.log(res);
         alert("로그인 되었습니다.");
