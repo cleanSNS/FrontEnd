@@ -17,7 +17,7 @@ function App() {
   //로그인시 refresh token을 local Storage에 저장하는 기능 앞에 Bearer 가 붙어있다.
   const loginFunc = (res) => {
     console.log(res);
-    alert("Welcome");
+    //alert("Welcome");
     localStorage.setItem("rft", res.headers.authorization);
     window.location.href="/main";
   };
@@ -46,7 +46,6 @@ function App() {
       axios.post(KakaoTokenUrl + code)
       .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
         console.log(res);
-        alert("로그인 되었습니다.");
         loginFunc(res);
       })
       .catch((res) => {
