@@ -55,6 +55,7 @@
 
     font-weight: bolder;
     display: inline;
+    cursor: pointer;
 }
 
 .formInput{
@@ -87,6 +88,7 @@
     height: 90%;
     box-shadow: 1px 1px 3px rgb(137, 137, 137);
     background-color:white;
+    cursor: pointer;
 }
 
 /*비밀번호 조건 알려주는 글*/
@@ -132,12 +134,14 @@
     position: absolute;
     transform: translate(50%, -70%);
     zoom: 1.5;
+    cursor: pointer;
 }
 
 .genderLabel{
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
+    cursor: pointer;
 }
 
 
@@ -148,6 +152,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     zoom: 1.5;
+    cursor: pointer;
 }
 
 /*취소 버튼*/
@@ -165,6 +170,7 @@
     background-color: white;
     color: black;
     box-shadow: 1px 1px 3px rgb(137, 137, 137);
+    cursor: pointer;
 }
 
 /*가입 버튼*/
@@ -182,4 +188,5 @@
     background-color: black;
     color: white;
     box-shadow: 1px 1px 3px rgb(137, 137, 137);
+    cursor: pointer;
 }

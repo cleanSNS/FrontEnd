@@ -59,4 +59,5 @@
     background-color: black;
     color: white;
     box-shadow: 1px 1px 3px rgb(137, 137, 137);
+    cursor: pointer;
 }
