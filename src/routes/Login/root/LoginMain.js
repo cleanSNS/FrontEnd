@@ -5,7 +5,7 @@ import MainInnerStuff from "./mainInnerStuff";
 
 const Login = ({login}) => {
     return(
-        <div>
+        <div className={Style.Mother}>
             <div className={Style.Cover}>
                 <div className={Style.circle1} />
                 <div className={Style.circle2} />
