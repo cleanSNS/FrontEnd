@@ -26,6 +26,9 @@ export const emailApiUrl = `${apiUrl}/user/auth/signup/request`;
 //로그아웃 Url
 export const logoutApiUrl = `${apiUrl}/user/auth/logout`;
 
+//비밀번호찾기 Url
+export const findPWUrl = `${apiUrl}/user/mypage/password/reset`;
+
 
 /***************************메인 페이지 관련 URl***********************************/
 //새 글 피드 가져오는 Url

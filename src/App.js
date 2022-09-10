@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
 import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl } from './apiUrl';
-
 axios.defaults.withCredentials = true;
 
 function App() {

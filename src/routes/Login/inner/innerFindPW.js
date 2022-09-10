@@ -1,6 +1,8 @@
 //비밀번호 찾기 창의 비밀번호 찾는 부분
 import { useState } from 'react';
 import Style from './innerFindPW.module.css';
+import axios from 'axios';
+import { findPWUrl } from '../../../apiUrl';
 
 const FindPW = ({toLoginPage, toSignUpPage}) => {
     const [email, setEmail] = useState();
@@ -10,22 +12,29 @@ const FindPW = ({toLoginPage, toSignUpPage}) => {
     }
     const submitHandler = (event) => {
         event.preventDefault();
-        if(email === '') return
-
-        let findPassWordInfo ={
-            email: email,
+        if(email === '') {
+            alert("이메일을 입력해 주세요");
+            return;
         }
-        console.log(findPassWordInfo)//구현시 지워도 됨
-        
-//        fetch('...', findPassWordInfo)
-//            .then((response) => response.json())
-//            .then((res) => {
-//                console.log(res);
-//                res.message === '...' ? alert("해당 이메일 정보가 없습니다.") : changeContent(event);
-//            });
+        if(!email.includes("@") || !email.includes(".")){
+            alert("올바른 이메일을 입력해 주세요");
+            return;
+        }
+
+        axios.post(findPWUrl, {
+            email: email,
+        })
+        .then((res) => {
+            alert("이매일을 보냈습니다. 비밀번호를 확인하고 입력해 주세요.");
+            window.location.href = '/';
+        })
+        .catch((res) => {
+            alert("가입되지 않은 이메일입니다.");
+            window.location.href = '/';
+        });
     }
     return(
-        <form className={Style.WholeCover}>
+        <form className={Style.WholeCover} onSubmit={submitHandler}>
             <div className={Style.Cover}>
                 <p className={Style.text}>로그인에 문제가 있나요?<br />가입했을 때의 이메일을 입력해 주세요.</p>
             </div>

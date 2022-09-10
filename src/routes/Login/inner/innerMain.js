@@ -29,7 +29,18 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
     //로그인 클릭 처리 함수
     const submitHandler = (event) => {
         event.preventDefault();
-        if(email === '' || password === '') return;
+        if(email === '') {
+            alert("이메일을 입력해 주세요");
+            return;
+        }
+        if(password === '') {
+            alert("비밀번호를 입력해 주세요");
+            return;
+        }
+        if(!email.includes("@") || !email.includes(".")){
+            alert("올바른 이메일을 입력해 주세요");
+            return;
+        }
 
         axios.post(loginApiUrl, {
             email: email,
