@@ -7,7 +7,7 @@ import axios from 'axios';
 import {
     loginApiUrl,
     kakaoLoginUrl,
-    naverLoginApiUrl
+    NaverLoginUrl,
 } from "../../../apiUrl";
 
 const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
@@ -49,26 +49,15 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
     //카카오 로그인 처리 함수
     const kakaoLoginHandler = (event) => {
         event.preventDefault();
-        //App.js에서 로그인 되지 않은 상황에서 login페이지를 벗어나는 것을 막는 과정에서 카카오 로그인중에 강제로 redirction이 발생할 수 있다.
-        //이를 막기 위해서 rft를 social로 변경. 해당 상태에서는 redirection이 발생하지 않게 한다
-        localStorage.setItem("rft", "social");
+        localStorage.setItem("rft", "kakao");
         window.location.href = kakaoLoginUrl;
-        /*
-            해당 Url로 들어가면 서버에서 자동으로 redirect를 해서 카카오 로그인 페이지로 이동시켜준다.
-            사용자가 카카오 로그인을 하면 카카오에서 사전에 동의된 대로 서버에게 데이터를 넘겨준다.
-            서버는 받은 데이터를 기반으로 회원가입을 진행하고 이후 문제가 없다면 즉시 로그인을 진행한다.
-            redirect된 페이지 .../social/login/kakao로 엑세스 토큰과 리프레시 토큰을 지급한다.
-            이후 해야할 작업은 사이트를 열고, 서버와 프론트가 하나의 ip로 구동될 때, 해당 페이지를 만들어야한다.
-            해당 페이지에서 토큰을 받고, "rft"를 변경하고, /main으로 redirct하는 useState함수만 작성하면 끝이다.
-            화면에는 잠시만 기다려달라는 말을 쓰면 된다.
-        */
     };
 
     //네이버 로그인 처리 함수 => 카카오와 내용은 동일하다.
     const naverLoginHandler = (event) => {
         event.preventDefault();
-        localStorage.setItem("rft", "social");
-        window.location.href = naverLoginApiUrl;
+        localStorage.setItem("rft", "naver");
+        window.location.href = NaverLoginUrl;
     };
 
     return(

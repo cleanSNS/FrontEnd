@@ -11,8 +11,11 @@ export const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?response_t
 //카카오 소셜 로그인 토큰 인증
 export const KakaoTokenUrl = `${apiUrl}/social/login/kakao?code=`;
 
-//네이버 소셜 로그인 Url
-export const naverLoginApiUrl = `${apiUrl}/social/login/naver/code`;
+//네이버 소셜 로그인 토큰 인증
+export const NaverLoginUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=_A0bRpk1yPqnrmV8eBx8&state=state&redirect_uri=${siteUrl}`;
+
+//네이버 소셜 로그인 URl
+export const NaverTokenUrl = `${apiUrl}/social/login/naver?code=`;
 
 //회원가입 Url
 export const signUpApiUrl = `${apiUrl}/user/auth/signup`;

@@ -8,7 +8,7 @@ import {
 import { useEffect } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
-import { logoutApiUrl, KakaoTokenUrl } from './apiUrl';
+import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl } from './apiUrl';
 
 axios.defaults.withCredentials = true;
 
@@ -39,11 +39,27 @@ function App() {
 
   //카카오 로그인 시 토큰을 프론트로 받게 되는 경우 처리하는 함수
   const socialLogin = () => {
-    if(localStorage.getItem("rft") === "social"){//소셜 처리중인 경우
+    if(localStorage.getItem("rft") === "kakao"){//소셜 처리중인 경우
       const params = new URL(window.location.href).searchParams;
       const code = params.get("code");
       console.log(code);
       axios.post(KakaoTokenUrl + code)
+      .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
+        console.log(res);
+        loginFunc(res);
+      })
+      .catch((res) => {
+        console.log(res);
+        alert("소셜 로그인에 문제가 발생했습니다.");
+        localStorage.removeItem("rft");//소셜 상태를 종료한다.
+        window.location.href = "/";//다시 원래의 로그인 url로 이동한다.
+      });
+    }
+    else if(localStorage.getItem("rft") === "naver"){//소셜 처리중인 경우
+      const params = new URL(window.location.href).searchParams;
+      const code = params.get("code");
+      console.log(code);
+      axios.post(NaverTokenUrl + code)
       .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
         console.log(res);
         loginFunc(res);
