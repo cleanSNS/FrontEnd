@@ -106,6 +106,7 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
             {/* 찾기와 회원가입 */}
             <div className={Style.Cover}>
                 <div className={Style.splitCover}>
+                    <div />
                     <div className={Style.Cover}>
                         <p
                             className={Style.word}
@@ -120,11 +121,12 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
                             회원 가입
                         </p>
                     </div>
+                    <div />
                 </div>
             </div>
             {/* 소셜 로그인 */}
             <div className={Style.Cover}>
-                <div className={Style.split4Cover}>
+                <div className={Style.splitCover}>
                     <div />
                     <div className={Style.Cover}>
                         <button className={Style.Socialbtn} onClick={kakaoLoginHandler}>

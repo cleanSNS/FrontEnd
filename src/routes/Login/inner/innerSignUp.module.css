@@ -5,19 +5,17 @@
 /*모든 커버*/
 .SignUpCover{
     position: absolute;
-    top: 10%;
+    top: 5%;
     left: 50%;
     transform: translate(-50%, 0);
 
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 2fr 3fr 5fr;
+    gap: 5px;
 
     width: 90%;
     height: 75%;
-    background-Color: white;
-    box-shadow: 2px 2px 3px rgb(137, 137, 137);
-    border: 1px solid rgb(186, 186, 186);
     border-radius: 0.5rem;
     padding: 40px 20px;
 }
@@ -98,10 +96,9 @@
     left: 65%;
     transform: translate(-50%, -50%);
     width: 100%;
-    font-weight: lighter;
     display: inline;
     font-size: small;
-    color: rgb(255, 102, 102);
+    color: rgb(218, 86, 86);
 }
 
 /*정보 공개 뭐시깽이*/
@@ -111,10 +108,9 @@
     left: 58%;
     transform: translate(-50%, -50%);
     width: 100%;
-    font-weight: lighter;
     display: inline;
     font-size: small;
-    color: rgb(102, 181, 255);
+    color: rgb(78, 159, 235);
 }
 
 /*성별 Input관련*/
@@ -164,8 +160,8 @@
 
     border: none;
     font-weight: bold;
-    width : 60%;
-    height: 50%;
+    width : 80%;
+    height: 60%;
     border-radius: 0.25rem;
     background-color: white;
     color: black;
@@ -182,10 +178,10 @@
 
     border: none;
     font-weight: bold;
-    width : 60%;
-    height: 50%;
+    width : 80%;
+    height: 60%;
     border-radius: 0.25rem;
-    background-color: black;
+    background-color: rgb(44, 44, 44);
     color: white;
     box-shadow: 1px 1px 3px rgb(137, 137, 137);
     cursor: pointer;

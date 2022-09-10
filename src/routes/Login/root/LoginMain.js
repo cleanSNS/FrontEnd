@@ -5,13 +5,22 @@ import MainInnerStuff from "./mainInnerStuff";
 
 const Login = ({login}) => {
     return(
-        <div className={Style.Cover}>
-            <div className={Style.book}>
-                <div className={Style.bookinnerCover}>
+        <div>
+            <div className={Style.Cover}>
+                <div className={Style.circle1} />
+                <div className={Style.circle2} />
+                <div className={Style.circle3} />
+                <div className={Style.circle4} />
+                <div className={Style.spring1} />
+                <div className={Style.spring2} />
+                <div className={Style.spring3} />
+                <div className={Style.spring4} />
+                <div className={Style.book}>
                     <Logo />
                     <MainInnerStuff login={login} />
                 </div>
             </div>
+            {/* 스타일 부분 */}
         </div>
     );
 }

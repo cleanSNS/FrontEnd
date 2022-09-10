@@ -68,7 +68,7 @@ const SignUp = ({login, toLoginPage}) => {
         }
         else{
             setPasswordInvalid(false);
-            document.querySelector("#validPasswordColorWord").style.color = "rgb(255, 102, 102)";
+            document.querySelector("#validPasswordColorWord").style.color = "rgb(218, 86, 86)";
         }
     }
     useEffect(passwordValid, [password]);
@@ -76,10 +76,10 @@ const SignUp = ({login, toLoginPage}) => {
     //비밀번호 check확인 함수
     const passwordCheckFunc = () => {
         if(password !== passwordCheck){
-            document.querySelector("#passwordCheckInput").style.border = "solid 2px rgb(255, 102, 102)";
+            document.querySelector("#passwordCheckInput").style.outline = "solid 2px rgb(218, 86, 86)";
         }
         else{
-            document.querySelector("#passwordCheckInput").style.border = "solid 1px rgb(186, 186, 186)";
+            document.querySelector("#passwordCheckInput").style.outline = "solid 1px rgb(186, 186, 186)";
         }
     };
     useEffect(passwordCheckFunc, [passwordCheck]);

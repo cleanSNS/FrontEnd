@@ -143,6 +143,14 @@
 				export PORT=443 && HTTPS=true SSL_CRT_FILE=(인증서명).crt SSL_KEY_FILE=(키명).key react-scripts start
 			5. 또한 github에 인증서와 키가 올라가는 것을 막기 위해 보낸 파일들은 frontend의 상위 폴더에 위치시켰다.
 
+18. 누를 수 있는 요소의 경우
+	=> button태그에 스타일을 지정하면 그 이후에 마우스를 가져다 대도 마우스가 변하지 않는다.
+	=> cursor : pointer;를 통해서 해당 기능을 더할 수 있다.
+
+19. 소셜 버튼이 잘 안눌리는 현상
+	=> z-index를 설정해야한다.
+	=> 0이 가장 위 Layer고, 그 이후로는 아래로 내려간다.
+
 # To Do List
 1. 카카오 로그인 - 도메인 작업 선행 필요
 2. 네이버 로그인 - 도메인 작업 선행 필요

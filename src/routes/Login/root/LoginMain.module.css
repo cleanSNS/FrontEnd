@@ -1,27 +1,123 @@
 .Cover{
     position: relative;
+    left: 50%;
+    transform: translate(-50%, 10%);
+    height: 800px;
+    width: 650px;
+    padding: 10px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border: 5px solid rgb(160, 160, 160);
+    background-color: #F4DEDE;
 }
 
 .book{
-    position : absolute;
-    top : 0%;
-    left : 50%;
-    transform: translate(-50%, 3%);
-
-    height: 700px;
-    width: 650px;
-}
-
-.bookinnerCover{
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 5fr;
-
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
-    height: 100%;
     width: 100%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 5fr;
+}
+
+.circle1{
+    position : absolute;
+    top: 12%;
+    left: 2%;
+
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid black;
+}
+.circle2{
+    position : absolute;
+    top: 15%;
+    left: 2%;
+
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid black;
+}
+.circle3{
+    position : absolute;
+    top: 85%;
+    left: 2%;
+
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid black;
+}
+.circle4{
+    position : absolute;
+    top: 88%;
+    left: 2%;
+
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.spring1{
+    position : absolute;
+    top: 12.16%;
+    left: -5%;
+
+    width: 55px;
+    height: 9px;
+
+    border-radius: 60px;
+    background: linear-gradient(180deg, #C2C2C2 0%, #E4E4E4 100%);
+    border: 1px solid black;
+}
+.spring2{
+    position : absolute;
+    top: 15.16%;
+    left: -5%;
+
+    width: 55px;
+    height: 9px;
+
+    border-radius: 60px;
+    background: linear-gradient(180deg, #C2C2C2 0%, #E4E4E4 100%);
+    border: 1px solid black;
+}
+.spring3{
+    position : absolute;
+    top: 85.2%;
+    left: -5%;
+
+    width: 55px;
+    height: 9px;
+
+    border-radius: 60px;
+    background: linear-gradient(180deg, #C2C2C2 0%, #E4E4E4 100%);
+    border: 1px solid black;
+}
+.spring4{
+    position : absolute;
+    top: 88.2%;
+    left: -5%;
+
+    width: 55px;
+    height: 9px;
+
+    border-radius: 60px;
+    background: linear-gradient(180deg, #C2C2C2 0%, #E4E4E4 100%);
+    border: 1px solid black;
 }
