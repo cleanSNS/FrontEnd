@@ -47,10 +47,7 @@ function App() {
       .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
         console.log(res);
         alert("로그인 되었습니다.");
-        /*
-              여기 작업해야함
-        */
-        //토큰 처리 해야하는데 어떻게 하냐..? 만약 일반 로그인이랑 응답이 비슷하면 loginFunc호출하면 될듯 아니라면 이제 따로 작업.
+        loginFunc(res);
       })
       .catch((res) => {
         console.log(res);
