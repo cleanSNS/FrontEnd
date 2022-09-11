@@ -1,24 +1,45 @@
 import Style from './newPost.module.css';
 import { useState } from 'react';
 
-const LeftNewPost = () => {
-    const [hashtag, setHashtag] = useState("");
-    const [word, setWord] = useState("");
-    const [media, setMedia] = useState([]);
-    const [hashtagList, setHashtagList] = useState([]);
+/*
+
+지금 남은 할 일
+
+해시태그 지웠을 때 즉각적으로 지워지는지 확인하기
+
+이미지 드래그 앤 드롭하는 부분 다듬기 - CSS
+이미지 드래그 앤 드롭으로 이미지 입력 받기
+이미지 드래그 앤 드롭으로 받은 정보 화면에 보여주기
+
+정상적으로 업로드 되는지 확인하기
+
+*/
+
+
+
+
+
+const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPostHashtag, newPostContent, setNewPostContent, uploadNewPostHandler }) => {
+    const [hashtag, setHashtag] = useState("");//임시로 입력되는 값 변경하는 State.
 
     //글 내용 변경 함수
-    const wordHandler = (event) => {
+    const contentHandler = (event) => {
         event.preventDefault();
-        setWord(event.target.value);
+        setNewPostContent(event.target.value);
     }
 
     //hashtag영역 바꿔주는 함수
     const hashtagHandler = (event) => {
         event.preventDefault();
         const value = event.target.value;
+        if(value === ","){
+            alert("1글자 이상의 키워드를 입력해 주세요");
+            return;
+        }
         if(value[value.length - 1] === ","){// 이 경우 
-            setHashtagList((cur) => cur.push(value.slice(0,-1)));
+            const tmp = newPostHashtag;
+            tmp.push(value.slice(0,-1));
+            setNewPostHashtag(tmp);
             setHashtag("");
         }
         else{
@@ -29,18 +50,17 @@ const LeftNewPost = () => {
     //hashtag 지우는 함수
     const deleteTag = (event) => {
         event.preventDefault();
-        console.log(event.target.value);
-        hashtagList.splice(Number(event.target.value), 1);
+        const tmp = newPostHashtag;
+        tmp.splice(Number(event.target.value), 1);
+        setNewPostHashtag(tmp);
     };
 
-    //글 올리는 함수
-
     return(
-        <form className={Style.WholeCover} >
+        <form className={Style.WholeCover} onSubmit={uploadNewPostHandler}>
             {/* 드래그 앤 드롭 영역 */}
             <div className={Style.Cover}>
                 <div className={Style.picture}>
-                    이미지 또는 비디오를 드래그 앤 드롭 하시거나
+                    이미지를 드래그 앤 드롭 하시거나
                     여기를 눌러 시작하세요.
                 </div>
             </div>
@@ -60,15 +80,17 @@ const LeftNewPost = () => {
             {/* hashtag list 영역 */}
             <div className={Style.Cover}>
                 <div className={Style.tagListArea}>
+                    {
                     <div className={Style.Cover}>
                         {
-                            hashtagList.map((data, index) =>(
-                                <button className={Style.singleHashTag} key={index} onClick={deleteTag} value={index}>
+                            newPostHashtag.map((data, index) =>(
+                                <button className={Style.singleHashTag} onClick={deleteTag} key={index} value={index}>
                                     #{data} 
                                 </button>
                             ))
                         }
                     </div>
+                    }
                 </div>
             </div>
             {/* word label 영역 */}
@@ -79,8 +101,8 @@ const LeftNewPost = () => {
             <div className={Style.Cover}>
                 <input 
                     type="text" 
-                    vaslue={word}
-                    onChange={wordHandler}
+                    vaslue={newPostContent}
+                    onChange={contentHandler}
                     className={Style.wordInput} />
             </div>
             {/* 글 제출 영역 */}

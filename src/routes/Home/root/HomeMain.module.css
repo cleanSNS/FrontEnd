@@ -9,7 +9,7 @@
     position: absolute;
     min-height: 99%;
     width: 98%;
-    min-width: 1200px;
+    min-width: 1350px;
 
     display: grid;
     grid-template-columns: 7fr 3fr;

@@ -33,3 +33,6 @@ export const findPWUrl = `${apiUrl}/user/mypage/password/reset`;
 /***************************메인 페이지 관련 URl***********************************/
 //새 글 피드 가져오는 Url
 export const pageloadUrl = `${apiUrl}/page/main`;
+
+//글 올리는 Url
+export const newPostUrl = `${apiUrl}/page`;

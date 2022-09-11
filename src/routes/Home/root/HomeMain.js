@@ -22,14 +22,79 @@ import notificationTagImg from "./tagImages/notification.png";
 import settingTagImg from "./tagImages/settings.png";
 import userTagImg from "./tagImages/user.png";
 
+import {
+  newPostUrl
+} from "../../../apiUrl";
+import axios from 'axios';
+
 const Home = ({ logout }) => {
-  
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pageList //chat // newPost // setting
   const [leftBookState, setLeftBookState] = useState("page");
   //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
   const [settingState, setSettingState] = useState("initial");
+
+  /* 새 글을 올리는 기능을 위한 부분 */
+  /* 좌, 우로 나뉘어져있는 정보를 추합해서 서버에 보내야 하기 때문에 상위 요소에서 작성 */
+  //아래는 좌측 페이지로 이동할 정보
+  //이미지 리스트
+  const [newPostImages, setNewPostImages] = useState([]);
+  //해시태그 리스트
+  const [newPostHashtag, setNewPostHashtag] = useState([]);
+  //글
+  const [newPostContent, setNewPostContent] = useState("");
+
+  //아래는 우측 페이지로 이동할 정보
+  //좋아요 알림
+  const [newPostLikeNotice, setNewPostLikeNotice] = useState(true);
+  //댓글 알림
+  const [newPostCommentNotice, setNewPostCommentNotice] = useState(true);
+  //읽기 권한
+  const [newPostReadPostAuth, setNewPostReadPostAuth] = useState("ALL");
+  //댓글 읽기 권한
+  const [newPostReadCommentAuth, setNewPostReadCommentAuth] = useState(true);
+  //댓글 쓰기 권한
+  const [newPostWriteCommentAuth, setNewPostWriteCommentAuth] = useState(true);
+  //좋아요 읽기 권한
+  const [newPostReadLikeAuth, setNewPostReadLikeAuth] = useState(true);
+
+  //글 올리는 함수 => 좌측 페이지로 넘어가야한다.
+  const uploadNewPostHandler = (event) => {
+    event.preventDefault();
+    console.log("Dd");
+    if(newPostImages.length === 0){
+      alert("이미지를 하나 이상 업로드 해주세요.");
+      return;
+    }
+    if(newPostContent.length === 0){
+      alert("글을 입력해 주세요/.");
+      return;
+    }
+
+    axios.post(newPostUrl,{
+      content: newPostContent,
+      notificationLike: newPostLikeNotice,
+      notificationComment: newPostCommentNotice,
+      readAuth: newPostReadPostAuth,
+      commentReadAuth: newPostReadCommentAuth,
+      commentWriteAuth: newPostWriteCommentAuth,
+      likeReadAuth: newPostReadLikeAuth,
+      imgUrlList: newPostImages,
+      pageHashtagList: newPostHashtag,
+    })
+    .then((res) => {
+      alert("업로드 되었습니다.");
+      window.location.href = "/main";
+    })
+    .catch((res) => {
+      console.log("잘못된 양식입니다.");
+      console.log(res);
+      alert("문제 발생");
+      window.location.href = "/main";
+    })
+  };
+
 
   //첫 render시 친구 tag를 칠해준다.
   const firstRender = () => {
@@ -130,7 +195,7 @@ const Home = ({ logout }) => {
                 {leftBookState === "page" ? <LeftPage /> : null}
                 {leftBookState === "pageList" ? <LeftPageList /> : null}
                 {leftBookState === "chat" ? <LeftChat /> : null}
-                {leftBookState === "newPost" ? <LeftNewPost /> : null}
+                {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
                 {leftBookState === "setting" ? <LeftSetting settingState={settingState} /> : null}
             </div>
           </div>
@@ -141,7 +206,7 @@ const Home = ({ logout }) => {
       <div className={Style.bookCover}>
           <div className={Style.rightbook}>
             <div className={Style.Cover}>
-              { rightBookState === "newPost" ? <RightNewPost /> :  null}
+              { rightBookState === "newPost" ? <RightNewPost newPostLikeNotice={newPostLikeNotice} setNewPostLikeNotice={setNewPostLikeNotice} newPostCommentNotice={newPostCommentNotice} setNewPostCommentNotice={setNewPostCommentNotice} newPostReadPostAuth={newPostReadPostAuth} setNewPostReadPostAuth={setNewPostReadPostAuth} newPostReadCommentAuth={newPostReadCommentAuth} setNewPostReadCommentAuth={setNewPostReadCommentAuth} newPostWriteCommentAuth={newPostWriteCommentAuth} setNewPostWriteCommentAuth={setNewPostWriteCommentAuth} newPostReadLikeAuth={newPostReadLikeAuth} setNewPostReadLikeAuth={setNewPostReadLikeAuth} /> :  null}
               { rightBookState === "chat" ? <RightChat /> : null}
               { rightBookState === "notice" ? <RightNotice /> : null}
               { rightBookState === "friend" ? <RightFriend /> : null}
