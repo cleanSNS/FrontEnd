@@ -16,16 +16,16 @@ const Setting = ({settingState, SettingChangeHandler}) => {
                 <div className={Style.setting} id="profile" onClick={settingClickHandler}>프로필 편집</div>
             </div>
             <div className={Style.settingCover} id="Snotice" onClick={settingClickHandler}>
-                <p className={Style.setting} id="Snotice" onClick={settingClickHandler}>푸쉬 알림</p>
+                <div className={Style.setting} id="Snotice" onClick={settingClickHandler}>푸쉬 알림</div>
             </div>
             <div className={Style.settingCover} id="password" onClick={settingClickHandler}>
-                <p className={Style.setting} id="password" onClick={settingClickHandler}>비밀번호 변경</p>
+                <div className={Style.setting} id="password" onClick={settingClickHandler}>비밀번호 변경</div>
             </div>
             <div className={Style.settingCover} id="filtering" onClick={settingClickHandler}>
-                <p className={Style.setting} id="filtering" onClick={settingClickHandler}>필터링 설정</p>
+                <div className={Style.setting} id="filtering" onClick={settingClickHandler}>필터링 설정</div>
             </div>
             <div className={Style.lastSettingCover} id="block" onClick={settingClickHandler}>
-                <p className={Style.setting} id="block" onClick={settingClickHandler}>차단 목록</p>
+                <div className={Style.setting} id="block" onClick={settingClickHandler}>차단 목록</div>
             </div>
         </div>
     );

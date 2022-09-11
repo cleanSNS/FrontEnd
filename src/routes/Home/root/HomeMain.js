@@ -16,6 +16,12 @@ import RightNotice from "../rightInner/notice/notice";
 import RightFriend from "../rightInner/friend/friend";
 import RightSetting from "../rightInner/setting/setting";
 
+import addTagImg from "./tagImages/add.png";
+import messageTagImg from "./tagImages/message.png";
+import notificationTagImg from "./tagImages/notification.png";
+import settingTagImg from "./tagImages/settings.png";
+import userTagImg from "./tagImages/user.png";
+
 const Home = ({ logout }) => {
   
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
@@ -80,19 +86,39 @@ const Home = ({ logout }) => {
       <div className={Style.Cover}>
         <div className={Style.tagArea}>
           <div className={Style.Cover}>
-            <div className={Style.tag} onClick={tagClickHandler} id="newPost">글</div>
+            <div className={Style.tag} id="newPost">
+              <div className={Style.Cover}>
+                <img src={addTagImg} className={Style.tagImg} onClick={tagClickHandler} id="newPost"/>
+              </div>
+            </div>
           </div>
           <div className={Style.Cover}>
-            <div className={Style.tag} onClick={tagClickHandler} id="chat">챗</div>
+            <div className={Style.tag} id="chat">
+              <div className={Style.Cover}>
+                <img src={messageTagImg} className={Style.tagImg} onClick={tagClickHandler} id="chat" />
+              </div>
+            </div>
           </div>
           <div className={Style.Cover}>
-            <div className={Style.tag} onClick={tagClickHandler} id="notice">알</div>
+            <div className={Style.tag} id="notice">
+              <div className={Style.Cover}>
+                <img src={notificationTagImg} className={Style.tagImg} onClick={tagClickHandler} id="notice" />
+              </div>
+            </div>
           </div>
           <div className={Style.Cover}>
-            <div className={Style.tag} onClick={tagClickHandler} id="friend">친</div>
+            <div className={Style.tag} id="friend">
+              <div className={Style.Cover}>
+                <img src={userTagImg} className={Style.tagImg} onClick={tagClickHandler} id="friend" />
+              </div>
+            </div>
           </div>
           <div className={Style.Cover}>
-            <div className={Style.tag} onClick={tagClickHandler} id="setting">설</div>
+            <div className={Style.tag} id="setting">
+              <div className={Style.Cover}>
+                <img src={settingTagImg} className={Style.tagImg} onClick={tagClickHandler} id="setting" />
+              </div>
+            </div>
           </div>
         </div>
       </div>

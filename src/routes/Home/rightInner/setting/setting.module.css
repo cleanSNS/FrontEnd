@@ -39,18 +39,22 @@
     border-bottom: 1px solid rgb(168, 168, 168);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    cursor: pointer;
 }
 
 .settingCover{
     position: relative;
     border-bottom: 1px solid rgb(168, 168, 168);
+    cursor: pointer;
 }
 
 .lastSettingCover{
     position: relative;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    cursor: pointer;
 }
+
 .setting{
     position: absolute;
     top: 50%;
@@ -69,6 +73,7 @@
     transform: translate(-50%, -50%);
     
     width: 50%;
+    height: 8%;
     border: 0;
     background-color: rgb(255, 197, 250);
     border-radius: 0.25rem;
@@ -76,4 +81,5 @@
     font-weight: bold;
     color: white;
     box-shadow: 1px 1px 3px rgb(178, 137, 175);
+    cursor: pointer;
 }

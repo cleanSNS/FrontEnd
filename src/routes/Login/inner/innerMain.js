@@ -137,8 +137,8 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
                         </button>
                     </div>
                     <div className={Style.Cover}>
-                        <button className={Style.Socialbtn}>
-                            <div id="NaverContainer" className={Style.naver} onClick={naverLoginHandler}>
+                        <button className={Style.Socialbtn} onClick={naverLoginHandler}>
+                            <div id="NaverContainer" className={Style.naver}>
                                 <img id="symbol" src={NaverImg} className={Style.naverSymbol}/>
                                 <span id="label" className={Style.naverLabel}>로그인</span>
                             </div>

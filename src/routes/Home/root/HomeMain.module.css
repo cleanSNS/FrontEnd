@@ -13,7 +13,7 @@
 
     display: grid;
     grid-template-columns: 7fr 3fr;
-    grid-template-rows: 1fr 7fr;
+    grid-template-rows: 1fr 9fr;
 }
 
 /*로고, 검색버튼을 넣을 공간이다.*/
@@ -55,6 +55,18 @@
     border: 1px solid rgb(160, 160, 160);
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
+    cursor: pointer;
+    z-index: 0;
+}
+
+/*태그 이미지*/
+.tagImg{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 42px;
+    height: 42px;
 }
 
 /* 책 커버 */
