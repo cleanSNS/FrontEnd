@@ -1,52 +1,45 @@
-.Cover{
-    position: relative;
-}
-
 /*전체*/
 .WholeCover{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 98%;
-    height: 98%;
-
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 5fr 1fr 1fr 1fr 1fr 3fr 3fr;
+    width: 80%;
+    height: 90%;
 }
 
 /*드래그 앤 드롭 하는 곳*/
 .picture{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
+    height: 200px;
+    width: 100%;
     border: 5px dashed rgb(190, 190, 190);
-    width: 80%;
-    height: 80%;
     border-radius: 0.75rem;
+}
+
+.pictureinnerword{
+    position: absolute;
+    top: 4%;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.pictureinnerimage{
+    width: 80px;
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 
 /*해시태그 Label*/
 .hashtag{
-    position: absolute;
-    bottom: 0;
-    left: 60%;
-    transform: translate(-50%, 0);
     width: 100%;
 }
 
 /*해시태그 input*/
 .hashtagInput{
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-
-    width : 80%;
-    height: 50%;
+    height: 30px;
+    width: 100%;
     border: 0;
     border-radius: 0.25rem;
     background-color: rgb(236, 236, 236);
@@ -56,13 +49,11 @@
     outline: 1px solid rgb(153, 221, 255);
 }
 
-/*해시태그 list가 들어가는 영역*/
-.tagListArea{
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-    width: 80%;
+/*해시태그와 이미지list가 들어가는 영역*/
+.ListArea{
+    padding-top: 10px;
+    min-height: 100px;
+    width: 100%;
     line-height: 45px;
 }
 
@@ -76,26 +67,18 @@
     border-radius: 0.5rem;
     box-shadow: 2px 2px 2px rgb(236, 236, 236);
     font-weight: 700;
+    cursor: pointer;
 }
 
 /*글 label*/
 .word{
-    position: absolute;
-    bottom: 0;
-    left: 60%;
-    transform: translate(-50%, 0);
     width: 100%;
 }
 
 /*글 input*/
 .wordInput{
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-    
-    width : 80%;
-    height: 80%;
+    width : 100%;
+    min-height: 120px;
     border: 0;
     border-radius: 0.25rem;
     background-color: rgb(236, 236, 236);
@@ -106,11 +89,19 @@
 }
 
 /*제출 버튼*/
+.submitbtnArea{
+    position: absolute;
+    height: 200px;
+    width: 100%;
+}
+
 .submitButton{
     position: absolute;
-    top: 10%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 250px;
+    height: 50px;
 
     background-color: rgb(158, 245, 255);
     color: white;
@@ -120,7 +111,5 @@
     border: 0;
     border-radius: 0.25rem;
     box-shadow: 2px 2px 2px rgb(236, 236, 236);
-    width: 30%;
-    height: 25%;
     cursor: pointer;
 }
