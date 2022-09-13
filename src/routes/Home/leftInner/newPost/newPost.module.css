@@ -1,34 +1,47 @@
 /*전체*/
 .WholeCover{
     position: absolute;
-    top: 50%;
+    top: 5%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
     width: 80%;
-    height: 90%;
 }
 
 /*드래그 앤 드롭 하는 곳*/
-.picture{
+.pictureArea{/*영역*/
+    display: flex;
+    align-items: center;
+    height: 200px;
+}
+.picture{/*실제 스타일*/
+    position: absolute;
     height: 200px;
     width: 100%;
     border: 5px dashed rgb(190, 190, 190);
     border-radius: 0.75rem;
 }
 
-.pictureinnerword{
+.pictureinnerword{/*글씨*/
     position: absolute;
-    top: 4%;
+    bottom: 0;
     left: 50%;
     transform: translate(-50%, 0);
 }
 
-.pictureinnerimage{
+.pictureinnerimage{/*이미지*/
     width: 80px;
     position: absolute;
-    top: 5%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
+}
+
+/*미리보기 이미지 하나의 스타일*/
+.singlepicture{
+    height: 100px;
+    cursor: pointer;
+    margin: 5px;
+    border: none;
 }
 
 /*해시태그 Label*/
@@ -59,7 +72,6 @@
 
 /*하나의 해시태그 들어있는 영역*/
 .singleHashTag{
-    position: relative;
     border: none;
     background-color: rgb(153, 221, 255);
     margin: 5px;
@@ -88,18 +100,14 @@
     outline: 1px solid rgb(153, 221, 255);
 }
 
-/*제출 버튼*/
-.submitbtnArea{
-    position: absolute;
-    height: 200px;
-    width: 100%;
+.area{
+    display: flex;
+    align-items: center;
+    height: 100px;
 }
 
+/*제출 버튼*/
 .submitButton{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     width: 250px;
     height: 50px;
 
@@ -112,4 +120,5 @@
     border-radius: 0.25rem;
     box-shadow: 2px 2px 2px rgb(236, 236, 236);
     cursor: pointer;
+    margin: 0 auto;
 }

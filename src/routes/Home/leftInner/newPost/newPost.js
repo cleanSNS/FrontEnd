@@ -6,7 +6,6 @@ import addImage from '../../root/tagImages/add.png';
 
 지금 남은 할 일
 
-이미지 드래그 앤 드롭하는 부분 다듬기 - CSS
 이미지 드래그 앤 드롭으로 이미지 입력 받기
 이미지 드래그 앤 드롭으로 받은 정보 화면에 보여주기
 
@@ -16,12 +15,24 @@ import addImage from '../../root/tagImages/add.png';
 
 const HashtagList = ({deleteTag, newPostHashtag}) => {
     return (
-        <div className={Style.Cover}>
+        <div>
             {
                 newPostHashtag.map((data, index) =>(
                     <button className={Style.singleHashTag} onClick={deleteTag} key={index} value={index}>
                         #{data} 
                     </button>
+                ))
+            }
+        </div>
+    );
+};
+
+const ImageList = ({deleteImage, newPostImages}) => {
+    return (
+        <div>
+            {
+                newPostImages.map((data, index) =>(
+                    <img className={Style.singlepicture} src={data} onClick={deleteImage} key={index} value={index} />
                 ))
             }
         </div>
@@ -37,19 +48,48 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
         setNewPostContent(event.target.value);
     }
 
+    //받은 파일리스트가 유효한지 검사하는 함수
+    const ImageValid = (data) => {
+        let answer = true;
+        //받은 input들에 대해서 이미지 여부, 용량 여부(5메가 이하),
+        data.map((d, index) => {
+            if(!(d.type === 'image/png' || d.type === 'image/jpg' || d.type === 'image/jpeg')){
+                alert(`이미지 파일만 업로드 가능합니다.\n${d.name}`);
+                answer = false;
+            }
+            if(d.size > 1024 * 1024 * 50){
+                alert(`50MB 이상의 이미지는 업로드 불가합니다.\n${d.name}`);
+                answer = false;
+            }
+            newPostImages.map((cd, index) => {
+                if(cd.name === d.name){
+                    alert(`같은 이름의 파일이 이미 업로드 되어있습니다.\n${d.name}`);
+                    answer = false;
+                }
+            });
+        });
+        return answer;
+    };
+
     //이미지 영역에 파일을 드랍한 경우 - ondrop
     const imageDropHandler = (event) => {
         event.preventDefault();
 
-        const files = [...event.dataTransfer?.files];
-        console.log(files);
+        const inputFile = [...event.dataTransfer?.files];
+        if(ImageValid(inputFile)){//유효하지 않은 경우이므로 즉각 종료한다.
+            const currentInput = [...newPostImages];
+            const InputChange = currentInput.concat(inputFile);
+            console.log(InputChange);
+            setNewPostImages(InputChange);
+        }
 
         const imageUploadArea = document.querySelector("#imageUploadArea");
+        document.querySelector("#imageUploadImage").style.opacity="1";
         imageUploadArea.style.backgroundColor="white";
         imageUploadArea.style.border="5px dashed rgb(190, 190, 190)";
     };
 
-    //이미지 영역위에 파일을 올려놓은 경우 - ondragover(이게 있어야 ondrop이 활성화 된다.)
+    //이미지 영역 위에 파일을 올려놓은 경우 - ondragover(이게 있어야 ondrop이 활성화 된다.)
     const imageDragOverHandler = (event) => {
         event.preventDefault();
     };
@@ -58,6 +98,8 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
     const imageDragEnterHandler = (event) => {
         event.preventDefault();
         const imageUploadArea = document.querySelector("#imageUploadArea");
+        document.querySelector("#imageUploadImage").style.opacity="0.5";
+        document.querySelector("#imageUploadMent").style.visibility="hidden";
         imageUploadArea.style.backgroundColor="rgb(236, 236, 236)";
         imageUploadArea.style.border="5px dashed rgb(150, 150, 150)";
     };
@@ -66,9 +108,14 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
     const imageDragLeaveHandler = (event) => {
         event.preventDefault();
         const imageUploadArea = document.querySelector("#imageUploadArea");
+        document.querySelector("#imageUploadImage").style.opacity="1";
+        document.querySelector("#imageUploadMent").style.visibility="visible";
         imageUploadArea.style.backgroundColor="white";
         imageUploadArea.style.border="5px dashed rgb(190, 190, 190)";
     };
+
+    //이미지 미리 보기 화면 바꿔주는 함수
+
 
     //hashtag영역 바꿔주는 함수
     const hashtagHandler = (event) => {
@@ -101,16 +148,26 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
         setNewPostHashtag(tmp);
     };
 
+    //이미지 지우는 함수
+    const deleteImage = (event) => {
+        event.preventDefault();
+        const tmp = [...newPostImages];
+        tmp.splice(Number(event.target.value), 1);
+        setNewPostImages(tmp);
+    }
+
     return(
         <form className={Style.WholeCover} onSubmit={uploadNewPostHandler}>
             {/* 드래그 앤 드롭 영역 */}
-            <div className={Style.picture} id="imageUploadArea" onDrop={imageDropHandler} onDragOver={imageDragOverHandler} onDragEnter={imageDragEnterHandler} onDragLeave={imageDragLeaveHandler}>
-                <img src={addImage} className={Style.pictureinnerimage} />
-                <p className={Style.pictureinnerword}>업로드할 이미지를 여기로 옮겨주세요.</p>
+            <div className={Style.pictureArea}>
+                <div className={Style.picture} id="imageUploadArea" onDrop={imageDropHandler} onDragOver={imageDragOverHandler} onDragEnter={imageDragEnterHandler} onDragLeave={imageDragLeaveHandler}>
+                    <img src={addImage} className={Style.pictureinnerimage} id="imageUploadImage"/>
+                    <p className={Style.pictureinnerword} id="imageUploadMent">업로드할 이미지를 여기로 옮겨주세요.</p>
+                </div>
             </div>
             {/* 올린 이미지 미리 보기 영역 */}
             <div className={Style.ListArea}>
-
+                <ImageList deleteImage={deleteImage} newPostImages={newPostImages} />
             </div>
             {/* hashtag label 영역 */}
             <p className={Style.hashtag}>키워드 (,로 분리해주세요)</p>
@@ -134,7 +191,7 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
                 onChange={contentHandler}
                 className={Style.wordInput} />
             {/* 글 제출 영역 */}
-            <div className={Style.submitbtnArea}>
+            <div className={Style.area}>
                 <button type="submit" className={Style.submitButton}>Submit</button>
             </div>
         </form>
