@@ -62,7 +62,6 @@ const Home = ({ logout }) => {
   //글 올리는 함수 => 좌측 페이지로 넘어가야한다.
   const uploadNewPostHandler = (event) => {
     event.preventDefault();
-    console.log("Dd");
     if(newPostImages.length === 0){
       alert("이미지를 하나 이상 업로드 해주세요.");
       return;
@@ -72,14 +71,16 @@ const Home = ({ logout }) => {
       return;
     }
 
-    axios.post(newPostUrl,{
+    axios.post(newPostUrl, {
       content: newPostContent,
-      notificationLike: newPostLikeNotice,
-      notificationComment: newPostCommentNotice,
-      readAuth: newPostReadPostAuth,
-      commentReadAuth: newPostReadCommentAuth,
-      commentWriteAuth: newPostWriteCommentAuth,
-      likeReadAuth: newPostReadLikeAuth,
+      pageSetting : {
+        notificationLike: newPostLikeNotice,
+        notificationComment: newPostCommentNotice,
+        readAuth: newPostReadPostAuth,
+        commentReadAuth: newPostReadCommentAuth,
+        commentWriteAuth: newPostWriteCommentAuth,
+        likeReadAuth: newPostReadLikeAuth,
+      },
       imgUrlList: newPostImages,
       pageHashtagList: newPostHashtag,
     })
