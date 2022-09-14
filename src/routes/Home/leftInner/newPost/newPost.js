@@ -32,7 +32,7 @@ const ImageList = ({deleteImage, newPostImages}) => {
         <div>
             {
                 newPostImages.map((data, index) =>(
-                    <img className={Style.singlepicture} src={data} onClick={deleteImage} key={index} value={index} />
+                    <img className={Style.singlepicture} src={data} key={index} value={index} onClick={deleteImage} />
                 ))
             }
         </div>
@@ -51,6 +51,12 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
     //받은 파일리스트가 유효한지 검사하는 함수
     const ImageValid = (data) => {
         let answer = true;
+        //먼저 받은 데이터가 1개인지 확인
+        if(data.length !== 1){
+            alert("한 번에 하나의 이미지를 드랍해주십시오.");
+            return false;
+        }
+
         //받은 input들에 대해서 이미지 여부, 용량 여부(5메가 이하),
         data.map((d, index) => {
             if(!(d.type === 'image/png' || d.type === 'image/jpg' || d.type === 'image/jpeg')){
@@ -75,14 +81,19 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
     const imageDropHandler = (event) => {
         event.preventDefault();
 
-        const inputFile = [...event.dataTransfer?.files];
-        if(ImageValid(inputFile)){//유효하지 않은 경우이므로 즉각 종료한다.
-            const currentInput = [...newPostImages];
-            const InputChange = currentInput.concat(inputFile);
-            console.log(InputChange);
-            setNewPostImages(InputChange);
+        const inputFile = [...event.dataTransfer?.files];//지금 들어온 파일이다.
+        if(ImageValid(inputFile)){//유효한 파일인 경우 집어넣는다.
+            //이미지를 랜더링 해서 집어넣는다.
+            const reader = new FileReader();
+            reader.readAsDataURL(inputFile[0]);
+            reader.onload = (imageData) => {
+                const curPreview = [...newPostImages];
+                curPreview.push(imageData.target.result);
+                setNewPostImages(curPreview);
+            }
         }
 
+        //CSS는 반드시 실행된다.
         const imageUploadArea = document.querySelector("#imageUploadArea");
         document.querySelector("#imageUploadImage").style.opacity="1";
         imageUploadArea.style.backgroundColor="white";
