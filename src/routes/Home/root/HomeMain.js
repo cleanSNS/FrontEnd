@@ -85,13 +85,13 @@ const Home = ({ logout }) => {
     })
     .then((res) => {
       alert("업로드 되었습니다.");
-      window.location.href = "/main";
+      //window.location.href = "/main";
     })
     .catch((res) => {
       console.log("잘못된 양식입니다.");
       console.log(res);
       alert("문제 발생");
-      window.location.href = "/main";
+      //window.location.href = "/main";
     })
   };
 

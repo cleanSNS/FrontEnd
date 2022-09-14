@@ -32,7 +32,7 @@ const ImageList = ({deleteImage, newPostImages}) => {
         <div>
             {
                 newPostImages.map((data, index) =>(
-                    <img className={Style.singlepicture} src={data} key={index} value={index} onClick={deleteImage} />
+                    <img className={Style.singlepicture} src={data} key={index} id={index} onClick={deleteImage} />
                 ))
             }
         </div>
@@ -163,7 +163,7 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
     const deleteImage = (event) => {
         event.preventDefault();
         const tmp = [...newPostImages];
-        tmp.splice(Number(event.target.value), 1);
+        tmp.splice(Number(event.target.id), 1);
         setNewPostImages(tmp);
     }
 
