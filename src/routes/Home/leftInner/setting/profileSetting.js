@@ -95,7 +95,6 @@ const ProfileSetting = () => {
     //이미지 변경 함수 - ps_nextUserImage를 바꾼다.
     const profileImageChangeHandler = (event) => {
         event.preventDefault();
-        console.log(event.target.files[0])
         const inputImage = event.target.files[0];
         const reader = new FileReader();
         reader.readAsDataURL(inputImage);
@@ -107,7 +106,6 @@ const ProfileSetting = () => {
     //값 변경 함수
     const nicknameChageHandler = (event) => {
         event.preventDefault();
-        setPs_UserName(event.target.value);
     };
     const ageChageHandler = (event) => {
         event.preventDefault();
@@ -154,7 +152,7 @@ const ProfileSetting = () => {
                         />
                     </div>
                     <div className={Style.Cover}>
-                        <div className={Style.myprofileNickname}>{ps_userName}</div>
+                        <p className={Style.myprofileNickname}>{ps_userName}</p>
                     </div>
                 </div>
             </div>
@@ -172,6 +170,7 @@ const ProfileSetting = () => {
                         <input 
                             id="profileSettingUserName"
                             type="text"
+                            maxLength={14}
                             value={ps_userName}
                             onChange={nicknameChageHandler}
                             className={Style.profileSettingInput}
@@ -214,9 +213,9 @@ const ProfileSetting = () => {
                     <div className={Style.Cover}>
                         {
                             ps_userGender === "MALE" ?
-                            <input type="text" value="남" className={Style.profileSettingInput} disabled />
+                            <input type="text" value="남" className={Style.profileSettingInput} readOnly />
                             :
-                            <input type="text" value="여" className={Style.profileSettingInput} disabled />
+                            <input type="text" value="여" className={Style.profileSettingInput} readOnly />
                         }
                     </div>
                     <div className={Style.Cover}>
@@ -240,6 +239,7 @@ const ProfileSetting = () => {
                         <input 
                             id="profileSettingIntroduce"
                             type="text"
+                            maxLength={30}
                             value={ps_userIntroduce}
                             onChange={selfIntroductionChageHandler}
                             className={Style.profileSettingInput} />
