@@ -59,6 +59,7 @@ const ProfileSetting = () => {
     //이미지 변경 함수 - ps_nextUserImage를 바꾼다.
     const profileImageChangeHandler = (event) => {//작성필요
         event.preventDefault();
+        console.log("good");
     };
 
     //값 변경 함수
@@ -91,10 +92,17 @@ const ProfileSetting = () => {
                     <div className={Style.Cover}>
                         <label
                             htmlFor='UserProfileImage'>
-                            {(ps_userImage === undefined || ps_userImage === null) ? <img scr={nullImage} className={Style.myprofileImage}/> : <img src={ps_userImage} className={Style.myprofileImage}/> }
+                            {
+                                (ps_userImage === undefined || ps_userImage === null)
+                                ? 
+                                <img scr={nullImage} className={Style.myprofileImage}/>
+                                :
+                                <img src={ps_userImage} className={Style.myprofileImage}/>
+                            }
                         </label>
                         <input 
                             type="file"
+                            onChange={profileImageChangeHandler}
                             className={Style.myprofileImageInput}
                             id="UserProfileImage"
                             accept="image/*"
