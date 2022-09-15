@@ -121,11 +121,11 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
     const hashtagHandler = (event) => {
         event.preventDefault();
         const value = event.target.value;
-        if(value === ","){
+        if(value === " "){
             alert("1글자 이상의 키워드를 입력해 주세요");
             return;
         }
-        if(value[value.length - 1] === ","){// 이 경우 
+        if(value[value.length - 1] === " "){// 이 경우 
             const tmp = newPostHashtag;
             const input = value.slice(0,-1);
             if(!newPostHashtag.includes(input)){
@@ -170,7 +170,7 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
                 <ImageList deleteImage={deleteImage} newPostImages={newPostImages} />
             </div>
             {/* hashtag label 영역 */}
-            <p className={Style.hashtag}>키워드 (,로 분리해주세요)</p>
+            <p className={Style.hashtag}>키워드 (띄어쓰기로 분리해주세요)</p>
             {/* hashtag input 영역 */}
             <input 
                 type="text"
