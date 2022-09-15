@@ -27,14 +27,30 @@ const ProfileSetting = () => {
             ps_curUserName = res.data.data.nickname;//이름 설정 - 프로필에 올리는 용도
             setPs_UserName(res.data.data.nickname);//이름 설정 - api upload
             setPs_UserAge(res.data.data.age);//나이 설정
+
             setPs_UserAgeVisible(res.data.data.ageVisible);//나이 공개
+            if(ps_userAgeVisible){//나이가 공개로 되어있는 경우
+                document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
+            }
+            else{//나이가 비공개로 되어있는 경우
+                document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
+            }
+
             if(res.data.data.gender === "MALE"){//성별 설정
                 ps_userGender = "남";
             }
             else{
                 ps_userGender = "여";
             }
+
             setPs_UserGenderVisible(res.data.data.genderVisible);//성별 공개
+            if(ps_userGenderVisible){//성별이 공개로 되어있는 경우
+                document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
+            }
+            else{//나이가 비공개로 되어있는 경우
+                document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
+            }
+
             if(res.data.data.selfIntroduction === null){//자기소개 설정
                 setPs_UserIntroduce("");
             }
@@ -59,7 +75,7 @@ const ProfileSetting = () => {
     //이미지 변경 함수 - ps_nextUserImage를 바꾼다.
     const profileImageChangeHandler = (event) => {//작성필요
         event.preventDefault();
-        
+        console.log(event.dataTransfer?.files);
     };
 
     //값 변경 함수
@@ -77,11 +93,26 @@ const ProfileSetting = () => {
     };
     
     //공개여부 변경 함수
-    const ageVisibleChangeHandler = (event) => {//작성필요
+    const ageVisibleChangeHandler = (event) => {
         event.preventDefault();
+        if(ps_userAgeVisible){//공개로 되어있는데 비공개를 하기 위해 누른 경우
+            document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
+        }
+        else{//비공개인데 공개를 하기 위해 누른 경우
+            document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
+        }
+        setPs_UserAgeVisible((cur) => !cur);
     };
+
     const genderVisibleChangeHandler = (event) => {//작성필요
         event.preventDefault();
+        if(ps_userGenderVisible){//공개로 되어있는데 비공개를 하기 위해 누른 경우
+            document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
+        }
+        else{//비공개인데 공개를 하기 위해 누른 경우
+            document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
+        }
+        setPs_UserGenderVisible((cur) => !cur);
     };
 
 
@@ -154,6 +185,7 @@ const ProfileSetting = () => {
                         <button
                             className={Style.smallSettingButton}
                             type="button"
+                            id="ageVisibleBtn"
                             onClick={ageVisibleChangeHandler}>
                             공개
                         </button>
@@ -177,6 +209,7 @@ const ProfileSetting = () => {
                         <button 
                             className={Style.smallSettingButton}
                             type="button"
+                            id="genderVisibleBtn"
                             onClick={genderVisibleChangeHandler}>
                             공개
                         </button>
