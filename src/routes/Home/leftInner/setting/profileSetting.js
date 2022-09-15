@@ -22,32 +22,23 @@ const ProfileSetting = () => {
     const profileSettingPreset = () => {
         axios.get(getcurrentProfileUrl)
         .then((res) => {
-            console.log(res.data.data);//확인용 : 나중에 지워도 됨
-            console.log(res.data.data.imgUrl);
-            console.log(res.data.data.nickname);
-            console.log(res.data.data.age);
-            console.log(res.data.data.ageVisible);
-            console.log(res.data.data.gender);
-
-
-
-            setPs_UserImage(res.data.imgUrl);//프로필 이미지 설정 없으면 null
-            ps_curUserName = res.data.nickname;//이름 설정 - 프로필에 올리는 용도
-            setPs_UserName(res.data.nickname);//이름 설정 - api upload
-            setPs_UserAge(res.data.age);//나이 설정
-            setPs_UserAgeVisible(res.data.ageVisible);//나이 공개
-            if(res.data.gender === "MALE"){//성별 설정
+            setPs_UserImage(res.data.data.imgUrl);//프로필 이미지 설정 없으면 null
+            ps_curUserName = res.data.data.nickname;//이름 설정 - 프로필에 올리는 용도
+            setPs_UserName(res.data.data.nickname);//이름 설정 - api upload
+            setPs_UserAge(res.data.data.age);//나이 설정
+            setPs_UserAgeVisible(res.data.data.ageVisible);//나이 공개
+            if(res.data.data.gender === "MALE"){//성별 설정
                 setPs_UserGender("남");
             }
             else{
                 setPs_UserGender("여");
             }
-            setPs_UserGenderVisible(res.data.genderVisible);//성별 공개
-            if(res.data.selfIntroduction === null){//자기소개 설정
+            setPs_UserGenderVisible(res.data.data.genderVisible);//성별 공개
+            if(res.data.data.selfIntroduction === null){//자기소개 설정
                 setPs_UserIntroduce("");
             }
             else{
-                setPs_UserIntroduce(res.data.selfIntroduction);
+                setPs_UserIntroduce(res.data.data.selfIntroduction);
             }
         })
         .catch((res) => {
@@ -162,7 +153,6 @@ const ProfileSetting = () => {
                     {/* 성별 */}
                     <div className={Style.Cover}>
                         <label 
-                            htmlFor="profileSettingGender"
                             className={Style.profileSettingLabel}>
                             성별
                         </label>
