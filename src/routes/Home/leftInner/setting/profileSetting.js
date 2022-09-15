@@ -22,6 +22,7 @@ const ProfileSetting = () => {
     const profileSettingPreset = () => {
         axios.get(getcurrentProfileUrl)
         .then((res) => {
+            console.log(res.data.data);
             setPs_UserImage(res.data.data.imgUrl);//프로필 이미지 설정 없으면 null
             ps_curUserName = res.data.data.nickname;//이름 설정 - 프로필에 올리는 용도
             setPs_UserName(res.data.data.nickname);//이름 설정 - api upload
@@ -89,9 +90,8 @@ const ProfileSetting = () => {
                 <div className={Style.MyprofileExample}>
                     <div className={Style.Cover}>
                         <label
-                            htmlFor='UserProfileImage'
-                            onClick={profileImageChangeHandler}>
-                            {(ps_userImage === undefined || ps_userImage === null)  ? <img scr={nullImage} className={Style.myprofileImage}/> : <img src={ps_userImage} className={Style.myprofileImage}/> }
+                            htmlFor='UserProfileImage'>
+                            {(ps_userImage === undefined || ps_userImage === null) ? <img scr={nullImage} className={Style.myprofileImage}/> : <img src={ps_userImage} className={Style.myprofileImage}/> }
                         </label>
                         <input 
                             type="file"
