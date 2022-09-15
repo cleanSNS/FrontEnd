@@ -30,9 +30,13 @@ export const logoutApiUrl = `${apiUrl}/user/auth/logout`;
 export const findPWUrl = `${apiUrl}/user/mypage/password/reset`;
 
 
-/***************************메인 페이지 관련 URl***********************************/
+/***************************글 관련 URl***********************************/
 //새 글 피드 가져오는 Url
 export const pageloadUrl = `${apiUrl}/page/main`;
 
 //글 올리는 Url
 export const newPostUrl = `${apiUrl}/page`;
+
+
+/***************************설정 관련 URl***********************************/
+export const getcurrentProfileUrl = `${apiUrl}/user/mypage/profile`;

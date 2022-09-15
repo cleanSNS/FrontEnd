@@ -24,8 +24,11 @@ const Setting = ({settingState, SettingChangeHandler}) => {
             <div className={Style.settingCover} id="filtering" onClick={settingClickHandler}>
                 <div className={Style.setting} id="filtering" onClick={settingClickHandler}>필터링 설정</div>
             </div>
-            <div className={Style.lastSettingCover} id="block" onClick={settingClickHandler}>
+            <div className={Style.settingCover} id="block" onClick={settingClickHandler}>
                 <div className={Style.setting} id="block" onClick={settingClickHandler}>차단 목록</div>
+            </div>
+            <div className={Style.lastSettingCover} id="credit" onClick={settingClickHandler}>
+                <div className={Style.setting} id="credit" onClick={settingClickHandler}>만든 사람들</div>
             </div>
         </div>
     );

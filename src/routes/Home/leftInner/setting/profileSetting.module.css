@@ -19,6 +19,7 @@
     position: relative;
 }
 
+/*내 프로필 보여주는 곳*/
 .MyprofileExample{
     position: absolute;
     width: 60%;
@@ -28,6 +29,7 @@
     transform: translate(-50%, -50%);
 }
 
+/*Input이 있는 부분*/
 .profileSettingDetail{
     position: absolute;
     height: 80%;
@@ -38,10 +40,11 @@
     transform: translate(-50%, -50%);
 
     display: grid;
-    grid-template-columns: 3fr 4fr 1fr;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: 3fr 6fr 2fr;
+    grid-template-rows: repeat(4, 1fr);
 }
 
+/*Label 태그*/
 .profileSettingLabel{
     position: absolute;
     top: 50%;
@@ -51,6 +54,7 @@
     font-weight: bolder;
 }
 
+/*Input 태그*/
 .profileSettingInput{
     position: absolute;
     top: 50%;
@@ -59,35 +63,50 @@
 
     width: 90%;
     height: 80%;
-    font-weight: bolder;
+    border: solid 1px rgb(186, 186, 186);
+    border-radius: 0.25rem;
+    box-shadow: 1px 1px 3px rgb(137, 137, 137);
+}
+.profileSettingInput:focus{
+    outline: 1px solid rgb(153, 221, 255);
 }
 
-.profileEmailButton{
+/*공개 여부 버튼*/
+.smallSettingButton{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
+    width: 50px;
+    height: 45px;
+    line-height: 100%;
+    font-weight: bold;
+    font-size: medium;
+
     border-radius: 0.25rem;
     border: none;
     background-color: rgb(209, 209, 209);
     box-shadow: 1px 1px 3px rgb(152, 152, 152);
-
+    cursor: pointer;
 }
 
+/*수정 버튼*/
 .submitButton{
     position: absolute;
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
 
-    height: 25%;
-    width: 40%;
+    height: 20%;
+    width: 25%;
     font-weight: bold;
+    font-size:large;
 
     background-color: rgb(255, 197, 250);
     color: white;
     border-radius: 0.25rem;
     box-shadow: 1px 1px 3px rgb(178, 137, 175);
     border: none;
+    cursor: pointer;
 }

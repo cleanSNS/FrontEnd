@@ -2,17 +2,6 @@ import Style from './newPost.module.css';
 import { useState } from 'react';
 import addImage from '../../root/tagImages/add.png';
 
-/*
-
-지금 남은 할 일
-
-이미지 드래그 앤 드롭으로 이미지 입력 받기
-이미지 드래그 앤 드롭으로 받은 정보 화면에 보여주기
-
-정상적으로 업로드 되는지 확인하기
-
-*/
-
 const HashtagList = ({deleteTag, newPostHashtag}) => {
     return (
         <div>

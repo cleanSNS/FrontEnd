@@ -9,7 +9,7 @@
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: 3fr 2fr;
 }
 
 .settingListCover{
@@ -31,7 +31,7 @@
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1fr);
 }
 
 .firstSettingCover{
@@ -73,7 +73,7 @@
     transform: translate(-50%, -50%);
     
     width: 50%;
-    height: 8%;
+    height: 13%;
     border: 0;
     background-color: rgb(255, 197, 250);
     border-radius: 0.25rem;
