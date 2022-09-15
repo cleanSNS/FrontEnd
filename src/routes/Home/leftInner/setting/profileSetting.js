@@ -22,12 +22,12 @@ const ProfileSetting = () => {
     const profileSettingPreset = () => {
         axios.get(getcurrentProfileUrl)
         .then((res) => {
-            console.log(res.data);//확인용 : 나중에 지워도 됨
-            console.log(res.data.imgUrl);
-            console.log(res.data.nickname);
-            console.log(res.data.age);
-            console.log(res.data.ageVisible);
-            console.log(res.data.gender);
+            console.log(res.data.data);//확인용 : 나중에 지워도 됨
+            console.log(res.data.data.imgUrl);
+            console.log(res.data.data.nickname);
+            console.log(res.data.data.age);
+            console.log(res.data.data.ageVisible);
+            console.log(res.data.data.gender);
 
 
 
