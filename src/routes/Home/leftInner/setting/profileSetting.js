@@ -117,9 +117,6 @@ const ProfileSetting = () => {
         event.preventDefault();
         setPs_UserIntroduce(event.target.value);
     };
-    const noChange = (event) => {
-        event.preventDefault();
-    }
     
     //공개여부 변경 함수
     const ageVisibleChangeHandler = (event) => {
@@ -215,13 +212,12 @@ const ProfileSetting = () => {
                         </label>
                     </div>
                     <div className={Style.Cover}>
-                        <input
-                            id="profileSettingGender"
-                            type="text"
-                            onChange={noChange}
-                            value={ps_userGender}
-                            className={Style.profileSettingInput}
-                        />
+                        {
+                            ps_userGender === "MALE" ?
+                            <input type="text" value="남" className={Style.profileSettingInput} disabled />
+                            :
+                            <input type="text" value="여" className={Style.profileSettingInput} disabled />
+                        }
                     </div>
                     <div className={Style.Cover}>
                         <button 
