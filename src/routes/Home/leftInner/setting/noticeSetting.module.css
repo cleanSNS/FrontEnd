@@ -51,7 +51,9 @@
 
 /*설정 input 하나*/
 .settingInput{
-  text-align: left;
+  position: absolute;
+  left: 0;
+  width: auto;
   font-size: large;
   cursor: pointer;
 }
