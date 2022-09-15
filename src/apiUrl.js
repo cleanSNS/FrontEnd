@@ -40,3 +40,5 @@ export const newPostUrl = `${apiUrl}/page`;
 
 /***************************설정 관련 URl***********************************/
 export const getcurrentProfileUrl = `${apiUrl}/user/mypage/profile`;
+
+export const submitProfileSettingUrl = `${apiUrl}/user/mypage/profile`;

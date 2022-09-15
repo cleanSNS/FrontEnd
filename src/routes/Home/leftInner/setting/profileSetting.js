@@ -3,6 +3,7 @@ import Style from './profileSetting.module.css';
 import nullImage from '../../root/anonymous.png';
 import {
     getcurrentProfileUrl,
+    submitProfileSettingUrl,
 } from '../../../../apiUrl';
 import axios from 'axios';
 
@@ -12,11 +13,9 @@ const ProfileSetting = () => {
     const [ps_userName, setPs_UserName] = useState();
     const [ps_userAge, setPs_UserAge] = useState();
     const [ps_userAgeVisible, setPs_UserAgeVisible] = useState();
+    const [ps_userGender, setPs_userGender] = useState();
     const [ps_userGenderVisible, setPs_UserGenderVisible] = useState();
     const [ps_userIntroduce, setPs_UserIntroduce] = useState();
-    //api에 보낼 내용 + 화면에 즉각적인 반응이 필요 없으므로 보낼건 next, 지금껀 cur로 선언
-    let ps_curUserName;//이건 초기 렌더링용이므로, input수정은 useState로 진행 - useState변수가 next임
-    let ps_userGender;//성별은 변경 불가
 
     //초기 상태 명시용 함수
     const profileSettingPreset = () => {
@@ -24,7 +23,6 @@ const ProfileSetting = () => {
         .then((res) => {
             console.log(res.data.data);
             setPs_UserImage(res.data.data.imgUrl);//프로필 이미지 설정 없으면 null
-            ps_curUserName = res.data.data.nickname;//이름 설정 - 프로필에 올리는 용도
             setPs_UserName(res.data.data.nickname);//이름 설정 - api upload
             setPs_UserAge(res.data.data.age);//나이 설정
 
@@ -37,10 +35,10 @@ const ProfileSetting = () => {
             }
 
             if(res.data.data.gender === "MALE"){//성별 설정
-                ps_userGender = "남";
+                setPs_userGender("남");
             }
             else{
-                ps_userGender = "여";
+                setPs_userGender("여");
             }
 
             setPs_UserGenderVisible(res.data.data.genderVisible);//성별 공개
@@ -69,13 +67,42 @@ const ProfileSetting = () => {
     //submit함수
     const profileSettingSubmitHandler = (event) => {//작성필요
         event.preventDefault();
-
+        if(ps_userGender === "남"){
+            setPs_userGender("MALE");
+        }
+        else{
+            setPs_userGender("FEMALE");
+        }
+        axios.post(submitProfileSettingUrl,{
+            nickname: ps_userName,
+            age: ps_userAge,
+            gender: ps_userGender,
+            ageVisible: ps_userAgeVisible,
+            genderVisible:ps_userGenderVisible,
+            imgUrl: ps_userImage,
+            selfIntroduction: ps_userIntroduce,
+        })
+        .then((res) => {
+            console.log(res);
+            alert("설정을 변경했습니다.");
+            //window.location.href = "/main";
+        })
+        .catch((res) => {
+            console.log(res);
+            alert("문제가 발생했습니다.")
+        })
     }
 
     //이미지 변경 함수 - ps_nextUserImage를 바꾼다.
-    const profileImageChangeHandler = (event) => {//작성필요
+    const profileImageChangeHandler = (event) => {
         event.preventDefault();
-        console.log(event.dataTransfer?.files);
+        console.log(event.target.files[0])
+        const inputImage = event.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(inputImage);
+        reader.onload = (imageData) => {
+            setPs_UserImage(imageData.target.result);
+        }
     };
 
     //값 변경 함수
@@ -91,6 +118,9 @@ const ProfileSetting = () => {
         event.preventDefault();
         setPs_UserIntroduce(event.target.value);
     };
+    const noChange = (event) => {
+        event.preventDefault();
+    }
     
     //공개여부 변경 함수
     const ageVisibleChangeHandler = (event) => {
@@ -104,7 +134,7 @@ const ProfileSetting = () => {
         setPs_UserAgeVisible((cur) => !cur);
     };
 
-    const genderVisibleChangeHandler = (event) => {//작성필요
+    const genderVisibleChangeHandler = (event) => {
         event.preventDefault();
         if(ps_userGenderVisible){//공개로 되어있는데 비공개를 하기 위해 누른 경우
             document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
@@ -140,7 +170,7 @@ const ProfileSetting = () => {
                         />
                     </div>
                     <div className={Style.Cover}>
-                        <div className={Style.myprofileNickname}>{ps_curUserName}</div>
+                        <div className={Style.myprofileNickname}>{ps_userName}</div>
                     </div>
                 </div>
             </div>
@@ -201,9 +231,10 @@ const ProfileSetting = () => {
                         <input
                             id="profileSettingGender"
                             type="text"
-                            disabled
+                            onChange={noChange}
                             value={ps_userGender}
-                            className={Style.profileSettingInput} />
+                            className={Style.profileSettingInput}
+                        />
                     </div>
                     <div className={Style.Cover}>
                         <button 
