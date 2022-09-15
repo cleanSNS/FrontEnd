@@ -35,10 +35,10 @@ const ProfileSetting = () => {
             }
 
             if(res.data.data.gender === "MALE"){//성별 설정
-                setPs_userGender("남");
+                setPs_userGender(res.data.data.gender);
             }
             else{
-                setPs_userGender("여");
+                setPs_userGender(res.data.data.gender);
             }
 
             setPs_UserGenderVisible(res.data.data.genderVisible);//성별 공개
@@ -67,12 +67,6 @@ const ProfileSetting = () => {
     //submit함수
     const profileSettingSubmitHandler = (event) => {//작성필요
         event.preventDefault();
-        if(ps_userGender === "남"){
-            setPs_userGender("MALE");
-        }
-        else{
-            setPs_userGender("FEMALE");
-        }
         axios.post(submitProfileSettingUrl,{
             nickname: ps_userName,
             age: ps_userAge,
