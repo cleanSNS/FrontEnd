@@ -1,3 +1,7 @@
+.Cover{
+    position: relative;
+}
+
 /*전체 커버*/
 .profileSettingCover{
     position: absolute;
@@ -16,10 +20,6 @@
     grid-template-rows: 1fr 2fr 1fr;
 }
 
-.Cover{
-    position: relative;
-}
-
 /*내 프로필 보여주는 곳*/
 .MyprofileExample{
     position: absolute;
@@ -35,12 +35,39 @@
     grid-template-rows: 1fr;
 }
 
+/*프로필 이미지*/
 .myprofileImage{
-
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border: solid 1px rgb(152, 152, 152);
+    border-radius: 20px;
+    cursor: pointer;
 }
 
+/*프로필 input태그*/
+.myprofileImageInput{
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+
+/*프로필 닉네임*/
 .myprofileNickname{
-    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    line-height: 100%;
+    font-weight: bold;
+    font-size: x-large;
 }
 
 /*Input이 있는 부분*/

@@ -23,8 +23,16 @@ const ProfileSetting = () => {
         axios.get(getcurrentProfileUrl)
         .then((res) => {
             console.log(res.data);//확인용 : 나중에 지워도 됨
+            console.log(res.data.imgUrl);
+            console.log(res.data.nickname);
+            console.log(res.data.age);
+            console.log(res.data.ageVisible);
+            console.log(res.data.gender);
+
+
+
             setPs_UserImage(res.data.imgUrl);//프로필 이미지 설정 없으면 null
-            ps_curUserName = res.data.nickname;//이름 설정 - render
+            ps_curUserName = res.data.nickname;//이름 설정 - 프로필에 올리는 용도
             setPs_UserName(res.data.nickname);//이름 설정 - api upload
             setPs_UserAge(res.data.age);//나이 설정
             setPs_UserAgeVisible(res.data.ageVisible);//나이 공개
@@ -91,18 +99,18 @@ const ProfileSetting = () => {
                     <div className={Style.Cover}>
                         <label
                             htmlFor='UserProfileImage'
-                            onClick={profileImageChangeHandler} 
-                            className={Style.myprofileImage}>
-                            {ps_userImage === null ? <img scr={nullImage} /> : <img src={ps_userImage} /> }
+                            onClick={profileImageChangeHandler}>
+                            {(ps_userImage === undefined || ps_userImage === null)  ? <img scr={nullImage} className={Style.myprofileImage}/> : <img src={ps_userImage} className={Style.myprofileImage}/> }
                         </label>
                         <input 
                             type="file"
+                            className={Style.myprofileImageInput}
                             id="UserProfileImage"
                             accept="image/*"
                         />
                     </div>
                     <div className={Style.Cover}>
-                        <p className={Style.myprofileNickname}>{ps_curUserName}</p>
+                        <div className={Style.myprofileNickname}>{ps_curUserName}</div>
                     </div>
                 </div>
             </div>
