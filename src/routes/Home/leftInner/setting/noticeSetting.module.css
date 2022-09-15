@@ -53,6 +53,7 @@
 .settingInput{
   text-align: left;
   font-size: large;
+  cursor: pointer;
 }
 
 /*제출 버튼*/
