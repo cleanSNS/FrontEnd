@@ -9,13 +9,13 @@ import axios from 'axios';
 
 const ProfileSetting = () => {
     //api에 보낼 내용 + input에 반영해야하므로 useState로 선언
-    const [ps_userImage, setPs_UserImage] = useState();
-    const [ps_userName, setPs_UserName] = useState();
-    const [ps_userAge, setPs_UserAge] = useState();
-    const [ps_userAgeVisible, setPs_UserAgeVisible] = useState();
-    const [ps_userGender, setPs_userGender] = useState();
-    const [ps_userGenderVisible, setPs_UserGenderVisible] = useState();
-    const [ps_userIntroduce, setPs_UserIntroduce] = useState();
+    const [ps_userImage, setPs_UserImage] = useState("");
+    const [ps_userName, setPs_UserName] = useState("");
+    const [ps_userAge, setPs_UserAge] = useState("");
+    const [ps_userAgeVisible, setPs_UserAgeVisible] = useState("");
+    const [ps_userGender, setPs_userGender] = useState("");
+    const [ps_userGenderVisible, setPs_UserGenderVisible] = useState("");
+    const [ps_userIntroduce, setPs_UserIntroduce] = useState("");
 
     //공개 여부 인지 후 색상 변경 함수
     const ageVisibleBtnChangeHandler = (event) => {
@@ -188,7 +188,7 @@ const ProfileSetting = () => {
                     <div className={Style.Cover}>
                         <input
                             id="profileSettingAge"
-                            type="text"
+                            type="number"
                             value={ps_userAge}
                             onChange={ageChageHandler}
                             className={Style.profileSettingInput}
@@ -205,14 +205,14 @@ const ProfileSetting = () => {
                     </div>
                     {/* 성별 */}
                     <div className={Style.Cover}>
-                        <label 
+                        <label
                             className={Style.profileSettingLabel}>
                             성별
                         </label>
                     </div>
                     <div className={Style.Cover}>
                         {
-                            ps_userGender === "MALE" ?
+                            "ps_userGender" === "MALE" ?
                             <input type="text" value="남" className={Style.profileSettingInput} readOnly />
                             :
                             <input type="text" value="여" className={Style.profileSettingInput} readOnly />

@@ -169,3 +169,8 @@
     reader.onload = (Data) => {
 		=> Data가 주어진 파일을 base64로 인코딩하고 확장자나 파일의 형식을 명시한다.
     }
+	
+23. component is changing an uncontrolled input to be controlled. 에러
+	: 해당 에러는 useState변수를 input영역에 value로 넣어줬을 때 발생했다.
+	=> 이 에러는 value로 undefined가 들어갔을때의 대책이 없어서 발생하는 것이다. 즉, 그런 경우를 방지해주면 된다.
+	: 이 경우 useState를 ""로 초기화해주면서 해결했다
