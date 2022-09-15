@@ -161,3 +161,11 @@
 21. position을 이용하면 영역이 사라지는 현상
 	: position기능을 이용하면 해당 요소의 기능이 사라지는 현상이 생긴다.
 	=> 그래서 영역을 그대로 유지하고싶다면 display: flex로 영역을 잡은 뒤 그 안에 요소를 넣으면 그 안에서 position사용이 용이해진다.
+
+22. 이미지 미리보기 기능
+	: 이미지 미리보기뿐 아니라, file형태로 참조되어있는 데이터를 문자열의 형태로 전환하여 DB에 저장할 수 있도록 하기 위해서 아래 과정이 필요하다.
+	const reader = new FileReader() => 불러오기
+	reader.readAsDataURL(File); => 주어진 파일을 URL로 만든다
+    reader.onload = (Data) => {
+		=> Data가 주어진 파일을 base64로 인코딩하고 확장자나 파일의 형식을 명시한다.
+    }

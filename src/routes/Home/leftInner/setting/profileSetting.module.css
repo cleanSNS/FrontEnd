@@ -1,3 +1,4 @@
+/*전체 커버*/
 .profileSettingCover{
     position: absolute;
     top: 50%;
@@ -24,9 +25,22 @@
     position: absolute;
     width: 60%;
     height: 60%;
-    top: 50%;
+    top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
+    border-bottom: solid 1px rgb(152, 152, 152);
+
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+    grid-template-rows: 1fr;
+}
+
+.myprofileImage{
+
+}
+
+.myprofileNickname{
+    
 }
 
 /*Input이 있는 부분*/
