@@ -161,7 +161,6 @@ const ProfileSetting = () => {
                         <input
                             id="profileSettingGender"
                             type="text"
-                            disabled
                             value={ps_userGender}
                             className={Style.profileSettingInput} />
                     </div>
