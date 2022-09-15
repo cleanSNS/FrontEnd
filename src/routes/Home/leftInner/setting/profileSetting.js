@@ -212,7 +212,7 @@ const ProfileSetting = () => {
                     </div>
                     <div className={Style.Cover}>
                         {
-                            "ps_userGender" === "MALE" ?
+                            ps_userGender === "MALE" ?
                             <input type="text" value="남" className={Style.profileSettingInput} readOnly />
                             :
                             <input type="text" value="여" className={Style.profileSettingInput} readOnly />
