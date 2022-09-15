@@ -17,6 +17,27 @@ const ProfileSetting = () => {
     const [ps_userGenderVisible, setPs_UserGenderVisible] = useState();
     const [ps_userIntroduce, setPs_UserIntroduce] = useState();
 
+    //공개 여부 인지 후 색상 변경 함수
+    const ageVisibleBtnChangeHandler = (event) => {
+        if(ps_userAgeVisible){//나이가 공개로 되어있는 경우
+            document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
+        }
+        else{//나이가 비공개로 되어있는 경우
+            document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
+        }
+    };
+    useEffect(ageVisibleBtnChangeHandler, [ps_userAgeVisible]);
+
+    const genderVisibleBtnChangeHandler = (event) => {
+        if(ps_userGenderVisible){//성별이 공개로 되어있는 경우
+            document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
+        }
+        else{//나이가 비공개로 되어있는 경우
+            document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
+        }
+    };
+    useEffect(genderVisibleBtnChangeHandler, [ps_userGenderVisible]);
+
     //초기 상태 명시용 함수
     const profileSettingPreset = () => {
         axios.get(getcurrentProfileUrl)
@@ -25,30 +46,14 @@ const ProfileSetting = () => {
             setPs_UserImage(res.data.data.imgUrl);//프로필 이미지 설정 없으면 null
             setPs_UserName(res.data.data.nickname);//이름 설정 - api upload
             setPs_UserAge(res.data.data.age);//나이 설정
-
             setPs_UserAgeVisible(res.data.data.ageVisible);//나이 공개
-            if(ps_userAgeVisible){//나이가 공개로 되어있는 경우
-                document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
-            }
-            else{//나이가 비공개로 되어있는 경우
-                document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
-            }
-
             if(res.data.data.gender === "MALE"){//성별 설정
                 setPs_userGender(res.data.data.gender);
             }
             else{
                 setPs_userGender(res.data.data.gender);
             }
-
             setPs_UserGenderVisible(res.data.data.genderVisible);//성별 공개
-            if(ps_userGenderVisible){//성별이 공개로 되어있는 경우
-                document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
-            }
-            else{//나이가 비공개로 되어있는 경우
-                document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
-            }
-
             if(res.data.data.selfIntroduction === null){//자기소개 설정
                 setPs_UserIntroduce("");
             }
@@ -119,23 +124,11 @@ const ProfileSetting = () => {
     //공개여부 변경 함수
     const ageVisibleChangeHandler = (event) => {
         event.preventDefault();
-        if(ps_userAgeVisible){//공개로 되어있는데 비공개를 하기 위해 누른 경우
-            document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
-        }
-        else{//비공개인데 공개를 하기 위해 누른 경우
-            document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
-        }
         setPs_UserAgeVisible((cur) => !cur);
     };
 
     const genderVisibleChangeHandler = (event) => {
         event.preventDefault();
-        if(ps_userGenderVisible){//공개로 되어있는데 비공개를 하기 위해 누른 경우
-            document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(209, 209, 209)";
-        }
-        else{//비공개인데 공개를 하기 위해 누른 경우
-            document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
-        }
         setPs_UserGenderVisible((cur) => !cur);
     };
 
