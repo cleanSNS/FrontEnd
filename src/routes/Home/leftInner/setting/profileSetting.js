@@ -12,11 +12,11 @@ const ProfileSetting = () => {
     const [ps_userName, setPs_UserName] = useState();
     const [ps_userAge, setPs_UserAge] = useState();
     const [ps_userAgeVisible, setPs_UserAgeVisible] = useState();
-    const [ps_userGender, setPs_UserGender] = useState();
     const [ps_userGenderVisible, setPs_UserGenderVisible] = useState();
     const [ps_userIntroduce, setPs_UserIntroduce] = useState();
     //api에 보낼 내용 + 화면에 즉각적인 반응이 필요 없으므로 보낼건 next, 지금껀 cur로 선언
     let ps_curUserName;//이건 초기 렌더링용이므로, input수정은 useState로 진행 - useState변수가 next임
+    let ps_userGender;//성별은 변경 불가
 
     //초기 상태 명시용 함수
     const profileSettingPreset = () => {
@@ -29,10 +29,10 @@ const ProfileSetting = () => {
             setPs_UserAge(res.data.data.age);//나이 설정
             setPs_UserAgeVisible(res.data.data.ageVisible);//나이 공개
             if(res.data.data.gender === "MALE"){//성별 설정
-                setPs_UserGender("남");
+                ps_userGender = "남";
             }
             else{
-                setPs_UserGender("여");
+                ps_userGender = "여";
             }
             setPs_UserGenderVisible(res.data.data.genderVisible);//성별 공개
             if(res.data.data.selfIntroduction === null){//자기소개 설정
@@ -169,6 +169,7 @@ const ProfileSetting = () => {
                         <input
                             id="profileSettingGender"
                             type="text"
+                            disabled
                             value={ps_userGender}
                             className={Style.profileSettingInput} />
                     </div>
