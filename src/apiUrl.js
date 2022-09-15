@@ -42,3 +42,7 @@ export const newPostUrl = `${apiUrl}/page`;
 export const getcurrentProfileUrl = `${apiUrl}/user/mypage/profile`;
 
 export const submitProfileSettingUrl = `${apiUrl}/user/mypage/profile`;
+
+export const getCurrentNoticeSettingUrl = `${apiUrl}/user/mypage/push`;
+
+export const submitCurrentNoticeSettingUrl = `${apiUrl}/user/mypage/push`;

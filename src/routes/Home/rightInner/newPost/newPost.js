@@ -2,7 +2,7 @@ import Style from './newPost.module.css';
 import {useEffect} from 'react';
 
 const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNotice, setNewPostCommentNotice, newPostReadPostAuth, setNewPostReadPostAuth, newPostReadCommentAuth, setNewPostReadCommentAuth, newPostWriteCommentAuth, setNewPostWriteCommentAuth, newPostReadLikeAuth, setNewPostReadLikeAuth}) => {
-    //초기에 모든 허용을 진하게 만드는 함수 -- 변경해야한다. state확인해서 그에 맞게 변경해야한다.
+    //초기에 모든 허용을 진하게 만드는 함수
     const firstColoring = () => {
         //좋아요 알림부분 반영
         if(newPostLikeNotice){
@@ -197,7 +197,7 @@ const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNo
     return(
         <div className={Style.WholeCover}>
             <div className={Style.Cover}>
-                <div className={Style.settingCover}>
+                <div className={Style.settingCover} style={{borderBottom:"1px solid rgb(216, 216, 216)"}}>
                     <div className={Style.Cover}>
                         <div className={Style.settingName}>좋아요 알림</div>
                     </div>
@@ -214,7 +214,7 @@ const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNo
                 </div>
             </div>
             <div className={Style.Cover}>
-                <div className={Style.settingCover}>
+                <div className={Style.settingCover} style={{borderBottom:"1px solid rgb(216, 216, 216)"}}>
                     <div className={Style.Cover}>
                         <div className={Style.settingName}>댓글 알림</div>
                     </div>
@@ -231,7 +231,7 @@ const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNo
                 </div>
             </div>
             <div className={Style.Cover}>
-                <div className={Style.settingCover}>
+                <div className={Style.settingCover} style={{borderBottom:"1px solid rgb(216, 216, 216)"}}>
                     <div className={Style.Cover}>
                         <div className={Style.settingName}>읽기 권한</div>
                     </div>
@@ -251,7 +251,7 @@ const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNo
                 </div>
             </div>
             <div className={Style.Cover}>
-                <div className={Style.settingCover}>
+                <div className={Style.settingCover} style={{borderBottom:"1px solid rgb(216, 216, 216)"}}>
                     <div className={Style.Cover}>
                         <div className={Style.settingName}>댓글 읽기 권한</div>
                     </div>
@@ -268,7 +268,7 @@ const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNo
                 </div>
             </div>
             <div className={Style.Cover}>
-                <div className={Style.settingCover}>
+                <div className={Style.settingCover} style={{borderBottom:"1px solid rgb(216, 216, 216)"}}>
                     <div className={Style.Cover}>
                         <div className={Style.settingName}>댓글 쓰기 권한</div>
                     </div>
@@ -285,7 +285,7 @@ const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNo
                 </div>
             </div>
             <div className={Style.Cover}>
-                <div className={Style.settingCoverLast}>
+                <div className={Style.settingCover}>
                     <div className={Style.Cover}>
                         <div className={Style.settingName}>좋아요 읽기 권한</div>
                     </div>
@@ -305,4 +305,4 @@ const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNo
     );
 }
 
-export default RightNewPost
+export default RightNewPost;
