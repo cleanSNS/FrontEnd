@@ -1,0 +1,65 @@
+.Cover{
+  position: relative;
+}
+
+.wholeCover{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 90%;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 3fr;
+}
+
+/*로고 부분*/
+.HongikLogo{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+}
+
+/*credit grid*/
+.creditArea{
+  position: absolute;
+  width: 100%;
+  height: 60%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+/*credit 한명의 영역*/
+.personArea{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 60%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 3fr 2fr 2fr;
+  box-shadow: 3px 3px 5px rgb(181, 181, 181);
+  border-radius: 0.5rem;
+  padding : 10px;
+  border: 1px solid rgb(181, 181, 181);
+}
+
+.name{
+  font-weight: bolder;
+  font-size: large;
+  width: 100%;
+  text-align: center;
+}
+
+.email, .github{
+  font-weight:lighter;
+  height: 0px;
+  color : #5A5A5A;
+}
