@@ -31,6 +31,10 @@ const PasswordSetting = () => {
     //submit handler
     const submitHandler = (event) => {
         event.preventDefault();
+        if(previousPassword === passwordChange){
+            alert("바꾸려는 비밀번호가 동일합니다.");
+            return;
+        }
         if(!passwordCondition){
             alert("새 비밀번호가 비밀번호 조건에 맞지 않습니다.");
             return;

@@ -13,11 +13,16 @@ const NoticeSetting = () => {
     const [notificationLike, setNotificationLike] = useState("");
     const [notificationFollowAccept, setNotificationFollowAccept] = useState("");
     const [notificationChat, setNotificationChat] = useState("");
+
     //처음에 설정현황을 불러오는 함수
     const noticeSettingPreset = () => {
         axios.get(getCurrentNoticeSettingUrl)
         .then((res) => {
-            console.log(res.data.data);
+            setNotificationFollow(res.data.data.notificationFollow);
+            setNotificationComment(res.data.data.notificationComment)
+            setNotificationLike(res.data.data.notificationLike);
+            setNotificationFollowAccept(res.data.data.notificationFollowAccept);
+            setNotificationChat(res.data.data.notificationChat);
         })
         .catch((res) => {
             console.log(res);
@@ -26,8 +31,144 @@ const NoticeSetting = () => {
         });
     };
     useEffect(noticeSettingPreset, []);
+
+    //submit function
+    const submitHandler = (event) => {
+        event.preventDefault();
+        axios.post(submitCurrentNoticeSettingUrl,{
+            notificationFollow: notificationFollow,
+            notificationComment: notificationComment,
+            notificationLike: notificationLike,
+            notificationFollowAccept: notificationFollowAccept,
+            notificationChat: notificationChat,
+        })
+        .then((res) => {
+            alert("설정을 변경했습니다.");
+        })
+        .catch((res) => {
+            alert("에러가 발생했습니다.");
+            //window.location.href = "/main";
+        })
+    };
+
+    //각 설정 클릭시 handler
+    const notificationFollowClickHandler = (event) => {
+        event.preventDefault();
+        setNotificationFollow((cur) => !cur);
+    };
+    const notificationCommentClickHandler = (event) => {
+        event.preventDefault();
+        if(event.target.id === "notificationCommentTrue"){
+            setNotificationComment("TRUE");
+        }
+        else if(event.target.id === "notificationCommentFollowOnly"){
+            setNotificationComment("FOLLOW_ONLY");
+        }
+        else{
+            setNotificationComment("FALSE");
+        }
+    };
+    const notificationLikeClickHandler = (event) => {
+        event.preventDefault();
+        if(event.target.id === "notificationLikeTrue"){
+            setNotificationLike("TRUE");
+        }
+        else if(event.target.id === "notificationLikeFollowOnly"){
+            setNotificationLike("FOLLOW_ONLY");
+        }
+        else{
+            setNotificationLike("FALSE");
+        }
+    };
+    const notificationFollowAcceptClickHandler = (event) => {
+        event.preventDefault();
+        setNotificationFollowAccept((cur) => !cur);
+    };
+    const notificationChatClickHandler = (event) => {
+        event.preventDefault();
+        setNotificationChat((cur) => !cur);
+    };
+
+    //각 요소 스타일 변경 handler
+    const notificationFollowStyleChanger = () => {
+        if(notificationFollow){
+            document.querySelector("#notificationFollowTrue").style.fontWeight = "600";
+            document.querySelector("#notificationFollowFalse").style.fontWeight = "400";
+        }
+        else{
+            document.querySelector("#notificationFollowTrue").style.fontWeight = "400";
+            document.querySelector("#notificationFollowFalse").style.fontWeight = "600";
+        }
+    };
+    useEffect(notificationFollowStyleChanger, [notificationFollow]);
+
+    const notificationCommentStyleChanger = () => {
+        if(notificationComment === "TRUE"){
+            document.querySelector("#notificationCommentTrue").style.fontWeight = "600";
+            document.querySelector("#notificationCommentFollowOnly").style.fontWeight = "400";
+            document.querySelector("#notificationCommentFalse").style.fontWeight = "400";
+        }
+        else if(notificationComment === "FOLLOW_ONLY"){
+            document.querySelector("#notificationCommentTrue").style.fontWeight = "400";
+            document.querySelector("#notificationCommentFollowOnly").style.fontWeight = "600";
+            document.querySelector("#notificationCommentFalse").style.fontWeight = "400";
+        }
+        else{
+            document.querySelector("#notificationCommentTrue").style.fontWeight = "400";
+            document.querySelector("#notificationCommentFollowOnly").style.fontWeight = "400";
+            document.querySelector("#notificationCommentFalse").style.fontWeight = "600";
+        }
+    };
+    useEffect(notificationCommentStyleChanger, [notificationComment]);
+
+    const notificationLikeStyleChanger = () => {
+        if(notificationLike === "TRUE"){
+            document.querySelector("#notificationLikeTrue").style.fontWeight = "600";
+            document.querySelector("#notificationLikeFollowOnly").style.fontWeight = "400";
+            document.querySelector("#notificationLikeFalse").style.fontWeight = "400";
+        }
+        else if(notificationLike === "FOLLOW_ONLY"){
+            document.querySelector("#notificationLikeTrue").style.fontWeight = "400";
+            document.querySelector("#notificationLikeFollowOnly").style.fontWeight = "600";
+            document.querySelector("#notificationLikeFalse").style.fontWeight = "400";
+        }
+        else {
+            document.querySelector("#notificationLikeTrue").style.fontWeight = "400";
+            document.querySelector("#notificationLikeFollowOnly").style.fontWeight = "400";
+            document.querySelector("#notificationLikeFalse").style.fontWeight = "600";
+        }
+
+    };
+    useEffect(notificationLikeStyleChanger, [notificationLike]);
+
+    const notificationFollowAcceptStyleChanger = () => {
+        if(notificationFollowAccept){
+            document.querySelector("#notificationFollowAcceptTrue").style.fontWeight = "600";
+            document.querySelector("#notificationFollowAcceptFalse").style.fontWeight = "400";
+        }
+        else{
+            document.querySelector("#notificationFollowAcceptTrue").style.fontWeight = "400";
+            document.querySelector("#notificationFollowAcceptFalse").style.fontWeight = "600";
+        }
+    };
+    useEffect(notificationFollowAcceptStyleChanger, [notificationFollowAccept]);
+
+    const notificationChatStyleChanger = () => {
+        if(notificationChat){
+            document.querySelector("#notificationChatTrue").style.fontWeight = "600";
+            document.querySelector("#notificationChatFalse").style.fontWeight = "400";
+        }
+        else{
+            document.querySelector("#notificationChatTrue").style.fontWeight = "400";
+            document.querySelector("#notificationChatFalse").style.fontWeight = "600";
+        }
+
+    };
+    useEffect(notificationChatStyleChanger, [notificationChat]);
+
+
     return(
-        <div className={Style.WholeCover}>
+        <form className={Style.WholeCover} onSubmit={submitHandler}>
             <div className={Style.Cover}>
                 <div className={Style.settingLabelInputSplit} style={{borderBottom:"1px solid rgb(216, 216, 216)"}}>
                     <div className={Style.Cover}>
@@ -36,10 +177,10 @@ const NoticeSetting = () => {
                     <div className={Style.Cover}>
                         <div className={Style.twoSettingLabelArea}>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>허용</p>
+                                <p className={Style.settingInput} id="notificationFollowTrue" onClick={notificationFollowClickHandler}>허용</p>
                             </div>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>거부</p>
+                                <p className={Style.settingInput} id="notificationFollowFalse" onClick={notificationFollowClickHandler}>거부</p>
                             </div>
                         </div>
                     </div>
@@ -53,13 +194,13 @@ const NoticeSetting = () => {
                     <div className={Style.Cover}>
                         <div className={Style.threeSettingLabelArea}>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>허용</p>
+                                <p className={Style.settingInput} id="notificationCommentTrue" onClick={notificationCommentClickHandler}>허용</p>
                             </div>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>팔로우 된 사람만 허용</p>
+                                <p className={Style.settingInput} id="notificationCommentFollowOnly" onClick={notificationCommentClickHandler}>팔로우 된 사람만 허용</p>
                             </div>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>거부</p>
+                                <p className={Style.settingInput} id="notificationCommentFalse" onClick={notificationCommentClickHandler}>거부</p>
                             </div>
                         </div>
                     </div>
@@ -73,13 +214,13 @@ const NoticeSetting = () => {
                     <div className={Style.Cover}>
                         <div className={Style.threeSettingLabelArea}>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>허용</p>
+                                <p className={Style.settingInput} id="notificationLikeTrue" onClick={notificationLikeClickHandler}>허용</p>
                             </div>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>팔로우 된 사람만 허용</p>
+                                <p className={Style.settingInput} id="notificationLikeFollowOnly" onClick={notificationLikeClickHandler}>팔로우 된 사람만 허용</p>
                             </div>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>거부</p>
+                                <p className={Style.settingInput} id="notificationLikeFalse" onClick={notificationLikeClickHandler}>거부</p>
                             </div>
                         </div>
                     </div>
@@ -93,10 +234,10 @@ const NoticeSetting = () => {
                     <div className={Style.Cover}>
                         <div className={Style.twoSettingLabelArea}>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>허용</p>
+                                <p className={Style.settingInput} id="notificationFollowAcceptTrue" onClick={notificationFollowAcceptClickHandler}>허용</p>
                             </div>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>거부</p>
+                                <p className={Style.settingInput} id="notificationFollowAcceptFalse" onClick={notificationFollowAcceptClickHandler}>거부</p>
                             </div>
                         </div>
                     </div>
@@ -110,19 +251,19 @@ const NoticeSetting = () => {
                     <div className={Style.Cover}>
                         <div className={Style.twoSettingLabelArea}>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>허용</p>
+                                <p className={Style.settingInput} id="notificationChatTrue" onClick={notificationChatClickHandler}>허용</p>
                             </div>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput}>거부</p>
+                                <p className={Style.settingInput} id="notificationChatFalse" onClick={notificationChatClickHandler}>거부</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div className={Style.Cover}>
-                <button className={Style.submitBtn}>수정</button>
+                <button type="submit" className={Style.submitBtn}>수정</button>
             </div>
-        </div>
+        </form>
     );
 }
 
