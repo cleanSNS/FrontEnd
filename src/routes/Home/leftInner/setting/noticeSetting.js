@@ -1,11 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Style from './noticeSetting.module.css';
 import {
     getCurrentNoticeSettingUrl,
     submitCurrentNoticeSettingUrl,
 } from "../../../../apiUrl";
+import axios from 'axios';
 
 const NoticeSetting = () => {
+    //설정들
+    const [notificationFollow, setNotificationFollow] = useState("");
+    const [notificationComment, setNotificationComment] = useState("");
+    const [notificationLike, setNotificationLike] = useState("");
+    const [notificationFollowAccept, setNotificationFollowAccept] = useState("");
+    const [notificationChat, setNotificationChat] = useState("");
+    //처음에 설정현황을 불러오는 함수
+    const noticeSettingPreset = () => {
+        axios.get(getCurrentNoticeSettingUrl)
+        .then((res) => {
+            console.log(res.data.data);
+        })
+        .catch((res) => {
+            console.log(res);
+            alert("에러발생");
+            //window.location.href = "/main";
+        });
+    };
+    useEffect(noticeSettingPreset, []);
     return(
         <div className={Style.WholeCover}>
             <div className={Style.Cover}>
