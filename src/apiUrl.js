@@ -46,3 +46,7 @@ export const submitProfileSettingUrl = `${apiUrl}/user/mypage/profile`;
 export const getCurrentNoticeSettingUrl = `${apiUrl}/user/mypage/push`;
 
 export const submitCurrentNoticeSettingUrl = `${apiUrl}/user/mypage/push`;
+
+export const passwordCheckForPasswordChangeUrl = `${apiUrl}/user/mypage/password/check`
+
+export const passwordChangeUrl = `${apiUrl}/user/mypage/password/change`
