@@ -1,5 +1,5 @@
 import Style from './credit.module.css';
-import HongikLogo from './Logo_of_hongik_university.jpg';
+import HongikLogo from './hongiklogo/Logo_of_hongik_university.jpg';
 
 const Person = ({name, email, github}) => {
     return(

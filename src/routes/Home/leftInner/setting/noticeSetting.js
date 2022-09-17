@@ -58,26 +58,26 @@ const NoticeSetting = () => {
     };
     const notificationCommentClickHandler = (event) => {
         event.preventDefault();
-        if(event.target.id === "notificationCommentTrue"){
-            setNotificationComment("TRUE");
+        if(event.target.id === "notificationCommentAll"){
+            setNotificationComment("ALL");
         }
         else if(event.target.id === "notificationCommentFollowOnly"){
             setNotificationComment("FOLLOW_ONLY");
         }
         else{
-            setNotificationComment("FALSE");
+            setNotificationComment("NONE");
         }
     };
     const notificationLikeClickHandler = (event) => {
         event.preventDefault();
-        if(event.target.id === "notificationLikeTrue"){
-            setNotificationLike("TRUE");
+        if(event.target.id === "notificationLikeAll"){
+            setNotificationLike("ALL");
         }
         else if(event.target.id === "notificationLikeFollowOnly"){
             setNotificationLike("FOLLOW_ONLY");
         }
         else{
-            setNotificationLike("FALSE");
+            setNotificationLike("NONE");
         }
     };
     const notificationFollowAcceptClickHandler = (event) => {
@@ -103,39 +103,39 @@ const NoticeSetting = () => {
     useEffect(notificationFollowStyleChanger, [notificationFollow]);
 
     const notificationCommentStyleChanger = () => {
-        if(notificationComment === "TRUE"){
-            document.querySelector("#notificationCommentTrue").style.fontWeight = "600";
+        if(notificationComment === "ALL"){
+            document.querySelector("#notificationCommentAll").style.fontWeight = "600";
             document.querySelector("#notificationCommentFollowOnly").style.fontWeight = "400";
-            document.querySelector("#notificationCommentFalse").style.fontWeight = "400";
+            document.querySelector("#notificationCommentNone").style.fontWeight = "400";
         }
         else if(notificationComment === "FOLLOW_ONLY"){
-            document.querySelector("#notificationCommentTrue").style.fontWeight = "400";
+            document.querySelector("#notificationCommentAll").style.fontWeight = "400";
             document.querySelector("#notificationCommentFollowOnly").style.fontWeight = "600";
-            document.querySelector("#notificationCommentFalse").style.fontWeight = "400";
+            document.querySelector("#notificationCommentNone").style.fontWeight = "400";
         }
         else{
-            document.querySelector("#notificationCommentTrue").style.fontWeight = "400";
+            document.querySelector("#notificationCommentAll").style.fontWeight = "400";
             document.querySelector("#notificationCommentFollowOnly").style.fontWeight = "400";
-            document.querySelector("#notificationCommentFalse").style.fontWeight = "600";
+            document.querySelector("#notificationCommentNone").style.fontWeight = "600";
         }
     };
     useEffect(notificationCommentStyleChanger, [notificationComment]);
 
     const notificationLikeStyleChanger = () => {
-        if(notificationLike === "TRUE"){
-            document.querySelector("#notificationLikeTrue").style.fontWeight = "600";
+        if(notificationLike === "ALL"){
+            document.querySelector("#notificationLikeAll").style.fontWeight = "600";
             document.querySelector("#notificationLikeFollowOnly").style.fontWeight = "400";
-            document.querySelector("#notificationLikeFalse").style.fontWeight = "400";
+            document.querySelector("#notificationLikeNone").style.fontWeight = "400";
         }
         else if(notificationLike === "FOLLOW_ONLY"){
-            document.querySelector("#notificationLikeTrue").style.fontWeight = "400";
+            document.querySelector("#notificationLikeAll").style.fontWeight = "400";
             document.querySelector("#notificationLikeFollowOnly").style.fontWeight = "600";
-            document.querySelector("#notificationLikeFalse").style.fontWeight = "400";
+            document.querySelector("#notificationLikeNone").style.fontWeight = "400";
         }
         else {
-            document.querySelector("#notificationLikeTrue").style.fontWeight = "400";
+            document.querySelector("#notificationLikeAll").style.fontWeight = "400";
             document.querySelector("#notificationLikeFollowOnly").style.fontWeight = "400";
-            document.querySelector("#notificationLikeFalse").style.fontWeight = "600";
+            document.querySelector("#notificationLikeNone").style.fontWeight = "600";
         }
 
     };
@@ -194,13 +194,13 @@ const NoticeSetting = () => {
                     <div className={Style.Cover}>
                         <div className={Style.threeSettingLabelArea}>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput} id="notificationCommentTrue" onClick={notificationCommentClickHandler}>허용</p>
+                                <p className={Style.settingInput} id="notificationCommentAll" onClick={notificationCommentClickHandler}>허용</p>
                             </div>
                             <div className={Style.Cover}>
                                 <p className={Style.settingInput} id="notificationCommentFollowOnly" onClick={notificationCommentClickHandler}>팔로우 된 사람만 허용</p>
                             </div>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput} id="notificationCommentFalse" onClick={notificationCommentClickHandler}>거부</p>
+                                <p className={Style.settingInput} id="notificationCommentNone" onClick={notificationCommentClickHandler}>거부</p>
                             </div>
                         </div>
                     </div>
@@ -214,13 +214,13 @@ const NoticeSetting = () => {
                     <div className={Style.Cover}>
                         <div className={Style.threeSettingLabelArea}>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput} id="notificationLikeTrue" onClick={notificationLikeClickHandler}>허용</p>
+                                <p className={Style.settingInput} id="notificationLikeAll" onClick={notificationLikeClickHandler}>허용</p>
                             </div>
                             <div className={Style.Cover}>
                                 <p className={Style.settingInput} id="notificationLikeFollowOnly" onClick={notificationLikeClickHandler}>팔로우 된 사람만 허용</p>
                             </div>
                             <div className={Style.Cover}>
-                                <p className={Style.settingInput} id="notificationLikeFalse" onClick={notificationLikeClickHandler}>거부</p>
+                                <p className={Style.settingInput} id="notificationLikeNone" onClick={notificationLikeClickHandler}>거부</p>
                             </div>
                         </div>
                     </div>
