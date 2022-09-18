@@ -39,16 +39,32 @@ export const newPostUrl = `${apiUrl}/page`;
 
 
 /***************************설정 관련 URl***********************************/
+//지금 프로필 가져오는 Url
 export const getcurrentProfileUrl = `${apiUrl}/user/mypage/profile`;
 
+//프로필 설정 변경 내용 제출 Url
 export const submitProfileSettingUrl = `${apiUrl}/user/mypage/profile`;
 
+//지금 알림 설정 가져오는 Url
 export const getCurrentNoticeSettingUrl = `${apiUrl}/user/mypage/push`;
 
+//알림 설정 변경 내용 제출 Url
 export const submitCurrentNoticeSettingUrl = `${apiUrl}/user/mypage/push`;
 
+//비민번호 변경을 위해 현 비밀번호 확인하는 Url
 export const passwordCheckForPasswordChangeUrl = `${apiUrl}/user/mypage/password/check`;
 
+//비밀번호 변경을 하는 Url
 export const passwordChangeUrl = `${apiUrl}/user/mypage/password/change`;
 
+//지금 차단된 유저를 가져오는 Url
 export const getCurrentBlockedPersonUrl = `${apiUrl}/user/block`;
+
+//차단된 유저를 취소하는 Url
+export const blockUserCancleUrl = `${apiUrl}/user/unblock`;
+
+//유저를 차단하는 Url
+export const blockUserUrl = `${apiUrl}/user/block`;
+
+//유저를 검색하는 Url
+export const searchUserUrl = `${apiUrl}/user/search?nickname=`;
