@@ -47,6 +47,8 @@ export const getCurrentNoticeSettingUrl = `${apiUrl}/user/mypage/push`;
 
 export const submitCurrentNoticeSettingUrl = `${apiUrl}/user/mypage/push`;
 
-export const passwordCheckForPasswordChangeUrl = `${apiUrl}/user/mypage/password/check`
+export const passwordCheckForPasswordChangeUrl = `${apiUrl}/user/mypage/password/check`;
 
-export const passwordChangeUrl = `${apiUrl}/user/mypage/password/change`
+export const passwordChangeUrl = `${apiUrl}/user/mypage/password/change`;
+
+export const getCurrentBlockedPersonUrl = `${apiUrl}/user/block`;

@@ -48,12 +48,14 @@
 
 /*검색된 유저들이 뜨는 공간*/
 .searchedUserListArea{
-
+  overflow: auto;
 }
 
 /*유저가 들어갈 공간*/
 .userArea{
-
+  min-width: 200px;
+  height: 80px;
+  border-radius: 0.5rem;
 }
 
 /*유저 카드의 이미지 */
