@@ -1,0 +1,188 @@
+.Cover{
+  position: relative;
+}
+
+.wholeCover{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 90%;
+  width: 90%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 2fr 3fr;
+}
+
+/*기본적인 필터링 설정을 위한 CSS*/
+.filterSettingArea{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 90%;
+  width: 50%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(4, 1fr);
+}
+
+/*설정 영역 label과 input을 분리*/
+.settingArea{
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+/*label*/
+.settingLabel{
+  text-align: left;
+  font-weight: 600;
+  font-size: large;
+}
+
+/*input 영역*/
+.inputArea{
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+/*input*/
+.settingInput{
+  position: absolute;
+  left: 0;
+  width: auto;
+  font-size: large;
+  cursor: pointer;
+}
+
+/*제출 버튼*/
+.submitBtn{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  height: 50px;
+  width: 200px;
+  font-weight: bold;
+  font-size:large;
+
+  background-color: rgb(255, 197, 250);
+  color: white;
+  border-radius: 0.25rem;
+  box-shadow: 1px 1px 3px rgb(178, 137, 175);
+  border: none;
+  cursor: pointer;
+}
+
+/*하단의 예외 설정을 위한 CSS*/
+
+/*검색창과 ID를 추가할 수 있는 Area*/
+.searchAndAddArea{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 4fr 4fr;
+}
+
+/*검색 Label*/
+.searchLabel{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/*검색 input*/
+.searchInput{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 40%;
+  width: 50%;
+  border: none;
+  border-bottom: 2px solid #F4DEDE;
+  text-align: center;
+  font-size: large;
+}
+.searchInput::-webkit-input-placeholder{
+  text-align: center;
+}
+.searchInput:focus{
+  outline: none;
+}
+
+/*검색된 유저들이 뜨는 공간*/
+.userListArea{
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+}
+
+/*유저 하나가 들어갈 공간*/
+.userArea{
+  min-width: 200px;
+  padding: 10px;
+  margin: 20px;
+  height: 80px;
+  border-radius: 0.5rem;
+}
+
+.userAreaGrid{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 70%;
+}
+
+/*유저 카드의 이미지 */
+.userImage{
+  display: inline;
+  width: 30px;
+  height: 30px;
+  border-radius: 0.25rem;
+  margin-right: 5px;
+}
+
+/*유저 카드의 닉네임*/
+.userNickname{
+  display: inline;
+  min-width: 100px;
+  text-align: center;
+  margin-right: 5px;
+}
+
+/*유저 카드의 닫기 혹은 추가 버튼*/
+.userButton{
+  display: inline;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  z-index: 0;
+  border: none;
+  background-color: none;
+  border-radius: 50%;
+}
+
+.userButtonImg{
+  width: 10px;
+  height: 10px;
+}

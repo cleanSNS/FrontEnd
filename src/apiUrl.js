@@ -68,3 +68,18 @@ export const blockUserUrl = `${apiUrl}/user/block`;
 
 //유저를 검색하는 Url
 export const searchUserUrl = `${apiUrl}/user/search?nickname=`;
+
+//필터링 설정을 가져오는 Url
+export const getCurrentfilterSetting = `${apiUrl}/user/mypage/filter`;
+
+//필터링 설정을 변경하는 Url
+export const submitFilteringSetting = `${apiUrl}/user/mypage/filter`;
+
+//필터링 하지 않을 유저 추가 Url
+export const addNotFilteredUserUrl = `${apiUrl}/user/unfilter`;
+
+//필터링 하지 않을 유저를 취소하는 Url
+export const deleteNotFilteredUserUrl = `${apiUrl}/user/filter`;
+
+//지금 필터링 하지 않을 유저 가져오는 Url
+export const getCurrentNotFilteredUserUrl = `${apiUrl}/user/unfilter`;
