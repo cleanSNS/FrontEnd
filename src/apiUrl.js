@@ -83,3 +83,10 @@ export const deleteNotFilteredUserUrl = `${apiUrl}/user/filter`;
 
 //지금 필터링 하지 않을 유저 가져오는 Url
 export const getCurrentNotFilteredUserUrl = `${apiUrl}/user/unfilter`;
+
+/**************************유저 관련**********************************/
+//내가 팔로우 하고 있는 유저 조회
+export const getFolloweeListUrl = `${apiUrl}/user/followee`;
+
+//나를 팔로우 하고 있는 유저 조회
+export const getfollowerListUrl = `${apiUrl}/user/follower`;

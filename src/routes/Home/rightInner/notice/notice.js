@@ -4,10 +4,10 @@ const Notice = ({img, script}) => {
     return(
         <div className={Style.noticeBlock}>
             <div className={Style.noticeCover}>
-                <div className={Style.noticeImgCover}>
+                <div className={Style.Cover}>
                     <p className={Style.noticeImg}>{img}</p>
                 </div>
-                <div className={Style.scriptCover}>
+                <div className={Style.Cover}>
                     <p className={Style.script}>{script}</p>
                 </div>
             </div>
@@ -20,7 +20,7 @@ const RightNotice = () => {
         <div className={Style.noticeList}>
             <Notice img='aaa' script='fsdfsd' />
             <Notice img='aaa' script='sdfsdf' />
-            <Notice img='aaa' script='fdsdfsdfsdf' />
+            <Notice img='aaa' script='fdsdfsdfssssssssssssssssssssssssssssssssssssdf' />
             <Notice img='aaa' script='ffsdfsdf' />
             <Notice img='aaa' script='ffsd' />
             <Notice img='aaa' script='fsdfsssdfd' />

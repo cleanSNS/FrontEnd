@@ -59,6 +59,28 @@ const Home = ({ logout }) => {
   //좋아요 읽기 권한
   const [newPostReadLikeAuth, setNewPostReadLikeAuth] = useState(true);
 
+  //글 검색
+  const [userSearch, setUserSearch] = useState("");
+
+  //글 검색 input Change Handler
+  const userSearchChangeHandler = (event) => {
+    event.preventDefault();
+    setUserSearch(event.target.value);
+  }
+
+  //글 검색 submit Handler
+  const userSearchSubmitHandler = (event) => {
+    event.preventDefault();
+    if(userSearch === '') return;
+    
+    axios.get()
+    /*
+
+    <------------------------------------------------------이 부분 작업 해야함 아직
+
+    */
+  }
+
   //글 올리는 함수 => 좌측 페이지로 넘어가야한다.
   const uploadNewPostHandler = (event) => {
     event.preventDefault();
@@ -129,7 +151,7 @@ const Home = ({ logout }) => {
 
   //우측 내용 클릭시 좌측 내용 변화 함수
   //채팅, 알림, 친구의 경우 이 함수를 사용해야 좌측이 달라진다.
-  const leftChange = (val) => {
+  const leftBookChangeHandler = (val) => {
     setLeftBookState(val);
   };
 
@@ -145,7 +167,7 @@ const Home = ({ logout }) => {
         <div className={Style.leftHeader}>
           <Logo />
           <div />
-          <SearchBar />
+          <SearchBar userSearch={userSearch} userSearchChangeHandler={userSearchChangeHandler} userSearchSubmitHandler={userSearchSubmitHandler} />
         </div>
       </div>
       {/* 우 상단 - 태그 */}
@@ -194,7 +216,7 @@ const Home = ({ logout }) => {
           <div className={Style.leftbook}>
             <div className={Style.Cover}>
                 {leftBookState === "page" ? <LeftPage /> : null}
-                {leftBookState === "pageList" ? <LeftPageList /> : null}
+                {leftBookState.includes("pageList") ? <LeftPageList /> : null}
                 {leftBookState === "chat" ? <LeftChat /> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
                 {leftBookState === "setting" ? <LeftSetting settingState={settingState} /> : null}
@@ -210,7 +232,7 @@ const Home = ({ logout }) => {
               { rightBookState === "newPost" ? <RightNewPost newPostLikeNotice={newPostLikeNotice} setNewPostLikeNotice={setNewPostLikeNotice} newPostCommentNotice={newPostCommentNotice} setNewPostCommentNotice={setNewPostCommentNotice} newPostReadPostAuth={newPostReadPostAuth} setNewPostReadPostAuth={setNewPostReadPostAuth} newPostReadCommentAuth={newPostReadCommentAuth} setNewPostReadCommentAuth={setNewPostReadCommentAuth} newPostWriteCommentAuth={newPostWriteCommentAuth} setNewPostWriteCommentAuth={setNewPostWriteCommentAuth} newPostReadLikeAuth={newPostReadLikeAuth} setNewPostReadLikeAuth={setNewPostReadLikeAuth} /> :  null}
               { rightBookState === "chat" ? <RightChat /> : null}
               { rightBookState === "notice" ? <RightNotice /> : null}
-              { rightBookState === "friend" ? <RightFriend /> : null}
+              { rightBookState === "friend" ? <RightFriend leftBookChangeHandler={leftBookChangeHandler} /> : null}
               { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout} /> : null}
             </div>
           </div>

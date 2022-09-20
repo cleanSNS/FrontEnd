@@ -1,38 +1,79 @@
 import Style from './friend.module.css';
 import Profile from '../../root/profile';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import {
+    getFolloweeListUrl,
+    getfollowerListUrl,
+    getcurrentProfileUrl,
+} from '../../../../apiUrl';
 
-const RightFriend = () => {
+const RenderRightFriend = ({followeeList, leftBookChangeHandler}) => {
+    return(
+        <div className={Style.friendList}>
+            {
+                followeeList.length === 0 ? 
+                <p className={Style.noFollowee}>팔로우 중인 유저가 없습니다.</p>
+                :
+                followeeList.map((data, index) => (
+                    <div className={Style.friendProfileCover} key={index}>
+                        <Profile img={data.imgUrl} name={data.nickname} userId={data.userId} leftBookChangeHandler={leftBookChangeHandler}/>
+                    </div>
+                ))
+            }
+        </div>
+    );
+}
+
+const RightFriend = ({leftBookChangeHandler}) => {
+    const [followeeList, setFolloweeList] = useState([]);
+    const [followerList, setFollowerList] = useState([]);
+    const [myProfileImage, setMyProfileImage] = useState("");
+    const [myProfileName, setMyProfileName] = useState("");
+
+    //화면 렌더링 초기 설정 함수
+    const rightFriendPreset = () => {
+        axios.get(getFolloweeListUrl)//내가 팔로우 중인 유저 불러오기
+        .then((res) => {
+            setFolloweeList(res.data.data);
+        })
+        .catch((res) => {
+            console.log(res);
+            alert("에러 발생");
+            //window.location.href = '/main';
+        });
+
+        axios.get(getfollowerListUrl)//나를 팔로우 중인 유저 불러오기
+        .then((res) => {
+            setFollowerList(res.data.data);
+        })
+        .catch((res) => {
+            console.log(res);
+            alert("에러 발생");
+            //window.location.href = '/main';
+        });
+
+        axios.get(getcurrentProfileUrl)//내 정보 불러오기
+        .then((res) => {
+            setMyProfileName(res.data.data.nickname);
+            setMyProfileImage(res.data.data.imgUrl);
+        })
+        .catch((res) => {
+            console.log(res);
+            alert("에러 발생");
+            //window.location.href = '/main';
+        })
+    };
+    useEffect(rightFriendPreset, []);
+
+    console.log(followeeList);
+
     return(
         <div className={Style.wholeCover}>
             <div className={Style.Cover}>
-                <Profile img={'내사진'} name={'내 이름'} />
+                <Profile img={myProfileImage} name={myProfileName} key="self" leftBookChangeHandler={leftBookChangeHandler}/>
             </div>
-            <div className={Style.friendList}>
-                <div className={Style.friendProfileCover}>
-                    <Profile img={'img'} name={'nnnnnnnnnnnn'} />
-                </div>
-                <div className={Style.friendProfileCover}>
-                    <Profile img={'img2'} name={'mmmmmmmmmmmm'} />
-                </div>
-                <div className={Style.friendProfileCover}>
-                    <Profile img={'img3'} name={'mmmmmmmmmmmm'} />
-                </div>
-                <div className={Style.friendProfileCover}>
-                    <Profile img={'img4'} name={'mmmmmmmmmmmm'} />
-                </div>
-                <div className={Style.friendProfileCover}>
-                    <Profile img={'img5'} name={'mmmmmmmmmmmm'} />
-                </div>
-                <div className={Style.friendProfileCover}>
-                    <Profile img={'img6'} name={'mmmmmmmmmmmm'} />
-                </div>
-                <div className={Style.friendProfileCover}>
-                    <Profile img={'img7'} name={'mmmmmmmmmmmm'} />
-                </div>
-                <div className={Style.friendProfileCover}>
-                    <Profile img={'img8'} name={'mmmmmmmmmmmm'} />
-                </div>
-            </div>
+            <RenderRightFriend followeeList={followeeList} leftBookChangeHandler={leftBookChangeHandler}/>
         </div>
     );
 }
