@@ -27,7 +27,7 @@ import {
 } from "../../../apiUrl";
 import axios from 'axios';
 
-const Home = ({ logout }) => {
+const Home = ({ logout, refreshAccessToken }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pageList //chat // newPost // setting
@@ -215,11 +215,11 @@ const Home = ({ logout }) => {
         <div className={Style.bookCover}>
           <div className={Style.leftbook}>
             <div className={Style.Cover}>
-                {leftBookState === "page" ? <LeftPage /> : null}
-                {leftBookState.includes("pageList") ? <LeftPageList /> : null}
-                {leftBookState === "chat" ? <LeftChat /> : null}
+                {leftBookState === "page" ? <LeftPage refreshAccessToken={refreshAccessToken}/> : null}
+                {leftBookState.includes("pageList") ? <LeftPageList refreshAccessToken={refreshAccessToken}/> : null}
+                {leftBookState === "chat" ? <LeftChat refreshAccessToken={refreshAccessToken}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
-                {leftBookState === "setting" ? <LeftSetting settingState={settingState} /> : null}
+                {leftBookState === "setting" ? <LeftSetting settingState={settingState} refreshAccessToken={refreshAccessToken}/> : null}
             </div>
           </div>
         </div>
@@ -229,11 +229,11 @@ const Home = ({ logout }) => {
       <div className={Style.bookCover}>
           <div className={Style.rightbook}>
             <div className={Style.Cover}>
-              { rightBookState === "newPost" ? <RightNewPost newPostLikeNotice={newPostLikeNotice} setNewPostLikeNotice={setNewPostLikeNotice} newPostCommentNotice={newPostCommentNotice} setNewPostCommentNotice={setNewPostCommentNotice} newPostReadPostAuth={newPostReadPostAuth} setNewPostReadPostAuth={setNewPostReadPostAuth} newPostReadCommentAuth={newPostReadCommentAuth} setNewPostReadCommentAuth={setNewPostReadCommentAuth} newPostWriteCommentAuth={newPostWriteCommentAuth} setNewPostWriteCommentAuth={setNewPostWriteCommentAuth} newPostReadLikeAuth={newPostReadLikeAuth} setNewPostReadLikeAuth={setNewPostReadLikeAuth} /> :  null}
-              { rightBookState === "chat" ? <RightChat /> : null}
-              { rightBookState === "notice" ? <RightNotice /> : null}
-              { rightBookState === "friend" ? <RightFriend leftBookChangeHandler={leftBookChangeHandler} /> : null}
-              { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout} /> : null}
+              { rightBookState === "newPost" ? <RightNewPost newPostLikeNotice={newPostLikeNotice} setNewPostLikeNotice={setNewPostLikeNotice} newPostCommentNotice={newPostCommentNotice} setNewPostCommentNotice={setNewPostCommentNotice} newPostReadPostAuth={newPostReadPostAuth} setNewPostReadPostAuth={setNewPostReadPostAuth} newPostReadCommentAuth={newPostReadCommentAuth} setNewPostReadCommentAuth={setNewPostReadCommentAuth} newPostWriteCommentAuth={newPostWriteCommentAuth} setNewPostWriteCommentAuth={setNewPostWriteCommentAuth} newPostReadLikeAuth={newPostReadLikeAuth} setNewPostReadLikeAuth={setNewPostReadLikeAuth}/> :  null}
+              { rightBookState === "chat" ? <RightChat refreshAccessToken={refreshAccessToken} /> : null}
+              { rightBookState === "notice" ? <RightNotice refreshAccessToken={refreshAccessToken}/> : null}
+              { rightBookState === "friend" ? <RightFriend leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken}/> : null}
+              { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout} refreshAccessToken={refreshAccessToken}/> : null}
             </div>
           </div>
         </div>

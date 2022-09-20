@@ -14,7 +14,7 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const FilteringSetting = () => {
+const FilteringSetting = ({refreshAccessToken}) => {
     const [filterAll, setFilterAll] = useState(false);
     const [filterFollower, setFilterFollower] = useState(false);
     const [filterFollowee, setFilterFollowee] = useState(false);

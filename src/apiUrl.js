@@ -29,6 +29,9 @@ export const logoutApiUrl = `${apiUrl}/user/auth/logout`;
 //비밀번호찾기 Url
 export const findPWUrl = `${apiUrl}/user/mypage/password/reset`;
 
+//access 토큰 재발급 Url
+export const refreshNewAccessTokenUrl = `${apiUrl}/user/auth/refresh`;
+
 
 /***************************글 관련 URl***********************************/
 //새 글 피드 가져오는 Url

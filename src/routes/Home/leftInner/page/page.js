@@ -25,7 +25,7 @@ const Pages = ({ obj, lastRef }) => {
 }
 
 
-const LeftPage = () => {
+const LeftPage = ({refreshAccessToken}) => {
     const [ref, inView] = useInView();//ref를 {ref}로 설정한요소가 화면에 보이는 상황이면 true가 나오고, 아닌 경우 false이다.
 
     const pageLoadFunc = () => {

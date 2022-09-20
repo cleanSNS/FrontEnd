@@ -6,7 +6,7 @@ import {
 } from "../../../../apiUrl";
 import axios from 'axios';
 
-const NoticeSetting = () => {
+const NoticeSetting = ({refreshAccessToken}) => {
     //설정들
     const [notificationFollow, setNotificationFollow] = useState("");
     const [notificationComment, setNotificationComment] = useState("");

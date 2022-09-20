@@ -1,4 +1,4 @@
-const LeftChat = () => {
+const LeftChat = ({refreshAccessToken}) => {
     return(
         <p>Chat</p>
     );

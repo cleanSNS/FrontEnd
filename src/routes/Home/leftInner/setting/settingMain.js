@@ -7,14 +7,14 @@ import Credit from './credit';
 
 
 //settingState로 가능한 것들 profile // Snotice // password // filtering // block
-const LeftSetting = ({settingState}) => {
+const LeftSetting = ({settingState, refreshAccessToken}) => {
     return(
         <div>
-            { settingState === 'profile' ? <ProfileSetting /> : null }
-            { settingState === 'Snotice' ? <NoticeSetting /> : null }
-            { settingState === 'password' ? <PasswordSetting /> :null }
-            { settingState === 'filtering' ? <FilteringSetting /> : null }
-            { settingState === 'block' ? <BlockSetting /> : null }
+            { settingState === 'profile' ? <ProfileSetting refreshAccessToken={refreshAccessToken}/> : null }
+            { settingState === 'Snotice' ? <NoticeSetting refreshAccessToken={refreshAccessToken}/> : null }
+            { settingState === 'password' ? <PasswordSetting refreshAccessToken={refreshAccessToken}/> :null }
+            { settingState === 'filtering' ? <FilteringSetting refreshAccessToken={refreshAccessToken}/> : null }
+            { settingState === 'block' ? <BlockSetting refreshAccessToken={refreshAccessToken}/> : null }
             { settingState === 'credit' ? <Credit /> : null }
         </div>
     );

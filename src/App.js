@@ -8,7 +8,7 @@ import {
 import { useEffect } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
-import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl } from './apiUrl';
+import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl } from './apiUrl';
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -19,6 +19,22 @@ function App() {
     //alert("Welcome");
     localStorage.setItem("rft", res.headers.authorization);
     window.location.href="/main";
+  };
+
+  //Access token이 만료되었을 수 있는 상황에서 refresh Token을 통해 다시 발급받는다.
+  const refreshAccessToken = () => {
+    axios.get(refreshNewAccessTokenUrl, {
+      headers:{
+        "REFRESH-TOKEN": localStorage.getItem("rft")
+      }
+    })
+    .then((res) => {
+      console.log("토큰 재발급");
+    })
+    .catch((res) =>{
+      console.log(res);
+      alert("토큰 재발급을 하지 못했습니다.");
+    })
   };
 
   //로그아웃 함수
@@ -81,7 +97,7 @@ function App() {
       */}
       <Switch>
         <Route path="/main">
-          <Home logout={logoutFunc} />
+          <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken}/>
         </Route>
         <Route path="/">
           <Login login={loginFunc} />

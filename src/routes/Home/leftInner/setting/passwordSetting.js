@@ -6,7 +6,7 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const PasswordSetting = () => {
+const PasswordSetting = ({refreshAccessToken}) => {
     //useState 선언
     const [previousPassword, setPreviousPassword] = useState("");
     const [passwordChange, setPasswordChange] = useState("");

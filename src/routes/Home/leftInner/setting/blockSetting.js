@@ -12,17 +12,32 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const BlockSetting = () => {
+const BlockSetting = ({refreshAccessToken}) => {
     const [userInput, setUserInput] = useState("");
     const [searchedUserList, setSearchedUserList] = useState([]);//검색된 사람들
     const [AddedUserList, setAddedUserList] = useState([]);//차단된 사람들
-
 
     //처음에 차단된 유저들의 리스트를 먼저 가져와야한다.
     const blockSettingInitialSetting = () => {
         axios.get(getCurrentBlockedPersonUrl)
         .then((res) => {
-            const tmp = [...res.data.data];
+            const tmp = [
+                {
+                    "userId": 1,
+                    "nickname": "홍길동sssssssssssssssssssssss",
+                    "imgUrl": "null"
+                },
+                {
+                    "userId": 2,
+                    "nickname": "홍길동",
+                    "imgUrl": "null"
+                },
+                {
+                    "userId": 3,
+                    "nickname": "홍길동",
+                    "imgUrl": "null"
+                }
+            ];
             setAddedUserList(tmp);
         })
         .catch((res) => {
@@ -80,7 +95,7 @@ const BlockSetting = () => {
             setAddedUserList(tmp);
         })
         .catch((res) => {
-            console.lor(res);
+            console.log(res);
             alert("문제 발생");
             //window.location.href="/main";
         })
@@ -148,7 +163,7 @@ const BlockSetting = () => {
             <div className={Style.Cover}>
                 <div className={Style.userListArea}>
                     {
-                        searchedUserList.map((person, index) => {
+                        searchedUserList.map((person, index) => (
                             <div className={Style.userArea} key={index} style={{backgroundColor: "white"}}>
                                 <div className={Style.userAreaGrid}>
                                     <img src={person.imgUrl} className={Style.userImage} />
@@ -158,24 +173,20 @@ const BlockSetting = () => {
                                     </button>
                                 </div>
                             </div>
-                        })
+                        ))
                     }
                 </div>
             </div>
             <div className={Style.Cover}>
                 <div className={Style.userListArea}>
                     {
-                        AddedUserList.map((person, index) => {
+                        AddedUserList.map((person, index) => (
                             <div className={Style.userArea} key={index} style={{backgroundColor: "#F4DEDE"}}>
-                                <div className={Style.userAreaGrid}>
-                                    <img src={person.imgUrl} className={Style.userImage} />
-                                    <p className={Style.userNickname}>{person.nickname}</p>
-                                    <button type="button" className={Style.userButton} onClick={deleteUserClickHandler} value={index} id={person.userId}>
-                                        <img scr={deleteBtn} className={Style.userButtonImg} onMouseOver={deleteUserMouseOverHandler} onMouseOut={deleteUserMouseOutHandler}/>
-                                    </button>
-                                </div>
+                                <img src={person.imgUrl} className={Style.userImage} />
+                                <p className={Style.userNickname}>{person.nickname}</p>
+                                <img scr={deleteBtn} className={Style.userButtonImg} onClick={deleteUserClickHandler} value={index} id={person.userId} onMouseOver={deleteUserMouseOverHandler} onMouseOut={deleteUserMouseOutHandler}/>
                             </div>
-                        })
+                        ))
                     }
                 </div>
             </div>

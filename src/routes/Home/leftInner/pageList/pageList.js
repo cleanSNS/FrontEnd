@@ -1,4 +1,4 @@
-const LeftPageList = () => {
+const LeftPageList = ({refreshAccessToken}) => {
     return(
         <p>PageList</p>
     );
