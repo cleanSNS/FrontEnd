@@ -39,7 +39,19 @@ const FilteringSetting = ({refreshAccessToken}) => {
         //필터링 하지 않을 유저 정보 가져오기
         axios.get(getCurrentNotFilteredUserUrl)
         .then((res) => {
-            const tmp = [...res.data.data];
+            //const tmp = [...res.data.data];
+            const tmp = [
+                {
+                    "userId": 1,
+                    "nickname": "홍길동",
+                    "imgUrl": null
+                },
+                {
+                    "userId": 2,
+                    "nickname": "홍길동",
+                    "imgUrl": null
+                }
+            ];
             setAddedUserList(tmp);
         })
         .catch((res) => {
@@ -305,7 +317,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
                                             <img src={person.imgUrl} className={Style.userImage} />
                                             <p className={Style.userNickname}>{person.nickname}</p>
                                             <button type="button" className={Style.userButton} onClick={addUserClickhandler} value={index} id={person.userId}>
-                                                <img scr={addBtn} className={Style.userButtonImg} onMouseOver={addUserMouseOverHandler} onMouseOut={addUserMouseOuthandler}/>
+                                                <img src={addBtn} className={Style.userButtonImg} onMouseOver={addUserMouseOverHandler} onMouseOut={addUserMouseOuthandler}/>
                                             </button>
                                         </div>
                                     </div>
@@ -321,9 +333,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
                                         <div className={Style.userAreaGrid}>
                                             <img src={person.imgUrl} className={Style.userImage} />
                                             <p className={Style.userNickname}>{person.nickname}</p>
-                                            <button type="button" className={Style.userButton} onClick={deleteUserClickHandler} value={index} id={person.userId}>
-                                                <img scr={deleteBtn} className={Style.userButtonImg} onMouseOver={deleteUserMouseOverHandler} onMouseOut={deleteUserMouseOutHandler}/>
-                                            </button>
+                                            <img src={deleteBtn} className={Style.userButtonImg} onMouseOver={deleteUserMouseOverHandler} onMouseOut={deleteUserMouseOutHandler}/>
                                         </div>
                                     </div>
                                 })
