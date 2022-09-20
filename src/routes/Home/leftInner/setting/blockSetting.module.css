@@ -56,45 +56,67 @@
 /*유저 하나가 들어갈 공간*/
 .userArea{
   display: inline-block;
-  width:fit-content;
+  width: fit-content;
   padding: 10px;
   margin: 5px;
   height: 50px;
   border-radius: 0.5rem;
   vertical-align: center;
+  box-shadow: 2px 2px 5px rgb(210, 210, 210);
+}
+
+.userdetail{
+  display: flex;
+  width: fit-content;
+  height: 50px;
 }
 
 /*유저 카드의 이미지 */
+.userImageArea{
+  position: relative;
+  width: 50px;
+  height: 100%;
+}
 .userImage{
-  display: inline;
-  width: 30px;
-  height: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 40px;
+  width: 40px;
   border-radius: 0.25rem;
-  margin-right: 5px;
+  border: 1px solid black;
 }
 
 /*유저 카드의 닉네임*/
+.userNicknameArea{
+  position: relative;
+  width: 200px;
+  height: 100%;
+}
 .userNickname{
-  display: inline;
-  min-width: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-align: center;
-  margin-right: 5px;
+  margin: 0;
+  padding: 0;
+  width: max-content;
+  font-size: small;
 }
 
 /*유저 카드의 닫기 혹은 추가 버튼*/
-.userButton{
-  display: inline;
-  width: 10px;
-  height: 10px;
-  cursor: pointer;
-  z-index: 0;
-  border: none;
-  background-color: white;
-  border-radius: 50%;
+.userButtonImgArea{
+  position: relative;
+  height: 100%;
+  width: 30px;
 }
-
 .userButtonImg{
-  display: inline;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 20px;
   height: 20px;
   cursor: pointer;

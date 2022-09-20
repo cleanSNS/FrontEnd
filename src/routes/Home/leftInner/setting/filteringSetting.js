@@ -39,19 +39,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
         //필터링 하지 않을 유저 정보 가져오기
         axios.get(getCurrentNotFilteredUserUrl)
         .then((res) => {
-            //const tmp = [...res.data.data];
-            const tmp = [
-                {
-                    "userId": 1,
-                    "nickname": "홍길동",
-                    "imgUrl": null
-                },
-                {
-                    "userId": 2,
-                    "nickname": "홍길동",
-                    "imgUrl": null
-                }
-            ];
+            const tmp = [...res.data.data];
             setAddedUserList(tmp);
         })
         .catch((res) => {
@@ -313,12 +301,16 @@ const FilteringSetting = ({refreshAccessToken}) => {
                             {
                                 searchedUserList.map((person, index) => {
                                     <div className={Style.userArea} key={index} style={{backgroundColor: "white"}}>
-                                        <div className={Style.userAreaGrid}>
-                                            <img src={person.imgUrl} className={Style.userImage} />
-                                            <p className={Style.userNickname}>{person.nickname}</p>
-                                            <button type="button" className={Style.userButton} onClick={addUserClickhandler} value={index} id={person.userId}>
-                                                <img src={addBtn} className={Style.userButtonImg} onMouseOver={addUserMouseOverHandler} onMouseOut={addUserMouseOuthandler}/>
-                                            </button>
+                                        <div className={Style.userdetail}>
+                                            <div className={Style.userImageArea}>
+                                                <img src={person.imgUrl} className={Style.userImage} />
+                                            </div>
+                                            <div className={Style.userNicknameArea}>
+                                                <p className={Style.userNickname}>{person.nickname}</p>
+                                            </div>
+                                            <div className={Style.userButtonImgArea}>
+                                                <img src={addBtn} className={Style.userButtonImg} onClick={addUserClickhandler} value={index} id={person.userId} onMouseOver={addUserMouseOverHandler} onMouseOut={addUserMouseOuthandler}/>
+                                            </div>
                                         </div>
                                     </div>
                                 })
@@ -330,10 +322,16 @@ const FilteringSetting = ({refreshAccessToken}) => {
                             {
                                 AddedUserList.map((person, index) => {
                                     <div className={Style.userArea} key={index} style={{backgroundColor: "#F4DEDE"}}>
-                                        <div className={Style.userAreaGrid}>
-                                            <img src={person.imgUrl} className={Style.userImage} />
-                                            <p className={Style.userNickname}>{person.nickname}</p>
-                                            <img src={deleteBtn} className={Style.userButtonImg} onMouseOver={deleteUserMouseOverHandler} onMouseOut={deleteUserMouseOutHandler}/>
+                                        <div className={Style.userdetail}>
+                                            <div className={Style.userImageArea}>
+                                                <img src={person.imgUrl} className={Style.userImage} />
+                                            </div>
+                                            <div className={Style.userNicknameArea}>
+                                                <p className={Style.userNickname}>{person.nickname}</p>
+                                            </div>
+                                            <div className={Style.userButtonImgArea}>
+                                                <img src={deleteBtn} className={Style.userButtonImg} onClick={deleteUserClickHandler} value={index} id={person.userId} onMouseOver={deleteUserMouseOverHandler} onMouseOut={deleteUserMouseOutHandler}/>
+                                            </div>
                                         </div>
                                     </div>
                                 })
