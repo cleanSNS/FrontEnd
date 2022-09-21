@@ -99,3 +99,6 @@ export const getMyUserIdUrl = `${apiUrl}/user/id`;
 
 //나에게 온 알림 조회
 export const getNoticeUrl = `${apiUrl}/user/notification?startId=`;
+
+//해당 유저의 글들 조회
+export const getUserPageListUrl = `${apiUrl}/page/user/`;

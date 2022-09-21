@@ -185,8 +185,7 @@
 1. refresh토큰 재발급받는 조건 받아서 catch처리 - 토큰 발급 후 다시 submit안눌러도 되게 작동하게 하기
 3. 채팅 left
 4. 채팅 right
-5. 알림 right
-6. 글 피드 left
+6. 글 피드 left(page)
 7. 글 피드 눌렀을 때 띄워지는 것
-8. 해당 유저의 페이지 left
+8. 해당 유저의 페이지 left(pageList)
 9. 검색창 기능 확실하게 합의해서 진행하기
