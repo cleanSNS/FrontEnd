@@ -30,7 +30,10 @@ const Notice = ({targetUserId, content, type, resourceId, lastNotice, leftBookCh
                     <img src={"imgUrl"} className={Style.noticeImg} onClick={onUserImageClickHandler}/>
                 </div>
                 <div className={Style.Cover}>
-                    <p className={Style.script} onClick={onNoticeScripsClickHandler}>{content}</p>
+                    {type === "COMMENT" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 댓글이 달렸습니다.</p> : null}
+                    {type === "FOLLOW" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>팔로우 요청이 왔습니다.</p> : null}
+                    {type === "NESTED" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 댓글에 답글이 달렸습니다.</p> : null}
+                    {type === "LIKE" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 좋아요가 눌렸습니다.</p> : null}
                 </div>
             </div>
         </div>
@@ -41,7 +44,10 @@ const Notice = ({targetUserId, content, type, resourceId, lastNotice, leftBookCh
                     <img src={"imgUrl"} className={Style.noticeImg} onClick={onUserImageClickHandler}/>
                 </div>
                 <div className={Style.Cover}>
-                    <p className={Style.script} onClick={onNoticeScripsClickHandler}>{content}</p>
+                    {type === "COMMENT" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 댓글이 달렸습니다.</p> : null}
+                    {type === "FOLLOW" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>팔로우 요청이 왔습니다.</p> : null}
+                    {type === "NESTED" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 댓글에 답글이 달렸습니다.</p> : null}
+                    {type === "LIKE" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 좋아요가 눌렸습니다.</p> : null}
                 </div>
             </div>
         </div>
@@ -59,79 +65,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken}) => {
         .then((res) => {
             console.log("알림을 불러왔습니다.")
             const current = [...noticeList];
-            //const tmp = [...res.data.data];
-            const tmp = [
-                {
-                    "userId": 1,
-                    "targetUserId": 2,
-                    "content": "name님이 팔로우했습니다.",
-                    "type": "FOLLOW",
-                    "resourceId": 2
-                },
-                {
-                    "userId": 1,
-                    "targetUserId": 2,
-                    "content": "새로운 댓글이 달렸습니다.",
-                    "type": "COMMENT",
-                    "resourceId": 1
-                },
-                {
-                    "userId": 1,
-                    "targetUserId": 2,
-                    "content": "새로운 댓글이 달렸습니다.",
-                    "type": "COMMENT",
-                    "resourceId": 1
-                },
-                {
-                    "userId": 1,
-                    "targetUserId": 2,
-                    "content": "name님이 좋아합니다.",
-                    "type": "LIKE",
-                    "resourceId": 1
-                },
-                {
-                    "userId": 1,
-                    "targetUserId": 2,
-                    "content": "새로운 댓글이 달렸습니다.",
-                    "type": "COMMENT",
-                    "resourceId": 1
-                },
-                {
-                    "userId": 1,
-                    "targetUserId": 2,
-                    "content": "새로운 댓글이 달렸습니다.",
-                    "type": "COMMENT",
-                    "resourceId": 1
-                },
-                {
-                    "userId": 1,
-                    "targetUserId": 2,
-                    "content": "name님이 좋아합니다.",
-                    "type": "LIKE",
-                    "resourceId": 1
-                },
-                {
-                    "userId": 1,
-                    "targetUserId": 2,
-                    "content": "새로운 댓글이 달렸습니다.",
-                    "type": "COMMENT",
-                    "resourceId": 1
-                },
-                {
-                    "userId": 1,
-                    "targetUserId": 2,
-                    "content": "새로운 댓글이 달렸습니다.",
-                    "type": "COMMENT",
-                    "resourceId": 1
-                },
-                {
-                    "userId": 1,
-                    "targetUserId": 2,
-                    "content": "name님이 좋아합니다.",
-                    "type": "LIKE",
-                    "resourceId": 1
-                }
-            ];
+            const tmp = [...res.data.data];
             const next = current.concat(tmp);
             setNoticeList(next);
             startId = res.data.startId;

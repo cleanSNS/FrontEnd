@@ -30,10 +30,12 @@ function App() {
     })
     .then((res) => {
       console.log("토큰 재발급");
+      //reDoApiCall();
     })
     .catch((res) =>{
       console.log(res);
-      alert("토큰 재발급을 하지 못했습니다.");
+      alert("장시간 로그인되어, 자동 로그아웃되었습니다. 다시 로그인해주세요.");
+      //logoutFunc(); //정상작동 확인되면 앞 주석 지우기
     })
   };
 
