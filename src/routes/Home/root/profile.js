@@ -5,7 +5,7 @@ const Profile = ({img, name, userId, leftBookChangeHandler}) => {
     const profileClickHandler = (event) => {
         event.preventDefault();
         //console.log(userId);
-        leftBookChangeHandler("pageList" + userId);
+        leftBookChangeHandler("pageList/" + userId);
     }
 
     return (

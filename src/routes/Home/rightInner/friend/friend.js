@@ -98,12 +98,10 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
     };
     useEffect(rightFriendPreset, []);
 
-    console.log(followeeList);
-
     return(
         <div className={Style.wholeCover}>
             <div className={Style.Cover}>
-                <Profile img={myProfileImage} name={myProfileName} key={myId} leftBookChangeHandler={leftBookChangeHandler}/>
+                <Profile img={myProfileImage} name={myProfileName} userId={myId} leftBookChangeHandler={leftBookChangeHandler}/>
             </div>
             <RenderRightFriend followeeList={followeeList} leftBookChangeHandler={leftBookChangeHandler}/>
         </div>

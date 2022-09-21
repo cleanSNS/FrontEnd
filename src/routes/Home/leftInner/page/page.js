@@ -6,8 +6,8 @@ import {
     pageloadUrl,
 } from "../../../../apiUrl";
 
-const pageList = [1,2,3,4,5];
-const currentStartId = 987654321;
+let pageList = [1,2,3,4,5];
+let currentStartId = 987654321;
 
 const Pages = ({ obj, lastRef }) => {
     return(
@@ -33,7 +33,7 @@ const LeftPage = ({refreshAccessToken}) => {
             axios.get(pageloadUrl + "?startId=" + currentStartId)
             .then((res) => {
                 console.log("데이터 추가");
-                pageList = [...res.data];//추가 데이터 저장
+                pageList = [...res.data.data];//추가 데이터 저장
                 currentStartId = res.startId;
             })
             .catch((res) => {
