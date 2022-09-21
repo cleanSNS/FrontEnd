@@ -142,6 +142,8 @@
 				=> 일단은 npm start로 테스트중이므로 해당 부분을 아래와 같이 변경했다.
 				export PORT=443 && HTTPS=true SSL_CRT_FILE=(인증서명).crt SSL_KEY_FILE=(키명).key react-scripts start
 			5. 또한 github에 인증서와 키가 올라가는 것을 막기 위해 보낸 파일들은 frontend의 상위 폴더에 위치시켰다.
+				=> 결론은 명령어가 다음과 같다.
+				"export PORT=443 && HTTPS=true SSL_CRT_FILE=../certificate.crt SSL_KEY_FILE=../private.key react-scripts start",
 
 18. 누를 수 있는 요소의 경우
 	=> button태그에 스타일을 지정하면 그 이후에 마우스를 가져다 대도 마우스가 변하지 않는다.

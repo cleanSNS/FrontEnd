@@ -62,9 +62,14 @@ const ProfileSetting = () => {
             }
         })
         .catch((res) => {
-            console.log(res);
-            alert("에러 발생");
-            //window.location.href = "/main";
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러 발생");
+                //window.location.href = "/main";
+            }
         });
     };
     useEffect(profileSettingPreset, []);
@@ -87,8 +92,13 @@ const ProfileSetting = () => {
             //window.location.href = "/main";
         })
         .catch((res) => {
-            console.log(res);
-            alert("문제가 발생했습니다.")
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("문제가 발생했습니다.");
+            }
         })
     }
 

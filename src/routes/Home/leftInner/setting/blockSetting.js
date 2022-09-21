@@ -25,8 +25,13 @@ const BlockSetting = ({refreshAccessToken}) => {
             setAddedUserList(tmp);
         })
         .catch((res) => {
-            console.log(res);
-            alert("에러 발생");
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러 발생");
+            }
         })
     };
     useEffect(blockSettingInitialSetting, []);
@@ -52,14 +57,24 @@ const BlockSetting = ({refreshAccessToken}) => {
                 setAddedUserList(tmp);
             })
             .catch((res) => {
-                console.log(res);
-                alert("에러 발생 - 리스트를 불러오지 못함");
+                if(res.status === 401){//access token이 만료된 경우이다.
+                    refreshAccessToken();
+                }
+                else{
+                    console.log(res);
+                    alert("에러 발생 - 리스트를 불러오지 못함");
+                }
             })
         })
         .catch((res) => {
-            console.log(res);
-            alert("에러 발생 - 차단 리스트에 추가하지 못함");
-            //window.location.href = '/main';
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러 발생 - 차단 리스트에 추가하지 못함");
+                //window.location.href = '/main';
+            }
         })
     };
 
@@ -79,9 +94,14 @@ const BlockSetting = ({refreshAccessToken}) => {
             setAddedUserList(tmp);
         })
         .catch((res) => {
-            console.log(res);
-            alert("문제 발생");
-            //window.location.href="/main";
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("문제 발생");
+                //window.location.href="/main"; 
+            }
         })
 
     };
@@ -119,9 +139,14 @@ const BlockSetting = ({refreshAccessToken}) => {
             setSearchedUserList(tmp);
         })
         .catch((res) => {
-            console.log(res);
-            alert("에러 발생");
-            //window.location.href = "/main";
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러 발생");
+                //window.location.href = "/main";
+            }
         })
     };
 

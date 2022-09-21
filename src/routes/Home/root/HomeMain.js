@@ -111,10 +111,15 @@ const Home = ({ logout, refreshAccessToken }) => {
       //window.location.href = "/main";
     })
     .catch((res) => {
-      console.log("잘못된 양식입니다.");
-      console.log(res);
-      alert("문제 발생");
-      //window.location.href = "/main";
+      if(res.status === 401){//access token이 만료된 경우이다.
+        refreshAccessToken();
+      }
+      else{
+        console.log("잘못된 양식입니다.");
+        console.log(res);
+        alert("문제 발생");
+        //window.location.href = "/main";
+      }
     })
   };
 
@@ -233,7 +238,7 @@ const Home = ({ logout, refreshAccessToken }) => {
               { rightBookState === "chat" ? <RightChat refreshAccessToken={refreshAccessToken} /> : null}
               { rightBookState === "notice" ? <RightNotice refreshAccessToken={refreshAccessToken}/> : null}
               { rightBookState === "friend" ? <RightFriend leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken}/> : null}
-              { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout} refreshAccessToken={refreshAccessToken}/> : null}
+              { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout}/> : null}
             </div>
           </div>
         </div>

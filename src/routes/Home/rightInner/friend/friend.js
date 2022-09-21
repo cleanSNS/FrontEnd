@@ -25,7 +25,7 @@ const RenderRightFriend = ({followeeList, leftBookChangeHandler}) => {
     );
 }
 
-const RightFriend = ({leftBookChangeHandler}) => {
+const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
     const [followeeList, setFolloweeList] = useState([]);
     const [followerList, setFollowerList] = useState([]);
     const [myProfileImage, setMyProfileImage] = useState("");
@@ -38,9 +38,14 @@ const RightFriend = ({leftBookChangeHandler}) => {
             setFolloweeList(res.data.data);
         })
         .catch((res) => {
-            console.log(res);
-            alert("에러 발생");
-            //window.location.href = '/main';
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러 발생");
+                //window.location.href = '/main';
+            }
         });
 
         axios.get(getfollowerListUrl)//나를 팔로우 중인 유저 불러오기
@@ -48,9 +53,14 @@ const RightFriend = ({leftBookChangeHandler}) => {
             setFollowerList(res.data.data);
         })
         .catch((res) => {
-            console.log(res);
-            alert("에러 발생");
-            //window.location.href = '/main';
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러 발생");
+                //window.location.href = '/main';
+            }
         });
 
         axios.get(getcurrentProfileUrl)//내 정보 불러오기
@@ -59,9 +69,14 @@ const RightFriend = ({leftBookChangeHandler}) => {
             setMyProfileImage(res.data.data.imgUrl);
         })
         .catch((res) => {
-            console.log(res);
-            alert("에러 발생");
-            //window.location.href = '/main';
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러 발생");
+                //window.location.href = '/main';
+            }
         })
     };
     useEffect(rightFriendPreset, []);

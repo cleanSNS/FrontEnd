@@ -56,12 +56,23 @@ const PasswordSetting = ({refreshAccessToken}) => {
                 //window.location.href = '/main';
             })
             .catch((res) => {
-                alert("에러 발생");
-                //window.location.href = '/main';
+                if(res.status === 401){//access token이 만료된 경우이다.
+                    refreshAccessToken();
+                }
+                else{
+                    console.log(res);
+                    alert("에러 발생");
+                    //window.location.href = '/main';
+                }
             })
         })
         .catch((res) => {
-            alert("기존 비밀번호가 틀립니다.");
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                alert("기존 비밀번호가 틀립니다.");
+            }
         })
     };
 

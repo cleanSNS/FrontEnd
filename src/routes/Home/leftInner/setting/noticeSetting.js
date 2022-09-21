@@ -25,9 +25,14 @@ const NoticeSetting = ({refreshAccessToken}) => {
             setNotificationChat(res.data.data.notificationChat);
         })
         .catch((res) => {
-            console.log(res);
-            alert("에러발생");
-            //window.location.href = "/main";
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러발생");
+                //window.location.href = "/main";
+            }
         });
     };
     useEffect(noticeSettingPreset, []);
@@ -46,8 +51,14 @@ const NoticeSetting = ({refreshAccessToken}) => {
             alert("설정을 변경했습니다.");
         })
         .catch((res) => {
-            alert("에러가 발생했습니다.");
-            //window.location.href = "/main";
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러가 발생했습니다.");
+                //window.location.href = "/main";
+            }
         })
     };
 

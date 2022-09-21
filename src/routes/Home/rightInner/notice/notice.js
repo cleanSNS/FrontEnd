@@ -15,7 +15,7 @@ const Notice = ({img, script}) => {
     );
 };
 
-const RightNotice = () => {
+const RightNotice = ({refreshAccessToken}) => {
     return(
         <div className={Style.noticeList}>
             <Notice img='aaa' script='fsdfsd' />
