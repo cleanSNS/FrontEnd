@@ -6,6 +6,7 @@ import {
     getFolloweeListUrl,
     getfollowerListUrl,
     getcurrentProfileUrl,
+    getMyUserIdUrl,
 } from '../../../../apiUrl';
 
 const RenderRightFriend = ({followeeList, leftBookChangeHandler}) => {
@@ -30,6 +31,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
     const [followerList, setFollowerList] = useState([]);
     const [myProfileImage, setMyProfileImage] = useState("");
     const [myProfileName, setMyProfileName] = useState("");
+    const [myId, setMyId] = useState("");
 
     //화면 렌더링 초기 설정 함수
     const rightFriendPreset = () => {
@@ -77,7 +79,22 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
                 alert("에러 발생");
                 //window.location.href = '/main';
             }
+        });
+
+        axios.get(getMyUserIdUrl)//내 id불러오기
+        .then((res) => {
+            setMyId(res.data.data.userId);
         })
+        .catch((res) => {
+            if(res.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러 발생");
+                //window.location.href = '/main';
+            }
+        });
     };
     useEffect(rightFriendPreset, []);
 
@@ -86,7 +103,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
     return(
         <div className={Style.wholeCover}>
             <div className={Style.Cover}>
-                <Profile img={myProfileImage} name={myProfileName} key="self" leftBookChangeHandler={leftBookChangeHandler}/>
+                <Profile img={myProfileImage} name={myProfileName} key={myId} leftBookChangeHandler={leftBookChangeHandler}/>
             </div>
             <RenderRightFriend followeeList={followeeList} leftBookChangeHandler={leftBookChangeHandler}/>
         </div>

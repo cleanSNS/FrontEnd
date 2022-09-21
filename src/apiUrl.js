@@ -93,3 +93,9 @@ export const getFolloweeListUrl = `${apiUrl}/user/followee`;
 
 //나를 팔로우 하고 있는 유저 조회
 export const getfollowerListUrl = `${apiUrl}/user/follower`;
+
+//나의 id를 조회
+export const getMyUserIdUrl = `${apiUrl}/user/id`;
+
+//나에게 온 알림 조회
+export const getNoticeUrl = `${apiUrl}/user/notification?startId=`;

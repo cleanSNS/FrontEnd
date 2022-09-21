@@ -120,7 +120,7 @@ const Home = ({ logout, refreshAccessToken }) => {
         alert("문제 발생");
         //window.location.href = "/main";
       }
-    })
+    });
   };
 
 
