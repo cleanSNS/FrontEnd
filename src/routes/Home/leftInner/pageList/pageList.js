@@ -1,9 +1,17 @@
-//import Style from './pageList.module.css';
+import Style from './pageList.module.css';
 import { useState, useEffect } from 'react';
 import {
     getUserPageListUrl,
 } from '../../../../apiUrl';
 import axios from 'axios';
+
+const UserListArea = () => {
+
+};
+
+const PageListArea = () => {
+
+};
 
 const LeftPageList = ({leftBookState, refreshAccessToken}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
     let startId = 987654321;
@@ -11,32 +19,56 @@ const LeftPageList = ({leftBookState, refreshAccessToken}) => {//일단 leftBook
     const [userPageList, setUserPageList] = useState([]);
     const [userImage, setUserImage] = useState("");
     const [userNickname, setUserNickname] = useState("");
+    const [isMyPage, setIsMyPage] = useState(false);
+    const [bottomStuff, setBottomStuff] = useState("BLANK");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
 
     const presetUserPageList = () => {
+        //먼저 나의 id를 구하는 api를 호출, 그 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
+        //if isMyPage면 맨 윗줄 프로필 부분에 
         userId = leftBookState.slice(9);
-        axios.get(getUserPageListUrl + userId + "?startId=" + startId.toString())
-        .then((res) => {
-            const prev = [...userPageList];
-            const tmp = [...res.data.data];
-            const next = prev.concat(tmp);
-            setUserPageList(next);
-            startId = res.data.startId;
-        })
-        .catch((res) => {
-            if(res.status === 401){
-                refreshAccessToken();
-            }
-            else{
-                console.log(res);
-                alert("에러 발생");
-                //window.location.href = "/main";
-            }
-        });
+        
     };
     useEffect(presetUserPageList, []);
+
+    //게시물 클릭 시 handler
+    const pageClickHandler = (event) => {
+        event.preventDefault();
+        setBottomStuff("PAGE");
+    }
+
+    //팔로워 클릭 시 handler
+    const followerClickHandler = (event) => {
+        event.preventDefault();
+        setBottomStuff("FOLLOWER");
+    }
+
+    const followeeClickHandler = (event) => {
+        event.preventDefault();
+        setBottomStuff("FOLLOWEE");
+    }
     
     return(
-        <p>PageList</p>
+        <div className={Style.wholeCover}>
+            <div className={Style.flexColCover}>
+                <div className={Style.profileCover}>
+                    <img src={"image"} className={Style.profileImg} />
+                    <p className={Style.profileName}>이ddddddddddfsdfsdfdddd름</p>
+                    {isMyPage ? null : <p>팔로우버튼</p>}
+                    {isMyPage ? null : <p>...</p>}
+                </div>
+                <div className={Style.pageFollowerFolloweeCover}>
+                    <p>게시물</p>
+                    <p>팔로워</p>
+                    <p>팔로잉</p>
+                </div>
+            </div>
+            <div className={Style.flexColCover}>
+                <p>자기소개는 이 공간에 쓰입니다.</p>
+            </div>
+            {bottomStuff === "PAGE" ? <PageListArea /> : null}
+            {bottomStuff === "FOLLOWER" ? <UserListArea /> : null}
+            {bottomStuff === "FOLLOWEE" ? <UserListArea /> : null}
+        </div>
     );
 }
 

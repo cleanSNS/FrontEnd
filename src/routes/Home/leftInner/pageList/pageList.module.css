@@ -1,3 +1,51 @@
-.Cover{
-    position: relative;
+.wholeCover{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 90%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 1fr 6fr;
+}
+
+/*flex의 container를 위한 영역*/
+.flexColCover{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.profileCover{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    height: 50%;
+}
+
+.pageFollowerFolloweeCover{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 80%;
+    height: 30%;;
+}
+
+.profileImg{
+    height: 70px;
+    width: 70px;
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    margin-right: 30px;
+}
+
+.profileName{
+    font-size: large;
+    margin-right: 30px;
 }
