@@ -6,7 +6,7 @@ import {
     getNoticeUrl,
 } from '../../../../apiUrl';
 
-const Notice = ({targetUserId, content, type, resourceId, lastNotice, key, leftBookChangeHandler}) => {
+const Notice = ({targetUserId, content, type, resourceId, lastNotice, leftBookChangeHandler}) => {
     const onUserImageClickHandler = (event) => {//해당 유저 페이지로 이동
         event.preventDefault();
         leftBookChangeHandler("pageList/" + targetUserId);
@@ -20,7 +20,7 @@ const Notice = ({targetUserId, content, type, resourceId, lastNotice, key, leftB
         else{//type이 그 외인 경우 어차피 다 글에서 발생한 것이므로, 해당 글을 '글 자세히 보기 페이지' 띄우기
             console.log("Working on it");
         }
-    }
+    };
 
     return(//마지막 요소는 설정을 더해준다.
         lastNotice === null ?//null이면 별도의 설정이 필요 없다.
