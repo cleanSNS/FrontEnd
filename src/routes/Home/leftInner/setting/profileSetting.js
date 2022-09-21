@@ -7,7 +7,7 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const ProfileSetting = () => {
+const ProfileSetting = ({refreshAccessToken}) => {
     //api에 보낼 내용 + input에 반영해야하므로 useState로 선언
     const [ps_userImage, setPs_UserImage] = useState("");
     const [ps_userName, setPs_UserName] = useState("");
