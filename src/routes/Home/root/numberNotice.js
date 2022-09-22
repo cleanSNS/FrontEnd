@@ -2,7 +2,6 @@
 import Style from './numberNotice.module.css';
 
 const NumberNotice = ({number}) => {
-    console.log(number);
     return(
             (number === "0" || number === 0) ?
             null

@@ -184,6 +184,7 @@ const Home = ({ logout, refreshAccessToken }) => {
       axios.get(getNoticeNumber)
       .then((res) => {
         //setNoticeNumber(res.data.count);
+        console.log(res.data.count);
         setNoticeNumber(5);
       })
       .catch((res) =>{
