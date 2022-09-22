@@ -167,17 +167,17 @@ const Home = ({ logout, refreshAccessToken }) => {
   }
 
   //읽지 않은 채팅 개수 읽어들이기 - 태그 누르면 0으로 바꿀거임 <---------------------------------구현해야함
-  const [chatNumber, setChatNumber] = useState(0);
+  const [chatNumber, setChatNumber] = useState("0");
   const getChatNumberFunc = () => {
 
   };
   useEffect(getChatNumberFunc, [rightBookState]);
 
   //읽지 않은 알림 개수 읽어들이기
-  const [noticeNumber, setNoticeNumber] = useState(0);
+  const [noticeNumber, setNoticeNumber] = useState("0");
   const getNoticeNumberFunc = () => {
     if(rightBookState === "notice"){//notice부분을 보는 중이라면 알림부분을 없앤다.
-      setNoticeNumber(0);
+      setNoticeNumber("0");
       return;
     }
     else{//그 외의 부분을 보는 중이라면 알림의 개수를 읽어서 반영한다.

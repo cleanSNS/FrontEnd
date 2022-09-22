@@ -3,7 +3,7 @@ import Style from './numberNotice.module.css';
 
 const NumberNotice = ({number}) => {
     return(
-            number === 0 ?
+            number === "0" ?
             null
             :
             <div className={Style.cover}>
