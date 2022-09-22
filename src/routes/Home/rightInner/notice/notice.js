@@ -149,9 +149,9 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken}) => {
     const ListDeleteHandler = (event) => {
         event.preventDefault();
         console.log(event.target.id);
-        //const tmp = [...noticeList];
-        //tmp.splice(Number(event.target.id), 1);
-        //setNoticeList(tmp);
+        const tmp = [...noticeList];
+        tmp.splice(Number(event.target.id), 1);
+        setNoticeList(tmp);
     };
 
     return(

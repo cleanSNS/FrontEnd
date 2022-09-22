@@ -1,18 +1,17 @@
 .cover{
-    position: absolute;
+    display : flex;
     background-color: rgba(255, 0, 0, 0.5);
     width: 25px;
     height: 20px;
 
     border-radius: 0.6rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .number{
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
+    margin: 0;
+    height: auto;
     text-align: center;
     font-size: xx-small;
     font-weight: bold;

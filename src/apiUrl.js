@@ -97,6 +97,10 @@ export const getfollowerListUrl = `${apiUrl}/user/follower`;
 //나의 id를 조회
 export const getMyUserIdUrl = `${apiUrl}/user/id`;
 
+//해당 유저의 글들 조회
+export const getUserPageListUrl = `${apiUrl}/page/user/`;
+
+/********************************알림 관련************************************/
 //나에게 온 알림 조회
 export const getNoticeUrl = `${apiUrl}/user/notification?startId=`;
 
@@ -106,5 +110,5 @@ export const readNoticeUrl = `${apiUrl}/user/notification?notificationId=`;
 //알림 삭제 처리
 export const deleteNoticeUrl = `${apiUrl}/user/notification?notificationId=`;
 
-//해당 유저의 글들 조회
-export const getUserPageListUrl = `${apiUrl}/page/user/`;
+//읽지 않은 알림 수 조회
+export const getNoticeNumber = `${apiUrl}/user/notification/count`;

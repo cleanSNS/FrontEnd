@@ -197,7 +197,7 @@
 - refresh토큰 재발급받는 조건 받아서 catch처리 - 토큰 발급 후 다시 submit안눌러도 되게 작동하게 하기
 		이거 일단 프로필 세팅에 작업해놨는데 정상작동 확인 되면 아에 refreshAccessToken함수를 잘 변형하기
 - userID보내면 이미지랑 닉네임 받아오는 api만들어주면 연결하기
-- api받아서 notice 완성하기
+- notice부분에 글 피드 눌렀을 때 글 자세히 보기 창 연결해주는 부분 만들기(이거 빼고는 완료)
 - 채팅 left
 - 채팅 right
 - 글 피드 left(page)

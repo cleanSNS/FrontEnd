@@ -23,7 +23,8 @@ import settingTagImg from "./tagImages/settings.png";
 import userTagImg from "./tagImages/user.png";
 
 import {
-  newPostUrl
+  newPostUrl,
+  getNoticeNumber
 } from "../../../apiUrl";
 import axios from 'axios';
 
@@ -165,6 +166,38 @@ const Home = ({ logout, refreshAccessToken }) => {
     setSettingState(val);
   }
 
+  //읽지 않은 채팅 개수 읽어들이기 - 태그 누르면 0으로 바꿀거임 <---------------------------------구현해야함
+  const [chatNumber, setChatNumber] = useState(0);
+  const getChatNumber = () => {
+
+  };
+  useEffect(getChatNumber, [rightBookState]);
+
+  //읽지 않은 알림 개수 읽어들이기
+  const [noticeNumber, setNoticeNumber] = useState(0);
+  const getNoticeNumber = () => {
+    if(rightBookState === "notice"){//notice부분을 보는 중이라면 알림부분을 없앤다.
+      setNoticeNumber(0);
+      return;
+    }
+    else{//그 외의 부분을 보는 중이라면 알림의 개수를 읽어서 반영한다.
+      axios.get(getNoticeNumber)
+      .then((res) => {
+        setNoticeNumber(res.data.count);
+      })
+      .catch((res) =>{
+        if(res.status === 401){
+          refreshAccessToken();
+        }
+        else{
+          console.log("알림의 개수를 불러오지 못했습니다.");
+        }
+      });
+      }
+  };
+  useEffect(getNoticeNumber, [rightBookState]);
+
+
   return(
     <div className={Style.pageCover}>
       {/* 좌 상단 - 로고와 검색창 */}
@@ -191,12 +224,18 @@ const Home = ({ logout, refreshAccessToken }) => {
                 <img src={messageTagImg} className={Style.tagImg} onClick={tagClickHandler} id="chat" />
               </div>
             </div>
+            <div className={Style.noticeArea}>
+              <NumberNotice number={chatNumber} />
+            </div>
           </div>
           <div className={Style.Cover}>
             <div className={Style.tag} id="notice">
               <div className={Style.Cover}>
                 <img src={notificationTagImg} className={Style.tagImg} onClick={tagClickHandler} id="notice" />
               </div>
+            </div>
+            <div className={Style.noticeArea}>
+              <NumberNotice number={noticeNumber} />
             </div>
           </div>
           <div className={Style.Cover}>

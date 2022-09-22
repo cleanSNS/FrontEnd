@@ -111,3 +111,9 @@
     border-top-left-radius: 21px;
     background-color: white;
 }
+
+.noticeArea{
+    position: absolute;
+    top: 0;
+    right: 50%;
+}
