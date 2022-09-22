@@ -4,52 +4,99 @@ import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
     getNoticeUrl,
+    readNoticeUrl,
+    deleteNoticeUrl,
 } from '../../../../apiUrl';
+import closeBtn from './close_btn.png';
 
-const Notice = ({targetUserId, content, type, resourceId, lastNotice, leftBookChangeHandler}) => {
-    const onUserImageClickHandler = (event) => {//해당 유저 페이지로 이동
+const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, checked, lastNotice, leftBookChangeHandler, ListDeleteHandler, index}) => {
+
+    //초기 설정으로, 이미 읽은 알림의 경우 연하게 스타일 변경
+    const noticePreset = () => {
+        if(checked){
+            document.querySelector(`#noticeScript${notificationId}`).style.color ="gray";
+        }
+    };
+    useEffect(noticePreset, []);
+
+    //알림의 이미지 클릭 시 해당 유저의 페이지로 이동
+    const onUserImageClickHandler = (event) => {
         event.preventDefault();
         leftBookChangeHandler("pageList/" + targetUserId);
     };
 
-    const onNoticeScripsClickHandler = (event) => {//알림이 발생한 원인지로 이동
+    //알림을 클릭 시 알림이 발생한 근원지로 이동(FOLLOW는 유저로, 나머지는 글로)
+    //알림 클릭 시 해당 알림은 읽은 것으로 처리
+    const onNoticeScripsClickHandler = (event) => {
         event.preventDefault();
-        if(type === "FOLLOW"){//type이 FOLLOW인 경우 프로필 클릭과 동일하게 해당 유저 페이지로 이동.
+
+        axios.post(readNoticeUrl + notificationId.toString(), {
+            notificationId: notificationId,
+        })
+        .then((res) => {
+            console.log("해당 알림 읽기 처리 완료");
+            document.querySelector(`#noticeScript${notificationId}`).style.color ="gray";
+        })
+        .catch((res) => {
+            console.log(res);
+            console.log("에러 발생");
+        });
+
+        if(type === "FOLLOW"){
             leftBookChangeHandler("pageList/" + targetUserId);
         }
-        else{//type이 그 외인 경우 어차피 다 글에서 발생한 것이므로, 해당 글을 '글 자세히 보기 페이지' 띄우기
-            console.log("Working on it");
+        else{
+            console.log("Working on it");//<------------------------------------------------------여기 구현해야함
         }
     };
 
+    const deleteBtnClickHandler = (event) => {
+        event.preventDefault();
+        //api로 삭제 처리
+        axios.delete(deleteNoticeUrl + notificationId.toString(),{
+            notificationId: notificationId
+        })
+        .then((res) => {
+            console.log("삭제 완료")
+        })
+        .catch((res) => {
+            console.log(res);
+            console.log("에러 발생")
+        })
+        //보이는 내용 처리
+        ListDeleteHandler(event);
+    }
+
     return(//마지막 요소는 설정을 더해준다.
         lastNotice === null ?//null이면 별도의 설정이 필요 없다.
-        <div className={Style.noticeBlock}>
-            <div className={Style.noticeCover}>
+        <div className={Style.noticeCover}>
                 <div className={Style.Cover}>
-                    <img src={"imgUrl"} className={Style.noticeImg} onClick={onUserImageClickHandler}/>
+                    <img src={userImgUrl} className={Style.noticeImg} onClick={onUserImageClickHandler}/>
                 </div>
                 <div className={Style.Cover}>
-                    {type === "COMMENT" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 댓글이 달렸습니다.</p> : null}
-                    {type === "FOLLOW" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>팔로우 요청이 왔습니다.</p> : null}
-                    {type === "NESTED" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 댓글에 답글이 달렸습니다.</p> : null}
-                    {type === "LIKE" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 좋아요가 눌렸습니다.</p> : null}
+                    {type === "COMMENT" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 댓글이 달렸습니다.</p> : null}
+                    {type === "FOLLOW" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>팔로우 요청이 왔습니다.</p> : null}
+                    {type === "NESTED" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 댓글에 답글이 달렸습니다.</p> : null}
+                    {type === "LIKE" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 좋아요가 눌렸습니다.</p> : null}
                 </div>
-            </div>
+                <div className={Style.Cover}>
+                    <img src={closeBtn} className={Style.deleteBtn} onClick={deleteBtnClickHandler} id={index}/>
+                </div>
         </div>
         ://null이 아니면 ref를 추가해준다.
-        <div className={Style.noticeBlock} ref={lastNotice}>
-            <div className={Style.noticeCover}>
+        <div className={Style.noticeCover} ref={lastNotice}>
                 <div className={Style.Cover}>
-                    <img src={"imgUrl"} className={Style.noticeImg} onClick={onUserImageClickHandler}/>
+                    <img src={userImgUrl} className={Style.noticeImg} onClick={onUserImageClickHandler}/>
                 </div>
                 <div className={Style.Cover}>
-                    {type === "COMMENT" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 댓글이 달렸습니다.</p> : null}
-                    {type === "FOLLOW" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>팔로우 요청이 왔습니다.</p> : null}
-                    {type === "NESTED" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 댓글에 답글이 달렸습니다.</p> : null}
-                    {type === "LIKE" ? <p className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 좋아요가 눌렸습니다.</p> : null}
+                    {type === "COMMENT" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 댓글이 달렸습니다.</p> : null}
+                    {type === "FOLLOW" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>팔로우 요청이 왔습니다.</p> : null}
+                    {type === "NESTED" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 댓글에 답글이 달렸습니다.</p> : null}
+                    {type === "LIKE" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 좋아요가 눌렸습니다.</p> : null}
                 </div>
-            </div>
+                <div className={Style.Cover}>
+                    <img src={closeBtn} className={Style.deleteBtn} onClick={deleteBtnClickHandler} id={index}/>
+                </div>
         </div>
     );
 };
@@ -58,12 +105,17 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken}) => {
     const [noticeList, setNoticeList] = useState([]);
     const [lastNotice, inView] = useInView();
     let startId = 987654321;
+    let noMoreNotice = false;
 
-    //초기설정
+    //알림 불러오는 함수
     const NoticeRead = () => {
         axios.get(getNoticeUrl + startId.toString())
         .then((res) => {
-            console.log("알림을 불러왔습니다.")
+            if(res.data.data.length === 0) {
+                noMoreNotice = true;
+                return;
+            }
+            console.log("알림을 불러왔습니다.");
             const current = [...noticeList];
             const tmp = [...res.data.data];
             const next = current.concat(tmp);
@@ -81,23 +133,62 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken}) => {
             }
         })
     };
+
+    //초기 설정
     useEffect(NoticeRead, []);
 
+    //마지막 요소를 보는 중이며, 아직 알림이 남은 경우 notice를 더 불러오게 하는 함수
     const infiniteLoad = () => {
-        if(inView){//마지막 요소를 보는 중인 경우
+        if(inView & !noMoreNotice){
             NoticeRead();
         }
     }
     useEffect(infiniteLoad, [inView]);
 
+    //닫기 버튼 누른 경우 - Notice 요소 안에 선언하려면 list를 요소마다 복사해서 변수로 가져야 하므로 여기에 선언
+    const ListDeleteHandler = (event) => {
+        event.preventDefault();
+        console.log(event.target.id);
+        //const tmp = [...noticeList];
+        //tmp.splice(Number(event.target.id), 1);
+        //setNoticeList(tmp);
+    };
+
     return(
         <div className={Style.noticeList}>
             {
+                noticeList.length === 0 ?
+                <p className={Style.noNoticeScript}>도착한 알림이 없습니다.</p>
+                :
                 noticeList.map((data, index) =>(//마지막 요소는 last가 true이다.
                     index === (noticeList.length - 1) ?
-                    <Notice targetUserId={data.targetUserId} content={data.content} type={data.type} resourceId={data.resourceId} key={index} lastNotice={lastNotice} leftBookChangeHandler={leftBookChangeHandler}/>
+                    <Notice
+                        notificationId={data.notificationId}//알림의 id
+                        userImgUrl={data.userImgUrl}//알림의 대상의 프로필 사진
+                        targetUserId={data.targetUserId}//알림의 대상의 id
+                        type={data.type}//알림의 타입
+                        resourceId={data.resourceId}//근원지 (FOLLOW의 경우 null이다.)
+                        checked={data.checked}//해당 알림을 확인했었는지 안했는지
+                        key={index}
+                        lastNotice={lastNotice}
+                        leftBookChangeHandler={leftBookChangeHandler}
+                        ListDeleteHandler={ListDeleteHandler}
+                        index={index}
+                    />
                     :
-                    <Notice targetUserId={data.targetUserId} content={data.content} type={data.type} resourceId={data.resourceId} key={index} lastNotice={null} leftBookChangeHandler={leftBookChangeHandler}/>
+                    <Notice
+                        notificationId={data.notificationId}//알림의 id
+                        userImgUrl={data.userImgUrl}//알림의 대상의 프로필 사진
+                        targetUserId={data.targetUserId}//알림의 대상의 id
+                        type={data.type}//알림의 타입
+                        resourceId={data.resourceId}//근원지 (FOLLOW의 경우 null이다.)
+                        checked={data.checked}//해당 알림을 확인했었는지 안했는지
+                        key={index}
+                        lastNotice={null}
+                        leftBookChangeHandler={leftBookChangeHandler}
+                        ListDeleteHandler={ListDeleteHandler}
+                        index={index}
+                    />
                 ))
             }
         </div>
