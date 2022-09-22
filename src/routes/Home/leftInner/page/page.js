@@ -1,3 +1,5 @@
+//피드 여러개 띄우는 화면
+
 import { useState, useEffect } from 'react';
 import { useInView } from "react-intersection-observer";
 import axios from 'axios';

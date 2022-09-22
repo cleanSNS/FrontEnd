@@ -3,6 +3,7 @@ import Style from "./HomeMain.module.css";
 import Logo from "../../../logo/mainLogo";
 import SearchBar from "./searchBar";
 import NumberNotice from "./numberNotice";
+import DetailPage from './detailPage';
 
 import LeftPage from "../leftInner/page/page";
 import LeftPageList from "../leftInner/pageList/pageList";
@@ -166,26 +167,25 @@ const Home = ({ logout, refreshAccessToken }) => {
     setSettingState(val);
   }
 
-  //읽지 않은 채팅 개수 읽어들이기 - 태그 누르면 0으로 바꿀거임 <---------------------------------구현해야함
-  const [chatNumber, setChatNumber] = useState("0");
+  //읽지 않은 채팅 개수 읽어들이기 <---------------------------------구현해야함(아래랑 아주 유사하게 구현)
+  const [chatNumber, setChatNumber] = useState(0);
   const getChatNumberFunc = () => {
 
   };
   useEffect(getChatNumberFunc, [rightBookState]);
 
   //읽지 않은 알림 개수 읽어들이기
-  const [noticeNumber, setNoticeNumber] = useState("0");
+  const [noticeNumber, setNoticeNumber] = useState(0);
   const getNoticeNumberFunc = () => {
     if(rightBookState === "notice"){//notice부분을 보는 중이라면 알림부분을 없앤다.
-      setNoticeNumber("0");
+      setNoticeNumber(0);
       return;
     }
     else{//그 외의 부분을 보는 중이라면 알림의 개수를 읽어서 반영한다.
       axios.get(getNoticeNumber)
       .then((res) => {
-        //setNoticeNumber(res.data.count);
+        setNoticeNumber(res.data.count);
         console.log(res.data.count);
-        setNoticeNumber(5);
       })
       .catch((res) =>{
         if(res.status === 401){
@@ -198,6 +198,9 @@ const Home = ({ logout, refreshAccessToken }) => {
       }
   };
   useEffect(getNoticeNumberFunc, [rightBookState]);
+
+  //페이지에서 글을 클릭하면 글 중앙으로 오게 하기
+  const [pageId, setPageId] = useState(-1);
 
 
   return(
@@ -227,7 +230,7 @@ const Home = ({ logout, refreshAccessToken }) => {
               </div>
             </div>
             <div className={Style.noticeArea}>
-              <NumberNotice number={chatNumber} />
+              {noticeNumber === 0 ? null : <NumberNotice number={chatNumber} />}
             </div>
           </div>
           <div className={Style.Cover}>
@@ -237,7 +240,7 @@ const Home = ({ logout, refreshAccessToken }) => {
               </div>
             </div>
             <div className={Style.noticeArea}>
-              <NumberNotice number={noticeNumber} />
+              {chatNumber === 0 ? null : <NumberNotice number={noticeNumber} />}
             </div>
           </div>
           <div className={Style.Cover}>
@@ -284,6 +287,8 @@ const Home = ({ logout, refreshAccessToken }) => {
           </div>
         </div>
       </div>
+      {/*{pageId === -1 ? null : <DetailPage pageId={pageId} />}*/}
+      <DetailPage pageId={pageId} />
     </div>
   );
 }

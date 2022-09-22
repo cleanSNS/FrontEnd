@@ -1,3 +1,5 @@
+//유저 프로필 화면
+
 import Style from './pageList.module.css';
 import { useState, useEffect } from 'react';
 import {
