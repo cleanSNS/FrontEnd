@@ -24,7 +24,7 @@ import userTagImg from "./tagImages/user.png";
 
 import {
   newPostUrl,
-  getNoticeNumber
+  getNoticeNumber,
 } from "../../../apiUrl";
 import axios from 'axios';
 
@@ -168,14 +168,14 @@ const Home = ({ logout, refreshAccessToken }) => {
 
   //읽지 않은 채팅 개수 읽어들이기 - 태그 누르면 0으로 바꿀거임 <---------------------------------구현해야함
   const [chatNumber, setChatNumber] = useState(0);
-  const getChatNumber = () => {
+  const getChatNumberFunc = () => {
 
   };
-  useEffect(getChatNumber, [rightBookState]);
+  useEffect(getChatNumberFunc, [rightBookState]);
 
   //읽지 않은 알림 개수 읽어들이기
   const [noticeNumber, setNoticeNumber] = useState(0);
-  const getNoticeNumber = () => {
+  const getNoticeNumberFunc = () => {
     if(rightBookState === "notice"){//notice부분을 보는 중이라면 알림부분을 없앤다.
       setNoticeNumber(0);
       return;
@@ -195,7 +195,7 @@ const Home = ({ logout, refreshAccessToken }) => {
       });
       }
   };
-  useEffect(getNoticeNumber, [rightBookState]);
+  useEffect(getNoticeNumberFunc, [rightBookState]);
 
 
   return(
