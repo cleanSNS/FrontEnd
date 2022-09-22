@@ -183,8 +183,8 @@ const Home = ({ logout, refreshAccessToken }) => {
     else{//그 외의 부분을 보는 중이라면 알림의 개수를 읽어서 반영한다.
       axios.get(getNoticeNumber)
       .then((res) => {
-        setNoticeNumber(res.data.count);
-        console.log(res.data.count);
+        //setNoticeNumber(res.data.count);
+        setNoticeNumber(5);
       })
       .catch((res) =>{
         if(res.status === 401){
