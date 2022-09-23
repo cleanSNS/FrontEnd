@@ -9,7 +9,7 @@ import {
 } from '../../../../apiUrl';
 import closeBtn from './close_btn.png';
 
-const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, checked, lastNotice, leftBookChangeHandler, ListDeleteHandler, index}) => {
+const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, checked, lastNotice, leftBookChangeHandler, ListDeleteHandler, index, setPageId}) => {
 
     //초기 설정으로, 이미 읽은 알림의 경우 연하게 스타일 변경
     const noticePreset = () => {
@@ -46,7 +46,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
             leftBookChangeHandler("pageList/" + targetUserId);
         }
         else{
-            console.log("Working on it");//<------------------------------------------------------여기 구현해야함
+            setPageId(resourceId);
         }
     };
 
@@ -101,7 +101,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
     );
 };
 
-const RightNotice = ({leftBookChangeHandler, refreshAccessToken}) => {
+const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId}) => {
     const [noticeList, setNoticeList] = useState([]);
     const [lastNotice, inView] = useInView();
     let startId = 987654321;
@@ -174,6 +174,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken}) => {
                         leftBookChangeHandler={leftBookChangeHandler}
                         ListDeleteHandler={ListDeleteHandler}
                         index={index}
+                        setPageId={setPageId}
                     />
                     :
                     <Notice
@@ -188,6 +189,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken}) => {
                         leftBookChangeHandler={leftBookChangeHandler}
                         ListDeleteHandler={ListDeleteHandler}
                         index={index}
+                        setPageId={setPageId}
                     />
                 ))
             }
