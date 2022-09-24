@@ -32,7 +32,7 @@ import axios from 'axios';
 const Home = ({ logout, refreshAccessToken }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
-  //왼쪽 책의 내용을 바꿔주는 state => page(글) // pageList //chat // newPost // setting
+  //왼쪽 책의 내용을 바꿔주는 state => page(글) // pageList // chat // newPost // setting
   const [leftBookState, setLeftBookState] = useState("page");
   //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
   const [settingState, setSettingState] = useState("initial");
