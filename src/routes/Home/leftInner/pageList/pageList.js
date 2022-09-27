@@ -14,12 +14,11 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, setted}) => {
+const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler}) => {
     const [userList, setUserList] = useState([]);
 
     const presetUserListArea = () => {
         console.log("유저를 불러옵니다..");
-        if(!setted) return;
         if(bottomStuff === "FOLLOWER"){
             axios.get(getfollowerListUrl)
             .then((res) =>{
@@ -75,13 +74,12 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
     );
 };
 
-const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
+const PageListArea = ({userId, refreshAccessToken, setPageId}) => {
     let pageStartId = 987654321;
     const [userPageList, setUserPageList] = useState([]);
 
     const presetUserPageList = () => {
         console.log("게시글을 불러옵니다. id = " + userId.toString());
-        if(!setted) return;
         axios.get(getUserPageListUrl + userId.toString() + "?startId=" + pageStartId.toString())
         .then((res) => {
             const tmp = [...res.data.data];
@@ -146,7 +144,6 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                 //setUserIntroduce();
                 //setFollowerCount();
                 //setFolloweeCount();
-                setted = true;
             })
             .catch((res) => {
                 if(res.status === 401){
@@ -207,8 +204,8 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                 <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{"팔로잉 " + followeeCount.toString()}</p>
             </div>
             <p style={{height:"fit-content"}}>{userIntroduce}</p>
-            {bottomStuff === "PAGE" ? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} setted={setted}/> : null}
-            {bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE"? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setted={setted}/> : null}
+            {bottomStuff === "PAGE" ? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} /> : null}
+            {bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE"? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} /> : null}
         </div>
     );
 }
