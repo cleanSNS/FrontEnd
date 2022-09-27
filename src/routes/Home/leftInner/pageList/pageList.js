@@ -76,6 +76,7 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
 };
 
 const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
+    console.log(userId);
     console.log(setted);
     let pageStartId = 987654321;
     const [userPageList, setUserPageList] = useState([]);
