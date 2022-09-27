@@ -191,7 +191,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken}) => {//일단 leftBook
                 <p onClick={followerClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{"팔로워 " + followerCount.toString()}</p>
                 <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{"팔로잉 " + followeeCount.toString()}</p>
             </div>
-            <p style={{height:"fit-content"}}>{userIntroduce + "ㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈ"}</p>
+            <p style={{height:"fit-content"}}>{userIntroduce}</p>
             {bottomStuff === "PAGE" && setted? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} /> : null}
             {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} userId={userId} refreshAccessToken={refreshAccessToken}/> : null}
         </div>

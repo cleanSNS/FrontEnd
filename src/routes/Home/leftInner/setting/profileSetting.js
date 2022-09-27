@@ -117,6 +117,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
     //값 변경 함수
     const nicknameChageHandler = (event) => {
         event.preventDefault();
+        setPs_UserName(event.target.value);
     };
     const ageChageHandler = (event) => {
         event.preventDefault();
