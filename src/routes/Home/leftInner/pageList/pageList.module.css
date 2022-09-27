@@ -69,6 +69,7 @@
     height: 200px;
     border: 1px solid black;
     margin: 10px;
+    cursor: pointer;
 }
 
 /*하단의 팔로워 팔로잉을 위한 CSS*/

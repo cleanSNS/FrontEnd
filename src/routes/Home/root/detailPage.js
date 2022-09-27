@@ -82,7 +82,7 @@ const DetailPage = ({pageId, refreshAccessToken}) => {//pageId가 -1이 되면 D
             setLikeNumber(res.data.data.pageDto.likeCount);
             const now = new Date();
             const postedTime = new Date(res.data.data.pageDto.createdDate);
-            const timeCal = (now - postedTime) / 1000;//초단위로 계산
+            let timeCal = (now - postedTime) / 1000;//초단위로 계산
             if(timeCal < 1){//1초보다 더 빨리 이전에 올린 경우
                 setPostedTime("방금전");
             }
