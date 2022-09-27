@@ -265,7 +265,7 @@ const Home = ({ logout, refreshAccessToken }) => {
           <div className={Style.leftbook}>
             <div className={Style.Cover}>
                 {leftBookState === "page" ? <LeftPage refreshAccessToken={refreshAccessToken}/> : null}
-                {leftBookState.includes("pageList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken}/> : null}
+                {leftBookState.includes("pageList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId}/> : null}
                 {leftBookState === "chat" ? <LeftChat refreshAccessToken={refreshAccessToken}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
                 {leftBookState === "setting" ? <LeftSetting settingState={settingState} refreshAccessToken={refreshAccessToken}/> : null}

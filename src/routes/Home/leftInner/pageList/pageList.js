@@ -8,26 +8,45 @@ import {
     getUserPageListUrl,
     getMyUserIdUrl,
     getUserNicknameAndImageUrl,
+    getFolloweeListUrl,
+    getfollowerListUrl,
+
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const UserListArea = ({bottomStuff, userId, refreshAccessToken}) => {
-    let userStartId = 987654321;
+const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler}) => {
     const [userList, setUserList] = useState([]);
 
     const presetUserListArea = () => {
         if(bottomStuff === "FOLLOWER"){
-            axios.get()
+            axios.get(getfollowerListUrl)
             .then((res) =>{
-
+                setUserList(res.data.data);
             })
             .catch((res) => {
-
+                if(res.status === 401){
+                    refreshAccessToken();
+                }
+                else{
+                    console.log(res);
+                    alert("팔로워를 불러오지 못했습니다.");
+                }
             });
-
         }
         else if(bottomStuff === "FOLLOWEE"){
-            axios.get()
+            axios.get(getFolloweeListUrl)
+            .then((res) => {
+                setUserList(res.data.data);
+            })
+            .catch((res) => {
+                if(res.status === 401){
+                    refreshAccessToken();
+                }
+                else{
+                    console.log(res);
+                    alert("팔로잉을 불러오지 못했습니다.");
+                }
+            });
         }
         else{
             return;
@@ -35,40 +54,28 @@ const UserListArea = ({bottomStuff, userId, refreshAccessToken}) => {
     };
     useEffect(presetUserListArea, [bottomStuff]);
 
+    const userClickHander = (event) => {
+        event.preventDefault();
+        leftBookChangeHandler ("pageList" + event.target.id);
+    }
+
 
 
     return(
         <div className={Style.pageArea}>
-            <div className={Style.userArea}>
-                <img className={Style.userImg} />
-                <p className={Style.userNickname}>유저 닉네임이 오는 곳입니다.</p>
-            </div>
-            <div className={Style.userArea}>
-                <img className={Style.userImg} />
-                <p className={Style.userNickname}>유저 닉네임이 오는 곳입니다.</p>
-            </div>
-            <div className={Style.userArea}>
-                <img className={Style.userImg} />
-                <p className={Style.userNickname}>유저 닉네임이 오는 곳입니다.</p>
-            </div>
-            <div className={Style.userArea}>
-                <img className={Style.userImg} />
-                <p className={Style.userNickname}>유저 닉네임이 오는 곳입니다.</p>
-            </div>
-            <div className={Style.userArea}>
-                <img className={Style.userImg} />
-                <p className={Style.userNickname}>유저 닉네임이 오는 곳입니다.</p>
-            </div>
-            <div className={Style.userArea}>
-                <img className={Style.userImg} />
-                <p className={Style.userNickname}>유저 닉네임이 오는 곳입니다.</p>
-            </div>
-
+            {
+                userList.map((data, index) => (
+                    <div className={Style.userArea} key={index} onClick={userClickHander} id={data.userId}>
+                        <img src={data.imgUrl}className={Style.userImg} />
+                        <p className={Style.userNickname}>{data.nickname}</p>
+                    </div>
+                ))
+            }
         </div>
     );
 };
 
-const PageListArea = ({userId, refreshAccessToken}) => {
+const PageListArea = ({userId, refreshAccessToken, setPageId}) => {
     let pageStartId = 987654321;
     const [userPageList, setUserPageList] = useState([]);
     const presetUserPageList = () => {
@@ -91,18 +98,24 @@ const PageListArea = ({userId, refreshAccessToken}) => {
         });
     };
     useEffect(presetUserPageList, []);
+
+    const singlePageClickHandler = (event) => {
+        event.preventDefault();
+        setPageId(event.target.id)
+    };
+
     return(
         <div className={Style.pageArea}>
             {
                 userPageList.map((data, index) => (
-                    <img src={data} className={Style.singlePage} key={index} />
+                    <img src={data} className={Style.singlePage} key={index} id={data.pageId} onClick={singlePageClickHandler}/>
                 ))
             }
         </div>
     );
 };
 
-const LeftPageList = ({leftBookState, refreshAccessToken}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
+const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
     const [userImage, setUserImage] = useState("");
     const [userNickname, setUserNickname] = useState("");
     const [userIntroduce, setUserIntroduce] = useState("");
@@ -192,8 +205,8 @@ const LeftPageList = ({leftBookState, refreshAccessToken}) => {//일단 leftBook
                 <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{"팔로잉 " + followeeCount.toString()}</p>
             </div>
             <p style={{height:"fit-content"}}>{userIntroduce}</p>
-            {bottomStuff === "PAGE" && setted? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} /> : null}
-            {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} userId={userId} refreshAccessToken={refreshAccessToken}/> : null}
+            {bottomStuff === "PAGE" && setted? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} /> : null}
+            {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler}/> : null}
         </div>
     );
 }
