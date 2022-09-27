@@ -111,6 +111,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken}) => {//일단 leftBook
     const [isMyPage, setIsMyPage] = useState(false);
     const [bottomStuff, setBottomStuff] = useState("PAGE");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
     let userId;
+    let setted = false;
 
     const presetUserPageList = () => {
         //먼저 나의 id를 구하는 api를 호출, 그 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
@@ -130,6 +131,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken}) => {//일단 leftBook
                 //setUserIntroduce();
                 //setFollowerCount();
                 //setFolloweeCount();
+                setted = true;
             })
             .catch((res) => {
                 if(res.status === 401){
@@ -190,8 +192,8 @@ const LeftPageList = ({leftBookState, refreshAccessToken}) => {//일단 leftBook
                 <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{"팔로잉 " + followeeCount.toString()}</p>
             </div>
             <p style={{height:"fit-content"}}>{userIntroduce + "ㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈ"}</p>
-            {bottomStuff === "PAGE" ? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} /> : null}
-            {bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE" ? <UserListArea bottomStuff={bottomStuff} userId={userId} refreshAccessToken={refreshAccessToken}/> : null}
+            {bottomStuff === "PAGE" && setted? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} /> : null}
+            {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} userId={userId} refreshAccessToken={refreshAccessToken}/> : null}
         </div>
     );
 }
