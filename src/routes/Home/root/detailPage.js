@@ -163,24 +163,22 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                     {/* 글 영역 */}
                     <div className={Style.pageScriptArea}>
                         <div className={Style.postPersonProfileArea}>
-                            <img className={Style.UserImage} />
-                            <p className={Style.UserNickname}>아아아아아앙아아아아아아아</p>
+                            <img src={postedPersonImage} className={Style.UserImage} />
+                            <p className={Style.UserNickname}>{postedPersonNickname}</p>
                             <img src={moreStuff} className={Style.UserSetting} />
                         </div>
                         <div className={Style.postPersonSettingArea}>
 
                         </div>
                         <div className={Style.contentArea}>
-                            <p className={Style.content}>
-                                글 내용이 오는 공간입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
-                            </p>
+                            <p className={Style.content}>{postedWord}</p>
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
                                 <img src={heartImg} className={Style.buttonImg} />
-                                <p className={Style.likeandCommentCount}>좋아요2222개</p>
+                                <p className={Style.likeandCommentCount}>{`좋아요 ${likeNumber}개`}</p>
                             </div>
-                            <p className={Style.time}>3초전</p>
+                            <p className={Style.time}>{postedTime}</p>
                         </div>
                     </div>
                     {/* 댓글 영역 */}
