@@ -18,8 +18,8 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
     const [userList, setUserList] = useState([]);
     console.log(setted);
     const presetUserListArea = () => {
-        console.log("유저를 불러옵니다..");
         if(!setted) return;
+        console.log("유저를 불러옵니다..");
         if(bottomStuff === "FOLLOWER"){
             axios.get(getfollowerListUrl)
             .then((res) =>{
@@ -80,8 +80,8 @@ const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
     let pageStartId = 987654321;
     const [userPageList, setUserPageList] = useState([]);
     const presetUserPageList = () => {
-        console.log("게시글을 불러옵니다. id = " + userId.toString());
         if(!setted) return;
+        console.log("게시글을 불러옵니다. id = " + userId.toString());
         axios.get(getUserPageListUrl + userId.toString() + "?startId=" + pageStartId.toString())
         .then((res) => {
             const tmp = [...res.data.data];
