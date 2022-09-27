@@ -14,11 +14,12 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler}) => {
+const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, setted}) => {
     const [userList, setUserList] = useState([]);
-
+    console.log(setted);
     const presetUserListArea = () => {
         console.log("유저를 불러옵니다..");
+        if(!setted) return;
         if(bottomStuff === "FOLLOWER"){
             axios.get(getfollowerListUrl)
             .then((res) =>{
@@ -74,12 +75,13 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler}) 
     );
 };
 
-const PageListArea = ({userId, refreshAccessToken, setPageId}) => {
+const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
+    console.log(setted);
     let pageStartId = 987654321;
     const [userPageList, setUserPageList] = useState([]);
-
     const presetUserPageList = () => {
         console.log("게시글을 불러옵니다. id = " + userId.toString());
+        if(!setted) return;
         axios.get(getUserPageListUrl + userId.toString() + "?startId=" + pageStartId.toString())
         .then((res) => {
             const tmp = [...res.data.data];
@@ -125,6 +127,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [isMyPage, setIsMyPage] = useState(false);
     const [bottomStuff, setBottomStuff] = useState("PAGE");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
     let userId;
+    let setted = false;
 
     const presetUserPageList = () => {
         //먼저 나의 id를 구하는 api를 호출, 그 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
@@ -144,6 +147,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                 //setUserIntroduce();
                 //setFollowerCount();
                 //setFolloweeCount();
+                setted = true;
             })
             .catch((res) => {
                 if(res.status === 401){
@@ -204,8 +208,8 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                 <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{"팔로잉 " + followeeCount.toString()}</p>
             </div>
             <p style={{height:"fit-content"}}>{userIntroduce}</p>
-            {bottomStuff === "PAGE" ? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} /> : null}
-            {bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE"? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} /> : null}
+            {bottomStuff === "PAGE" && setted? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} setted={setted}/> : null}
+            {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setted={setted}/> : null}
         </div>
     );
 }
