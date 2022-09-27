@@ -126,8 +126,8 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [followeeCount, setFolloweeCount] = useState(0);//팔로잉 숫자
     const [isMyPage, setIsMyPage] = useState(false);
     const [bottomStuff, setBottomStuff] = useState("PAGE");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
+    const [setted, setSetted] = useState(false);
     let userId;
-    let setted = false;
 
     const presetUserPageList = () => {
         //먼저 나의 id를 구하는 api를 호출, 그 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
@@ -147,7 +147,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                 //setUserIntroduce();
                 //setFollowerCount();
                 //setFolloweeCount();
-                setted = true;
+                setSetted(true);
             })
             .catch((res) => {
                 if(res.status === 401){
