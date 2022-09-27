@@ -82,7 +82,6 @@ const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
     const [userPageList, setUserPageList] = useState([]);
     const presetUserPageList = () => {
         if(!setted) return;
-        console.log("게시글을 불러옵니다. id = " + userId.toString());
         axios.get(getUserPageListUrl + userId.toString() + "?startId=" + pageStartId.toString())
         .then((res) => {
             const tmp = [...res.data.data];
@@ -128,12 +127,11 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [isMyPage, setIsMyPage] = useState(false);
     const [bottomStuff, setBottomStuff] = useState("PAGE");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
     const [setted, setSetted] = useState(false);
-    let userId;
+    const userId = leftBookState.slice(9);
 
     const presetUserPageList = () => {
         //먼저 나의 id를 구하는 api를 호출, 그 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
         //if isMyPage면 맨 윗줄 프로필 부분에 
-        userId = leftBookState.slice(9);
         console.log(userId);
         axios.get(getMyUserIdUrl)
         .then((res) => {
