@@ -104,7 +104,7 @@ export const getMyUserIdUrl = `${apiUrl}/user/id`;
 export const getUserPageListUrl = `${apiUrl}/page/user/`;
 
 //해당 유저의 닉네임과 이미지 조회
-export const getUserNicknameAndImageUrl = `${apiUrl}/user/profile`;
+export const getUserNicknameAndImageUrl = `${apiUrl}/user/`;
 
 //해당 유저의 게시글 조회
 export const getUserPageUrl = `${apiUrl}/page/user/`;
