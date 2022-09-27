@@ -5,13 +5,14 @@ import heartImg from './heart_outline.png';
 import heartImgFill from './heart_fill.png';
 import newCommentImg from './tagImages/message.png';
 import { useState, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import {
     LoadDetailPageUrl,
 
 } from './../../../apiUrl';
 import axios from 'axios';
 
-const RenderCommentOfComment = ({commentId}) => {
+const RenderCommentOfComment = ({commentId, refreshAccessToken}) => {
     let CommentofCommentstartId = 987654321;
     return (
         <div className={Style.CommentBox} style={{width:"80%"}}>
@@ -32,27 +33,77 @@ const RenderCommentOfComment = ({commentId}) => {
     );
 }
 
-const RenderComment = ({commentList}) => {
+const RenderComment = ({pageId, refreshAccessToken}) => {
+    const [commentList, setCommentList] = useState([
+        {
+            "userDto": {
+                "userId": 1,
+                "nickname": "홍길동",
+                "imgUrl": null
+            },
+            "commentId": 1,
+            "content": "first comment",
+            "likeCount": 0,
+            "createdDate": "2022-08-04T23:45:55.11111"
+        },
+        {
+            "userDto": {
+                "userId": 1,
+                "nickname": "홍길동",
+                "imgUrl": null
+            },
+            "commentId": 5,
+            "content": "first comment",
+            "likeCount": 0,
+            "createdDate": "2022-08-04T23:45:55.55555"
+        }
+    ]); //업로드된 댓글
+    let CommentstartId = 987654321;
+    const [lastComment, inView] = useInView();
+
+    //초기 화면 로드 - 댓글
+    const presetComment = () => {
+        if(pageId === -1) return;
+        axios.get(LoadDetailPageUrl + pageId.toString() + "/comment?startId=" + CommentstartId.toString())
+        .then((res) => {
+            const tmp = [...res.data.data];
+            const current = [...commentList];
+            const next = tmp.concat(current);
+            setCommentList(next);
+            CommentstartId = res.data.startId;
+        })
+        .catch((res) => {
+            if(res.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("댓글을 불러오지 못했습니다.");
+            }
+        });
+    };
+    useEffect(presetComment, []);
+
     return(
         <div className={Style.CommentArea}>
             {
             commentList.map((data, index) => (
-                <div className={Style.singleCommentArea}>
+                <div key={index} className={Style.singleCommentArea} ref={index === (commentList.length - 1) ? {lastComment} : null}>
                     <div className={Style.CommentBox} style={{width:"100%"}}>
                             <div className={Style.CommentProfileArea}>
-                                <img className={Style.UserImage} />
-                                <p className={Style.UserNickname}>아아아아아아아아아아아아아아</p>
+                                <img src={data.userDto.imgUrl} className={Style.UserImage} />
+                                <p className={Style.UserNickname}>{data.userDto.nickname}</p>
                                 <img src={moreStuff} className={Style.UserSetting} />
                             </div>
-                            <p className={Style.commentText}>글 내용이 오는 공간입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
+                            <p className={Style.commentText}>{data.content}</p>
                             <div className={Style.commentbtnArea}>
                                 <img src={heartImg} className={Style.buttonImg} />
-                                <p className={Style.likeandCommentCount}>좋아요1111개</p>
+                                <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
                                 <img src={newCommentImg} className={Style.buttonImg} />
                                 <p className={Style.likeandCommentCount}>답글 더보기</p>
                             </div>
                     </div>
-                    <RenderCommentOfComment commentId={data.commentId}/>
+                    <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken}/>
                 </div>
             ))
             }
@@ -66,9 +117,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const [postedPersonNickname, setPostedPersonNickname] = useState("");//올린 사람의 닉네임
     const [postedWord, setPostedWord] = useState(""); //올린 글의 내용
     const [likeNumber, setLikeNumber] = useState(0); //좋아요 개수
-    const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장)
-    const [commentList, setCommentList] = useState([]); //업로드된 댓글
-    let CommentstartId = 987654321;
+    const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장
 
     //초기 화면 로드 - 글 내용
     const presetDetailPage = () => {
@@ -126,26 +175,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     };
     useEffect(presetDetailPage, []);
 
-    //초기 화면 로드 - 댓글
-    const presetComment = () => {
-        if(pageId === -1) return;
-        axios.get(LoadDetailPageUrl + pageId.toString() + "/comment?startId=" + CommentstartId.toString())
-        .then((res) => {
-            setCommentList(res.data.data);
-            CommentstartId = res.data.startId;
-        })
-        .catch((res) => {
-            if(res.status === 401){
-                refreshAccessToken();
-            }
-            else{
-                console.log(res);
-                alert("댓글을 불러오지 못했습니다.")
-            }
-        });
-    };
-    useEffect(presetComment, []);
-
     //외부 클릭 시 화면 닫기
     const closePage = (event) => {
         if(event.target.id === "outSide"){
@@ -182,7 +211,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                         </div>
                     </div>
                     {/* 댓글 영역 */}
-                    <RenderComment commentList={commentList}/>
+                    <RenderComment pageId={pageId} refreshAccessToken={refreshAccessToken}/>
                     {/* 댓글 입력 영역 */}
                     <div className={Style.userCommentArea}>
                         <div className={Style.cover}>
