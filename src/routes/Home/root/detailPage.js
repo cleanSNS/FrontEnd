@@ -73,7 +73,7 @@ const DetailPage = ({pageId, refreshAccessToken}) => {//pageId가 -1이 되면 D
     //초기 화면 로드 - 글 내용
     const presetDetailPage = () => {
         if(pageId === -1) return;
-        axios.get(LoadDetailPageUrl + "/" + pageId.toString() + "/detail")
+        axios.get(LoadDetailPageUrl + pageId.toString() + "/detail")
         .then((res) => {
             setPostedImageList(res.data.data.imgUrlList);
             setPostedPersonImage(res.data.data.pageDto.userDto.imgUrl);
@@ -120,7 +120,7 @@ const DetailPage = ({pageId, refreshAccessToken}) => {//pageId가 -1이 되면 D
             }
             else{
                 console.log(res);
-                alert("글을 불러오지 못했습니다.")
+                alert("글을 불러오지 못했습니다.");
             }
         });
     };

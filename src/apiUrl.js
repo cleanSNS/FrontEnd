@@ -41,7 +41,7 @@ export const pageloadUrl = `${apiUrl}/page/main`;
 export const newPostUrl = `${apiUrl}/page`;
 
 //특정 글의 세부 내용을 불러오는 Url
-export const LoadDetailPageUrl = `${apiUrl}/page`;
+export const LoadDetailPageUrl = `${apiUrl}/page/`;
 
 
 /***************************설정 관련 URl***********************************/
