@@ -18,6 +18,7 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
     const [userList, setUserList] = useState([]);
 
     const presetUserListArea = () => {
+        console.log("유저를 불러옵니다..");
         if(!setted) return;
         if(bottomStuff === "FOLLOWER"){
             axios.get(getfollowerListUrl)
@@ -78,6 +79,7 @@ const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
     let pageStartId = 987654321;
     const [userPageList, setUserPageList] = useState([]);
     const presetUserPageList = () => {
+        console.log("게시글을 불러옵니다. id = " + userId.toString());
         if(!setted) return;
         axios.get(getUserPageListUrl + userId.toString() + "?startId=" + pageStartId.toString())
         .then((res) => {
@@ -101,7 +103,7 @@ const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
 
     const singlePageClickHandler = (event) => {
         event.preventDefault();
-        setPageId(event.target.id)
+        setPageId(event.target.id);
     };
 
     return(
