@@ -14,10 +14,11 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler}) => {
+const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, setted}) => {
     const [userList, setUserList] = useState([]);
 
     const presetUserListArea = () => {
+        if(!setted) return;
         if(bottomStuff === "FOLLOWER"){
             axios.get(getfollowerListUrl)
             .then((res) =>{
@@ -57,9 +58,7 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler}) 
     const userClickHander = (event) => {
         event.preventDefault();
         leftBookChangeHandler ("pageList" + event.target.id);
-    }
-
-
+    };
 
     return(
         <div className={Style.pageArea}>
@@ -75,10 +74,11 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler}) 
     );
 };
 
-const PageListArea = ({userId, refreshAccessToken, setPageId}) => {
+const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
     let pageStartId = 987654321;
     const [userPageList, setUserPageList] = useState([]);
     const presetUserPageList = () => {
+        if(!setted) return;
         axios.get(getUserPageListUrl + userId.toString() + "?startId=" + pageStartId.toString())
         .then((res) => {
             const tmp = [...res.data.data];
@@ -173,7 +173,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const pageClickHandler = (event) => {
         event.preventDefault();
         setBottomStuff("PAGE");
-    }
+    };
 
     //팔로워 클릭 시 handler
     const followerClickHandler = (event) => {
@@ -181,14 +181,14 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         if(isMyPage){
             setBottomStuff("FOLLOWER");
         }
-    }
+    };
 
     const followeeClickHandler = (event) => {
         event.preventDefault();
         if(isMyPage){
             setBottomStuff("FOLLOWEE");
         }
-    }
+    };
     
     return(
         <div className={Style.wholeCover}>
@@ -205,8 +205,8 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                 <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{"팔로잉 " + followeeCount.toString()}</p>
             </div>
             <p style={{height:"fit-content"}}>{userIntroduce}</p>
-            {bottomStuff === "PAGE" && setted? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} /> : null}
-            {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler}/> : null}
+            {bottomStuff === "PAGE" && setted? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} setted={setted}/> : null}
+            {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setted={setted}/> : null}
         </div>
     );
 }
