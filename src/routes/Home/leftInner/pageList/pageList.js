@@ -111,7 +111,7 @@ const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
         <div className={Style.pageArea}>
             {
                 userPageList.map((data, index) => (
-                    <img src={data} className={Style.singlePage} key={index} id={data.pageId} onClick={singlePageClickHandler}/>
+                    <img src={data.imgUrlList[0]} className={Style.singlePage} key={index} id={data.pageId} onClick={singlePageClickHandler}/>
                 ))
             }
         </div>
