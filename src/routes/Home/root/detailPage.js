@@ -129,7 +129,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     //초기 화면 로드 - 댓글
     const presetComment = () => {
         if(pageId === -1) return;
-        axios.get(LoadDetailPageUrl + "/" + pageId.toString() + "comment?startId=" + CommentstartId.toString())
+        axios.get(LoadDetailPageUrl + pageId.toString() + "/comment?startId=" + CommentstartId.toString())
         .then((res) => {
             setCommentList(res.data.data);
             CommentstartId = res.data.startId;
