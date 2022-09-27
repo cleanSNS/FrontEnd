@@ -25,6 +25,7 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
     background-color: white;
+    z-index: 500;
 }
 
 /*좌측 공간*/

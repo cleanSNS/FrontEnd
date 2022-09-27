@@ -60,7 +60,7 @@ const RenderComment = ({commentList}) => {
     );
 };
 
-const DetailPage = ({pageId, refreshAccessToken}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
+const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
     const [postedImageList, setPostedImageList] = useState([]);//올린 이미지 list
     const [postedPersonImage, setPostedPersonImage] = useState("");//올린 사람의 이미지
     const [postedPersonNickname, setPostedPersonNickname] = useState("");//올린 사람의 닉네임
@@ -129,7 +129,7 @@ const DetailPage = ({pageId, refreshAccessToken}) => {//pageId가 -1이 되면 D
     //초기 화면 로드 - 댓글
     const presetComment = () => {
         if(pageId === -1) return;
-        axios.get(LoadDetailPageUrl + "/" + pageId.toString() + "comment?startId=" +CommentstartId.toString())
+        axios.get(LoadDetailPageUrl + "/" + pageId.toString() + "comment?startId=" + CommentstartId.toString())
         .then((res) => {
             setCommentList(res.data.data);
             CommentstartId = res.data.startId;
@@ -146,8 +146,15 @@ const DetailPage = ({pageId, refreshAccessToken}) => {//pageId가 -1이 되면 D
     };
     useEffect(presetComment, []);
 
+    //외부 클릭 시 화면 닫기
+    const closePage = (event) => {
+        if(event.target.id === "outSide"){
+            setPageId(-1);
+        }
+    }
+
     return(
-        <div className={Style.wholeCover}>
+        <div className={Style.wholeCover} onClick={closePage} id="outSide">
             <div className={Style.ImageAndScriptCover}>
                 <div className={Style.imageArea}>
 

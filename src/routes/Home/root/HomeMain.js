@@ -287,8 +287,7 @@ const Home = ({ logout, refreshAccessToken }) => {
           </div>
         </div>
       </div>
-      {pageId === -1 ? null : <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken}/>}
-      {/*<DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken}/>*/}
+      {pageId === -1 ? null : <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId}/>}
     </div>
   );
 }
