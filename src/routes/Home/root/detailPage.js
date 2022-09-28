@@ -15,7 +15,7 @@ import {
 import axios from 'axios';
 
 //대댓글 관리
-const RenderCommentOfComment = ({commentId, refreshAccessToken}) => {
+const RenderCommentOfComment = ({commentId, refreshAccessToken, loadCommentOfComment}) => {
     let CommentofCommentstartId = 987654321;
     return (
         <div className={Style.CommentBox} style={{width:"80%"}}>
@@ -95,6 +95,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
 
     //댓글을 더 불러오는 함수
     const loadMoreComment = () => {
+        console.log(commentStartId);
         if(!isLastComment){//불러올 내용이 더 있는 경우
             presetComment();
         }
@@ -116,11 +117,6 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
         setLoadCommentOfComment((cur) => !cur);
     };
 
-    //좋아요 하는 버튼
-    const onLikeCommentClickHandler = (event) => {
-
-    };
-
     return(
         <div className={Style.CommentArea}>
             {
@@ -135,13 +131,13 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
                             </div>
                             <p className={Style.commentText}>{data.content}</p>
                             <div className={Style.commentbtnArea}>
-                                <img src={heartImg} className={Style.buttonImg} onClick={onLikeCommentClickHandler}/>
+                                <img src={heartImg} className={Style.buttonImg}/>
                                 <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
-                                <img src={newCommentImg} className={Style.buttonImg} onClick={onLoadCommentOfCommentClickHandler} />
-                                <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler}>답글 더보기</p>
+                                <img src={newCommentImg} className={Style.buttonImg} onClick={onLoadCommentOfCommentClickHandler} id={data.commentId}/>
+                                <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.commentId}>답글 더보기</p>
                             </div>
                     </div>
-                    {loadCommentOfComment ? <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken}/> : null}
+                    <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken} loadCommentOfComment={loadCommentOfComment}/>
                 </div>
                 :
                 <div key={index} className={Style.singleCommentArea}>
@@ -153,13 +149,13 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
                             </div>
                             <p className={Style.commentText}>{data.content}</p>
                             <div className={Style.commentbtnArea}>
-                                <img src={heartImg} className={Style.buttonImg} onClick={onLikeCommentClickHandler}/>
+                                <img src={heartImg} className={Style.buttonImg}/>
                                 <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
-                                <img src={newCommentImg} className={Style.buttonImg} onClick={onLoadCommentOfCommentClickHandler} />
-                                <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler}>답글 더보기</p>
+                                <img src={newCommentImg} className={Style.buttonImg} onClick={onLoadCommentOfCommentClickHandler} id={data.commentId}/>
+                                <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.commentId}>답글 더보기</p>
                             </div>
                     </div>
-                    {loadCommentOfComment ? <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken}/> : null}
+                    <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken} loadCommentOfComment={loadCommentOfComment}/>
                 </div>
             ))
             }
