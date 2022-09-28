@@ -106,12 +106,8 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
 
     //댓글을 더 불러오는 함수
     const loadMoreComment = () => {
-        console.log(commentStartId);
         if(!isLastComment){//불러올 내용이 더 있는 경우
             presetComment();
-        }
-        else{
-            console.log("더 불러올 내용이 없습니다.");
         }
     };
     useEffect(loadMoreComment, [inView]);
@@ -119,7 +115,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
     //대댓글 켜는 버튼
     const onLoadCommentOfCommentClickHandler = (event) => {
         event.preventDefault();
-        if(loadCommentOfComment){//더보기가 활성화 되어있었을 때 클릭 된 경우
+        if(event.target.innerText === "답글 닫기"){
             event.target.innerText = "답글 더보기";
         }
         else{//더 보기가 없을 때 클릭된 경우
