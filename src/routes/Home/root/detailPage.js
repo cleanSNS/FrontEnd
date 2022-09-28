@@ -180,6 +180,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const [likeNumber, setLikeNumber] = useState(0); //좋아요 개수
     const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장
     const [isLiked, setIsLiked] = useState(false);//해당 페이지를 좋아요했는지 저장
+    const [userNewcomment, setUserNewComment] = useState("");
 
     //초기 화면 로드 - 글 내용
     const presetDetailPage = () => {
@@ -291,6 +292,13 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     }
     useEffect(likeStyleChangeHandler, [isLiked]);
 
+    //댓글 입력 내용 변경함수
+    const onCommentChangeHandler = (event) => {
+        event.preventDefault();
+        setUserNewComment(event.target.value);
+    };
+    
+
     return(
         <div className={Style.wholeCover} onClick={closePage} id="outSide">
             <div className={Style.ImageAndScriptCover}>
@@ -324,7 +332,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                     {/* 댓글 입력 영역 */}
                     <div className={Style.userCommentArea}>
                         <div className={Style.cover}>
-                            <textarea type="text" className={Style.userComment} placeholder="댓글을 입력하세요..."/>
+                            <textarea type="text" className={Style.userComment} placeholder="댓글을 입력하세요..." value={userNewcomment} onChange={onCommentChangeHandler}/>
                         </div>
                         <div className={Style.cover}>
                             <button className={Style.commentSubmitBtn}>게시</button>
