@@ -104,8 +104,13 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
     //대댓글 켜는 버튼
     const onLoadCommentOfCommentClickHandler = (event) => {
         event.preventDefault();
+        if(loadCommentOfComment){//더보기가 활성화 되어있었을 때 클릭 된 경우
+            event.target.innerText = "답글 더보기";
+        }
+        else{//더 보기가 없을 때 클릭된 경우
+            event.target.innerText = "답글 닫기";
+        }
         setLoadCommentOfComment((cur) => !cur);
-        console.log(event);
     };
 
     //좋아요 하는 버튼
