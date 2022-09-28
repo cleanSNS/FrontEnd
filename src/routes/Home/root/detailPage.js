@@ -15,13 +15,14 @@ import {
 import axios from 'axios';
 
 //대댓글 관리
-const RenderCommentOfComment = ({commentId, refreshAccessToken, loadCommentOfComment}) => {
+const RenderCommentOfComment = ({commentId, refreshAccessToken, loadCommentOfComment, setLoadCommentOfComment}) => {
     const [commentofCommentstartId, setCommentofCommentstartId] = useState(987654321);
     const [toggle, setToggle] = useState(false);
 
     const toggleSet = () => {
         if(commentId === loadCommentOfComment){
             setToggle((cur) => !cur);
+            setLoadCommentOfComment(-1);
         }
     };
     useEffect(toggleSet, [loadCommentOfComment]);
@@ -144,7 +145,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
                                 <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.commentId}>답글 더보기</p>
                             </div>
                     </div>
-                    <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken} loadCommentOfComment={loadCommentOfComment}/>
+                    <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken} loadCommentOfComment={loadCommentOfComment} setLoadCommentOfComment={setLoadCommentOfComment}/>
                 </div>
                 :
                 <div key={index} className={Style.singleCommentArea}>
@@ -162,7 +163,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
                                 <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.commentId}>답글 더보기</p>
                             </div>
                     </div>
-                    <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken} loadCommentOfComment={loadCommentOfComment}/>
+                    <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken} loadCommentOfComment={loadCommentOfComment} setLoadCommentOfComment={setLoadCommentOfComment}/>
                 </div>
             ))
             }
