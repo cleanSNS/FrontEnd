@@ -137,10 +137,6 @@ const Home = ({ logout, refreshAccessToken }) => {
     event.preventDefault();
     const targetID = event.target.id;//누른 위치
     if(targetID === rightBookState) return; //같은 태그를 여러번 누르는 경우 아무 변화도 주지 않는다.
-    
-    //태그 색상 변경
-    document.querySelector(`#${targetID}`).style.backgroundColor = "rgb(145, 145, 145)";//누른 버튼 어둡게 변경
-    document.querySelector(`#${rightBookState}`).style.backgroundColor = "rgb(190, 190, 190)";//원래 눌려있던 버튼 밝게 변경
 
     if(targetID === "setting" || targetID === 'newPost'){
       setRightBookState(targetID);
@@ -155,6 +151,17 @@ const Home = ({ logout, refreshAccessToken }) => {
       setSettingState('initial');
     }
   };
+
+  //태그 색상 변경
+  const tagColorChangeHandler = () => {
+    document.querySelector("#newPost").style.backgroundColor = "rgb(190, 190, 190)";
+    document.querySelector("#chat").style.backgroundColor = "rgb(190, 190, 190)";
+    document.querySelector("#notice").style.backgroundColor = "rgb(190, 190, 190)";
+    document.querySelector("#friend").style.backgroundColor = "rgb(190, 190, 190)";
+    document.querySelector("#setting").style.backgroundColor = "rgb(190, 190, 190)";
+    document.querySelector(`#${rightBookState}`).style.backgroundColor = "rgb(145, 145, 145)";//원래 눌려있던 버튼 밝게 변경
+  };
+  useEffect(tagColorChangeHandler, [rightBookState]);
 
   //우측 내용 클릭시 좌측 내용 변화 함수
   //채팅, 알림, 친구의 경우 이 함수를 사용해야 좌측이 달라진다.
@@ -202,6 +209,31 @@ const Home = ({ logout, refreshAccessToken }) => {
   //페이지에서 글을 클릭하면 글 중앙으로 오게 하기
   const [pageId, setPageId] = useState(-1);
 
+  //뒤로 가기를 눌렀을 때, 처리하는 함수--------------------------------------------테스트공간
+  const [goBack, setGoBack] = useState(false);//뒤로가기 이벤트로 이동한 경우, true로 세팅된다.
+  window.onpopstate = function(event) {//뒤로가기 이벤트를 캐치합니다.
+    console.log(event.state);
+    if(event.state === null) return;
+    console.log(`뒤로가기가 눌렸습니다 : (${event.state.rightBookState}, ${event.state.leftBookState}, ${event.state.pageId})`);
+    setRightBookState(event.state.rightBookState);
+    setLeftBookState(event.state.leftBookState);
+    setPageId(event.state.pageId);
+    setGoBack(true);
+  };
+
+  const pushStateHandler = () => {//state에 변경이 있을 때마다 state에 집어넣기
+    if(goBack){
+      setGoBack(false);
+      return;
+    }
+    console.log(`state를 저장했습니다 : (${rightBookState}, ${leftBookState}, ${pageId})`);
+    window.history.pushState({
+      rightBookState: rightBookState,
+      leftBookState: leftBookState,
+      pageId: pageId
+    },null, '');
+  };
+  useEffect(pushStateHandler, [rightBookState, leftBookState, pageId]);
 
   return(
     <div className={Style.pageCover}>
