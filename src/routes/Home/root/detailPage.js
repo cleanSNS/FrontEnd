@@ -227,10 +227,10 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     //좋아요 상태 변경 시 style변경
     const likeStyleChangeHandler = () => {
         if(isLiked){//좋아요가 눌린 경우
-            document.querySelector(".likeBtn").src = heartImgFill;
+            document.querySelector("#likeBtn").src = heartImgFill;
         }
         else{//좋아요가 눌리지 않은 경우
-            document.querySelector(".likeBtn").src = heartImg;
+            document.querySelector("#likeBtn").src = heartImg;
         }
     }
     useEffect(likeStyleChangeHandler, [isLiked]);
