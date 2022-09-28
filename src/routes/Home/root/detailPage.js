@@ -16,23 +16,34 @@ import axios from 'axios';
 
 //대댓글 관리
 const RenderCommentOfComment = ({commentId, refreshAccessToken, loadCommentOfComment}) => {
-    let CommentofCommentstartId = 987654321;
-    return (
-        <div className={Style.CommentBox} style={{width:"80%"}}>
-                                <div className={Style.CommentProfileArea}>
-                                    <img className={Style.UserImage} />
-                                    <p className={Style.UserNickname}>아아아아아아아아아아아아아아</p>
-                                    <img src={moreStuff} className={Style.UserSetting} />
-                                </div>
-                                <p className={Style.commentText}>대댓글 내용이 오는 공간입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                <div className={Style.commentbtnArea}>
-                                    <img src={heartImg} className={Style.buttonImg} />
-                                    <p className={Style.likeandCommentCount}>좋아요111개</p>
-                                    <img src={newCommentImg} className={Style.buttonImg} />
-                                    <p className={Style.likeandCommentCount}>답글 더보기</p>
-                                </div>
-                            </div>
+    const [commentofCommentstartId, setCommentofCommentstartId] = useState(987654321);
+    const [toggle, setToggle] = useState(false);
 
+    const toggleSet = () => {
+        if(commentId === loadCommentOfComment){
+            setToggle((cur) => !cur);
+        }
+    };
+    useEffect(toggleSet, [loadCommentOfComment]);
+
+    return (
+        toggle ?
+        <div className={Style.CommentBox} style={{width:"80%"}}>
+            <div className={Style.CommentProfileArea}>
+                <img className={Style.UserImage} />
+                <p className={Style.UserNickname}>아아아아아아아아아아아아아아</p>
+                <img src={moreStuff} className={Style.UserSetting} />
+            </div>
+            <p className={Style.commentText}>대댓글 내용이 오는 공간입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
+            <div className={Style.commentbtnArea}>
+                <img src={heartImg} className={Style.buttonImg} />
+                <p className={Style.likeandCommentCount}>좋아요111개</p>
+                <img src={newCommentImg} className={Style.buttonImg} />
+                <p className={Style.likeandCommentCount}>답글 더보기</p>
+            </div>
+        </div>
+        :
+        null
     );
 }
 
@@ -64,7 +75,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
     ]); //업로드된 댓글
     const [commentStartId, setCommentStartId] = useState(987654321);//불러올 댓글의 index
     const [isLastComment, setIsLastComment] = useState(false);//마지막 댓글이 불린 경우 true로 설정
-    const [loadCommentOfComment, setLoadCommentOfComment] = useState(false);//대댓글 켜는 버튼
+    const [loadCommentOfComment, setLoadCommentOfComment] = useState(-1);//대댓글 켜는 버튼
     const [lastComment, inView] = useInView();
 
     //초기 화면 로드 - 댓글
@@ -114,7 +125,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
         else{//더 보기가 없을 때 클릭된 경우
             event.target.innerText = "답글 닫기";
         }
-        setLoadCommentOfComment((cur) => !cur);
+        setLoadCommentOfComment(event.target.id);
     };
 
     return(
