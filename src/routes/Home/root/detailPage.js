@@ -49,7 +49,7 @@ const RenderCommentOfComment = ({commentId, refreshAccessToken, loadCommentOfCom
 }
 
 //댓글관리
-const RenderComment = ({pageId, refreshAccessToken}) => {
+const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
     const [commentList, setCommentList] = useState([
         {
             "userDto": {
@@ -125,6 +125,13 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
         setLoadCommentOfComment(Number(event.target.id));
     };
 
+    //댓글 클릭 시 댓글 대상을 댓글로 변경
+    const onCommentClickHandler = (event) => {
+        event.preventDefault();
+        const tmp = event.target.id.split('/');
+        setCommentToWhom(tmp);
+    };
+
     return(
         <div className={Style.CommentArea}>
             {
@@ -137,7 +144,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
                                 <p className={Style.UserNickname}>{data.userDto.nickname}</p>
                                 <img src={moreStuff} className={Style.UserSetting} />
                             </div>
-                            <p className={Style.commentText}>{data.content}</p>
+                            <p className={Style.commentText} onClick={onCommentClickHandler} id={`${data.userDto.nickname}/${data.commentId}`}>{data.content}</p>
                             <div className={Style.commentbtnArea}>
                                 <img src={heartImg} className={Style.buttonImg}/>
                                 <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
@@ -155,7 +162,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
                                 <p className={Style.UserNickname}>{data.userDto.nickname}</p>
                                 <img src={moreStuff} className={Style.UserSetting} />
                             </div>
-                            <p className={Style.commentText}>{data.content}</p>
+                            <p className={Style.commentText} onClick={onCommentClickHandler} id={`${data.userDto.nickname}/${data.commentId}`}>{data.content}</p>
                             <div className={Style.commentbtnArea}>
                                 <img src={heartImg} className={Style.buttonImg}/>
                                 <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
@@ -180,7 +187,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const [likeNumber, setLikeNumber] = useState(0); //좋아요 개수
     const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장
     const [isLiked, setIsLiked] = useState(false);//해당 페이지를 좋아요했는지 저장
-    const [userNewcomment, setUserNewComment] = useState("");
+    const [userNewcomment, setUserNewComment] = useState("");//사용자의 댓글 입력
+    const [commentToWhom, setCommentToWhom] = useState(["p", pageId]);//일반 댓글인 경우 [p, pageId], 특정 댓글의 답글인 경우 그 댓글의 [닉네임, commentid]로 값을 세팅한다.
 
     //초기 화면 로드 - 글 내용
     const presetDetailPage = () => {
@@ -296,9 +304,25 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const onCommentChangeHandler = (event) => {
         event.preventDefault();
         setUserNewComment(event.target.value);
-        console.log(userNewcomment);
     };
+
+    //댓글 대상자 변경 시 입력 부분 변경 함수
+    const onChangeToWhomHandler = () => {
+        setUserNewComment("");//작성하던 댓글 초기화
+        if(commentToWhom[0] === "p"){
+            document.querySelector("#userCommentArea").placeholder = "댓글을 입력하세요...";
+        }
+        else{
+            document.querySelector("#userCommentArea").placeholder = `${commentToWhom[0]}님에게 대댓글을 입력합니다...`;
+        }
+    };
+    useState(onChangeToWhomHandler, [commentToWhom]);
     
+    //댓글 작성 제출 함수
+    const submitCommentHandler = (event) => {//commentToWhom[1]에 pageid나 commentid가 있음 이를 이용. commentToWhom[0] === p면 댓글 아니면 대댓글
+        event.preventDefault();
+
+    };
 
     return(
         <div className={Style.wholeCover} onClick={closePage} id="outSide">
@@ -329,11 +353,11 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                         </div>
                     </div>
                     {/* 댓글 영역 */}
-                    <RenderComment pageId={pageId} refreshAccessToken={refreshAccessToken}/>
+                    <RenderComment pageId={pageId} refreshAccessToken={refreshAccessToken} setCommentToWhom={setCommentToWhom}/>
                     {/* 댓글 입력 영역 */}
-                    <form className={Style.userCommentArea}>
+                    <form className={Style.userCommentArea} onSubmit={submitCommentHandler}>
                         <div className={Style.cover}>
-                            <textarea type="text" className={Style.userComment} placeholder="댓글을 입력하세요..." value={userNewcomment} onChange={onCommentChangeHandler}/>
+                            <textarea id="userCommentArea" type="text" className={Style.userComment} placeholder="댓글을 입력하세요..." value={userNewcomment} onChange={onCommentChangeHandler}/>
                         </div>
                         <div className={Style.cover}>
                             <button type="submit" className={Style.commentSubmitBtn}>게시</button>
