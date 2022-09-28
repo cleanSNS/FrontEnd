@@ -128,7 +128,7 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
     //댓글 클릭 시 댓글 대상을 댓글로 변경
     const onCommentClickHandler = (event) => {
         event.preventDefault();
-        const tmp = event.target.id.split('/');
+        const tmp = (event.target.id).split('/');
         setCommentToWhom(tmp);
     };
 
@@ -144,7 +144,7 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
                                 <p className={Style.UserNickname}>{data.userDto.nickname}</p>
                                 <img src={moreStuff} className={Style.UserSetting} />
                             </div>
-                            <p className={Style.commentText} onClick={onCommentClickHandler} id={`${data.userDto.nickname}/${data.commentId}`}>{data.content}</p>
+                            <p className={Style.commentText} onClick={onCommentClickHandler} id={`${data.userDto.nickname}/${data.commentId}`} style={{cursor: "pointer"}}>{data.content}</p>
                             <div className={Style.commentbtnArea}>
                                 <img src={heartImg} className={Style.buttonImg}/>
                                 <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
@@ -162,7 +162,7 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
                                 <p className={Style.UserNickname}>{data.userDto.nickname}</p>
                                 <img src={moreStuff} className={Style.UserSetting} />
                             </div>
-                            <p className={Style.commentText} onClick={onCommentClickHandler} id={`${data.userDto.nickname}/${data.commentId}`}>{data.content}</p>
+                            <p className={Style.commentText} onClick={onCommentClickHandler} id={`${data.userDto.nickname}/${data.commentId}`} style={{cursor: "pointer"}}>{data.content}</p>
                             <div className={Style.commentbtnArea}>
                                 <img src={heartImg} className={Style.buttonImg}/>
                                 <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
@@ -308,16 +308,21 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
 
     //댓글 대상자 변경 시 입력 부분 변경 함수
     const onChangeToWhomHandler = () => {
-        console.log(document.querySelector("#userCommentArea"));
-        //setUserNewComment("");//작성하던 댓글 초기화
+        setUserNewComment("");//작성하던 댓글 초기화
         if(commentToWhom[0] === "p"){
-            //document.querySelector("#userCommentArea").placeholder = "댓글을 입력하세요...";
+            document.querySelector("#userCommentArea").placeholder = "댓글을 입력하세요...";
         }
         else{
-            //document.querySelector("#userCommentArea").placeholder = `${commentToWhom[0]}님에게 대댓글을 입력합니다...`;
+            document.querySelector("#userCommentArea").placeholder = `${commentToWhom[0]}님에게 대댓글을 입력합니다...(글을 클릭하면 다시 댓글을 입력합니다.)`;
         }
     };
-    useState(onChangeToWhomHandler, [commentToWhom]);
+    useEffect(onChangeToWhomHandler, [commentToWhom]);
+
+    //댓글을 다시 글에 입력하는 것으로 변경 함수
+    const onChangeToPage = (event) => {
+        event.preventDefault();
+        setCommentToWhom(["p", pageId]);
+    }
     
     //댓글 작성 제출 함수
     const submitCommentHandler = (event) => {//commentToWhom[1]에 pageid나 commentid가 있음 이를 이용. commentToWhom[0] === p면 댓글 아니면 대댓글
@@ -343,7 +348,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
 
                         </div>
                         <div className={Style.contentArea}>
-                            <p className={Style.content}>{postedWord}</p>
+                            <p className={Style.content} onClick={onChangeToPage}>{postedWord + "ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ"}</p>
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>

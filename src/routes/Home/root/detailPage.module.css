@@ -104,9 +104,10 @@
 
 .content{
     width: 100%;
-    height: 100%;
-    padding-top: 10px;
+    height: fit-content;
     margin: 0;
+    padding-top: 20px;
+    cursor: pointer;
 }
 
 /*좋아요와 좋아요 개수와 시간이 올라오는 공간*/
@@ -182,9 +183,9 @@
 .commentText{
     margin: 0;
     height: fit-content;
+    width: fit-content;
     margin-top: 15px;
     margin-left: 40px;
-    cursor: pointer;
 }
 
 .commentbtnArea{
