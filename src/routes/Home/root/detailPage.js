@@ -296,6 +296,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const onCommentChangeHandler = (event) => {
         event.preventDefault();
         setUserNewComment(event.target.value);
+        console.log(userNewcomment);
     };
     
 
@@ -330,14 +331,14 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                     {/* 댓글 영역 */}
                     <RenderComment pageId={pageId} refreshAccessToken={refreshAccessToken}/>
                     {/* 댓글 입력 영역 */}
-                    <div className={Style.userCommentArea}>
+                    <form className={Style.userCommentArea}>
                         <div className={Style.cover}>
                             <textarea type="text" className={Style.userComment} placeholder="댓글을 입력하세요..." value={userNewcomment} onChange={onCommentChangeHandler}/>
                         </div>
                         <div className={Style.cover}>
-                            <button className={Style.commentSubmitBtn}>게시</button>
+                            <button type="submit" className={Style.commentSubmitBtn}>게시</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
