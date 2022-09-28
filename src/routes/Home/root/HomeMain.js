@@ -26,6 +26,7 @@ import userTagImg from "./tagImages/user.png";
 import {
   newPostUrl,
   getNoticeNumber,
+  getMyUserIdUrl,
 } from "../../../apiUrl";
 import axios from 'axios';
 
@@ -206,10 +207,11 @@ const Home = ({ logout, refreshAccessToken }) => {
   };
   useEffect(getNoticeNumberFunc, [rightBookState]);
 
-  //페이지에서 글을 클릭하면 글 중앙으로 오게 하기
+  //페이지에서 글을 클릭하면 글 중앙으로 오게 하기 - 가운데 글을 위한 UseState
   const [pageId, setPageId] = useState(-1);
 
-  //뒤로 가기를 눌렀을 때, 처리하는 함수--------------------------------------------테스트공간
+
+  //뒤로가기 이벤트를 처리하기 위한 두 함수
   const [goBack, setGoBack] = useState(false);//뒤로가기 이벤트로 이동한 경우, true로 세팅된다.
   window.onpopstate = function(event) {//뒤로가기 이벤트를 캐치합니다.
     console.log(event.state);
@@ -234,6 +236,24 @@ const Home = ({ logout, refreshAccessToken }) => {
     },null, '');
   };
   useEffect(pushStateHandler, [rightBookState, leftBookState, pageId]);
+
+  //접속한 유저의 id를 불러와서 필요한 곳에서 사용
+  const [userId, setUserId] = useState(-1);
+  const getUserIdHandler = () => {
+    axios.get(getMyUserIdUrl)
+    .then((res) => {
+      setUserId(res.data.data.userId);
+    })
+    .catch((res) => {
+      if(res.status === 401){
+        refreshAccessToken();
+      }
+      else{
+        console.log("유저 아이디를 불러오지 못했습니다.");
+      }
+    });
+  };
+  useEffect(getUserIdHandler, []);
 
   return(
     <div className={Style.pageCover}>
@@ -297,7 +317,7 @@ const Home = ({ logout, refreshAccessToken }) => {
           <div className={Style.leftbook}>
             <div className={Style.Cover}>
                 {leftBookState === "page" ? <LeftPage refreshAccessToken={refreshAccessToken}/> : null}
-                {leftBookState.includes("pageList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId}/> : null}
+                {leftBookState.includes("pageList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
                 {leftBookState === "chat" ? <LeftChat refreshAccessToken={refreshAccessToken}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
                 {leftBookState === "setting" ? <LeftSetting settingState={settingState} refreshAccessToken={refreshAccessToken}/> : null}
@@ -319,7 +339,7 @@ const Home = ({ logout, refreshAccessToken }) => {
           </div>
         </div>
       </div>
-      {pageId === -1 ? null : <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId}/>}
+      {pageId === -1 ? null : <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} userId={userId}/>}
       {/*<DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId}/>*/}
     </div>
   );

@@ -75,14 +75,14 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
     );
 };
 
-const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
-    console.log(userId);
+const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => {
+    console.log(loadedUserId);
     console.log(setted);
     let pageStartId = 987654321;
     const [userPageList, setUserPageList] = useState([]);
     const presetUserPageList = () => {
         if(!setted) return;
-        axios.get(getUserPageListUrl + userId.toString() + "?startId=" + pageStartId.toString())
+        axios.get(getUserPageListUrl + loadedUserId.toString() + "?startId=" + pageStartId.toString())
         .then((res) => {
             const tmp = [...res.data.data];
             const currentList = [...userPageList];
@@ -118,7 +118,7 @@ const PageListArea = ({userId, refreshAccessToken, setPageId, setted}) => {
     );
 };
 
-const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
+const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId, userId}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
     const [userImage, setUserImage] = useState("");
     const [userNickname, setUserNickname] = useState("");
     const [userIntroduce, setUserIntroduce] = useState("");
@@ -127,36 +127,23 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [isMyPage, setIsMyPage] = useState(false);
     const [bottomStuff, setBottomStuff] = useState("PAGE");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
     const [setted, setSetted] = useState(false);
-    const userId = leftBookState.slice(9);
+    const loadedUserId = leftBookState.slice(9);
 
     const presetUserPageList = () => {
-        //먼저 나의 id를 구하는 api를 호출, 그 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
-        //if isMyPage면 맨 윗줄 프로필 부분에 
-        console.log(userId);
-        axios.get(getMyUserIdUrl)
+        //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
+        console.log(loadedUserId);
+        if(userId === Number(loadedUserId)){//자기 자신의 페이지를 불러온 경우
+            setIsMyPage(true);
+        }
+        //이후는 자신의 페이지든 타인의 페이지든 동일하다
+        axios.get(getUserNicknameAndImageUrl + loadedUserId + "/profile")
         .then((res) => {
-            if(res.data.data.userId === Number(userId)){//자기 자신의 페이지를 불러온 경우
-                setIsMyPage(true);
-            }
-            //이후는 자신의 페이지든 타인의 페이지든 동일하다
-            axios.get(getUserNicknameAndImageUrl + userId + "/profile")
-            .then((res) => {
-                setUserImage(res.data.data.imgUrl);
-                setUserNickname(res.data.data.nickname);
-                //setUserIntroduce();
-                //setFollowerCount();
-                //setFolloweeCount();
-                setSetted(true);
-            })
-            .catch((res) => {
-                if(res.status === 401){
-                    refreshAccessToken();
-                }
-                else{
-                    console.log(res);
-                    alert("이미지와 닉네임을 불러오지 못했습니다.");
-                }
-            })
+            setUserImage(res.data.data.imgUrl);
+            setUserNickname(res.data.data.nickname);
+            setUserIntroduce(res.data.data.selfIntroduction);
+            setFollowerCount(res.data.data.followerCount);
+            setFolloweeCount(res.data.data.followeeCount);
+            setSetted(true);
         })
         .catch((res) => {
             if(res.status === 401){
@@ -164,10 +151,9 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             }
             else{
                 console.log(res);
-                alert("내 id를 불러오지 못했습니다.");
+                alert("이미지와 닉네임을 불러오지 못했습니다.");
             }
-        })
-        
+        });
     };
     useEffect(presetUserPageList, []);
 
@@ -207,7 +193,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                 <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{"팔로잉 " + followeeCount.toString()}</p>
             </div>
             <p style={{height:"fit-content"}}>{userIntroduce}</p>
-            {bottomStuff === "PAGE" && setted? <PageListArea userId={userId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} setted={setted}/> : null}
+            {bottomStuff === "PAGE" && setted? <PageListArea loadedUserId={loadedUserId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} setted={setted}/> : null}
             {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setted={setted}/> : null}
         </div>
     );

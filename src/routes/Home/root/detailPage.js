@@ -8,10 +8,13 @@ import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
     LoadDetailPageUrl,
+    likeThisPageUrl,
+    checkILikedThisPageOrComment,
 
 } from './../../../apiUrl';
 import axios from 'axios';
 
+//대댓글 관리
 const RenderCommentOfComment = ({commentId, refreshAccessToken}) => {
     let CommentofCommentstartId = 987654321;
     return (
@@ -33,6 +36,7 @@ const RenderCommentOfComment = ({commentId, refreshAccessToken}) => {
     );
 }
 
+//댓글관리
 const RenderComment = ({pageId, refreshAccessToken}) => {
     const [commentList, setCommentList] = useState([
         {
@@ -53,8 +57,8 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
                 "imgUrl": null
             },
             "commentId": 5,
-            "content": "first comment",
-            "likeCount": 0,
+            "content": "second comment",
+            "likeCount": 3,
             "createdDate": "2022-08-04T23:45:55.55555"
         }
     ]); //업로드된 댓글
@@ -111,6 +115,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
     );
 };
 
+//모든 페이지
 const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
     const [postedImageList, setPostedImageList] = useState([]);//올린 이미지 list
     const [postedPersonImage, setPostedPersonImage] = useState("");//올린 사람의 이미지
@@ -118,11 +123,13 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const [postedWord, setPostedWord] = useState(""); //올린 글의 내용
     const [likeNumber, setLikeNumber] = useState(0); //좋아요 개수
     const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장
+    const [isLiked, setIsLiked] = useState(false);//해당 페이지를 좋아요했는지 저장
 
     //초기 화면 로드 - 글 내용
     const presetDetailPage = () => {
         if(pageId === -1) return;
-        axios.get(LoadDetailPageUrl + pageId.toString() + "/detail")
+
+        axios.get(LoadDetailPageUrl + pageId.toString() + "/detail")//글 불러오기
         .then((res) => {
             setPostedImageList(res.data.data.imgUrlList);
             setPostedPersonImage(res.data.data.pageDto.userDto.imgUrl);
@@ -172,6 +179,20 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                 alert("글을 불러오지 못했습니다.");
             }
         });
+
+        axios.get(checkILikedThisPageOrComment + `?targetId=${pageId}&type=PAGE`)//좋아요 여부 불러오기
+        .then((res) => {
+            setIsLiked(res.data.data.like);
+        })
+        .catch((res) => {
+            if(res.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("글을 불러오지 못했습니다.");
+            }
+        });
     };
     useEffect(presetDetailPage, []);
 
@@ -181,6 +202,33 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
             setPageId(-1);
         }
     }
+
+    //글의 좋아요 클릭 handler
+    const pageLikeClickHandler = (event) => {
+        axios.post(likeThisPageUrl, {
+            targetId: pageId,
+            type: "PAGE"
+        })
+        .then((res) => {
+            setIsLiked(true);
+            console.log("페이지에 좋아요했습니다.");
+        })
+        .catch((res) => {
+            if(res.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("글을 불러오지 못했습니다.");
+            }
+        });
+    };
+
+    //좋아요 상태 변경 시 style변경
+    const likeStyleChangeHandler = () => {
+        document.querySelector(".likeBtn").src = heartImgFill;
+    }
+    useEffect(likeStyleChangeHandler, [isLiked]);
 
     return(
         <div className={Style.wholeCover} onClick={closePage} id="outSide">
@@ -192,7 +240,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                     {/* 글 영역 */}
                     <div className={Style.pageScriptArea}>
                         <div className={Style.postPersonProfileArea}>
-                            <img src={postedPersonImage} className={Style.UserImage} />
+                            <img src={postedPersonImage} className={Style.UserImage} id="likeBtn"/>
                             <p className={Style.UserNickname}>{postedPersonNickname}</p>
                             <img src={moreStuff} className={Style.UserSetting} />
                         </div>
@@ -204,8 +252,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
-                                <img src={heartImg} className={Style.buttonImg} />
-                                <p className={Style.likeandCommentCount}>{`좋아요 ${likeNumber}개`}</p>
+                                <img src={heartImg} className={Style.buttonImg} onClick={pageLikeClickHandler} />
+                                <p className={Style.likeandCommentCount} onClick={pageLikeClickHandler}>{`좋아요 ${likeNumber}개`}</p>
                             </div>
                             <p className={Style.time}>{postedTime}</p>
                         </div>
