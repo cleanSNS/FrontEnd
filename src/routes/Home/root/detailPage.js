@@ -98,6 +98,9 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
         if(!isLastComment){//불러올 내용이 더 있는 경우
             presetComment();
         }
+        else{
+            console.log("더 불러올 내용이 없습니다.");
+        }
     };
     useEffect(loadMoreComment, [inView]);
 
