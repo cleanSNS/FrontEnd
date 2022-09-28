@@ -92,7 +92,26 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
         <div className={Style.CommentArea}>
             {
             commentList.map((data, index) => (
-                <div key={index} className={Style.singleCommentArea} ref={index === (commentList.length - 1) ? {lastComment} : undefined}>
+                index === commentList.length - 1 ?
+                <div key={index} className={Style.singleCommentArea} ref={lastComment}>
+                    <div className={Style.CommentBox} style={{width:"100%"}}>
+                            <div className={Style.CommentProfileArea}>
+                                <img src={data.userDto.imgUrl} className={Style.UserImage} />
+                                <p className={Style.UserNickname}>{data.userDto.nickname}</p>
+                                <img src={moreStuff} className={Style.UserSetting} />
+                            </div>
+                            <p className={Style.commentText}>{data.content}</p>
+                            <div className={Style.commentbtnArea}>
+                                <img src={heartImg} className={Style.buttonImg} />
+                                <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
+                                <img src={newCommentImg} className={Style.buttonImg} />
+                                <p className={Style.likeandCommentCount}>답글 더보기</p>
+                            </div>
+                    </div>
+                    <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken}/>
+                </div>
+                :
+                <div key={index} className={Style.singleCommentArea}>
                     <div className={Style.CommentBox} style={{width:"100%"}}>
                             <div className={Style.CommentProfileArea}>
                                 <img src={data.userDto.imgUrl} className={Style.UserImage} />
