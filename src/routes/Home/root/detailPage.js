@@ -125,7 +125,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
         else{//더 보기가 없을 때 클릭된 경우
             event.target.innerText = "답글 닫기";
         }
-        setLoadCommentOfComment(event.target.id);
+        setLoadCommentOfComment(Number(event.target.id));
     };
 
     return(
