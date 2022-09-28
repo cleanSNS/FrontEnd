@@ -74,7 +74,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
             const current = [...commentList];
             const next = tmp.concat(current);
             setCommentList(next);
-            commentStartId = res.data.startId;
+            setCommentStartId(res.data.startId);
         })
         .catch((res) => {
             if(res.status === 401){
