@@ -308,12 +308,13 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
 
     //댓글 대상자 변경 시 입력 부분 변경 함수
     const onChangeToWhomHandler = () => {
-        setUserNewComment("");//작성하던 댓글 초기화
+        console.log(document.querySelector("#userCommentArea"));
+        //setUserNewComment("");//작성하던 댓글 초기화
         if(commentToWhom[0] === "p"){
-            document.querySelector("#userCommentArea").placeholder = "댓글을 입력하세요...";
+            //document.querySelector("#userCommentArea").placeholder = "댓글을 입력하세요...";
         }
         else{
-            document.querySelector("#userCommentArea").placeholder = `${commentToWhom[0]}님에게 대댓글을 입력합니다...`;
+            //document.querySelector("#userCommentArea").placeholder = `${commentToWhom[0]}님에게 대댓글을 입력합니다...`;
         }
     };
     useState(onChangeToWhomHandler, [commentToWhom]);
