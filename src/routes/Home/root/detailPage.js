@@ -226,7 +226,12 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
 
     //좋아요 상태 변경 시 style변경
     const likeStyleChangeHandler = () => {
-        document.querySelector(".likeBtn").src = heartImgFill;
+        if(isLiked){//좋아요가 눌린 경우
+            document.querySelector(".likeBtn").src = heartImgFill;
+        }
+        else{//좋아요가 눌리지 않은 경우
+            document.querySelector(".likeBtn").src = heartImg;
+        }
     }
     useEffect(likeStyleChangeHandler, [isLiked]);
 
@@ -240,7 +245,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                     {/* 글 영역 */}
                     <div className={Style.pageScriptArea}>
                         <div className={Style.postPersonProfileArea}>
-                            <img src={postedPersonImage} className={Style.UserImage} id="likeBtn"/>
+                            <img src={postedPersonImage} className={Style.UserImage}/>
                             <p className={Style.UserNickname}>{postedPersonNickname}</p>
                             <img src={moreStuff} className={Style.UserSetting} />
                         </div>
@@ -252,7 +257,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
-                                <img src={heartImg} className={Style.buttonImg} onClick={pageLikeClickHandler} />
+                                <img id="likeBtn" src={heartImg} className={Style.buttonImg} onClick={pageLikeClickHandler} />
                                 <p className={Style.likeandCommentCount} onClick={pageLikeClickHandler}>{`좋아요 ${likeNumber}개`}</p>
                             </div>
                             <p className={Style.time}>{postedTime}</p>
