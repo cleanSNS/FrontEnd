@@ -62,19 +62,19 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
             "createdDate": "2022-08-04T23:45:55.55555"
         }
     ]); //업로드된 댓글
-    let CommentstartId = 987654321;
+    const [commentStartId, setCommentStartId] = useState(987654321);
     const [lastComment, inView] = useInView();
 
     //초기 화면 로드 - 댓글
     const presetComment = () => {
         if(pageId === -1) return;
-        axios.get(LoadDetailPageUrl + pageId.toString() + "/comment?startId=" + CommentstartId.toString())
+        axios.get(LoadDetailPageUrl + pageId.toString() + "/comment?startId=" + commentStartId.toString())
         .then((res) => {
             const tmp = [...res.data.data];
             const current = [...commentList];
             const next = tmp.concat(current);
             setCommentList(next);
-            CommentstartId = res.data.startId;
+            commentStartId = res.data.startId;
         })
         .catch((res) => {
             if(res.status === 401){
@@ -92,7 +92,7 @@ const RenderComment = ({pageId, refreshAccessToken}) => {
         <div className={Style.CommentArea}>
             {
             commentList.map((data, index) => (
-                <div key={index} className={Style.singleCommentArea} ref={index === (commentList.length - 1) ? {lastComment} : null}>
+                <div key={index} className={Style.singleCommentArea} ref={index === (commentList.length - 1) ? {lastComment} : undefined}>
                     <div className={Style.CommentBox} style={{width:"100%"}}>
                             <div className={Style.CommentProfileArea}>
                                 <img src={data.userDto.imgUrl} className={Style.UserImage} />
