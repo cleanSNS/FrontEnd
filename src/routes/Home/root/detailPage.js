@@ -219,7 +219,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
             }
             else{
                 console.log(res);
-                alert("글을 불러오지 못했습니다.");
+                alert("좋아요를 누르지 못했습니다.");
             }
         });
     };
