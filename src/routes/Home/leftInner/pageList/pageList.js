@@ -189,8 +189,8 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             {/* 게시물, 팔로워, 팔로우 하는 사람을 볼 수 있는 곳으로, 내 페이지인 경우만 팔로워, 팔로우 하는 사람을 볼 수 있다. */}
             <div className={Style.pageFollowerFolloweeCover}>
                 <p onClick={pageClickHandler} style={{cursor:"pointer"}}>게시물</p>
-                <p onClick={followerClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{"팔로워 " + followerCount.toString()}</p>
-                <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{"팔로잉 " + followeeCount.toString()}</p>
+                <p onClick={followerClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{`팔로워 ${followerCount}`}</p>
+                <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{`팔로잉 ${followeeCount}`}</p>
             </div>
             <p style={{height:"fit-content"}}>{userIntroduce}</p>
             {bottomStuff === "PAGE" && setted? <PageListArea loadedUserId={loadedUserId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} setted={setted}/> : null}
