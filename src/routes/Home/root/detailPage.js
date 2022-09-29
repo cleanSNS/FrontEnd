@@ -4,6 +4,8 @@ import moreStuff from './moreStuff.png';
 import heartImg from './heart_outline.png';
 import heartImgFill from './heart_fill.png';
 import newCommentImg from './tagImages/message.png';
+import leftArrow from './caret_left.png';
+import rightArrow from './caret_right.png';
 import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
@@ -189,7 +191,9 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const [isLiked, setIsLiked] = useState(false);//해당 페이지를 좋아요했는지 저장
     const [userNewcomment, setUserNewComment] = useState("");//사용자의 댓글 입력
     const [commentToWhom, setCommentToWhom] = useState(["p", pageId]);//일반 댓글인 경우 [p, pageId], 특정 댓글의 답글인 경우 그 댓글의 [닉네임, commentid]로 값을 세팅한다.
+    const [imageIndex, setImageIndex] = useState(0);
 
+    /*********************초기 화면 세팅**********************/
     //초기 화면 로드 - 글 내용
     const presetDetailPage = () => {
         if(pageId === -1) return;
@@ -261,6 +265,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     };
     useEffect(presetDetailPage, []);
 
+    /*********************외부**********************/
     //외부 클릭 시 화면 닫기
     const closePage = (event) => {
         if(event.target.id === "outSide"){
@@ -268,6 +273,26 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
         }
     }
 
+    /*********************이미지 영역**********************/
+    const leftArrowClickHandler = (event) => {
+        event.preventDefault();
+        if(imageIndex === 0) return;//넘어서지 않게 한다
+        else setImageIndex((cur) => cur - 1);
+    };
+
+    const rightArrowClickHandler = (event) => {
+        event.preventDefault();
+        if(imageIndex === postedImageList.length - 1) return;//넘어서지 않게 한다
+        else setImageIndex((cur) => cur + 1);
+    };
+
+    const moveImageHandler = () => {
+        document.querySelector("#onlyImageArea").style.transform = `translate(-${(imageIndex * 100) / postedImageList.length}%)`;
+    };
+    useEffect(moveImageHandler, [imageIndex]);
+
+
+    /*********************글 영역**********************/
     //글의 좋아요 클릭 handler
     const pageLikeClickHandler = (event) => {
         axios.post(likeThisPageUrl, {
@@ -334,7 +359,23 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
         <div className={Style.wholeCover} onClick={closePage} id="outSide">
             <div className={Style.ImageAndScriptCover}>
                 <div className={Style.imageArea}>
-
+                    {/* 이미지공간 */}
+                    <div style={{overflow:"hidden"}}>
+                        <div id="onlyImageArea" style={{width:`${100 * postedImageList.length}%`, height: "100%", transition: "transform 0.5s"}}>
+                            {
+                                postedImageList.map((data, index) =>
+                                    <div style={{height: "100%", width: `${100 / postedImageList.length}%`, float: "left"}}>
+                                        <img src={data} key={index} style={{width: "100%", height: "100%"}}/>
+                                    </div>
+                                )
+                            }
+                        </div>
+                    </div>
+                    {/* 버튼공간 */}
+                    <div className={Style.cover}>
+                        <img src={leftArrow} className={Style.arrowButton} onClick={leftArrowClickHandler}/>
+                        <img src={rightArrow} className={Style.arrowButton} onClick={rightArrowClickHandler}/>
+                    </div>
                 </div>
                 <div className={Style.ScriptArea}>
                     {/* 글 영역 */}
