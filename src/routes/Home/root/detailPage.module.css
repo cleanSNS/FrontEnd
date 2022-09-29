@@ -34,6 +34,8 @@
     grid-template-columns: 1fr;
     grid-template-rows: 9fr 1fr;
     background-color: black;
+    height: 100%;
+    width: 100%;
 }
 
 .arrowButton{
