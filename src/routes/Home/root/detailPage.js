@@ -365,7 +365,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageIdê°€ -1ì
                             {
                                 postedImageList.map((data, index) =>
                                     <div style={{height: "100%", width: `${100 / postedImageList.length}%`, float: "left"}}>
-                                        <img src={data} key={index} style={{objectFit: "contain"}}/>
+                                        <img src={data} key={index} style={{width: "100%", height: "100%", objectFit: "contain"}}/>
                                     </div>
                                 )
                             }
