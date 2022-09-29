@@ -96,7 +96,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => 
             }
             else{
                 console.log(res);
-                alert("내 id를 불러오지 못했습니다.");
+                alert("글을 불러오지 못했습니다.");
             }
         });
     };

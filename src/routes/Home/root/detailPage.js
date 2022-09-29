@@ -61,6 +61,7 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
             },
             "commentId": 1,
             "content": "first comment",
+            "group": 1,
             "likeCount": 0,
             "createdDate": "2022-08-04T23:45:55.11111"
         },
@@ -72,6 +73,7 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
             },
             "commentId": 5,
             "content": "second comment",
+            "group": 1,
             "likeCount": 3,
             "createdDate": "2022-08-04T23:45:55.55555"
         }
@@ -364,8 +366,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                         <div id="onlyImageArea" style={{width:`${100 * postedImageList.length}%`, height: "100%", transition: "transform 0.5s"}}>
                             {
                                 postedImageList.map((data, index) =>
-                                    <div style={{height: "100%", width: `${100 / postedImageList.length}%`, float: "left"}}>
-                                        <img src={data} key={index} style={{width: "100%", height: "100%", objectFit: "contain"}}/>
+                                    <div style={{height: "100%", width: `${100 / postedImageList.length}%`, float: "left"}} key={index}>
+                                        <img src={data} style={{width: "100%", height: "100%", objectFit: "contain"}}/>
                                     </div>
                                 )
                             }
@@ -389,7 +391,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
 
                         </div>
                         <div className={Style.contentArea}>
-                            <p className={Style.content} onClick={onChangeToPage}>{postedWord + "ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ"}</p>
+                            <p className={Style.content} onClick={onChangeToPage}>{postedWord}</p>
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
@@ -414,6 +416,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
             </div>
         </div>
     );
-}
+};
 
 export default DetailPage;
