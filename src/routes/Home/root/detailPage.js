@@ -17,41 +17,48 @@ import {
 import axios from 'axios';
 
 //대댓글 관리
-const RenderCommentOfComment = ({commentId, refreshAccessToken, loadCommentOfComment, setLoadCommentOfComment}) => {
-    const [commentofCommentstartId, setCommentofCommentstartId] = useState(987654321);
+const RenderCommentOfComment = ({groupId, commentOfCommentList, setLoadCommentOfComment, loadCommentOfComment}) => {
     const [toggle, setToggle] = useState(false);
 
-    const toggleSet = () => {
-        if(commentId === loadCommentOfComment){
+    const setToggleFunc = () => {
+        if(groupId === loadCommentOfComment){
             setToggle((cur) => !cur);
-            setLoadCommentOfComment(-1);
+            setLoadCommentOfComment(0);//다시 초기 상태로
         }
-    };
-    useEffect(toggleSet, [loadCommentOfComment]);
+
+    }
+    useEffect(setToggleFunc, [loadCommentOfComment]);
 
     return (
         toggle ?
-        <div className={Style.CommentBox} style={{width:"80%"}}>
-            <div className={Style.CommentProfileArea}>
-                <img className={Style.UserImage} />
-                <p className={Style.UserNickname}>아아아아아아아아아아아아아아</p>
-                <img src={moreStuff} className={Style.UserSetting} />
-            </div>
-            <p className={Style.commentText}>대댓글 내용이 오는 공간입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-            <div className={Style.commentbtnArea}>
-                <img src={heartImg} className={Style.buttonImg} />
-                <p className={Style.likeandCommentCount}>좋아요111개</p>
-                <img src={newCommentImg} className={Style.buttonImg} />
-                <p className={Style.likeandCommentCount}>답글 더보기</p>
-            </div>
-        </div>
-        :
-        null
+            commentOfCommentList.map((data, index) =>
+                <div key={index} className={Style.CommentBox} style={{width:"80%"}}>
+                    <div className={Style.CommentProfileArea}>
+                        <img src={data.userDto.imgUrl} className={Style.UserImage} />
+                        <p className={Style.UserNickname}>{data.nickname}</p>
+                        <img src={moreStuff} className={Style.UserSetting} />
+                    </div>
+                    <p className={Style.commentText}>{data.content}</p>
+                    <div className={Style.commentbtnArea}>
+                        <img src={heartImg} className={Style.buttonImg} />
+                        <p className={Style.likeandCommentCount}>{`좋아요${data.likeCount}개`}</p>
+                    </div>
+                </div>
+            )
+        : null
     );
 }
 
 //댓글관리
-const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
+/* 
+    댓글부르기 : pageId와 startId에 따른다 => groupId를 알게 된다
+    대댓글 부르기 : pageId와 startId와 groupId를 알게 된다.
+        - 각 댓글이 groupId를 가지며, 그 값은 commentList의 length와 같다.
+    즉, 순차적으로 처리해서 각각의 list가 생성된다.
+    댓글 부르기 트리거는 가장 하단의 댓글을 사용자가 확인했을 때이고,
+    대댓글 부르기는 댓글 부르기함수가 호출된 상황 자체이다 - 호출 시 groupId가 달라진다.
+*/
+const RenderComment = ({pageId, refreshAccessToken, groupId, setGroupId}) => {
     const [commentList, setCommentList] = useState([
         {
             "userDto": {
@@ -61,7 +68,7 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
             },
             "commentId": 1,
             "content": "first comment",
-            "group": 1,
+			"group": 1,
             "likeCount": 0,
             "createdDate": "2022-08-04T23:45:55.11111"
         },
@@ -72,30 +79,34 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
                 "imgUrl": null
             },
             "commentId": 5,
-            "content": "second comment",
-            "group": 1,
-            "likeCount": 3,
+            "content": "first comment",
+			"group": 2,
+            "likeCount": 0,
             "createdDate": "2022-08-04T23:45:55.55555"
         }
     ]); //업로드된 댓글
     const [commentStartId, setCommentStartId] = useState(987654321);//불러올 댓글의 index
     const [isLastComment, setIsLastComment] = useState(false);//마지막 댓글이 불린 경우 true로 설정
-    const [loadCommentOfComment, setLoadCommentOfComment] = useState(-1);//대댓글 켜는 버튼
-    const [lastComment, inView] = useInView();
+    const [lastComment, inView] = useInView();//마지막 댓글을 인식할 inView
+    const [commentOfCommentList, setCommentOfCommentList] = useState([[]]);//대댓글 리스트 - [[초기화때 필요!], [groupId === 1인 대댓글], [groupId === 2인 대댓글], [groupId === 3인 대댓글], ...]의 형식이다.
+    const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(987654321);//대댓글 startId
+    const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
 
-    //초기 화면 로드 - 댓글
+    //댓글로드 함수
     const presetComment = () => {
         if(pageId === -1) return;
         axios.get(LoadDetailPageUrl + pageId.toString() + "/comment?startId=" + commentStartId.toString())
         .then((res) => {
-            const tmp = [...res.data.data];//불러온 댓글
-            if(tmp.length === 0){//더 불러온 내용이 없는 경우
-                setIsLastComment(true);
+            const cur = [...commentList];//기존의 댓글 리스트
+            const tmp = [...res.data.data];//불러온 댓글들
+            if(tmp.length === 0){//불러온 리스트가 빈 배열인 경우 - 즉, 더 댓글이 없는 경우 : 이 경우 이후 과정이 필요 없으므로 그냥 return
+                setIsLastComment(true); //더 불러올 댓글이 없다고 세팅한다. - inView에 의해 과도하게 api호출을 막기 위함
+                return;
             }
-            const current = [...commentList];
-            const next = tmp.concat(current);
-            setCommentList(next);
-            setCommentStartId(res.data.startId);
+            const next = cur.concat(tmp);//기존의 리스트에 불러온 댓글을 붙여넣는다
+            setCommentList(next); //댓글 리스트 업데이트
+            setCommentStartId(res.data.startId); // startId업데이트
+            setGroupId(next.length);//그룹아이디는 지금까지 불러온 댓글 리스트의 길이와 동일하다.
         })
         .catch((res) => {
             if(res.status === 401){
@@ -107,9 +118,9 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
             }
         });
     };
-    useEffect(presetComment, []);
+    useEffect(presetComment, []);//초기에 댓글을 1회 로드한다.
 
-    //댓글을 더 불러오는 함수
+    //가장 하단의 댓글이 사용자에게 읽혔을 때, 댓글을 더 불러오기 위해 조건을 확인하는 함수
     const loadMoreComment = () => {
         if(!isLastComment){//불러올 내용이 더 있는 경우
             presetComment();
@@ -117,66 +128,88 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
     };
     useEffect(loadMoreComment, [inView]);
 
-    //대댓글 켜는 버튼
+    //대댓글을 불러오는 함수 - group이 변화했을 때가 트리거이며 초기상황인 groupId === 0인 경우를 제외하고 실행된다.
+    const loadCommentOfCommentFunc = () => {
+        if(groupId === 0) return; //초기상황에는 실행 X
+        
+        axios.get(LoadDetailPageUrl + pageId.toString() + "/nested?group=" + groupId.toString() + "&startId=" + commentOfCommentStartId.toString())
+        .then((res) => {
+            const next = [...commentOfCommentList];//지금의 리스트
+            const tmp = [...res.data.data];//받아온 리스트
+            for(let i = 0; i < (groupId - next.length + 1); i++){//추가된 group의 수만큼 빈 배열을 append
+                next.push([]);
+            }
+            tmp.forEach((data) => {
+                next[data.group].push(data);//적절한 index위치에 넣기
+            });
+            setCommentOfCommentList(next);//리스트 업데이트
+            setCommentOfCommentStartId(res.data.startId);//대댓글 startId업데이트
+        })
+        .catch((res) => {
+            if(res.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("댓글을 불러오지 못했습니다.");
+            }
+        });
+    };
+    useEffect(loadCommentOfCommentFunc, [groupId]);
+
+    //대댓글을 켜는 함수
     const onLoadCommentOfCommentClickHandler = (event) => {
         event.preventDefault();
         if(event.target.innerText === "답글 닫기"){
             event.target.innerText = "답글 더보기";
         }
-        else{//더 보기가 없을 때 클릭된 경우
+        else{
             event.target.innerText = "답글 닫기";
         }
         setLoadCommentOfComment(Number(event.target.id));
     };
 
-    //댓글 클릭 시 댓글 대상을 댓글로 변경
-    const onCommentClickHandler = (event) => {
-        event.preventDefault();
-        const tmp = (event.target.id).split('/');
-        setCommentToWhom(tmp);
-    };
-
     return(
         <div className={Style.CommentArea}>
             {
-            commentList.map((data, index) => (
-                index === commentList.length - 1 ?
-                <div key={index} className={Style.singleCommentArea} ref={lastComment}>
-                    <div className={Style.CommentBox} style={{width:"100%"}}>
-                            <div className={Style.CommentProfileArea}>
-                                <img src={data.userDto.imgUrl} className={Style.UserImage} />
-                                <p className={Style.UserNickname}>{data.userDto.nickname}</p>
-                                <img src={moreStuff} className={Style.UserSetting} />
-                            </div>
-                            <p className={Style.commentText} onClick={onCommentClickHandler} id={`${data.userDto.nickname}/${data.commentId}`} style={{cursor: "pointer"}}>{data.content}</p>
-                            <div className={Style.commentbtnArea}>
-                                <img src={heartImg} className={Style.buttonImg}/>
-                                <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
-                                <img src={newCommentImg} className={Style.buttonImg} onClick={onLoadCommentOfCommentClickHandler} id={data.commentId}/>
-                                <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.commentId}>답글 더보기</p>
-                            </div>
+                commentList.map((data, index) => (
+                    index === commentList.length - 1 ?
+                    <div key={index} className={Style.singleCommentArea} ref={lastComment}>
+                        <div className={Style.CommentBox} style={{width:"100%"}}>
+                                <div className={Style.CommentProfileArea}>
+                                    <img src={data.userDto.imgUrl} className={Style.UserImage} />
+                                    <p className={Style.UserNickname}>{data.userDto.nickname}</p>
+                                    <img src={moreStuff} className={Style.UserSetting} />
+                                </div>
+                                <p className={Style.commentText} style={{cursor: "pointer"}}>{data.content}</p>
+                                <div className={Style.commentbtnArea}>
+                                    <img src={heartImg} className={Style.buttonImg}/>
+                                    <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
+                                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                                    <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
+                                </div>
+                        </div>
+                        <RenderCommentOfComment groupId={data.group} commentOfCommentList={commentOfCommentList[data.group]} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment}/>
                     </div>
-                    <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken} loadCommentOfComment={loadCommentOfComment} setLoadCommentOfComment={setLoadCommentOfComment}/>
-                </div>
-                :
-                <div key={index} className={Style.singleCommentArea}>
-                    <div className={Style.CommentBox} style={{width:"100%"}}>
-                            <div className={Style.CommentProfileArea}>
-                                <img src={data.userDto.imgUrl} className={Style.UserImage} />
-                                <p className={Style.UserNickname}>{data.userDto.nickname}</p>
-                                <img src={moreStuff} className={Style.UserSetting} />
-                            </div>
-                            <p className={Style.commentText} onClick={onCommentClickHandler} id={`${data.userDto.nickname}/${data.commentId}`} style={{cursor: "pointer"}}>{data.content}</p>
-                            <div className={Style.commentbtnArea}>
-                                <img src={heartImg} className={Style.buttonImg}/>
-                                <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
-                                <img src={newCommentImg} className={Style.buttonImg} onClick={onLoadCommentOfCommentClickHandler} id={data.commentId}/>
-                                <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.commentId}>답글 더보기</p>
-                            </div>
+                    :
+                    <div key={index} className={Style.singleCommentArea}>
+                        <div className={Style.CommentBox} style={{width:"100%"}}>
+                                <div className={Style.CommentProfileArea}>
+                                    <img src={data.userDto.imgUrl} className={Style.UserImage} />
+                                    <p className={Style.UserNickname}>{data.userDto.nickname}</p>
+                                    <img src={moreStuff} className={Style.UserSetting} />
+                                </div>
+                                <p className={Style.commentText} style={{cursor: "pointer"}}>{data.content}</p>
+                                <div className={Style.commentbtnArea}>
+                                    <img src={heartImg} className={Style.buttonImg}/>
+                                    <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
+                                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                                    <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
+                                </div>
+                        </div>
+                        <RenderCommentOfComment groupId={data.group} commentOfCommentList={commentOfCommentList[data.group]} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment}/>
                     </div>
-                    <RenderCommentOfComment commentId={data.commentId} refreshAccessToken={refreshAccessToken} loadCommentOfComment={loadCommentOfComment} setLoadCommentOfComment={setLoadCommentOfComment}/>
-                </div>
-            ))
+                ))
             }
         </div>
     );
@@ -189,11 +222,10 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const [postedPersonNickname, setPostedPersonNickname] = useState("");//올린 사람의 닉네임
     const [postedWord, setPostedWord] = useState(""); //올린 글의 내용
     const [likeNumber, setLikeNumber] = useState(0); //좋아요 개수
-    const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장
+    const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장)
     const [isLiked, setIsLiked] = useState(false);//해당 페이지를 좋아요했는지 저장
-    const [userNewcomment, setUserNewComment] = useState("");//사용자의 댓글 입력
-    const [commentToWhom, setCommentToWhom] = useState(["p", pageId]);//일반 댓글인 경우 [p, pageId], 특정 댓글의 답글인 경우 그 댓글의 [닉네임, commentid]로 값을 세팅한다.
-    const [imageIndex, setImageIndex] = useState(0);
+    const [imageIndex, setImageIndex] = useState(0);//보고있는 이미지의 index
+    const [groupId, setGroupId] = useState(0);//가장 마지막 groupId
 
     /*********************초기 화면 세팅**********************/
     //초기 화면 로드 - 글 내용
@@ -294,7 +326,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     useEffect(moveImageHandler, [imageIndex]);
 
 
-    /*********************글 영역**********************/
+    /*********************글 영역 - 좋아요 관련**********************/
     //글의 좋아요 클릭 handler
     const pageLikeClickHandler = (event) => {
         axios.post(likeThisPageUrl, {
@@ -327,35 +359,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     }
     useEffect(likeStyleChangeHandler, [isLiked]);
 
-    //댓글 입력 내용 변경함수
-    const onCommentChangeHandler = (event) => {
-        event.preventDefault();
-        setUserNewComment(event.target.value);
-    };
-
-    //댓글 대상자 변경 시 입력 부분 변경 함수
-    const onChangeToWhomHandler = () => {
-        setUserNewComment("");//작성하던 댓글 초기화
-        if(commentToWhom[0] === "p"){
-            document.querySelector("#userCommentArea").placeholder = "댓글을 입력하세요...";
-        }
-        else{
-            document.querySelector("#userCommentArea").placeholder = `${commentToWhom[0]}님에게 대댓글을 입력합니다...(글을 클릭하면 다시 댓글을 입력합니다.)`;
-        }
-    };
-    useEffect(onChangeToWhomHandler, [commentToWhom]);
-
-    //댓글을 다시 글에 입력하는 것으로 변경 함수
-    const onChangeToPage = (event) => {
-        event.preventDefault();
-        setCommentToWhom(["p", pageId]);
-    }
-    
-    //댓글 작성 제출 함수
-    const submitCommentHandler = (event) => {//commentToWhom[1]에 pageid나 commentid가 있음 이를 이용. commentToWhom[0] === p면 댓글 아니면 대댓글
-        event.preventDefault();
-
-    };
+    /*********************글 영역 - 댓글 관련**********************/
 
     return(
         <div className={Style.wholeCover} onClick={closePage} id="outSide">
@@ -391,7 +395,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
 
                         </div>
                         <div className={Style.contentArea}>
-                            <p className={Style.content} onClick={onChangeToPage}>{postedWord}</p>
+                            <p className={Style.content}>{postedWord}</p>
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
@@ -402,11 +406,11 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                         </div>
                     </div>
                     {/* 댓글 영역 */}
-                    <RenderComment pageId={pageId} refreshAccessToken={refreshAccessToken} setCommentToWhom={setCommentToWhom}/>
+                    <RenderComment pageId={pageId} refreshAccessToken={refreshAccessToken} groupId={groupId} setGroupId={setGroupId}/>
                     {/* 댓글 입력 영역 */}
-                    <form className={Style.userCommentArea} onSubmit={submitCommentHandler}>
+                    <form className={Style.userCommentArea}>
                         <div className={Style.cover}>
-                            <textarea id="userCommentArea" type="text" className={Style.userComment} placeholder="댓글을 입력하세요..." value={userNewcomment} onChange={onCommentChangeHandler}/>
+                            <textarea id="userCommentArea" type="text" className={Style.userComment} placeholder="댓글을 입력하세요..."/>
                         </div>
                         <div className={Style.cover}>
                             <button type="submit" className={Style.commentSubmitBtn}>게시</button>
