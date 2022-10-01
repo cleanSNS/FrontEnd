@@ -123,7 +123,7 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
 
     //가장 하단의 댓글이 사용자에게 읽혔을 때, 댓글을 더 불러오기 위해 조건을 확인하는 함수
     const loadMoreComment = () => {
-        if(!isLastComment){//불러올 내용이 더 있는 경우
+        if(!isLastComment && inView){//불러올 내용이 더 있는 경우
             presetComment();
         }
     };
@@ -182,26 +182,7 @@ const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
         <div className={Style.CommentArea}>
             {
                 commentList.map((data, index) => (
-                    index === commentList.length - 1 ?
-                    <div key={index} className={Style.singleCommentArea} ref={lastComment}>
-                        <div className={Style.CommentBox} style={{width:"100%"}}>
-                                <div className={Style.CommentProfileArea}>
-                                    <img src={data.userDto.imgUrl} className={Style.UserImage} />
-                                    <p className={Style.UserNickname}>{data.userDto.nickname}</p>
-                                    <img src={moreStuff} className={Style.UserSetting} />
-                                </div>
-                                <p id={`commentContent/${index}`} className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
-                                <div className={Style.commentbtnArea}>
-                                    <img src={heartImg} className={Style.buttonImg}/>
-                                    <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
-                                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                                    <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
-                                </div>
-                        </div>
-                        <RenderCommentOfComment groupId={data.group} commentOfCommentList={commentOfCommentList[data.group]} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment}/>
-                    </div>
-                    :
-                    <div key={index} className={Style.singleCommentArea}>
+                    <div key={index} className={Style.singleCommentArea} ref={index === (commentList.length - 1) ? lastComment : null}>
                         <div className={Style.CommentBox} style={{width:"100%"}}>
                                 <div className={Style.CommentProfileArea}>
                                     <img src={data.userDto.imgUrl} className={Style.UserImage} />
