@@ -58,7 +58,7 @@ const RenderCommentOfComment = ({groupId, commentOfCommentList, setLoadCommentOf
     댓글 부르기 트리거는 가장 하단의 댓글을 사용자가 확인했을 때이고,
     대댓글 부르기는 댓글 부르기함수가 호출된 상황 자체이다 - 호출 시 groupId가 달라진다.
 */
-const RenderComment = ({pageId, refreshAccessToken, groupId, setGroupId, setCommentToWhom}) => {
+const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
     const [commentList, setCommentList] = useState([
         {
             "userDto": {
@@ -91,11 +91,12 @@ const RenderComment = ({pageId, refreshAccessToken, groupId, setGroupId, setComm
     const [commentOfCommentList, setCommentOfCommentList] = useState([[]]);//대댓글 리스트 - [[초기화때 필요!], [groupId === 1인 대댓글], [groupId === 2인 대댓글], [groupId === 3인 대댓글], ...]의 형식이다.
     const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(987654321);//대댓글 startId
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
+    const [groupId, setGroupId] = useState(0);//가장 마지막 groupId
 
     //댓글로드 함수
     const presetComment = () => {
         if(pageId === -1) return;
-        axios.get(LoadDetailPageUrl + pageId.toString() + "/comment?startId=" + commentStartId.toString())
+        axios.get(`${LoadDetailPageUrl}${pageId}/comment?startId=${commentStartId}`)
         .then((res) => {
             const cur = [...commentList];//기존의 댓글 리스트
             const tmp = [...res.data.data];//불러온 댓글들
@@ -132,7 +133,7 @@ const RenderComment = ({pageId, refreshAccessToken, groupId, setGroupId, setComm
     const loadCommentOfCommentFunc = () => {
         if(groupId === 0) return; //초기상황에는 실행 X
         
-        axios.get(LoadDetailPageUrl + pageId.toString() + "/nested?group=" + groupId.toString() + "&startId=" + commentOfCommentStartId.toString())
+        axios.get(`${LoadDetailPageUrl}${pageId}/nested?group=${groupId}&startId=${commentOfCommentStartId}`)
         .then((res) => {
             const next = [...commentOfCommentList];//지금의 리스트
             const tmp = [...res.data.data];//받아온 리스트
@@ -174,7 +175,7 @@ const RenderComment = ({pageId, refreshAccessToken, groupId, setGroupId, setComm
     const changeCommentToComment = (event) => {
         event.preventDefault();
         const tmp = (event.target.id).split('/');
-        setCommentToWhom(["c", Number(tmp[0]), tmp[1]]);
+        setCommentToWhom(["c", commentList[Number(tmp[1])].group, commentList[Number(tmp[1])].userDto.nickname]);
     }
 
     return(
@@ -189,7 +190,7 @@ const RenderComment = ({pageId, refreshAccessToken, groupId, setGroupId, setComm
                                     <p className={Style.UserNickname}>{data.userDto.nickname}</p>
                                     <img src={moreStuff} className={Style.UserSetting} />
                                 </div>
-                                <p id={`${data.group}/${data.userDto.nickname}`} className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
+                                <p id={`commentContent/${index}`} className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
                                 <div className={Style.commentbtnArea}>
                                     <img src={heartImg} className={Style.buttonImg}/>
                                     <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
@@ -207,7 +208,7 @@ const RenderComment = ({pageId, refreshAccessToken, groupId, setGroupId, setComm
                                     <p className={Style.UserNickname}>{data.userDto.nickname}</p>
                                     <img src={moreStuff} className={Style.UserSetting} />
                                 </div>
-                                <p id={`${data.group}/${data.userDto.nickname}`} className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
+                                <p id={`commentContent/${index}`} className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
                                 <div className={Style.commentbtnArea}>
                                     <img src={heartImg} className={Style.buttonImg}/>
                                     <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
@@ -242,7 +243,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const presetDetailPage = () => {
         if(pageId === -1) return;
 
-        axios.get(LoadDetailPageUrl + pageId.toString() + "/detail")//글 불러오기
+        axios.get(`${LoadDetailPageUrl}${pageId}/detail`)//글 불러오기
         .then((res) => {
             setPostedImageList(res.data.data.imgUrlList);
             setPostedPersonImage(res.data.data.pageDto.userDto.imgUrl);
@@ -293,7 +294,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
             }
         });
 
-        axios.get(checkILikedThisPageOrComment + `?targetId=${pageId}&type=PAGE`)//좋아요 여부 불러오기
+        axios.get(`${checkILikedThisPageOrComment}?targetId=${pageId}&type=PAGE`)//좋아요 여부 불러오기
         .then((res) => {
             setIsLiked(res.data.data.like);
         })
@@ -401,7 +402,11 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
             alert("1자 이상의 댓글을 입력해 주세요.");
             return;
         }
-        axios.post((newCommentUrl + pageId.toString() + "/comment"), {
+        //댓글 작성 직전 현재의 groupId받아오기<--------------------------------------------------작성해야함
+
+
+        //정보를 바탕으로 댓글 작성
+        axios.post(`${newCommentUrl}${pageId}/comment`, {
             pageId: pageId,
             content: userCommentInput,
             group: commentToWhom[0] === "p" ? null : commentToWhom[1],

@@ -229,12 +229,12 @@
 }
 
 .commentSubmitBtn{
-    width: 65%;
-    height: 45%;
+    width: 50%;
+    height: 40%;
     border: none;
     border-radius: 0.25rem;
     background-color: #F4DEDE;
     color: white;
-    box-shadow: 1px 1px 3px black;
+    box-shadow: 1px 1px 3px rgb(190, 190, 190);
     cursor: pointer;
 }

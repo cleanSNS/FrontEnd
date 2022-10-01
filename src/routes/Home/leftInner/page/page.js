@@ -1,5 +1,4 @@
 //피드 여러개 띄우는 화면
-
 import { useState, useEffect } from 'react';
 import { useInView } from "react-intersection-observer";
 import axios from 'axios';
@@ -8,18 +7,12 @@ import {
     pageloadUrl,
 } from "../../../../apiUrl";
 
-let pageList = [1,2,3,4,5];
-let currentStartId = 987654321;
-
-const Pages = ({ obj, lastRef }) => {
+const Pages = ({pageList}) => {
     return(
-        <div className={Style.singlePageCover}>
+        <div className={Style.pageListArea}>
             {
-                obj.map((data, index) => (
-                    index === (obj.length - 1) ? 
-                    <p key={index} ref={lastRef}>last obj</p>
-                    :
-                    <p key={index}>{data}</p>
+                pageList.map((data, index) => (
+                    <div className={Style.singlePageCover} />
                 ))
             }
         </div>
@@ -28,26 +21,35 @@ const Pages = ({ obj, lastRef }) => {
 
 
 const LeftPage = ({refreshAccessToken}) => {
-    const [ref, inView] = useInView();//ref를 {ref}로 설정한요소가 화면에 보이는 상황이면 true가 나오고, 아닌 경우 false이다.
+    const [pageStartId, setPageStartId] = useState(987654321);
+    const [pageList, setPageList] = useState([]);
+    const [lastPage, inView] = useInView();
 
-    const pageLoadFunc = () => {
-        if(inView){
-            axios.get(pageloadUrl + "?startId=" + currentStartId)
-            .then((res) => {
-                console.log("데이터 추가");
-                pageList = [...res.data.data];//추가 데이터 저장
-                currentStartId = res.startId;
-            })
-            .catch((res) => {
-                console.log("더이상 글이 없습니다.");
+    //게시글 로드 함수
+    const loadPageListFunc = () => {
+        axios.get(`${pageloadUrl}?startId=${pageStartId}`)
+        .then((res) => {
+            const cur = [...pageList];
+            const tmp = [res.data.data];
+            const next = cur.concat(tmp);
+            setPageList(next);
+            setPageStartId(res.data.startId);
+        })
+        .catch((res) => {
+            if(res.status === 401){
+                refreshAccessToken();
+            }
+            else{
                 console.log(res);
-            })
-        }
-    };
-    useEffect(pageLoadFunc, [inView]);
+                alert("글을 로드해 오지 못했습니다.");
+            }
+        })
+    }
+    useEffect(loadPageListFunc, []);//초기 상황에서 로드
+
     return(
-        <div className={Style.pageCover}>
-            <Pages obj={pageList} lastRef={ref}/>
+        <div className={Style.wholeCover}>
+            <Pages pageList={pageList} />
         </div>
     );
 }
