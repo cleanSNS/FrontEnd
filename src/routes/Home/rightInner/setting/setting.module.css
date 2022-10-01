@@ -73,13 +73,13 @@
     transform: translate(-50%, -50%);
     
     width: 50%;
-    height: 13%;
+    height: 10%;
     border: 0;
-    background-color: rgb(255, 197, 250);
+    background-color: #F4DEDE;
     border-radius: 0.25rem;
     font-size: large;
     font-weight: bold;
     color: white;
-    box-shadow: 1px 1px 3px rgb(178, 137, 175);
+    box-shadow: 2px 2px 5px rgb(236, 236, 236);
     cursor: pointer;
 }

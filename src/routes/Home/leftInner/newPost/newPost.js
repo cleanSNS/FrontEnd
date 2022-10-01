@@ -185,7 +185,7 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
             {/* word label 영역 */}
             <p className={Style.word}>글을 입력해 주세요</p>
             {/* word input 영역 */}
-            <input 
+            <textarea 
                 type="text" 
                 vaslue={newPostContent}
                 onChange={contentHandler}

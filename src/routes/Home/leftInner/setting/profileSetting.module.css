@@ -19,15 +19,15 @@
 /*내 프로필 보여주는 곳*/
 .MyprofileExample{
     position: absolute;
-    width: 60%;
-    height: 60%;
+    width: 75%;
+    height: 50%;
     top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-bottom: solid 1px rgb(152, 152, 152);
 
     display: grid;
-    grid-template-columns: 2fr 5fr;
+    grid-template-columns: 2fr 8fr;
     grid-template-rows: 1fr;
 }
 
@@ -37,8 +37,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border: solid 1px rgb(152, 152, 152);
     border-radius: 20px;
     cursor: pointer;
@@ -63,7 +63,7 @@
     width: 100%;
     text-align: center;
     font-weight: bold;
-    font-size: x-large;
+    font-size: large;
 }
 
 /*Input이 있는 부분*/
@@ -78,7 +78,7 @@
 
     display: grid;
     grid-template-columns: 3fr 6fr 2fr;
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: 1fr 1fr 1fr 2fr;
 }
 
 /*Label 태그*/
@@ -140,7 +140,7 @@
     font-weight: bold;
     font-size:large;
 
-    background-color: rgb(255, 197, 250);
+    background-color: #F4DEDE;
     color: white;
     border-radius: 0.25rem;
     box-shadow: 1px 1px 3px rgb(178, 137, 175);

@@ -49,6 +49,8 @@ export const likeThisPageUrl = `${apiUrl}/user/like`;
 //좋아요 여부 확인
 export const checkILikedThisPageOrComment = `${apiUrl}/user/like`;
 
+//댓글 생성 Url
+export const newCommentUrl = `${apiUrl}/page/`;
 
 /***************************설정 관련 URl***********************************/
 //지금 프로필 가져오는 Url

@@ -182,7 +182,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
                         <input 
                             id="profileSettingUserName"
                             type="text"
-                            maxLength={14}
+                            maxLength={20}
                             value={ps_userName}
                             onChange={nicknameChageHandler}
                             className={Style.profileSettingInput}
@@ -248,13 +248,14 @@ const ProfileSetting = ({refreshAccessToken}) => {
                         </label>
                     </div>
                     <div className={Style.Cover}>
-                        <input 
+                        <textarea 
                             id="profileSettingIntroduce"
                             type="text"
-                            maxLength={30}
+                            maxLength={120}
                             value={ps_userIntroduce}
                             onChange={selfIntroductionChageHandler}
-                            className={Style.profileSettingInput} />
+                            className={Style.profileSettingInput}
+                            style={{resize: "none", height: "70%"}}/>
                     </div>
                     <div />
                 </div>
