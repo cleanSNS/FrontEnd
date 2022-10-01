@@ -13,7 +13,6 @@ import {
 } from "../../../../apiUrl";
 
 const Pages = ({pageList, lastPage}) => {
-    console.log(pageList);
     return(
         <div className={Style.pageListArea}>
             {
