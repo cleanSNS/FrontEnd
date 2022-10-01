@@ -390,12 +390,14 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
         axios.post(`${newCommentUrl}${pageId}/comment`, {
             pageId: pageId,
             content: userCommentInput,
-            group: commentToWhom[0] === "p" ? null : commentToWhom[1],
+            group: commentToWhom[0] === "p" ? 0 : commentToWhom[1],
             nested: !(commentToWhom[0] === "p"),
             visible: true,
         })
         .then((res) => {
             alert("댓글 작성 완료");
+            setUserCommentInput("");//댓글 부분 초기화
+            setCommentToWhom(["p", -1, ""]);//댓글 대상 초기화
         })
         .catch((res) => {
             if(res.status === 401){
