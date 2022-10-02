@@ -49,8 +49,15 @@ const ImageArea = ({imgList, pageIndex}) => {
                 </div>
             </div>
             <div className={Style.ImageBtnArea}>
-                <img id={`leftArrow_${pageIndex}`} src={leftArrow} className={Style.ImageChangeBtn} onClick={leftArrowClickHandler}/>
-                <img id={`rightArrow_${pageIndex}`} src={rightArrow} className={Style.ImageChangeBtn} onClick={rightArrowClickHandler}/>
+                {
+                    imgList.length === 1 ?
+                    null
+                    :
+                    <div className={Style.flexBoxCenter}>
+                        <img id={`leftArrow_${pageIndex}`} src={leftArrow} className={Style.ImageChangeBtn} onClick={leftArrowClickHandler}/>
+                        <img id={`rightArrow_${pageIndex}`} src={rightArrow} className={Style.ImageChangeBtn} onClick={rightArrowClickHandler}/>
+                    </div>
+                }
             </div>
         </div>
     );
