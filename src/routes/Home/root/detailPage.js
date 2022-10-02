@@ -25,7 +25,6 @@ const RenderCommentOfComment = ({groupId, commentOfCommentList, setLoadCommentOf
             setToggle((cur) => !cur);
             setLoadCommentOfComment(0);//다시 초기 상태로
         }
-
     }
     useEffect(setToggleFunc, [loadCommentOfComment]);
 
