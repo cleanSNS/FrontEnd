@@ -31,6 +31,9 @@ const RenderCommentOfComment = ({groupId, commentOfCommentList, setLoadCommentOf
 
     return (
         toggle ?
+            commentOfCommentList === undefined ?
+            null
+            :
             commentOfCommentList.map((data, index) =>
                 <div key={index} className={Style.CommentBox} style={{width:"80%"}}>
                     <div className={Style.CommentProfileArea}>
@@ -59,32 +62,7 @@ const RenderCommentOfComment = ({groupId, commentOfCommentList, setLoadCommentOf
     대댓글 부르기는 댓글 부르기함수가 호출된 상황 자체이다 - 호출 시 groupId가 달라진다.
 */
 const RenderComment = ({pageId, refreshAccessToken, setCommentToWhom}) => {
-    const [commentList, setCommentList] = useState([
-        {
-            "userDto": {
-                "userId": 1,
-                "nickname": "홍길동",
-                "imgUrl": null
-            },
-            "commentId": 1,
-            "content": "first comment",
-			"group": 1,
-            "likeCount": 0,
-            "createdDate": "2022-08-04T23:45:55.11111"
-        },
-        {
-            "userDto": {
-                "userId": 1,
-                "nickname": "김철수",
-                "imgUrl": null
-            },
-            "commentId": 5,
-            "content": "first comment",
-			"group": 2,
-            "likeCount": 0,
-            "createdDate": "2022-08-04T23:45:55.55555"
-        }
-    ]); //업로드된 댓글
+    const [commentList, setCommentList] = useState([]); //업로드된 댓글
     const [commentStartId, setCommentStartId] = useState(987654321);//불러올 댓글의 index
     const [isLastComment, setIsLastComment] = useState(false);//마지막 댓글이 불린 경우 true로 설정
     const [lastComment, inView] = useInView();//마지막 댓글을 인식할 inView

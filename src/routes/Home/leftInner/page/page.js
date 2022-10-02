@@ -61,7 +61,7 @@ const ImageArea = ({imgList, pageIndex}) => {
             </div>
         </div>
     );
-}
+};
 
 const Pages = ({pageList, lastPage}) => {
     return(
@@ -100,8 +100,7 @@ const Pages = ({pageList, lastPage}) => {
             }
         </div>
     );
-}
-
+};
 
 const LeftPage = ({refreshAccessToken}) => {
     const [pageStartId, setPageStartId] = useState(987654321);//글 리스트의 startId

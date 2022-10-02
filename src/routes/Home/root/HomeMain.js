@@ -349,7 +349,7 @@ const Home = ({ logout, refreshAccessToken }) => {
         </div>
       </div>
       {pageId === -1 ? null : <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} userId={userId}/>}
-      {/*<DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId}/>*/}{/* 테스트용. */}
+      {<DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId}/>}{/* 테스트용. */}
     </div>
   );
 }
