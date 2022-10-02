@@ -111,7 +111,16 @@ const Home = ({ logout, refreshAccessToken }) => {
     })
     .then((res) => {
       alert("업로드 되었습니다.");
-      //window.location.href = "/main";
+      setNewPostImages([]);
+      setNewPostHashtag([]);
+      setNewPostContent("");
+      setNewPostLikeNotice(true);
+      setNewPostCommentNotice(true);
+      setNewPostReadPostAuth("ALL");
+      setNewPostReadCommentAuth(true);
+      setNewPostWriteCommentAuth(true);
+      setNewPostReadLikeAuth(true);
+      window.location.href = "/main";
     })
     .catch((res) => {
       if(res.status === 401){//access token이 만료된 경우이다.
