@@ -35,15 +35,17 @@ const ImageArea = ({imgList, pageIndex}) => {
 
     return(
         <div className={Style.imageArea}>
-            <div style={{overflow:"hidden"}}>
-                <div id={`onlyImageArea_${pageIndex}`} style={{width:`${100 * imgList.length}%`, height: "100%", transition: "transform 0.5s"}}>
-                    {
-                        imgList.map((imageUrl, index) =>
-                            <div style={{height: "100%", width: `${100 / imgList.length}%`, float: "left"}} key={index}>
-                                <img src={imageUrl} style={{width: "100%", height: "100%", objectFit: "contain"}}/>{/* border지워야함 */}
-                            </div>
-                        )
-                    }
+            <div className={Style.onlyImageArea}>
+                <div style={{overflow:"hidden"}}>
+                    <div id={`onlyImageArea_${pageIndex}`} style={{width:`${100 * imgList.length}%`, height: "100%", transition: "transform 0.5s"}}>
+                        {
+                            imgList.map((imageUrl, index) =>
+                                <div style={{height: "100%", width: `${100 / imgList.length}%`, float: "left"}} key={index}>
+                                    <img src={imageUrl} style={{width: "100%", height: "100%", objectFit: "contain"}}/>{/* border지워야함 */}
+                                </div>
+                            )
+                        }
+                    </div>
                 </div>
             </div>
             <div className={Style.ImageBtnArea}>
@@ -58,6 +60,9 @@ const Pages = ({pageList, lastPage}) => {
     return(
         <div className={Style.pageListArea}>
             {
+                pageList.length === 0 ?
+                <p className={Style.noPageText}>글이 존재하지 않습니다.. 너무도 조용합니다..</p>
+                :
                 pageList.map((data, index) => (
                     <div className={Style.singlePageCover} key={index} ref={index === (pageList.length - 1) ? lastPage : null}>
                         {/* 프로필 영역 */}

@@ -45,6 +45,12 @@
   align-items: center;
   align-content: center;
 }
+
+.noPageText{
+  width: 100%;
+  margin-top: 30px;
+  text-align: center;
+}
 /***************하나의 페이지의 스타일****************/
 /*프로필영역*/
 .profileArea{
@@ -76,6 +82,13 @@
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid rgb(156, 156, 156);
+}
+
+.onlyImageArea{
+  height: 90%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .ImageBtnArea{
