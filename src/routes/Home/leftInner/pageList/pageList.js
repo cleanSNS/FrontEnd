@@ -131,7 +131,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [bottomStuff, setBottomStuff] = useState("PAGE");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
     const [setted, setSetted] = useState(false);
     const [userDropBoxToggle, setUserDropBoxToggle] = useState(false);//...누르면 뜨는거 활성화 toggle
-    const loadedUserId = leftBookState.slice(9);
+    const loadedUserId = leftBookState.split('/')[1];
 
     const presetUserPageList = () => {
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
