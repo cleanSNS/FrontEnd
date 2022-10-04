@@ -82,7 +82,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => 
     console.log(setted);
     const [userPageList, setUserPageList] = useState([]);
     const [pageStartId, setPageStartId] = useState(987654321);
-    
+
     const presetUserPageList = () => {
         if(!setted) return;
         axios.get(getUserPageListUrl + loadedUserId.toString() + "?startId=" + pageStartId.toString())
@@ -141,6 +141,9 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         setLoadedUserId(Number(leftBookState.split('/')[1]));
         if(userId === Number(loadedUserId)){//자기 자신의 페이지를 불러온 경우
             setIsMyPage(true);
+        }
+        else{
+            setIsMyPage(false);
         }
         //이후는 자신의 페이지든 타인의 페이지든 동일하다
         axios.get(getUserNicknameAndImageUrl + loadedUserId + "/profile")
