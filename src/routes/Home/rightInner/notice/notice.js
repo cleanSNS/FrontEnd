@@ -22,7 +22,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
     //알림의 이미지 클릭 시 해당 유저의 페이지로 이동
     const onUserImageClickHandler = (event) => {
         event.preventDefault();
-        leftBookChangeHandler("pageList/" + targetUserId);
+        leftBookChangeHandler("pList/" + targetUserId);
     };
 
     //알림을 클릭 시 알림이 발생한 근원지로 이동(FOLLOW는 유저로, 나머지는 글로)
@@ -43,7 +43,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
         });
 
         if(type === "FOLLOW"){
-            leftBookChangeHandler("pageList/" + targetUserId);
+            leftBookChangeHandler("pList/" + targetUserId);
         }
         else{
             setPageId(resourceId);

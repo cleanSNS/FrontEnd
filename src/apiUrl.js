@@ -117,6 +117,18 @@ export const getUserNicknameAndImageUrl = `${apiUrl}/user/`;
 //해당 유저의 게시글 조회
 export const getUserPageUrl = `${apiUrl}/page/user/`;
 
+//신고하기 기능
+export const ReportUrl = `${apiUrl}/user/report`;
+
+//유저 차단하기 기능
+export const BlockUserURl = `${apiUrl}/user/block`
+
+//유저 팔로우 하기
+export const followUserUrl = `${apiUrl}/user/follow`;
+
+//유저 팔로우 취소하기
+export const unfollowUserUrl = `${apiUrl}/user/unfollow`;
+
 /********************************알림 관련************************************/
 //나에게 온 알림 조회
 export const getNoticeUrl = `${apiUrl}/user/notification?startId=`;

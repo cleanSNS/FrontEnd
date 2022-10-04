@@ -34,7 +34,7 @@ import axios from 'axios';
 const Home = ({ logout, refreshAccessToken }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
-  //왼쪽 책의 내용을 바꿔주는 state => page(글) // pageList // chat // newPost // setting
+  //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting
   const [leftBookState, setLeftBookState] = useState("page");
   //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
   const [settingState, setSettingState] = useState("initial");
@@ -103,7 +103,7 @@ const Home = ({ logout, refreshAccessToken }) => {
     setUserSearch("");
     setSearchedList([]);
     //이제 좌측 페이지 변경
-    setLeftBookState(`pageList/${(event.target.id.split('_'))[1]}`);
+    setLeftBookState(`pList/${(event.target.id.split('_'))[1]}`);
   };
 
   const searchedHashtagClickHandler = (event) => {
@@ -359,7 +359,7 @@ const Home = ({ logout, refreshAccessToken }) => {
           <div className={Style.leftbook}>
             <div className={Style.Cover}>
                 {leftBookState.includes("page") ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState}/> : null}
-                {leftBookState.includes("pageList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
+                {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
                 {leftBookState === "chat" ? <LeftChat refreshAccessToken={refreshAccessToken}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
                 {leftBookState === "setting" ? <LeftSetting settingState={settingState} refreshAccessToken={refreshAccessToken}/> : null}
