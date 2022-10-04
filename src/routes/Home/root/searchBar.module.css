@@ -33,8 +33,8 @@
     box-shadow: 2px 2px 5px rgb(190, 190, 190);
     background-color: white;
     overflow-y: auto;
-    display: flex;
     flex-direction: column;
+    display: none;
 }
 
 .dropBoxInner{
@@ -45,4 +45,19 @@
 .content{
     width: 100%;
     height: 15%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.searchedUserImage{
+    width: 40px;
+    height: 40px;
+    border-radius: 0.5rem;
+    border: 1px solid black;
+    margin-left: 10px;
+}
+
+.searchedUserNickname{
+    margin-left: 15px;
 }

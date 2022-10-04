@@ -27,6 +27,7 @@ import {
   newPostUrl,
   getNoticeNumber,
   getMyUserIdUrl,
+  getUserNicknameAndImageUrl,
 } from "../../../apiUrl";
 import axios from 'axios';
 
@@ -62,28 +63,60 @@ const Home = ({ logout, refreshAccessToken }) => {
   //좋아요 읽기 권한
   const [newPostReadLikeAuth, setNewPostReadLikeAuth] = useState(true);
 
-  //글 검색
-  const [userSearch, setUserSearch] = useState("");
+  /*************************글 검색 부분****************************/
+  //필요 변수 선언
+  const [userSearch, setUserSearch] = useState("");//사용자의 search input이다.
+  const [isSubmitted, setIsSubmitted] = useState(false);//제출된 상태인지 입력중인 상태인지를 나타낸다.
+  const [searchedList, setSearchedList] = useState([]);//검색 결과 list이다.
 
-  //글 검색 input Change Handler
+  //사용자의 input에 따라 input의 value를 바꾸는 함수
   const userSearchChangeHandler = (event) => {
     event.preventDefault();
+    setIsSubmitted(false);//검색을 입력 중에는 submit된 상태가 아니므로 false로 만든다
     setUserSearch(event.target.value);
   }
 
-  //글 검색 submit Handler
+  //사용자의 input을 검색하는 함수
   const userSearchSubmitHandler = (event) => {
     event.preventDefault();
     if(userSearch === '') return;
     
-    axios.get()
-    /*
+    axios.get(`${getUserNicknameAndImageUrl}search?nickname=${userSearch}`)
+    .then((res) => {
+      setSearchedList(res.data.data);
+      setIsSubmitted(true);
+    })
+    .catch((res) => {
+      if(res.status === 401){
+        refreshAccessToken();
+      }
+      else{
+        alert("검색하지 못했습니다.");
+      }
+    });
+  };
 
-    <------------------------------------------------------이 부분 작업 해야함 아직
+  const searchedUserClickHandler = (event) => {
+    event.preventDefault();
+    //제출이 끝난 것으로 인식한다. 다시 초기 상태로 변환 - 아래 3개
+    setIsSubmitted(false);
+    setUserSearch("");
+    setSearchedList([]);
+    //이제 좌측 페이지 변경
+    setLeftBookState(`pageList/${(event.target.id.split('_'))[1]}`);
+  };
 
-    */
-  }
+  const searchedHashtagClickHandler = (event) => {
+    event.preventDefault();
+    //제출이 끝난 것으로 인식한다. 다시 초기 상태로 변환 - 아래 3개
+    setIsSubmitted(false);
+    setUserSearch("");
+    setSearchedList([]);
+    //이제 좌측 페이지 변경
+    setLeftBookState(`page/${userSearch}`);
+  };
 
+  /*****************************new Post 관련*********************************/
   //글 올리는 함수 => 좌측 페이지로 넘어가야한다.
   const uploadNewPostHandler = (event) => {
     event.preventDefault();
@@ -271,7 +304,7 @@ const Home = ({ logout, refreshAccessToken }) => {
         <div className={Style.leftHeader}>
           <Logo />
           <div />
-          <SearchBar userSearch={userSearch} userSearchChangeHandler={userSearchChangeHandler} userSearchSubmitHandler={userSearchSubmitHandler} />
+          <SearchBar userSearch={userSearch} userSearchChangeHandler={userSearchChangeHandler} userSearchSubmitHandler={userSearchSubmitHandler} isSubmitted={isSubmitted} searchedList={searchedList} searchedUserClickHandler={searchedUserClickHandler} searchedHashtagClickHandler={searchedHashtagClickHandler}/>
         </div>
       </div>
       {/* 우 상단 - 태그 */}
@@ -325,7 +358,7 @@ const Home = ({ logout, refreshAccessToken }) => {
         <div className={Style.bookCover}>
           <div className={Style.leftbook}>
             <div className={Style.Cover}>
-                {leftBookState === "page" ? <LeftPage refreshAccessToken={refreshAccessToken}/> : null}
+                {leftBookState.includes("page") ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState}/> : null}
                 {leftBookState.includes("pageList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
                 {leftBookState === "chat" ? <LeftChat refreshAccessToken={refreshAccessToken}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}

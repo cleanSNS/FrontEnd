@@ -102,13 +102,14 @@ const Pages = ({pageList, lastPage}) => {
     );
 };
 
-const LeftPage = ({refreshAccessToken}) => {
+const LeftPage = ({refreshAccessToken, leftBookState}) => {
     const [pageStartId, setPageStartId] = useState(987654321);//글 리스트의 startId
     const [pageList, setPageList] = useState([]); //글 리스트
     const [lastPage, inView] = useInView(); //이게 ref된 요소가 화면에 보이면 inView가 true로 변경
     const [isLoadFinish, setIsLoadFinish] = useState(false);//false면 더 이상 로드할 내용이 남은 경우, true면 로드할 내용이 더 없는 경우이다.
+    const hashtagFilter = leftBookState.split('/')[1];//그냥 리스트면 undefined고, 뭐가 들어있으면 그 값이 들어있다.
 
-    //게시글 로드 함수
+    //게시글 로드 함수 <---------------------------------------------hashtagFilter에 따라 여기 다르게 해야함
     const loadPageListFunc = () => {
         axios.get(`${pageloadUrl}?startId=${pageStartId}`)
         .then((res) => {
