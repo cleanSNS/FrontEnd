@@ -80,8 +80,9 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
 const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => {
     console.log(loadedUserId);
     console.log(setted);
-    let pageStartId = 987654321;
     const [userPageList, setUserPageList] = useState([]);
+    const [pageStartId, setPageStartId] = useState(987654321);
+    
     const presetUserPageList = () => {
         if(!setted) return;
         axios.get(getUserPageListUrl + loadedUserId.toString() + "?startId=" + pageStartId.toString())
@@ -90,7 +91,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => 
             const currentList = [...userPageList];
             const next = currentList.concat(tmp);
             setUserPageList(next);
-            pageStartId = res.data.startId;
+            setPageStartId(res.data.startId);
         })
         .catch((res) => {
             if(res.status === 401){
@@ -131,12 +132,13 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [bottomStuff, setBottomStuff] = useState("PAGE");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
     const [setted, setSetted] = useState(false);
     const [userDropBoxToggle, setUserDropBoxToggle] = useState(false);//...누르면 뜨는거 활성화 toggle
-    const loadedUserId = leftBookState.split('/')[1];
+    const [loadedUserId, setLoadedUserId] = useState(Number(leftBookState.split('/')[1]));
 
     const presetUserPageList = () => {
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
         console.log(leftBookState);
         console.log(loadedUserId);
+        setLoadedUserId(Number(leftBookState.split('/')[1]));
         if(userId === Number(loadedUserId)){//자기 자신의 페이지를 불러온 경우
             setIsMyPage(true);
         }
