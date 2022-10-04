@@ -257,7 +257,6 @@ const Home = ({ logout, refreshAccessToken }) => {
   window.onpopstate = function(event) {//뒤로가기 이벤트를 캐치합니다.
     console.log(event.state);
     if(event.state === null) return;
-    console.log(`뒤로가기가 눌렸습니다 : (${event.state.rightBookState}, ${event.state.leftBookState}, ${event.state.pageId})`);
     setRightBookState(event.state.rightBookState);
     setLeftBookState(event.state.leftBookState);
     setPageId(event.state.pageId);
@@ -269,7 +268,6 @@ const Home = ({ logout, refreshAccessToken }) => {
       setGoBack(false);
       return;
     }
-    console.log(`state를 저장했습니다 : (${rightBookState}, ${leftBookState}, ${pageId})`);
     window.history.pushState({
       rightBookState: rightBookState,
       leftBookState: leftBookState,
