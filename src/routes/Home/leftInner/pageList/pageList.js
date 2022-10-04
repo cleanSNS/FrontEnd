@@ -134,6 +134,20 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [userDropBoxToggle, setUserDropBoxToggle] = useState(false);//...누르면 뜨는거 활성화 toggle
     const [loadedUserId, setLoadedUserId] = useState(Number(leftBookState.split('/')[1]));
 
+    const loadLoadedUserId = () => {
+        //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
+        console.log(leftBookState);
+        console.log(loadedUserId);
+        setLoadedUserId(Number(leftBookState.split('/')[1]));
+        if(userId === Number(loadedUserId)){//자기 자신의 페이지를 불러온 경우
+            setIsMyPage(true);
+        }
+        else{
+            setIsMyPage(false);
+        }
+    };
+    useEffect(loadLoadedUserId, [leftBookState]);
+
     const presetUserPageList = () => {
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
         console.log(leftBookState);
@@ -165,7 +179,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             }
         });
     };
-    useEffect(presetUserPageList, [leftBookState]);
+    useEffect(presetUserPageList, [loadedUserId]);
 
     //게시물 클릭 시 handler
     const pageClickHandler = (event) => {
