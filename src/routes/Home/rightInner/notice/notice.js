@@ -102,38 +102,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
 };
 
 const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId}) => {
-    const [noticeList, setNoticeList] = useState([
-        {
-            "notificationId": 3,
-            "userId": 1,
-            "userImgUrl": null,
-            "targetUserId": 2,
-            "content": "새로운 댓글이 달렸습니다.",
-            "type": "COMMENT",
-            "resourceId": 1,
-            "checked": false
-        },
-        {
-            "notificationId": 2,
-            "userId": 1,
-            "userImgUrl": null,
-            "targetUserId": 2,
-            "content": "새로운 대댓글이 달렸습니다.",
-            "type": "NESTED",
-            "resourceId": 2,
-            "checked": false
-        },
-        {
-            "notificationId": 1,
-            "userId": 1,
-            "userImgUrl": null,
-            "targetUserId": 2,
-            "content": "name님이 팔로우했습니다.",
-            "type": "FOLLOW",
-            "resourceId": null,
-            "checked": false
-        }
-    ]);
+    const [noticeList, setNoticeList] = useState([]);
     const [lastNotice, inView] = useInView();
     let startId = 987654321;
     let noMoreNotice = false;
