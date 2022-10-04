@@ -10,6 +10,7 @@ import {
 } from '../../../../apiUrl';
 
 const RenderRightFriend = ({followeeList, leftBookChangeHandler}) => {
+    console.log(followeeList);
     return(
         <div className={Style.friendList}>
             {
@@ -84,7 +85,6 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
         axios.get(getMyUserIdUrl)//내 id불러오기
         .then((res) => {
             setMyId(res.data.data.userId);
-            console.log(res.data.data.userId);
         })
         .catch((res) => {
             if(res.status === 401){//access token이 만료된 경우이다.
