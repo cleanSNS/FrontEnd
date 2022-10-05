@@ -30,6 +30,7 @@ import {
   getNoticeNumber,
   getMyUserIdUrl,
   getUserNicknameAndImageUrl,
+  pageloadHashtagNumAndListUrl,
 } from "../../../apiUrl";
 import axios from 'axios';
 
@@ -70,6 +71,7 @@ const Home = ({ logout, refreshAccessToken }) => {
   const [userSearch, setUserSearch] = useState("");//사용자의 search input이다.
   const [isSubmitted, setIsSubmitted] = useState(false);//제출된 상태인지 입력중인 상태인지를 나타낸다.
   const [searchedList, setSearchedList] = useState([]);//검색 결과 list이다.
+  const [hashtagPageNumber, setHashtagPageNumber] = useState(0);//해당 해시태그에 속하는 글의 수이다.
 
   //사용자의 input에 따라 input의 value를 바꾸는 함수
   const userSearchChangeHandler = (event) => {
@@ -81,12 +83,14 @@ const Home = ({ logout, refreshAccessToken }) => {
   //사용자의 input을 검색하는 함수
   const userSearchSubmitHandler = (event) => {
     event.preventDefault();
+    let isOK = false;
     if(userSearch === '') return;
     
+    //유저 검색해서 리스트 업데이트
     axios.get(`${getUserNicknameAndImageUrl}search?nickname=${userSearch}`)
     .then((res) => {
       setSearchedList(res.data.data);
-      setIsSubmitted(true);
+      isOK = true;
     })
     .catch((res) => {
       if(res.status === 401){
@@ -94,6 +98,21 @@ const Home = ({ logout, refreshAccessToken }) => {
       }
       else{
         alert("검색하지 못했습니다.");
+      }
+    });
+
+    //해시태그의 게시글 숫자 검색
+    axios.get(`${pageloadHashtagNumAndListUrl}${userSearch}`)
+    .then((res) => {
+      setHashtagPageNumber(res.data.count);//여기 좀 다를 수 있음
+      if(isOK) setIsSubmitted(true);
+    })
+    .catch((res) => {
+      if(res.status === 401){
+        refreshAccessToken();
+      }
+      else{
+        alert("해시태그의 수를 불러오지 못했습니다.");
       }
     });
   };
@@ -303,7 +322,7 @@ const Home = ({ logout, refreshAccessToken }) => {
         <div className={Style.leftHeader}>
           <Logo />
           <div />
-          <SearchBar userSearch={userSearch} userSearchChangeHandler={userSearchChangeHandler} userSearchSubmitHandler={userSearchSubmitHandler} isSubmitted={isSubmitted} searchedList={searchedList} searchedUserClickHandler={searchedUserClickHandler} searchedHashtagClickHandler={searchedHashtagClickHandler}/>
+          <SearchBar userSearch={userSearch} hashtagPageNumber={hashtagPageNumber} userSearchChangeHandler={userSearchChangeHandler} userSearchSubmitHandler={userSearchSubmitHandler} isSubmitted={isSubmitted} searchedList={searchedList} searchedUserClickHandler={searchedUserClickHandler} searchedHashtagClickHandler={searchedHashtagClickHandler}/>
         </div>
       </div>
       {/* 우 상단 - 태그 */}

@@ -38,7 +38,7 @@ export const refreshNewAccessTokenUrl = `${apiUrl}/user/auth/refresh`;
 export const pageloadUrl = `${apiUrl}/page/main`;
 
 //해시태그로 검색하는 Url
-export const pageloadHashtagUrl = `${apiUrl}/user/search/hashtag?hashtag=`
+export const pageloadHashtagNumAndListUrl = `${apiUrl}/user/search/hashtag?hashtag=`
 
 //글 올리는 Url
 export const newPostUrl = `${apiUrl}/page`;
@@ -54,6 +54,7 @@ export const checkILikedThisPageOrComment = `${apiUrl}/user/like`;
 
 //댓글 생성 Url
 export const newCommentUrl = `${apiUrl}/page/`;
+
 
 /***************************설정 관련 URl***********************************/
 //지금 프로필 가져오는 Url
