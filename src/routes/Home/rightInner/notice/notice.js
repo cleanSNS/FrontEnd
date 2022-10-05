@@ -9,7 +9,7 @@ import {
 } from '../../../../apiUrl';
 import closeBtn from './close_btn.png';
 
-const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, checked, lastNotice, leftBookChangeHandler, ListDeleteHandler, index, setPageId}) => {
+const Notice = ({notificationId, userImgUrl, type, resourceId, checked, lastNotice, leftBookChangeHandler, ListDeleteHandler, index, setPageId}) => {
 
     //초기 설정으로, 이미 읽은 알림의 경우 연하게 스타일 변경
     const noticePreset = () => {
@@ -22,7 +22,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
     //알림의 이미지 클릭 시 해당 유저의 페이지로 이동
     const onUserImageClickHandler = (event) => {
         event.preventDefault();
-        leftBookChangeHandler("pList/" + targetUserId);
+        leftBookChangeHandler("pList/" + resourceId);
     };
 
     //알림을 클릭 시 알림이 발생한 근원지로 이동(FOLLOW는 유저로, 나머지는 글로)
@@ -43,7 +43,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
         });
 
         if(type === "FOLLOW"){
-            leftBookChangeHandler("pList/" + targetUserId);
+            leftBookChangeHandler("pList/" + resourceId);
         }
         else{
             setPageId(resourceId);
@@ -65,7 +65,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
         })
         //보이는 내용 처리
         ListDeleteHandler(event);
-    }
+    };
 
     return(//마지막 요소는 설정을 더해준다.
         lastNotice === null ?//null이면 별도의 설정이 필요 없다.
@@ -165,9 +165,8 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId}) => 
                     <Notice
                         notificationId={data.notificationId}//알림의 id
                         userImgUrl={data.userImgUrl}//알림의 대상의 프로필 사진
-                        targetUserId={data.targetUserId}//알림의 대상의 id
                         type={data.type}//알림의 타입
-                        resourceId={data.resourceId}//근원지 (FOLLOW의 경우 null이다.)
+                        resourceId={data.resourceId}//근원지 (COMMENT의 경우 null이다.)
                         checked={data.checked}//해당 알림을 확인했었는지 안했는지
                         key={index}
                         lastNotice={lastNotice}
@@ -180,9 +179,8 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId}) => 
                     <Notice
                         notificationId={data.notificationId}//알림의 id
                         userImgUrl={data.userImgUrl}//알림의 대상의 프로필 사진
-                        targetUserId={data.targetUserId}//알림의 대상의 id
                         type={data.type}//알림의 타입
-                        resourceId={data.resourceId}//근원지 (FOLLOW의 경우 null이다.)
+                        resourceId={data.resourceId}//근원지 (COMMENT의 경우 null이다.)
                         checked={data.checked}//해당 알림을 확인했었는지 안했는지
                         key={index}
                         lastNotice={null}
