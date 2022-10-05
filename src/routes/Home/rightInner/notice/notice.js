@@ -104,12 +104,12 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
 const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId}) => {
     const [noticeList, setNoticeList] = useState([]);
     const [lastNotice, inView] = useInView();
-    let startId = 987654321;
+    const [noticeStartId, setNoticeStartId] = useState(987654321);
     let noMoreNotice = false;
 
     //알림 불러오는 함수
     const NoticeRead = () => {
-        axios.get(getNoticeUrl + startId.toString())
+        axios.get(getNoticeUrl + noticeStartId.toString())
         .then((res) => {
             if(res.data.data.length === 0) {
                 noMoreNotice = true;
@@ -120,7 +120,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId}) => 
             const tmp = [...res.data.data];
             const next = current.concat(tmp);
             setNoticeList(next);
-            startId = res.data.startId;
+            setNoticeStartId(res.data.startId);
         })
         .catch((res) => {
             if(res.status === 401){//access token이 만료된 경우이다.
