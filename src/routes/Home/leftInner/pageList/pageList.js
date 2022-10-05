@@ -122,9 +122,9 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => 
 };
 
 const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId, userId}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
-    const [userImage, setUserImage] = useState("");
-    const [userNickname, setUserNickname] = useState("");
-    const [userIntroduce, setUserIntroduce] = useState("");
+    const [userImage, setUserImage] = useState("");//해당 프로필의 유저 이미지
+    const [userNickname, setUserNickname] = useState("");//해당 프로필의 유저 닉네임
+    const [userIntroduce, setUserIntroduce] = useState("");//해당 프로필의 유저 자기소개
     const [followerCount, setFollowerCount] = useState(0);//팔로워 숫자
     const [followeeCount, setFolloweeCount] = useState(0);//팔로잉 숫자
     const [isFollowed, setIsFollowed] = useState(false);//해당 유저를 내가 이미 팔로우 중인지 확인
@@ -168,6 +168,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             setFollowerCount(res.data.data.followerCount);
             setFolloweeCount(res.data.data.followeeCount);
             setSetted(true);
+            setIsFollowed(res.data.data.follow);
         })
         .catch((res) => {
             if(res.status === 401){
@@ -210,42 +211,24 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
 
     //유저 팔로우/팔로우 취소 함수
     const followClickHandler = (event) => {
-        if(isFollowed){//해당 유저를 이미 팔로우 중인데 클릭 -> 팔로우 취소
-            axios.post(unfollowUserUrl,{
-                userId: loadedUserId
-            })
-            .then((res) => {
-                alert("팔로우를 취소했습니다.");
-                setIsFollowed((cur) => !cur);
-            })
-            .catch((res) => {
-                if(res.status === 401){
-                    refreshAccessToken();
-                }
-                else{
-                    console.log(res);
-                    alert("해당 유저를 팔로우 취소하지 못했습니다.");
-                }
-            });
-        }
-        else{//해당 유저가 팔로우 되어있지 않은데 클릭 -> 팔로우 신청
-            axios.post(followUserUrl,{
-                userId: loadedUserId
-            })
-            .then((res) => {
-                alert("팔로우 신청했습니다.");
-                setIsFollowed((cur) => !cur);
-            })
-            .catch((res) => {
-                if(res.status === 401){
-                    refreshAccessToken();
-                }
-                else{
-                    console.log(res);
-                    alert("해당 유저를 팔로우 하지 못했습니다.");
-                }
-            });
-        }
+        let followOrUnfollowUrl = "";
+        isFollowed ? followOrUnfollowUrl = unfollowUserUrl : followOrUnfollowUrl = followUserUrl
+        axios.post(followOrUnfollowUrl,{
+            userId: loadedUserId
+        })
+        .then((res) => {
+            alert("팔로우/팔로우를 취소했습니다.");
+            setIsFollowed((cur) => !cur);
+        })
+        .catch((res) => {
+            if(res.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("해당 유저를 팔로우/ 팔로우 취소하지 못했습니다.");
+            }
+        });
     };
 
     //유저 신고함수
