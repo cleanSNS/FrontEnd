@@ -104,7 +104,7 @@ const Home = ({ logout, refreshAccessToken }) => {
     //해시태그의 게시글 숫자 검색
     axios.get(`${pageloadHashtagNumUrl}${userSearch}`)
     .then((res) => {
-      setHashtagPageNumber(res.data.count);//여기 좀 다를 수 있음
+      setHashtagPageNumber(res.data.data.count);//여기 좀 다를 수 있음
       if(isOK) setIsSubmitted(true);
     })
     .catch((res) => {
