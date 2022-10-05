@@ -64,6 +64,10 @@ const ImageArea = ({imgList, pageIndex}) => {
 };
 
 const Pages = ({pageList, lastPage, setPageId}) => {
+    const pageClickFunc = (event) => {
+        setPageId(event.target.id.split('_')[1]);
+    };
+
     return(
         <div className={Style.pageListArea}>
             {
@@ -71,7 +75,7 @@ const Pages = ({pageList, lastPage, setPageId}) => {
                 <p className={Style.noPageText}>글이 존재하지 않습니다.. 너무도 조용합니다..</p>
                 :
                 pageList.map((data, index) => (
-                    <div className={Style.singlePageCover} key={index} onClick={setPageId(data.pageId)}ref={index === (pageList.length - 1) ? lastPage : null}>
+                    <div className={Style.singlePageCover} key={index} id={`page_${data.pageId}`} onClick={pageClickFunc} ref={index === (pageList.length - 1) ? lastPage : null}>
                         {/* 프로필 영역 */}
                         <div className={Style.profileArea}>
                             <div className={Style.flexBoxCenter}>
