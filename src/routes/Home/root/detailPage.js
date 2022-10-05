@@ -131,7 +131,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(987654321);//대댓글 startId
 
     /*********************초기 화면 세팅**********************/
-    //초기 화면 로드 - 글 내용
+    //초기 화면 로드 - 글 내용 + 초기 댓글
     const presetDetailPage = () => {
         if(pageId === -1) return;
 
@@ -146,7 +146,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
             //댓글 초기 세팅 부분
             const tmp = [...res.data.data.commentDtoList.data];
             setCommentList(tmp);
-            setCommentStartId(res.data.data.startId);
+            setCommentStartId(res.data.data.commentDtoList.startId);
 
             //시간 연산부분
             const now = new Date();
@@ -209,7 +209,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     };
     useEffect(presetDetailPage, []);
 
-    //댓글로드 함수 - 초기상황에 부르지 않고 두번째 이후부터 부르는 함수이다.
+    //댓글로드 함수 - 추가 댓글
     const presetComment = () => {
         if(pageId === -1) return;
         axios.get(`${LoadDetailPageUrl}${pageId}/comment?startId=${commentStartId}`)
@@ -378,6 +378,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
             alert("댓글 작성 완료");
             setUserCommentInput("");//댓글 부분 초기화
             setCommentToWhom(["p", -1, ""]);//댓글 대상 초기화
+            presetComment();//댓글 내가 쓴거까지 로드된내용 불러오기
         })
         .catch((res) => {
             if(res.status === 401){
