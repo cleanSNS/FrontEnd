@@ -253,6 +253,10 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
         .then((res) => {
             const next = [...commentOfCommentList];//지금의 리스트
             const tmp = [...res.data.data];//받아온 리스트
+            console.log("아래 배열이 기존 배열입니다.");
+            console.log(next);
+            console.log("아래 배열이 받아온 리스트이다.");
+            console.log(tmp);
             for(let i = 0; i < (groupId - next.length + 1); i++){//추가된 group의 수만큼 빈 배열을 append
                 next.push([]);
             }
