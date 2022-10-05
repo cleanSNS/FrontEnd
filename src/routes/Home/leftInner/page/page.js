@@ -116,11 +116,18 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
 
     //hashtag변경함수 - 이게 트리거가 되어 page들을 불러온다.
     const setHashtagFilterFunc = () => {
+        let setTo = "";
         if(leftBookState.split('/')[1] === undefined){
-            setHashtagFilter("");
+            setTo = "";
         }
         else{
-            setHashtagFilter(leftBookState.split('/')[1]);
+            setTo = leftBookState.split('/')[1];
+        }
+        if(hashtagFilter !== setTo){//다른 페이지로 이동한 것임으로 기존에 로드했던 페이지를 초기화한다.
+            setPageList([]);
+            setPageStartId(987654321);
+            console.log(`해시태그 ${setTo}로 검색합니다.`);
+            setHashtagFilter(setTo);
         }
     };
     useEffect(setHashtagFilterFunc, [leftBookState]);
@@ -128,6 +135,7 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
     //게시글 로드 함수 <---------------------------------------------hashtagFilter에 따라 여기 다르게 해야함
     const loadPageListFunc = () => {
         let selectedpageLoadUrl = "";
+        console.log(hashtagFilter);
         hashtagFilter === "" ? 
         selectedpageLoadUrl = `${pageloadUrl}?startId=${pageStartId}`
         :
