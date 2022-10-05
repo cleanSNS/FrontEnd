@@ -128,7 +128,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const [isLastComment, setIsLastComment] = useState(false);//마지막 댓글이 불린 경우 true로 설정
     const [lastComment, inView] = useInView();//마지막 댓글을 인식할 inView
     const [commentOfCommentList, setCommentOfCommentList] = useState([[]]);//대댓글 리스트 - [[초기화때 필요!], [groupId === 1인 대댓글], [groupId === 2인 대댓글], [groupId === 3인 대댓글], ...]의 형식이다.
-    const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(0);//대댓글 startId
+    const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//대댓글 startId
 
     /*********************초기 화면 세팅**********************/
     //초기 화면 로드 - 글 내용 + 초기 댓글
