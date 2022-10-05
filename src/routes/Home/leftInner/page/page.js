@@ -131,7 +131,7 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
         hashtagFilter === "" ? 
         selectedpageLoadUrl = `${pageloadUrl}?startId=${pageStartId}`
         :
-        selectedpageLoadUrl = `${pageloadHashtagUrl}${hashtagFilter}$startId=${pageStartId}`
+        selectedpageLoadUrl = `${pageloadHashtagUrl}${hashtagFilter}&startId=${pageStartId}`
         axios.get(selectedpageLoadUrl)
         .then((res) => {
             const cur = [...pageList];
