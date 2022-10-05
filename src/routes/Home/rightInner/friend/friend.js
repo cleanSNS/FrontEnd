@@ -14,7 +14,7 @@ const RenderRightFriend = ({freindList, leftBookChangeHandler}) => {
         <div className={Style.friendList}>
             {
                 freindList.length === 0 ? 
-                <p className={Style.noFollowee}>팔로우 중인 유저가 없습니다.</p>
+                <p className={Style.noFollowee}>친구인 유저가 없습니다.</p>
                 :
                 freindList.map((data, index) => (
                     <div className={Style.friendProfileCover} key={index}>
@@ -36,10 +36,12 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
 
     //화면 렌더링 초기 설정 함수
     const rightFriendPreset = () => {
+        let followeeListtmp;
+        let followerListtmp;
         axios.get(getFolloweeListUrl)//내가 팔로우 중인 유저 불러오기
         .then((res) => {
             const tmp = [...res.data.data];
-            console.log(res.data);
+            followeeListtmp = tmp;
             setFolloweeList(tmp);
         })
         .catch((res) => {
@@ -56,6 +58,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
         axios.get(getfollowerListUrl)//나를 팔로우 중인 유저 불러오기
         .then((res) => {
             const tmp = [...res.data.data];
+            followerListtmp = tmp;
             setFollowerList(tmp);
         })
         .catch((res) => {
@@ -70,8 +73,8 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
         });
 
         //follower와 follwee에 동시에 속한 값들은 친구로 저장
-        const JSONFollowerList = followerList.map(d => JSON.stringify(d));
-        const JSONFolloweeList = followeeList.map(d => JSON.stringify(d));
+        const JSONFollowerList = followerListtmp.map(d => JSON.stringify(d));
+        const JSONFolloweeList = followeeListtmp.map(d => JSON.stringify(d));
         const JSONFreindList = JSONFollowerList.filter(x => JSONFolloweeList.includes(x));
         setFreindList(JSONFreindList.map(d => JSON.parse(d)));
 
