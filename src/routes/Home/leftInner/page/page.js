@@ -10,6 +10,7 @@ import axios from 'axios';
 import Style from './page.module.css';
 import {
     pageloadUrl,
+    pageloadHashtagUrl,
 } from "../../../../apiUrl";
 
 const ImageArea = ({imgList, pageIndex}) => {
@@ -126,7 +127,12 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
 
     //게시글 로드 함수 <---------------------------------------------hashtagFilter에 따라 여기 다르게 해야함
     const loadPageListFunc = () => {
-        axios.get(`${pageloadUrl}?startId=${pageStartId}`)
+        let selectedpageLoadUrl = "";
+        hashtagFilter === "" ? 
+        selectedpageLoadUrl = `${pageloadUrl}?startId=${pageStartId}`
+        :
+        selectedpageLoadUrl = `${pageloadHashtagUrl}${hashtagFilter}$startId=${pageStartId}`
+        axios.get(selectedpageLoadUrl)
         .then((res) => {
             const cur = [...pageList];
             const tmp = [...res.data.data];

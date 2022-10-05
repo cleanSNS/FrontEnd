@@ -3,7 +3,6 @@ import Style from './detailPage.module.css';
 import moreStuff from './moreStuff.png';
 import heartImg from './heart_outline.png';
 import heartImgFill from './heart_fill.png';
-import newCommentImg from './tagImages/message.png';
 import leftArrow from './caret_left.png';
 import rightArrow from './caret_right.png';
 import { useState, useEffect } from 'react';
