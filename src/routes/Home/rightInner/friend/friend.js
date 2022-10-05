@@ -27,8 +27,6 @@ const RenderRightFriend = ({freindList, leftBookChangeHandler}) => {
 }
 
 const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
-    const [followeeList, setFolloweeList] = useState([]);
-    const [followerList, setFollowerList] = useState([]);
     const [freindList, setFreindList] = useState([]);
     const [myProfileImage, setMyProfileImage] = useState("");
     const [myProfileName, setMyProfileName] = useState("");
@@ -37,12 +35,10 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
     //화면 렌더링 초기 설정 함수
     const rightFriendPreset = () => {
         let followeeListtmp;
-        let followerListtmp;
         axios.get(getFolloweeListUrl)//내가 팔로우 중인 유저 불러오기
         .then((res) => {
             const tmp = [...res.data.data];
             followeeListtmp = tmp;
-            setFolloweeList(tmp);
         })
         .catch((res) => {
             if(res.status === 401){//access token이 만료된 경우이다.
@@ -55,11 +51,13 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
             }
         });
 
+        console.log(followeeListtmp);
+
+        let followerListtmp;
         axios.get(getfollowerListUrl)//나를 팔로우 중인 유저 불러오기
         .then((res) => {
             const tmp = [...res.data.data];
             followerListtmp = tmp;
-            setFollowerList(tmp);
         })
         .catch((res) => {
             if(res.status === 401){//access token이 만료된 경우이다.
@@ -72,11 +70,13 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
             }
         });
 
+        console.log(followerListtmp);
+
         //follower와 follwee에 동시에 속한 값들은 친구로 저장
-        const JSONFollowerList = followerListtmp?.map(d => JSON.stringify(d));
-        const JSONFolloweeList = followeeListtmp?.map(d => JSON.stringify(d));
-        const JSONFreindList = JSONFollowerList?.filter(x => JSONFolloweeList.includes(x));
-        setFreindList(JSONFreindList?.map(d => JSON.parse(d)));
+        const JSONFollowerList = followerListtmp.map(d => JSON.stringify(d));
+        const JSONFolloweeList = followeeListtmp.map(d => JSON.stringify(d));
+        const JSONFreindList = JSONFollowerList.filter(x => JSONFolloweeList.includes(x));
+        setFreindList(JSONFreindList.map(d => JSON.parse(d)));
 
 
         axios.get(getcurrentProfileUrl)//내 정보 불러오기
