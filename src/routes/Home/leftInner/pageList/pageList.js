@@ -63,8 +63,6 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
 };
 
 const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => {
-    console.log(loadedUserId);
-    console.log(setted);
     const [userPageList, setUserPageList] = useState([]);
     const [pageStartId, setPageStartId] = useState(987654321);
 
@@ -121,8 +119,6 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
 
     const loadLoadedUserId = () => {
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
-        console.log(leftBookState);
-        console.log(loadedUserId);
         setLoadedUserId(Number(leftBookState.split('/')[1]));
         if(userId === Number(loadedUserId)){//자기 자신의 페이지를 불러온 경우
             setIsMyPage(true);
@@ -135,8 +131,6 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
 
     const presetUserPageList = () => {
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
-        console.log(leftBookState);
-        console.log(loadedUserId);
         setLoadedUserId(Number(leftBookState.split('/')[1]));
         if(userId === Number(loadedUserId)){//자기 자신의 페이지를 불러온 경우
             setIsMyPage(true);

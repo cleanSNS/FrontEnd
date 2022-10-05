@@ -126,7 +126,6 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
         if(hashtagFilter !== setTo){//다른 페이지로 이동한 것임으로 기존에 로드했던 페이지를 초기화한다.
             setPageList([]);
             setPageStartId(987654321);
-            console.log(`해시태그 ${setTo}로 검색합니다.`);
             setHashtagFilter(setTo);
         }
     };
@@ -135,14 +134,13 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
     //게시글 로드 함수
     const loadPageListFunc = () => {
         let selectedpageLoadUrl = "";
-        console.log(hashtagFilter);
+        //해시태그가 존재하면 해시태그로 글 부르는 api로 전환
         hashtagFilter === "" ? 
         selectedpageLoadUrl = `${pageloadUrl}?startId=${pageStartId}`
         :
         selectedpageLoadUrl = `${pageloadHashtagUrl}${hashtagFilter}&startId=${pageStartId}`
         axios.get(selectedpageLoadUrl)
         .then((res) => {
-            console.log(res.data);//<====================================지워야함
             const cur = [...pageList];
             const tmp = [...res.data.data];
             if(tmp.length === 0){
