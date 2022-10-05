@@ -10,6 +10,7 @@ import LeftPageList from "../leftInner/pageList/pageList";
 import LeftChat from "../leftInner/chat/chat";
 import LeftNewPost from "../leftInner/newPost/newPost";
 import LeftSetting from "../leftInner/setting/settingMain";
+import LeftNewChat from "../leftInner/newChat/newChat";
 
 import RightNewPost from "../rightInner/newPost/newPost";
 import RightChat from "../rightInner/chat/chat";
@@ -32,7 +33,7 @@ import {
 import axios from 'axios';
 
 const Home = ({ logout, refreshAccessToken }) => {
-  //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
+  //오른쪽 책의 내용을 바꿔주는 state => newPost // newChat // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting
   const [leftBookState, setLeftBookState] = useState("page");
@@ -358,6 +359,7 @@ const Home = ({ logout, refreshAccessToken }) => {
                 {leftBookState.includes("page") ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setPageId={setPageId}/> : null}
                 {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
                 {leftBookState === "chat" ? <LeftChat refreshAccessToken={refreshAccessToken}/> : null}
+                {leftBookState === "newChat" ? <LeftNewChat /> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
                 {leftBookState === "setting" ? <LeftSetting settingState={settingState} refreshAccessToken={refreshAccessToken}/> : null}
             </div>
