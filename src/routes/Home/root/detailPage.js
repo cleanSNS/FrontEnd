@@ -146,6 +146,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
             //댓글 초기 세팅 부분
             const tmp = [...res.data.data.commentDtoList.data];
             setCommentList(tmp);
+            setGroupId(tmp.length);
             setCommentStartId(res.data.data.commentDtoList.startId);
 
             //시간 연산부분
