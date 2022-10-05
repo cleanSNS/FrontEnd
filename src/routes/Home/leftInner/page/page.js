@@ -12,7 +12,7 @@ import {
     pageloadUrl,
 } from "../../../../apiUrl";
 
-const ImageArea = ({imgList, pageIndex, pageClickFunc}) => {
+const ImageArea = ({imgList, pageIndex}) => {
     const [imageIndex, setImageIndex] = useState(0);//보고있는 이미지의 index
 
     /* 이미지 영역 */
@@ -34,7 +34,7 @@ const ImageArea = ({imgList, pageIndex, pageClickFunc}) => {
     useEffect(moveImageHandler, [imageIndex]);
 
     return(
-        <div className={Style.imageArea} onClick={pageClickFunc}>
+        <div className={Style.imageArea}>
             <div className={Style.onlyImageArea}>
                 <div style={{overflow:"hidden"}}>
                     <div id={`onlyImageArea_${pageIndex}`} style={{width:`${100 * imgList.length}%`, height: "100%", transition: "transform 0.5s"}}>
@@ -64,9 +64,8 @@ const ImageArea = ({imgList, pageIndex, pageClickFunc}) => {
 };
 
 const Pages = ({pageList, lastPage, setPageId}) => {
-    const pageClickFunc = (event) => {
-        console.log(event.target.id.split('_'));
-        setPageId(event.target.id.split('_')[1]);
+    const pageClickFunc = () => {
+        setPageId(document.querySelector('[id^=singlePageId]').id.split('_')[1]);
     };
 
     return(
@@ -76,7 +75,7 @@ const Pages = ({pageList, lastPage, setPageId}) => {
                 <p className={Style.noPageText}>글이 존재하지 않습니다.. 너무도 조용합니다..</p>
                 :
                 pageList.map((data, index) => (
-                    <div className={Style.singlePageCover} key={index} id={`page_${data.pageId}`} ref={index === (pageList.length - 1) ? lastPage : null}>
+                    <div className={Style.singlePageCover} key={index} id={`singlePageId_${data.pageDto.pageId}`} ref={index === (pageList.length - 1) ? lastPage : null}>
                         {/* 프로필 영역 */}
                         <div className={Style.profileArea}>
                             <div className={Style.flexBoxCenter}>
@@ -90,7 +89,7 @@ const Pages = ({pageList, lastPage, setPageId}) => {
                             </div>
                         </div>
                         {/* 이미지 영역 */}
-                        <ImageArea imgList={data.imgUrlList} pageIndex={index} pageClickFunc={pageClickFunc}/>
+                        <ImageArea imgList={data.imgUrlList} pageIndex={index}/>
                         {/* 아래 좋아요랑 글 영역 */}
                         <div className={Style.pageLikeAndContentArea} onClick={pageClickFunc}>
                             <div className={Style.pagelikearea}>
