@@ -9,14 +9,14 @@ import {
     getMyUserIdUrl,
 } from '../../../../apiUrl';
 
-const RenderRightFriend = ({freindList, leftBookChangeHandler}) => {
+const RenderRightFriend = ({friendList, leftBookChangeHandler}) => {
     return(
         <div className={Style.friendList}>
             {
-                freindList.length === 0 ? 
+                friendList.length === 0 ? 
                 <p className={Style.noFollowee}>친구인 유저가 없습니다.</p>
                 :
-                freindList.map((data, index) => (
+                friendList.map((data, index) => (
                     <div className={Style.friendProfileCover} key={index}>
                         <Profile img={data.imgUrl} name={data.nickname} userId={data.userId} leftBookChangeHandler={leftBookChangeHandler}/>
                     </div>
@@ -27,17 +27,19 @@ const RenderRightFriend = ({freindList, leftBookChangeHandler}) => {
 }
 
 const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
-    const [freindList, setFreindList] = useState([]);
+    const [followeeList, setFolloweeList] = useState([]);
+    const [followerList, setFollowerList] = useState([]);
+    const [friendList, setFriendList] = useState([]);
     const [myProfileImage, setMyProfileImage] = useState("");
     const [myProfileName, setMyProfileName] = useState("");
     const [myId, setMyId] = useState("");
 
     //화면 렌더링 초기 설정 함수
     const rightFriendPreset = () => {
-        let followeeListtmp;
         axios.get(getFolloweeListUrl)//내가 팔로우 중인 유저 불러오기
         .then((res) => {
-            followeeListtmp = [...res.data.data];
+            const tmp = [...res.data.data];
+            setFolloweeList(tmp);
         })
         .catch((res) => {
             if(res.status === 401){//access token이 만료된 경우이다.
@@ -50,12 +52,10 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
             }
         });
 
-        if(followeeListtmp === undefined) return;//이상한 경우, 즉시 그냥 종료한다.
-
-        let followerListtmp;
         axios.get(getfollowerListUrl)//나를 팔로우 중인 유저 불러오기
         .then((res) => {
-            followerListtmp = [...res.data.data];
+            const tmp = [...res.data.data];
+            setFollowerList(tmp);
         })
         .catch((res) => {
             if(res.status === 401){//access token이 만료된 경우이다.
@@ -67,15 +67,6 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
                 //window.location.href = '/main';
             }
         });
-
-        console.log(followerListtmp);
-
-        //follower와 follwee에 동시에 속한 값들은 친구로 저장
-        const JSONFollowerList = followerListtmp.map(d => JSON.stringify(d));
-        const JSONFolloweeList = followeeListtmp.map(d => JSON.stringify(d));
-        const JSONFreindList = JSONFollowerList.filter(x => JSONFolloweeList.includes(x));
-        setFreindList(JSONFreindList.map(d => JSON.parse(d)));
-
 
         axios.get(getcurrentProfileUrl)//내 정보 불러오기
         .then((res) => {
@@ -110,12 +101,21 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
     };
     useEffect(rightFriendPreset, []);
 
+    const friendListSet = () => {
+        //follower와 follwee에 동시에 속한 값들은 친구로 저장
+        const JSONFollowerList = followerList.map(d => JSON.stringify(d));
+        const JSONFolloweeList = followeeList.map(d => JSON.stringify(d));
+        const JSONFriendList = JSONFollowerList.filter(x => JSONFolloweeList.includes(x));
+        setFriendList(JSONFriendList.map(d => JSON.parse(d)));
+    };
+    useEffect(friendListSet, [followerList, followeeList]);
+
     return(
         <div className={Style.wholeCover}>
             <div className={Style.Cover}>
                 <Profile img={myProfileImage} name={myProfileName} userId={myId} leftBookChangeHandler={leftBookChangeHandler}/>
             </div>
-            <RenderRightFriend freindList={freindList} leftBookChangeHandler={leftBookChangeHandler}/>
+            <RenderRightFriend friendList={friendList} leftBookChangeHandler={leftBookChangeHandler}/>
         </div>
     );
 }
