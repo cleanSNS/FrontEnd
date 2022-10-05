@@ -16,7 +16,7 @@ import {
 import axios from 'axios';
 
 //대댓글
-const RenderCommentOfComment = ({groupId, setLoadCommentOfComment, loadCommentOfComment, refreshAccessToken}) => {
+const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadCommentOfComment, refreshAccessToken}) => {
     const [toggle, setToggle] = useState(false);//대댓글을 보여주는 toggle이다.
     const [commentOfCommentList, setCommentOfCommentList] = useState([]);//대댓글 리스트
     const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//첫 로드시에는 1이온다.
@@ -87,7 +87,7 @@ const RenderCommentOfComment = ({groupId, setLoadCommentOfComment, loadCommentOf
 }
 
 //댓글
-const RenderComment = ({commentList, lastComment, setCommentToWhom, refreshAccessToken}) => {
+const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
 
     //대댓글을 켜는 함수
@@ -129,7 +129,7 @@ const RenderComment = ({commentList, lastComment, setCommentToWhom, refreshAcces
                                     <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
                                 </div>
                         </div>
-                        <RenderCommentOfComment groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} refreshAccessToken={refreshAccessToken}/>
+                        <RenderCommentOfComment pageId={pageId} groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} refreshAccessToken={refreshAccessToken}/>
                     </div>
                 ))
             }
@@ -441,6 +441,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                     {/* 댓글 영역 */}
                     <RenderComment 
                         commentList={commentList}
+                        pageId={pageId}
                         lastComment={lastComment}
                         setCommentToWhom={setCommentToWhom}
                         refreshAccessToken={refreshAccessToken}
