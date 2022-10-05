@@ -107,6 +107,8 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId}) => 
     const [noticeStartId, setNoticeStartId] = useState(987654321);
     let noMoreNotice = false;
 
+    console.log(noticeList);//<======================================================지우기
+
     //알림 불러오는 함수
     const NoticeRead = () => {
         axios.get(getNoticeUrl + noticeStartId.toString())
