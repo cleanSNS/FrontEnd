@@ -10,7 +10,6 @@ import {
 } from '../../../../apiUrl';
 
 const RenderRightFriend = ({followeeList, leftBookChangeHandler}) => {
-    console.log(followeeList);
     return(
         <div className={Style.friendList}>
             {
@@ -40,7 +39,9 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
     const rightFriendPreset = () => {
         axios.get(getFolloweeListUrl)//내가 팔로우 중인 유저 불러오기
         .then((res) => {
-            setFolloweeList(res.data.data);
+            const tmp = [...res.data.data];
+            console.log(res.data);
+            setFolloweeList(tmp);
         })
         .catch((res) => {
             if(res.status === 401){//access token이 만료된 경우이다.
@@ -55,7 +56,8 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
 
         axios.get(getfollowerListUrl)//나를 팔로우 중인 유저 불러오기
         .then((res) => {
-            setFollowerList(res.data.data);
+            const tmp = [...res.data.data];
+            setFollowerList(tmp);
         })
         .catch((res) => {
             if(res.status === 401){//access token이 만료된 경우이다.
