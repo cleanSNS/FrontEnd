@@ -132,7 +132,7 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
     };
     useEffect(setHashtagFilterFunc, [leftBookState]);
 
-    //게시글 로드 함수 <---------------------------------------------hashtagFilter에 따라 여기 다르게 해야함
+    //게시글 로드 함수
     const loadPageListFunc = () => {
         let selectedpageLoadUrl = "";
         console.log(hashtagFilter);
@@ -142,6 +142,7 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
         selectedpageLoadUrl = `${pageloadHashtagUrl}${hashtagFilter}&startId=${pageStartId}`
         axios.get(selectedpageLoadUrl)
         .then((res) => {
+            console.log(res.data);//<====================================지워야함
             const cur = [...pageList];
             const tmp = [...res.data.data];
             if(tmp.length === 0){
