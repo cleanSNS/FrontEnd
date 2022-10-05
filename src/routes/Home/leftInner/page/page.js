@@ -41,7 +41,7 @@ const ImageArea = ({imgList, pageIndex}) => {
                         {
                             imgList.map((imageUrl, index) =>
                                 <div style={{height: "100%", width: `${100 / imgList.length}%`, float: "left"}} key={index}>
-                                    <img src={imageUrl} style={{width: "100%", height: "100%", objectFit: "contain"}}/>{/* border지워야함 */}
+                                    <img src={imageUrl} style={{width: "100%", height: "100%", objectFit: "contain"}}/>
                                 </div>
                             )
                         }
@@ -107,7 +107,18 @@ const LeftPage = ({refreshAccessToken, leftBookState}) => {
     const [pageList, setPageList] = useState([]); //글 리스트
     const [lastPage, inView] = useInView(); //이게 ref된 요소가 화면에 보이면 inView가 true로 변경
     const [isLoadFinish, setIsLoadFinish] = useState(false);//false면 더 이상 로드할 내용이 남은 경우, true면 로드할 내용이 더 없는 경우이다.
-    const hashtagFilter = leftBookState.split('/')[1];//그냥 리스트면 undefined고, 뭐가 들어있으면 그 값이 들어있다.
+    const [hashtagFilter, setHashtagFilter] = useState(leftBookState.split('/')[1]);//그냥 리스트면 undefined고, 뭐가 들어있으면 그 값이 들어있다.
+
+    //hashtag변경함수 - 이게 트리거가 되어 page들을 불러온다.
+    const setHashtagFilterFunc = () => {
+        if(leftBookState.split('/')[1] === undefined){
+            setHashtagFilter("");
+        }
+        else{
+            setHashtagFilter(leftBookState.split('/')[1]);
+        }
+    };
+    useEffect(setHashtagFilterFunc, [leftBookState]);
 
     //게시글 로드 함수 <---------------------------------------------hashtagFilter에 따라 여기 다르게 해야함
     const loadPageListFunc = () => {
@@ -133,7 +144,7 @@ const LeftPage = ({refreshAccessToken, leftBookState}) => {
             }
         });
     };
-    useEffect(loadPageListFunc, []);//초기 상황에서 로드
+    useEffect(loadPageListFunc, [hashtagFilter]);
 
     //화면의 마지막이 읽히면 조건을 확인해서 글을 로드하는 함수
     const loadMorePageFunc = () => {

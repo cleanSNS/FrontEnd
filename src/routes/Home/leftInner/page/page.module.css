@@ -27,9 +27,8 @@
   margin-bottom: 10px;
   margin-top: 10px;
   border-radius: 0.3rem;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 2fr 9fr 3fr;
+  display: flex;
+  flex-direction: column;
 }
 
 .flexBoxCenter{
@@ -54,6 +53,8 @@
 /***************하나의 페이지의 스타일****************/
 /*프로필영역*/
 .profileArea{
+  width: 100%;
+  height: 10%;
   display: grid;
   grid-template-columns: 2fr 9fr 1fr;
   grid-template-rows: 1fr;
@@ -79,6 +80,8 @@
 
 /*이미지 영역*/
 .imageArea{
+  height: 60%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid rgb(156, 156, 156);
@@ -94,6 +97,9 @@
 .ImageBtnArea{
   height: 10%;
   width: 100%;
+  display: flex;
+  align-content: flex-end;
+  justify-content: center;
 }
 
 .ImageChangeBtn{
@@ -106,6 +112,8 @@
 
 /*글 영역*/
 .pageLikeAndContentArea{
+  width: 100%;
+  height: 30%;
   display: flex;
   flex-direction: column;
 }
