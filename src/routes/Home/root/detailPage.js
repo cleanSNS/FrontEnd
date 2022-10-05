@@ -20,6 +20,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
     const [toggle, setToggle] = useState(false);//대댓글을 보여주는 toggle이다.
     const [commentOfCommentList, setCommentOfCommentList] = useState([]);//대댓글 리스트
     const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//첫 로드시에는 1이온다.
+    const [isLastCommentOfComment, setIsLastCommentOfComment] = useState(false);//마지막 요소가 읽어들여지면 true로 세팅해서 inview로 인해 더이상 로드가 안되게 한다.
     const [lastCommentOfComment, InView] = useInView();//마지막 대댓글에 넣는다. 이게 보이면 대댓글을 추가로 요청한다.
 
     //대댓글 활성화하고 비활성화 하는 함수
@@ -27,6 +28,8 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
         if(groupId === loadCommentOfComment){
             setToggle((cur) => !cur);
             setLoadCommentOfComment(0);//다시 초기 상태로
+            setCommentOfCommentList([]);//다시 초기 상태로
+            setCommentOfCommentStartId(1);//다시 초기 상태로
         }
     }
     useEffect(setToggleFunc, [loadCommentOfComment]);
@@ -36,8 +39,12 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
         if(toggle){
             axios.get(`${LoadDetailPageUrl}${pageId}/nested?group=${groupId}&startId=${commentOfCommentStartId}`)
             .then((res) => {
-                const cur = [...commentOfCommentList];
                 const tmp = [...res.data.data];
+                if(tmp.lenth === 0){
+                    setIsLastCommentOfComment(true);
+                    return;//이후의 작업은 불필요하다.
+                }
+                const cur = [...commentOfCommentList];
                 const next = cur.concat(tmp);
                 setCommentOfCommentList(next);
                 setCommentOfCommentStartId(res.data.startId);
@@ -57,7 +64,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
 
     //맨 아래 요소가 보이면 대댓글을 부른다.
     const lastCommentOfCommentSeen = () => {
-        if(InView){//false일 때도 call된다. true일 때만 실제로 로드한다.
+        if(!isLastCommentOfComment && InView){//false일 때도 call된다. true일 때만 실제로 로드한다 + 실제로 마지막 댓글이 이미 로드 된 상황이면 로드하지 않는다.
             loadThisCommentOfComment();
         }
     };
