@@ -108,7 +108,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
             <div className={Style.Cover}>
                 <Profile img={myProfileImage} name={myProfileName} userId={myId} leftBookChangeHandler={leftBookChangeHandler}/>
             </div>
-            <RenderRightFriend followeeList={followeeList} leftBookChangeHandler={leftBookChangeHandler}/>
+            <RenderRightFriend followeeList={followerList} leftBookChangeHandler={leftBookChangeHandler}/>
         </div>
     );
 }
