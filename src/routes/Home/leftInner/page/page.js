@@ -10,7 +10,6 @@ import axios from 'axios';
 import Style from './page.module.css';
 import {
     pageloadUrl,
-    pageloadHashtagUrl,
 } from "../../../../apiUrl";
 
 const ImageArea = ({imgList, pageIndex}) => {
@@ -112,34 +111,10 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
     const [pageList, setPageList] = useState([]); //글 리스트
     const [lastPage, inView] = useInView(); //이게 ref된 요소가 화면에 보이면 inView가 true로 변경
     const [isLoadFinish, setIsLoadFinish] = useState(false);//false면 더 이상 로드할 내용이 남은 경우, true면 로드할 내용이 더 없는 경우이다.
-    const [hashtagFilter, setHashtagFilter] = useState(leftBookState.split('/')[1]);//그냥 리스트면 undefined고, 뭐가 들어있으면 그 값이 들어있다.
-
-    //hashtag변경함수 - 이게 트리거가 되어 page들을 불러온다.
-    const setHashtagFilterFunc = () => {
-        let setTo = "";
-        if(leftBookState.split('/')[1] === undefined){
-            setTo = "";
-        }
-        else{
-            setTo = leftBookState.split('/')[1];
-        }
-        if(hashtagFilter !== setTo){//다른 페이지로 이동한 것임으로 기존에 로드했던 페이지를 초기화한다.
-            setPageList([]);
-            setPageStartId(987654321);
-            setHashtagFilter(setTo);
-        }
-    };
-    useEffect(setHashtagFilterFunc, [leftBookState]);
 
     //게시글 로드 함수
     const loadPageListFunc = () => {
-        let selectedpageLoadUrl = "";
-        //해시태그가 존재하면 해시태그로 글 부르는 api로 전환
-        hashtagFilter === "" ? 
-        selectedpageLoadUrl = `${pageloadUrl}?startId=${pageStartId}`
-        :
-        selectedpageLoadUrl = `${pageloadHashtagUrl}${hashtagFilter}&startId=${pageStartId}`
-        axios.get(selectedpageLoadUrl)
+        axios.get(`${pageloadUrl}?startId=${pageStartId}`)
         .then((res) => {
             const cur = [...pageList];
             const tmp = [...res.data.data];
@@ -161,7 +136,7 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
             }
         });
     };
-    useEffect(loadPageListFunc, [hashtagFilter]);
+    useEffect(loadPageListFunc, [leftBookState]);//state가 바뀌면 다시 load
 
     //화면의 마지막이 읽히면 조건을 확인해서 글을 로드하는 함수
     const loadMorePageFunc = () => {

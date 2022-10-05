@@ -11,6 +11,7 @@ import LeftChat from "../leftInner/chat/chat";
 import LeftNewPost from "../leftInner/newPost/newPost";
 import LeftSetting from "../leftInner/setting/settingMain";
 import LeftNewChat from "../leftInner/newChat/newChat";
+import LeftHashtagPage from "../leftInner/hashtagPage/hashtagPage";
 
 import RightNewPost from "../rightInner/newPost/newPost";
 import RightChat from "../rightInner/chat/chat";
@@ -114,7 +115,7 @@ const Home = ({ logout, refreshAccessToken }) => {
     setUserSearch("");
     setSearchedList([]);
     //이제 좌측 페이지 변경
-    setLeftBookState(`page/${userSearch}`);
+    setLeftBookState(`hashtagPage/${userSearch}`);
   };
 
   /*****************************new Post 관련*********************************/
@@ -360,6 +361,7 @@ const Home = ({ logout, refreshAccessToken }) => {
                 {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
                 {leftBookState === "chat" ? <LeftChat refreshAccessToken={refreshAccessToken}/> : null}
                 {leftBookState === "newChat" ? <LeftNewChat /> : null}
+                {leftBookState.includes("hashtagPage") ? <LeftHashtagPage leftBookState={leftBookState}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
                 {leftBookState === "setting" ? <LeftSetting settingState={settingState} refreshAccessToken={refreshAccessToken}/> : null}
             </div>
