@@ -16,9 +16,13 @@ import {
 import axios from 'axios';
 
 //대댓글
-const RenderCommentOfComment = ({groupId, commentOfCommentList, setLoadCommentOfComment, loadCommentOfComment}) => {
-    const [toggle, setToggle] = useState(false);
+const RenderCommentOfComment = ({groupId, setLoadCommentOfComment, loadCommentOfComment, refreshAccessToken}) => {
+    const [toggle, setToggle] = useState(false);//대댓글을 보여주는 toggle이다.
+    const [commentOfCommentList, setCommentOfCommentList] = useState([]);//대댓글 리스트
+    const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//첫 로드시에는 1이온다.
+    const [lastCommentOfComment, InView] = useInView();//마지막 대댓글에 넣는다. 이게 보이면 대댓글을 추가로 요청한다.
 
+    //대댓글 활성화하고 비활성화 하는 함수
     const setToggleFunc = () => {
         if(groupId === loadCommentOfComment){
             setToggle((cur) => !cur);
@@ -27,13 +31,45 @@ const RenderCommentOfComment = ({groupId, commentOfCommentList, setLoadCommentOf
     }
     useEffect(setToggleFunc, [loadCommentOfComment]);
 
+    //toggle이되고, 그 값이 true면 그 그룹에 해당하는 대댓글을 불러와야한다.
+    const loadThisCommentOfComment = () => {
+        if(toggle){
+            axios.get(`${LoadDetailPageUrl}${pageId}/nested?group=${groupId}&startId=${commentOfCommentStartId}`)
+            .then((res) => {
+                const cur = [...commentOfCommentList];
+                const tmp = [...res.data.data];
+                const next = cur.concat(tmp);
+                setCommentOfCommentList(next);
+                setCommentOfCommentStartId(res.data.startId);
+            })
+            .catch((res) =>{
+                if(res.status === 401){
+                    refreshAccessToken();
+                }
+                else{
+                    console.log(res);
+                    alert("대댓글을 불러오지 못했습니다.");
+                }
+            });
+        }
+    };
+    useEffect(loadThisCommentOfComment, [toggle]);
+
+    //맨 아래 요소가 보이면 대댓글을 부른다.
+    const lastCommentOfCommentSeen = () => {
+        if(InView){//false일 때도 call된다. true일 때만 실제로 로드한다.
+            loadThisCommentOfComment();
+        }
+    };
+    useEffect(lastCommentOfCommentSeen, [InView]);
+
     return (
         toggle ?
             commentOfCommentList === undefined ?
             null
             :
             commentOfCommentList.map((data, index) =>
-                <div key={index} className={Style.CommentBox} style={{width:"80%"}}>
+                <div key={index} className={Style.CommentBox} style={{width:"80%"}} ref={index === (commentOfCommentList.length - 1) ? lastCommentOfComment : null}>
                     <div className={Style.CommentProfileArea}>
                         <img src={data.userDto.imgUrl} className={Style.UserImage} />
                         <p className={Style.UserNickname}>{data.nickname}</p>
@@ -51,7 +87,7 @@ const RenderCommentOfComment = ({groupId, commentOfCommentList, setLoadCommentOf
 }
 
 //댓글
-const RenderComment = ({commentList, lastComment, commentOfCommentList, setCommentToWhom}) => {
+const RenderComment = ({commentList, lastComment, setCommentToWhom, refreshAccessToken}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
 
     //대댓글을 켜는 함수
@@ -93,7 +129,7 @@ const RenderComment = ({commentList, lastComment, commentOfCommentList, setComme
                                     <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
                                 </div>
                         </div>
-                        <RenderCommentOfComment groupId={data.group} commentOfCommentList={commentOfCommentList[data.group]} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment}/>
+                        <RenderCommentOfComment groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} refreshAccessToken={refreshAccessToken}/>
                     </div>
                 ))
             }
@@ -119,7 +155,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장)
     const [isLiked, setIsLiked] = useState(false);//해당 페이지를 좋아요했는지 저장
     const [imageIndex, setImageIndex] = useState(0);//보고있는 이미지의 index
-    const [groupId, setGroupId] = useState(0);//가장 마지막 groupId
     const [commentToWhom, setCommentToWhom] = useState(["p", -1, ""]);//[0]은 페이지에 댓글인지 댓글에 대댓글인지(c) 표시 // [1]은 대댓글인 경우 groupId를 의미 댓글이면 -1 // [2]는 대댓글인 경우 유저의 닉네임 댓글이면 ""
     const [userCommentInput, setUserCommentInput] = useState("");//유저가 작성하고있는 댓글
 
@@ -127,8 +162,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     const [commentStartId, setCommentStartId] = useState(0);//불러올 댓글의 index
     const [isLastComment, setIsLastComment] = useState(false);//마지막 댓글이 불린 경우 true로 설정
     const [lastComment, inView] = useInView();//마지막 댓글을 인식할 inView
-    const [commentOfCommentList, setCommentOfCommentList] = useState([[]]);//대댓글 리스트 - [[초기화때 필요!], [groupId === 1인 대댓글], [groupId === 2인 대댓글], [groupId === 3인 대댓글], ...]의 형식이다.
-    const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//대댓글 startId
 
     /*********************초기 화면 세팅**********************/
     //초기 화면 로드 - 글 내용 + 초기 댓글
@@ -146,7 +179,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
             //댓글 초기 세팅 부분
             const tmp = [...res.data.data.commentDtoList.data];
             setCommentList(tmp);
-            setGroupId(tmp.length);
             setCommentStartId(res.data.data.commentDtoList.startId);
 
             //시간 연산부분
@@ -224,7 +256,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
             const next = cur.concat(tmp);//기존의 리스트에 불러온 댓글을 붙여넣는다
             setCommentList(next); //댓글 리스트 업데이트
             setCommentStartId(res.data.startId); // startId업데이트
-            setGroupId(next.length);//그룹아이디는 지금까지 불러온 댓글 리스트의 길이와 동일하다.
         })
         .catch((res) => {
             if(res.status === 401){
@@ -244,39 +275,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
         }
     };
     useEffect(loadMoreComment, [inView]);
-
-    //대댓글을 불러오는 함수 - group이 변화했을 때가 트리거이며 초기상황인 groupId === 0인 경우를 제외하고 실행된다.
-    const loadCommentOfCommentFunc = () => {
-        if(groupId === 0) return; //초기상황에는 실행 X
-        
-        axios.get(`${LoadDetailPageUrl}${pageId}/nested?group=${groupId}&startId=${commentOfCommentStartId}`)
-        .then((res) => {
-            const next = [...commentOfCommentList];//지금의 리스트
-            const tmp = [...res.data.data];//받아온 리스트
-            console.log("아래 배열이 기존 배열입니다.");
-            console.log(next);
-            console.log("아래 배열이 받아온 리스트이다.");
-            console.log(tmp);
-            for(let i = 0; i < (groupId - next.length + 1); i++){//추가된 group의 수만큼 빈 배열을 append
-                next.push([]);
-            }
-            tmp.forEach((data) => {
-                next[data.group].push(data);//적절한 index위치에 넣기
-            });
-            setCommentOfCommentList(next);//리스트 업데이트
-            setCommentOfCommentStartId(res.data.startId);//대댓글 startId업데이트
-        })
-        .catch((res) => {
-            if(res.status === 401){
-                refreshAccessToken();
-            }
-            else{
-                console.log(res);
-                alert("댓글을 불러오지 못했습니다.");
-            }
-        });
-    };
-    useEffect(loadCommentOfCommentFunc, [groupId]);
 
     /*********************외부**********************/
     //외부 클릭 시 화면 닫기
@@ -373,7 +371,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
 
         //정보를 바탕으로 댓글 작성
         axios.post(`${newCommentUrl}${pageId}/comment`, {
-            pageId: pageId,
+            pageId: Number(pageId),
             content: userCommentInput,
             group: commentToWhom[0] === "p" ? 0 : commentToWhom[1],
             nested: !(commentToWhom[0] === "p"),
@@ -444,8 +442,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                     <RenderComment 
                         commentList={commentList}
                         lastComment={lastComment}
-                        commentOfCommentList={commentOfCommentList}
                         setCommentToWhom={setCommentToWhom}
+                        refreshAccessToken={refreshAccessToken}
                     />
                     {/* 댓글 입력 영역 */}
                     <form className={Style.userCommentArea} onSubmit={userCommentSubmitHandler}>
