@@ -73,10 +73,10 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
         });
 
         //follower와 follwee에 동시에 속한 값들은 친구로 저장
-        const JSONFollowerList = followerListtmp.map(d => JSON.stringify(d));
-        const JSONFolloweeList = followeeListtmp.map(d => JSON.stringify(d));
-        const JSONFreindList = JSONFollowerList.filter(x => JSONFolloweeList.includes(x));
-        setFreindList(JSONFreindList.map(d => JSON.parse(d)));
+        const JSONFollowerList = followerListtmp?.map(d => JSON.stringify(d));
+        const JSONFolloweeList = followeeListtmp?.map(d => JSON.stringify(d));
+        const JSONFreindList = JSONFollowerList?.filter(x => JSONFolloweeList.includes(x));
+        setFreindList(JSONFreindList?.map(d => JSON.parse(d)));
 
 
         axios.get(getcurrentProfileUrl)//내 정보 불러오기
