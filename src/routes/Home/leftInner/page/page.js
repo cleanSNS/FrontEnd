@@ -63,7 +63,7 @@ const ImageArea = ({imgList, pageIndex}) => {
     );
 };
 
-const Pages = ({pageList, lastPage}) => {
+const Pages = ({pageList, lastPage, setPageId}) => {
     return(
         <div className={Style.pageListArea}>
             {
@@ -71,7 +71,7 @@ const Pages = ({pageList, lastPage}) => {
                 <p className={Style.noPageText}>글이 존재하지 않습니다.. 너무도 조용합니다..</p>
                 :
                 pageList.map((data, index) => (
-                    <div className={Style.singlePageCover} key={index} ref={index === (pageList.length - 1) ? lastPage : null}>
+                    <div className={Style.singlePageCover} key={index} onClick={setPageId(data.pageId)}ref={index === (pageList.length - 1) ? lastPage : null}>
                         {/* 프로필 영역 */}
                         <div className={Style.profileArea}>
                             <div className={Style.flexBoxCenter}>
@@ -102,7 +102,7 @@ const Pages = ({pageList, lastPage}) => {
     );
 };
 
-const LeftPage = ({refreshAccessToken, leftBookState}) => {
+const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
     const [pageStartId, setPageStartId] = useState(987654321);//글 리스트의 startId
     const [pageList, setPageList] = useState([]); //글 리스트
     const [lastPage, inView] = useInView(); //이게 ref된 요소가 화면에 보이면 inView가 true로 변경
@@ -156,7 +156,7 @@ const LeftPage = ({refreshAccessToken, leftBookState}) => {
 
     return(
         <div className={Style.wholeCover}>
-            <Pages pageList={pageList} lastPage={lastPage}/>
+            <Pages pageList={pageList} lastPage={lastPage} setPageId={setPageId}/>
         </div>
     );
 }
