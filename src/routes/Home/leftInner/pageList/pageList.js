@@ -18,56 +18,41 @@ import axios from 'axios';
 
 const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, setted}) => {
     const [userList, setUserList] = useState([]);
-    console.log(setted);
+
+    //팔로워/팔로잉을 불러오는 함수
     const presetUserListArea = () => {
         if(!setted) return;
-        console.log("유저를 불러옵니다..");
-        if(bottomStuff === "FOLLOWER"){
-            axios.get(getfollowerListUrl)
-            .then((res) =>{
-                setUserList(res.data.data);
-            })
-            .catch((res) => {
-                if(res.status === 401){
-                    refreshAccessToken();
-                }
-                else{
-                    console.log(res);
-                    alert("팔로워를 불러오지 못했습니다.");
-                }
-            });
-        }
-        else if(bottomStuff === "FOLLOWEE"){
-            axios.get(getFolloweeListUrl)
-            .then((res) => {
-                setUserList(res.data.data);
-            })
-            .catch((res) => {
-                if(res.status === 401){
-                    refreshAccessToken();
-                }
-                else{
-                    console.log(res);
-                    alert("팔로잉을 불러오지 못했습니다.");
-                }
-            });
-        }
-        else{
-            return;
-        }
+        let followerOfFolloweeUrl = "";
+        bottomStuff === "FOLLOWER" ? followerOfFolloweeUrl = getfollowerListUrl : null
+        bottomStuff === "FOLLOWEE" ? followerOfFolloweeUrl = getFolloweeListUrl : null
+        if(followerOfFolloweeUrl === "") return; //에러상황
+
+        axios.get(followerOfFolloweeUrl)
+        .then((res) =>{
+            setUserList(res.data.data);
+        })
+        .catch((res) => {
+            if(res.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("팔로워/팔로잉를 불러오지 못했습니다.");
+            }
+        });
     };
     useEffect(presetUserListArea, [bottomStuff]);
 
     const userClickHander = (event) => {
         event.preventDefault();
-        leftBookChangeHandler ("pList" + event.target.id);
+        leftBookChangeHandler ("pList/" + document.querySelector('[id^=pageListUserId]').id.split('_')[1]);
     };
 
     return(
         <div className={Style.pageArea}>
             {
                 userList.map((data, index) => (
-                    <div className={Style.userArea} key={index} onClick={userClickHander} id={data.userId}>
+                    <div className={Style.userArea} key={index} onClick={userClickHander} id={`pageListUserId_${data.userId}`}>
                         <img src={data.imgUrl}className={Style.userImg} />
                         <p className={Style.userNickname}>{data.nickname}</p>
                     </div>
