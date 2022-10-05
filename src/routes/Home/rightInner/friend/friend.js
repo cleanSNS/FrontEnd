@@ -34,6 +34,8 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
     const [myProfileName, setMyProfileName] = useState("");
     const [myId, setMyId] = useState("");
 
+    console.log(followeeList);
+
     //화면 렌더링 초기 설정 함수
     const rightFriendPreset = () => {
         axios.get(getFolloweeListUrl)//내가 팔로우 중인 유저 불러오기
