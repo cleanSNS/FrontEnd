@@ -9,14 +9,14 @@ import {
     getMyUserIdUrl,
 } from '../../../../apiUrl';
 
-const RenderRightFriend = ({followeeList, leftBookChangeHandler}) => {
+const RenderRightFriend = ({freindList, leftBookChangeHandler}) => {
     return(
         <div className={Style.friendList}>
             {
-                followeeList.length === 0 ? 
+                freindList.length === 0 ? 
                 <p className={Style.noFollowee}>팔로우 중인 유저가 없습니다.</p>
                 :
-                followeeList.map((data, index) => (
+                freindList.map((data, index) => (
                     <div className={Style.friendProfileCover} key={index}>
                         <Profile img={data.imgUrl} name={data.nickname} userId={data.userId} leftBookChangeHandler={leftBookChangeHandler}/>
                     </div>
@@ -29,11 +29,10 @@ const RenderRightFriend = ({followeeList, leftBookChangeHandler}) => {
 const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
     const [followeeList, setFolloweeList] = useState([]);
     const [followerList, setFollowerList] = useState([]);
+    const [freindList, setFreindList] = useState([]);
     const [myProfileImage, setMyProfileImage] = useState("");
     const [myProfileName, setMyProfileName] = useState("");
     const [myId, setMyId] = useState("");
-
-    console.log(followeeList);
 
     //화면 렌더링 초기 설정 함수
     const rightFriendPreset = () => {
@@ -69,6 +68,13 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
                 //window.location.href = '/main';
             }
         });
+
+        //follower와 follwee에 동시에 속한 값들은 친구로 저장
+        const JSONFollowerList = followerList.map(d => JSON.stringify(d));
+        const JSONFolloweeList = followeeList.map(d => JSON.stringify(d));
+        const JSONFreindList = JSONFollowerList.filter(x => JSONFolloweeList.includes(x));
+        setFreindList(JSONFreindList.map(d => JSON.parse(d)));
+
 
         axios.get(getcurrentProfileUrl)//내 정보 불러오기
         .then((res) => {
@@ -108,7 +114,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
             <div className={Style.Cover}>
                 <Profile img={myProfileImage} name={myProfileName} userId={myId} leftBookChangeHandler={leftBookChangeHandler}/>
             </div>
-            <RenderRightFriend followeeList={followerList} leftBookChangeHandler={leftBookChangeHandler}/>
+            <RenderRightFriend freindList={freindList} leftBookChangeHandler={leftBookChangeHandler}/>
         </div>
     );
 }
