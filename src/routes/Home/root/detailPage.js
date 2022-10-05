@@ -40,7 +40,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
             axios.get(`${LoadDetailPageUrl}${pageId}/nested?group=${groupId}&startId=${commentOfCommentStartId}`)
             .then((res) => {
                 const tmp = [...res.data.data];
-                if(tmp.lenth === 0){
+                if(tmp.length === 0){
                     setIsLastCommentOfComment(true);
                     return;//이후의 작업은 불필요하다.
                 }
