@@ -37,8 +37,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
         let followeeListtmp;
         axios.get(getFolloweeListUrl)//내가 팔로우 중인 유저 불러오기
         .then((res) => {
-            const tmp = [...res.data.data];
-            followeeListtmp = tmp;
+            followeeListtmp = [...res.data.data];
         })
         .catch((res) => {
             if(res.status === 401){//access token이 만료된 경우이다.
@@ -51,13 +50,12 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
             }
         });
 
-        console.log(followeeListtmp);
+        if(followeeListtmp === undefined) return;//이상한 경우, 즉시 그냥 종료한다.
 
         let followerListtmp;
         axios.get(getfollowerListUrl)//나를 팔로우 중인 유저 불러오기
         .then((res) => {
-            const tmp = [...res.data.data];
-            followerListtmp = tmp;
+            followerListtmp = [...res.data.data];
         })
         .catch((res) => {
             if(res.status === 401){//access token이 만료된 경우이다.
