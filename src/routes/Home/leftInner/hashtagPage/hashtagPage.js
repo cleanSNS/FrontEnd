@@ -59,6 +59,7 @@ const LeftHashtagPage = ({leftBookState, setPageId}) => {
 
   return(
     <div className={Style.wholeCover}>
+      <p className={Style.AnswerText}>{`검색하신 "#${hashTag}"에 대한 게시물입니다.`}</p>
       {
         hashTagPageList.map((data, index) => (
           <img 
