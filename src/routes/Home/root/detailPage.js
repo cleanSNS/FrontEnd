@@ -86,7 +86,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
                     <p className={Style.commentText}>{data.content}</p>
                     <div className={Style.commentbtnArea}>
                         <img src={heartImg} className={Style.buttonImg} />
-                        <p className={Style.likeandCommentCount}>{`좋아요${data.likeCount}개`}</p>
+                        <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요${data.likeCount}개`}</p>
                         <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                         {
                             userId === data.userDto.userId ?
@@ -165,7 +165,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                                 <p id={`commentContent/${index}`} className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
                                 <div className={Style.commentbtnArea}>
                                     <img src={heartImg} className={Style.buttonImg}/>
-                                    <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
+                                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${data.likeCount}개`}</p>
                                     <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                                     <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
                                     <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
@@ -510,7 +510,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
                                 <img id="likeBtn" src={heartImg} className={Style.buttonImg} onClick={pageLikeClickHandler} />
-                                <p className={Style.likeandCommentCount}>{`좋아요 ${likeNumber}개`}</p>
+                                <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${likeNumber}개`}</p>
                                 <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                                 {
                                     pageUploadUserId === userId ?
