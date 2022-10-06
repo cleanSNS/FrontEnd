@@ -122,7 +122,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
         setLoadedUserId(Number(leftBookState.split('/')[1]));
         setBottomStuff("PAGE");//또한 기존에 이 페이지가 로드되어있었을 수 있으므로 초기화한다.
-        if(userId === Number(loadedUserId)){//자기 자신의 페이지를 불러온 경우
+        if(userId === Number(leftBookState.split('/')[1])){//자기 자신의 페이지를 불러온 경우
             setIsMyPage(true);
         }
         else{
