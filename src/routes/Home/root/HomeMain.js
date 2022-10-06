@@ -89,7 +89,21 @@ const Home = ({ logout, refreshAccessToken }) => {
     axios.get(`${getUserNicknameAndImageUrl}search?nickname=${userSearch}`)
     .then((res) => {
       setSearchedList(res.data.data);
-      setIsSubmitted(true);
+      //해시태그의 게시글 숫자 검색
+      axios.get(`${pageloadHashtagNumUrl}${userSearch}`)
+      .then((res) => {
+        setHashtagPageNumber(res.data.data.count);//여기 좀 다를 수 있음
+        setIsSubmitted(true);
+      })
+      .catch((res) => {
+        if(res.status === 401){
+          refreshAccessToken();
+        }
+        else{
+          alert("해시태그의 수를 불러오지 못했습니다.");
+          setIsSubmitted(false);
+        }
+      });
     })
     .catch((res) => {
       if(res.status === 401){
@@ -97,22 +111,6 @@ const Home = ({ logout, refreshAccessToken }) => {
       }
       else{
         alert("검색하지 못했습니다.");
-        setIsSubmitted(false);
-      }
-    });
-
-    //해시태그의 게시글 숫자 검색
-    axios.get(`${pageloadHashtagNumUrl}${userSearch}`)
-    .then((res) => {
-      setHashtagPageNumber(res.data.data.count);//여기 좀 다를 수 있음
-      setIsSubmitted(true);
-    })
-    .catch((res) => {
-      if(res.status === 401){
-        refreshAccessToken();
-      }
-      else{
-        alert("해시태그의 수를 불러오지 못했습니다.");
         setIsSubmitted(false);
       }
     });
