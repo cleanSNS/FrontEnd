@@ -115,11 +115,13 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [bottomStuff, setBottomStuff] = useState("PAGE");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
     const [setted, setSetted] = useState(false);
     const [userDropBoxToggle, setUserDropBoxToggle] = useState(false);//...누르면 뜨는거 활성화 toggle
-    const [loadedUserId, setLoadedUserId] = useState(Number(leftBookState.split('/')[1]));
+    const [loadedUserId, setLoadedUserId] = useState("");
 
-    const loadLoadedUserId = () => {
+    /**************************초기 설정******************************/
+    const loadLoadedUserId = () => {//지금 어떤 페이지로 들어왔는지 확인한다.
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
         setLoadedUserId(Number(leftBookState.split('/')[1]));
+        setBottomStuff("PAGE");//또한 기존에 이 페이지가 로드되어있었을 수 있으므로 초기화한다.
         if(userId === Number(loadedUserId)){//자기 자신의 페이지를 불러온 경우
             setIsMyPage(true);
         }
@@ -130,15 +132,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     useEffect(loadLoadedUserId, [leftBookState]);
 
     const presetUserPageList = () => {
-        //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
-        setLoadedUserId(Number(leftBookState.split('/')[1]));
-        if(userId === Number(loadedUserId)){//자기 자신의 페이지를 불러온 경우
-            setIsMyPage(true);
-        }
-        else{
-            setIsMyPage(false);
-        }
-        //이후는 자신의 페이지든 타인의 페이지든 동일하다
+        if(loadedUserId === "") return;//초기 상황인 경우 즉시 종료한다.
         axios.get(getUserNicknameAndImageUrl + loadedUserId + "/profile")
         .then((res) => {
             setUserImage(res.data.data.imgUrl);
@@ -161,6 +155,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     };
     useEffect(presetUserPageList, [loadedUserId]);
 
+    /**************************관리 부분*****************************/
     //게시물 클릭 시 handler
     const pageClickHandler = (event) => {
         event.preventDefault();
