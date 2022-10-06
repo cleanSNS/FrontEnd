@@ -153,7 +153,8 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
     댓글 부르기 트리거는 가장 하단의 댓글을 사용자가 확인했을 때이고,
     대댓글 부르기는 댓글 부르기함수가 호출된 상황 자체이다 - 호출 시 groupId가 달라진다.
 */
-const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
+const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandler}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
+    const [pageUploadUserId, setPageUploadUserId] = useState("");//page를 올린 사람의 id
     const [postedImageList, setPostedImageList] = useState([]);//올린 이미지 list
     const [postedPersonImage, setPostedPersonImage] = useState("");//올린 사람의 이미지
     const [postedPersonNickname, setPostedPersonNickname] = useState("");//올린 사람의 닉네임
@@ -178,6 +179,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
         axios.get(`${LoadDetailPageUrl}${pageId}/detail`)//글 불러오기
         .then((res) => {
             setPostedImageList(res.data.data.imgUrlList);
+            setPageUploadUserId(res.data.data.pageDto.userDto.userId);
             setPostedPersonImage(res.data.data.pageDto.userDto.imgUrl);
             setPostedPersonNickname(res.data.data.pageDto.userDto.nickname);
             setPostedWord(res.data.data.pageDto.content);
@@ -309,6 +311,12 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
     };
     useEffect(moveImageHandler, [imageIndex]);
 
+    /********************글 영역 - 유저 클릭 관련*********************/
+    const pageuploaderClickHandler = (event) => {
+        setPageId(-1);//현재 페이지에서 나감
+        leftBookChangeHandler(`pList/${event.target.id.split('_')[1]}`);//해당 유저의 페이지로 이동
+    }
+
 
     /*********************글 영역 - 좋아요 관련**********************/
     //글의 좋아요 클릭 handler
@@ -427,8 +435,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId}) => {//pageId가 -1�
                     {/* 글 영역 */}
                     <div className={Style.pageScriptArea}>
                         <div className={Style.postPersonProfileArea}>
-                            <img src={postedPersonImage} className={Style.UserImage}/>
-                            <p className={Style.UserNickname}>{postedPersonNickname}</p>
+                            <img src={postedPersonImage} className={Style.UserImage} id={`pageUploadUserImage_${pageUploadUserId}`} onClick={pageuploaderClickHandler}/>
+                            <p className={Style.UserNickname} id={`pageUploadUserName_${pageUploadUserId}`} onClick={pageuploaderClickHandler}>{postedPersonNickname}</p>
                             <img src={moreStuff} className={Style.UserSetting} />
                         </div>
                         <div className={Style.postPersonSettingArea}>

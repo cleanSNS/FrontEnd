@@ -80,6 +80,7 @@
     border: 1px solid black;
     border-radius: 0.5rem;
     margin-right: 30px;
+    cursor: pointer;
 }
 
 .UserNickname{
@@ -87,6 +88,7 @@
     margin-right: 30px;
     font-weight: bold;
     text-align: center;
+    cursor: pointer;
 }
 
 .UserSetting{
