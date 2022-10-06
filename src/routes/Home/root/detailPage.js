@@ -18,7 +18,7 @@ import {
 import axios from 'axios';
 
 //대댓글
-const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadCommentOfComment, userClickHandler, refreshAccessToken, reportClickHandler}) => {
+const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadCommentOfComment, userClickHandler, refreshAccessToken, reportClickHandler, userId}) => {
     const [toggle, setToggle] = useState(false);//대댓글을 보여주는 toggle이다.
     const [commentOfCommentList, setCommentOfCommentList] = useState([]);//대댓글 리스트
     const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//첫 로드시에는 1이온다.
@@ -88,6 +88,19 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
                     <div className={Style.commentbtnArea}>
                         <img src={heartImg} className={Style.buttonImg} />
                         <p className={Style.likeandCommentCount}>{`좋아요${data.likeCount}개`}</p>
+                        <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                        {
+                            userId === data.userDto.userId ?
+                            /* 내 댓글인 경우 수정, 삭제 가능 */
+                            <div className={Style.commentbtnArea}>
+                                <p className={Style.likeandCommentCount}>댓글 수정</p>
+                                <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                                <p className={Style.likeandCommentCount}>댓글 삭제</p>
+                            </div>
+                            :
+                            /* 남의 댓글인 경우 신고 가능 */
+                            <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
+                        }
                     </div>
                 </div>
             )
@@ -96,7 +109,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
 }
 
 //댓글
-const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken, userClickHandler}) => {
+const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken, userClickHandler, userId}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
 
     //대댓글을 켜는 함수
@@ -149,7 +162,6 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                                 <div className={Style.CommentProfileArea}>
                                     <img src={data.userDto.imgUrl} className={Style.UserImage} id={`commentUserImage_${data.userDto.userId}`} onClick={userClickHandler}/>
                                     <p className={Style.UserNickname} id={`commentUserNickname_${data.userDto.userId}`} onClick={userClickHandler}>{data.userDto.nickname}</p>
-                                    <img src={reportBtn} className={Style.UserSetting} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}/>
                                 </div>
                                 <p id={`commentContent/${index}`} className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
                                 <div className={Style.commentbtnArea}>
@@ -157,9 +169,22 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                                     <p className={Style.likeandCommentCount}>{`좋아요 ${data.likeCount}개`}</p>
                                     <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                                     <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
+                                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                                    {
+                                        userId === data.userDto.userId ?
+                                        /* 내 댓글인 경우 수정, 삭제 가능 */
+                                        <div className={Style.commentbtnArea}>
+                                            <p className={Style.likeandCommentCount}>댓글 수정</p>
+                                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                                            <p className={Style.likeandCommentCount}>댓글 삭제</p>
+                                        </div>
+                                        :
+                                        /* 남의 댓글인 경우 신고 가능 */
+                                        <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
+                                    }
                                 </div>
                         </div>
-                        <RenderCommentOfComment pageId={pageId} groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} userClickHandler={userClickHandler} refreshAccessToken={refreshAccessToken} reportClickHandler={reportClickHandler} />
+                        <RenderCommentOfComment pageId={pageId} groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} userClickHandler={userClickHandler} refreshAccessToken={refreshAccessToken} reportClickHandler={reportClickHandler} userId={userId}/>
                     </div>
                 ))
             }
@@ -176,7 +201,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
     댓글 부르기 트리거는 가장 하단의 댓글을 사용자가 확인했을 때이고,
     대댓글 부르기는 댓글 부르기함수가 호출된 상황 자체이다 - 호출 시 groupId가 달라진다.
 */
-const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandler}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
+const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandler, userId}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
     const [pageUploadUserId, setPageUploadUserId] = useState("");//page를 올린 사람의 id
     const [postedImageList, setPostedImageList] = useState([]);//올린 이미지 list
     const [postedPersonImage, setPostedPersonImage] = useState("");//올린 사람의 이미지
@@ -479,7 +504,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         <div className={Style.postPersonProfileArea}>
                             <img src={postedPersonImage} className={Style.UserImage} id={`pageUploadUserImage_${pageUploadUserId}`} onClick={userClickHandler}/>
                             <p className={Style.UserNickname} id={`pageUploadUserName_${pageUploadUserId}`} onClick={userClickHandler}>{postedPersonNickname}</p>
-                            <img src={reportBtn} className={Style.UserSetting} onClick={pageReportClickHandler}/>
                         </div>
                         <div className={Style.contentArea}>
                             <p onClick={changeCommentToPage} className={Style.content}>{postedWord}</p>
@@ -488,6 +512,15 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                             <div className={Style.cover}>
                                 <img id="likeBtn" src={heartImg} className={Style.buttonImg} onClick={pageLikeClickHandler} />
                                 <p className={Style.likeandCommentCount}>{`좋아요 ${likeNumber}개`}</p>
+                                <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                                {
+                                    pageUploadUserId === userId ?
+                                    /* 내 글인 경우 글 삭제 기능이 있음 */
+                                    <p className={Style.likeandCommentCount}>게시글 삭제</p>
+                                    :
+                                    /* 타인의 글인 경우 글 신고 기능이 있음 */
+                                    <p className={Style.likeandCommentCount} onClick={pageReportClickHandler}>글 신고</p>
+                                }
                             </div>
                             <p className={Style.time}>{postedTime}</p>
                         </div>
@@ -500,6 +533,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         setCommentToWhom={setCommentToWhom}
                         refreshAccessToken={refreshAccessToken}
                         userClickHandler={userClickHandler}
+                        userId={userId}
                     />
                     {/* 댓글 입력 영역 */}
                     <form className={Style.userCommentArea} onSubmit={userCommentSubmitHandler}>
