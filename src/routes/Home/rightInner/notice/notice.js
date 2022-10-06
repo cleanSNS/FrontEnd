@@ -105,17 +105,18 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId}) => 
     const [noticeList, setNoticeList] = useState([]);
     const [lastNotice, inView] = useInView();
     const [noticeStartId, setNoticeStartId] = useState(987654321);
-    let noMoreNotice = false;
+    const [noMoreNotice, setNomoreNotice] = useState(false);
 
     //알림 불러오는 함수
     const NoticeRead = () => {
         axios.get(getNoticeUrl + noticeStartId.toString())
         .then((res) => {
             if(res.data.data.length === 0) {
-                noMoreNotice = true;
+                setNomoreNotice(true);
                 return;
             }
             console.log("알림을 불러왔습니다.");
+            console.log(res.data.data);
             const current = [...noticeList];
             const tmp = [...res.data.data];
             const next = current.concat(tmp);
