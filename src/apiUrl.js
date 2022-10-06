@@ -38,7 +38,10 @@ export const refreshNewAccessTokenUrl = `${apiUrl}/user/auth/refresh`;
 export const pageloadUrl = `${apiUrl}/page/main`;
 
 //해시태그에 해당하는 page의 수를 불러오는 Url
-export const pageloadHashtagNumUrl = `${apiUrl}/page/search/hashtag/count?hashtag=`
+export const pageloadHashtagNumUrl = `${apiUrl}/page/search/hashtag/count?hashtag=`;
+
+//해시태그로 글 가져오는 Url
+export const pageLoadHashtagUrl = `${apiUrl}/page/search/hashtag?hashtag=`;
 
 //글 올리는 Url
 export const newPostUrl = `${apiUrl}/page`;
