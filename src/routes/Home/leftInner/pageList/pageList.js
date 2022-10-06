@@ -16,8 +16,14 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, setted}) => {
+const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, setted, leftBookState}) => {
     const [userList, setUserList] = useState([]);
+
+    //페이지 이동 시 초기화함수
+    const reset = () => {
+        setUserList([]);
+    };
+    useEffect(reset, [leftBookState]);
 
     //팔로워/팔로잉을 불러오는 함수
     const presetUserListArea = () => {
@@ -62,9 +68,15 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
     );
 };
 
-const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => {
+const PageListArea = ({bottomStuff, loadedUserId, refreshAccessToken, setPageId, setted, leftBookState}) => {
     const [userPageList, setUserPageList] = useState([]);
     const [pageStartId, setPageStartId] = useState(987654321);
+
+    const reset = () => {
+        setUserPageList([]);
+        setPageStartId(987654321);
+    };
+    useEffect(reset, [leftBookState]);
 
     const presetUserPageList = () => {
         if(!setted) return;
@@ -86,7 +98,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => 
             }
         });
     };
-    useEffect(presetUserPageList, []);
+    useEffect(presetUserPageList, [bottomStuff]);
 
     const singlePageClickHandler = (event) => {
         event.preventDefault();
@@ -309,8 +321,8 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                 <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{`팔로잉 ${followeeCount}`}</p>
             </div>
             <p style={{height:"fit-content"}}>{userIntroduce}</p>
-            {bottomStuff === "PAGE" && setted? <PageListArea loadedUserId={loadedUserId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} setted={setted}/> : null}
-            {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setted={setted}/> : null}
+            {bottomStuff === "PAGE" && setted? <PageListArea bottomStuff={bottomStuff} loadedUserId={loadedUserId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} setted={setted} leftBookState={leftBookState}/> : null}
+            {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setted={setted} leftBookState={leftBookState}/> : null}
         </div>
     );
 }
