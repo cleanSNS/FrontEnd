@@ -29,8 +29,13 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
     const presetUserListArea = () => {
         if(!setted) return;
         let followerOfFolloweeUrl = "";
-        bottomStuff === "FOLLOWER" ? followerOfFolloweeUrl = getfollowerListUrl : followerOfFolloweeUrl = ""
-        bottomStuff === "FOLLOWEE" ? followerOfFolloweeUrl = getFolloweeListUrl : followerOfFolloweeUrl = ""
+        bottomStuff === "FOLLOWER" ? 
+        followerOfFolloweeUrl = getfollowerListUrl
+        :
+        bottomStuff === "FOLLOWEE" ?
+            followerOfFolloweeUrl = getFolloweeListUrl
+            :
+            followerOfFolloweeUrl = ""
         if(followerOfFolloweeUrl === "") return; //에러상황
 
         axios.get(followerOfFolloweeUrl)
