@@ -91,7 +91,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
                         {
                             userId === data.userDto.userId ?
                             /* 내 댓글인 경우 수정, 삭제 가능 */
-                            <div className={Style.commentbtnArea}>
+                            <div className={Style.commentbtnArea} style={{padding: "0", margin: "0"}}>
                                 <p className={Style.likeandCommentCount}>댓글 수정</p>
                                 <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                                 <p className={Style.likeandCommentCount}>댓글 삭제</p>
@@ -172,7 +172,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                                     {
                                         userId === data.userDto.userId ?
                                         /* 내 댓글인 경우 수정, 삭제 가능 */
-                                        <div className={Style.commentbtnArea}>
+                                        <div className={Style.commentbtnArea} style={{padding: "0", margin: "0"}}>
                                             <p className={Style.likeandCommentCount}>댓글 수정</p>
                                             <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                                             <p className={Style.likeandCommentCount}>댓글 삭제</p>
