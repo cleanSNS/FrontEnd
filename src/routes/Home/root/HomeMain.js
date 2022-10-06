@@ -83,14 +83,13 @@ const Home = ({ logout, refreshAccessToken }) => {
   //사용자의 input을 검색하는 함수
   const userSearchSubmitHandler = (event) => {
     event.preventDefault();
-    let isOK = false;
     if(userSearch === '') return;
     
     //유저 검색해서 리스트 업데이트
     axios.get(`${getUserNicknameAndImageUrl}search?nickname=${userSearch}`)
     .then((res) => {
       setSearchedList(res.data.data);
-      isOK = true;
+      setIsSubmitted(true);
     })
     .catch((res) => {
       if(res.status === 401){
@@ -98,6 +97,7 @@ const Home = ({ logout, refreshAccessToken }) => {
       }
       else{
         alert("검색하지 못했습니다.");
+        setIsSubmitted(false);
       }
     });
 
@@ -105,7 +105,7 @@ const Home = ({ logout, refreshAccessToken }) => {
     axios.get(`${pageloadHashtagNumUrl}${userSearch}`)
     .then((res) => {
       setHashtagPageNumber(res.data.data.count);//여기 좀 다를 수 있음
-      if(isOK) setIsSubmitted(true);
+      setIsSubmitted(true);
     })
     .catch((res) => {
       if(res.status === 401){
@@ -113,6 +113,7 @@ const Home = ({ logout, refreshAccessToken }) => {
       }
       else{
         alert("해시태그의 수를 불러오지 못했습니다.");
+        setIsSubmitted(false);
       }
     });
   };
