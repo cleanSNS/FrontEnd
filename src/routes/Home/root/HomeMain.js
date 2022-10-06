@@ -400,7 +400,7 @@ const Home = ({ logout, refreshAccessToken }) => {
           </div>
         </div>
       </div>
-      {pageId === -1 ? null : <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} leftBookChangeHandler={leftBookChangeHandler}/>}
+      {pageId === -1 ? null : <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} leftBookChangeHandler={leftBookChangeHandler} userId={userId}/>}
       {/*<DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId}/>*/}{/* 테스트용. */}
     </div>
   );
