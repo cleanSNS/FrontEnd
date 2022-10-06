@@ -82,7 +82,6 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
                     <div className={Style.CommentProfileArea}>
                         <img src={data.userDto.imgUrl} className={Style.UserImage} id={`commentOfCommentUserImage_${data.userDto.userId}`} onClick={userClickHandler}/>
                         <p className={Style.UserNickname} id={`commentOfCommentUserNickname_${data.userDto.userId}`} onClick={userClickHandler}>{data.userDto.nickname}</p>
-                        <img src={reportBtn} className={Style.UserSetting} id={`reportCommentOfComment_${data.commentId}`} onClick={reportClickHandler}/>
                     </div>
                     <p className={Style.commentText}>{data.content}</p>
                     <div className={Style.commentbtnArea}>
