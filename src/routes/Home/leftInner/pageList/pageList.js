@@ -73,17 +73,20 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
     );
 };
 
-const PageListArea = ({bottomStuff, loadedUserId, refreshAccessToken, setPageId, setted, leftBookState}) => {
+const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, leftBookState}) => {
     const [userPageList, setUserPageList] = useState([]);
     const [pageStartId, setPageStartId] = useState(987654321);
+    const [triger, setTriger] = useState(false);
 
     const reset = () => {
         setUserPageList([]);
         setPageStartId(987654321);
+        setTriger(true);
     };
     useEffect(reset, [leftBookState]);
 
     const presetUserPageList = () => {
+        setTriger(false);
         if(!setted) return;
         axios.get(getUserPageListUrl + loadedUserId.toString() + "?startId=" + pageStartId.toString())
         .then((res) => {
@@ -103,7 +106,7 @@ const PageListArea = ({bottomStuff, loadedUserId, refreshAccessToken, setPageId,
             }
         });
     };
-    useEffect(presetUserPageList, [bottomStuff]);
+    useEffect(presetUserPageList, [triger]);
 
     const singlePageClickHandler = (event) => {
         event.preventDefault();
