@@ -1,6 +1,7 @@
 //가운데에 띄우는 화면
 import Style from './detailPage.module.css';
 import moreStuff from './moreStuff.png';
+import reportBtn from './warning.png';
 import heartImg from './heart_outline.png';
 import heartImgFill from './heart_fill.png';
 import leftArrow from './caret_left.png';
@@ -12,11 +13,12 @@ import {
     likeThisPageUrl,
     checkILikedThisPageOrComment,
     newCommentUrl,
+    ReportUrl,
 } from './../../../apiUrl';
 import axios from 'axios';
 
 //대댓글
-const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadCommentOfComment, userClickHandler, refreshAccessToken}) => {
+const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadCommentOfComment, userClickHandler, refreshAccessToken, reportClickHandler}) => {
     const [toggle, setToggle] = useState(false);//대댓글을 보여주는 toggle이다.
     const [commentOfCommentList, setCommentOfCommentList] = useState([]);//대댓글 리스트
     const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//첫 로드시에는 1이온다.
@@ -80,7 +82,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
                     <div className={Style.CommentProfileArea}>
                         <img src={data.userDto.imgUrl} className={Style.UserImage} id={`commentOfCommentUserImage_${data.userDto.userId}`} onClick={userClickHandler}/>
                         <p className={Style.UserNickname} id={`commentOfCommentUserNickname_${data.userDto.userId}`} onClick={userClickHandler}>{data.userDto.nickname}</p>
-                        <img src={moreStuff} className={Style.UserSetting} />
+                        <img src={reportBtn} className={Style.UserSetting} id={`reportCommentOfComment_${data.userDto.userId}`} onClick={reportClickHandler}/>
                     </div>
                     <p className={Style.commentText}>{data.content}</p>
                     <div className={Style.commentbtnArea}>
@@ -109,6 +111,27 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
         setLoadCommentOfComment(Number(event.target.id));
     };
 
+    //신고 클릭함수
+    const reportClickHandler = (event) => {
+        const target = event.target.id.split('_')[1];
+        axios.post(ReportUrl, {
+            targetId: target,
+            type: "COMMENT",
+        })
+        .then((res) => {
+            alert("신고가 접수되었습니다.");
+        })
+        .catch((res) => {
+            if(res.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("신고하지 못했습니다.");
+            }
+        });
+    }
+
     /*************************상위 요소 전달용 함수들*****************************/
     //댓글에 대댓글을 달 수 있도록 변경하는 함수
     const changeCommentToComment = (event) => {
@@ -126,7 +149,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                                 <div className={Style.CommentProfileArea}>
                                     <img src={data.userDto.imgUrl} className={Style.UserImage} id={`commentUserImage_${data.userDto.userId}`} onClick={userClickHandler}/>
                                     <p className={Style.UserNickname} id={`commentUserNickname_${data.userDto.userId}`} onClick={userClickHandler}>{data.userDto.nickname}</p>
-                                    <img src={moreStuff} className={Style.UserSetting} />
+                                    <img src={reportBtn} className={Style.UserSetting} id={`reportComment_${data.userDto.userId}`} onClick={reportClickHandler}/>
                                 </div>
                                 <p id={`commentContent/${index}`} className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
                                 <div className={Style.commentbtnArea}>
@@ -136,7 +159,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                                     <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
                                 </div>
                         </div>
-                        <RenderCommentOfComment pageId={pageId} groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} userClickHandler={userClickHandler} refreshAccessToken={refreshAccessToken} />
+                        <RenderCommentOfComment pageId={pageId} groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} userClickHandler={userClickHandler} refreshAccessToken={refreshAccessToken} reportClickHandler={reportClickHandler} />
                     </div>
                 ))
             }
@@ -315,7 +338,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     const userClickHandler = (event) => {
         setPageId(-1);//현재 페이지에서 나감
         leftBookChangeHandler(`pList/${event.target.id.split('_')[1]}`);//해당 유저의 페이지로 이동
-    }
+    };
 
     /*********************글 영역 - 좋아요 관련**********************/
     //글의 좋아요 클릭 handler
@@ -408,6 +431,26 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         });
     };
 
+    /*****************글 영역 - 신고*********************/
+    const pageReportClickHandler = () => {
+        axios.post(ReportUrl, {
+            targetId: pageId,
+            type: "PAGE",
+        })
+        .then((res) => {
+            alert("게시글을 신고했습니다.");
+        })
+        .catch((res) => {
+            if(res.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("게시글을 신고하지 못했습니다.");
+            }
+        });
+    };
+
     return(
         <div className={Style.wholeCover} onClick={closePage} id="outSide">
             <div className={Style.ImageAndScriptCover}>
@@ -436,10 +479,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         <div className={Style.postPersonProfileArea}>
                             <img src={postedPersonImage} className={Style.UserImage} id={`pageUploadUserImage_${pageUploadUserId}`} onClick={userClickHandler}/>
                             <p className={Style.UserNickname} id={`pageUploadUserName_${pageUploadUserId}`} onClick={userClickHandler}>{postedPersonNickname}</p>
-                            <img src={moreStuff} className={Style.UserSetting} />
-                        </div>
-                        <div className={Style.postPersonSettingArea}>
-
+                            <img src={reportBtn} className={Style.UserSetting} onClick={pageReportClickHandler}/>
                         </div>
                         <div className={Style.contentArea}>
                             <p onClick={changeCommentToPage} className={Style.content}>{postedWord}</p>

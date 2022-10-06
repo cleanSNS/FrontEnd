@@ -94,6 +94,7 @@
 .UserSetting{
     width: 20px;
     height: 20px;
+    cursor: pointer;
 }
 
 /*작성자 프로필에 ... 누르면 나오는 공간*/
