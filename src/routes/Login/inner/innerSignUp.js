@@ -155,6 +155,7 @@ const SignUp = ({login, toLoginPage}) => {
             })
             .then((res) => {
                 login(res);
+                alert("hi");//<----------------------------------지우기
                 window.location.href="/main";
             })
             .catch((res) => {

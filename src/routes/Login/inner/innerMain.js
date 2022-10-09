@@ -49,6 +49,7 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
             .then((res) => {
                 setWrong("clear");
                 login(res);
+                alert("hi");//<----------------------------------지우기
                 window.location.href="/main";
             })
             .catch((res) => {
