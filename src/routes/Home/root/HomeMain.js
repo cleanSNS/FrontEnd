@@ -34,7 +34,7 @@ import {
 } from "../../../apiUrl";
 import axios from 'axios';
 
-const Home = ({ noticeCount, logout, refreshAccessToken }) => {
+const Home = ({ noticeGetUrl, logout, refreshAccessToken }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting //newChat // hastTagPage
@@ -284,6 +284,14 @@ const Home = ({ noticeCount, logout, refreshAccessToken }) => {
   useEffect(getUserIdHandler, []);
 
   /*************************알림 관련******************************/
+  const [noticeCount, setNoticeCount] = useState(0);
+  const eventSource = new EventSource(noticeGetUrl, { withCredentials: true });
+  eventSource.addEventListener("sse", function (event) {
+    console.log(event);
+    const data = JSON.parse(event.data);
+    console.log(data);//확인하고 지우기
+    setNoticeCount(data.count);
+  });
 
   return(
     <div className={Style.pageCover}>

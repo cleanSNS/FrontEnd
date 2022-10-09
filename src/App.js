@@ -13,7 +13,7 @@ axios.defaults.withCredentials = true;
 
 function App() {
   //로그인 시 받아올 알림과 채팅의 개수
-  const [noticeCount, setNoticeCount] = useState(0);
+  const [noticeGetUrl, setNoticeGetUrl] = useState("");
 
   //로그인시 refresh token을 local Storage에 저장하는 기능 앞에 Bearer 가 붙어있다.
   const loginFunc = (res) => {
@@ -21,15 +21,7 @@ function App() {
     localStorage.setItem("rft", res.headers.authorization);//rft설정
 
     //sse알림 설정
-    const url = `https://api.cleanbook.site/test/${res.data.data.userId}`;//<----------나중에 잘 되면 apiUrl에 옮기기
-
-    const eventSource = new EventSource(url, { withCredentials: true });
-    eventSource.addEventListener("sse", function (event) {
-      console.log(event);
-      const data = JSON.parse(event.data);
-      console.log(data);//확인하고 지우기
-      setNoticeCount(data.count);//<--------------------------------------------------------여기 작성 해야함
-    });
+    setNoticeGetUrl(`https://api.cleanbook.site/test/${res.data.data.userId}`);//<----------나중에 잘 되면 apiUrl에 옮기기
 
     window.location.href="/main";//페이지 이동
   };
@@ -112,7 +104,7 @@ function App() {
       */}
       <Switch>
         <Route path="/main">
-          <Home noticeCount={noticeCount} logout={logoutFunc} refreshAccessToken={refreshAccessToken}/>
+          <Home noticeGetUrl={noticeGetUrl} logout={logoutFunc} refreshAccessToken={refreshAccessToken}/>
         </Route>
         <Route path="/">
           <Login login={loginFunc} />
