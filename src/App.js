@@ -31,7 +31,7 @@ function App() {
       setNoticeCount(data.count);//<--------------------------------------------------------여기 작성 해야함
     });
 
-    window.location.href="/main";//페이지 이동
+    //window.location.href="/main";//페이지 이동
   };
 
   //Access token이 만료되었을 수 있는 상황에서 refresh Token을 통해 다시 발급받는다.
