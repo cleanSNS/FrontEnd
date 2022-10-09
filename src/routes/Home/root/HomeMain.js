@@ -284,15 +284,19 @@ const Home = ({ noticeGetUrl, logout, refreshAccessToken }) => {
   useEffect(getUserIdHandler, []);
 
   /*************************알림 관련******************************/
-  console.log(noticeGetUrl);
   const [noticeCount, setNoticeCount] = useState(0);
-  const eventSource = new EventSource(noticeGetUrl, { withCredentials: true });
-  eventSource.addEventListener("sse", function (event) {
-    console.log(event);
-    const data = JSON.parse(event.data);
-    console.log(data);//확인하고 지우기
-    setNoticeCount(data.count);
-  });
+
+  useEffect(() => {
+    console.log(noticeGetUrl);
+    if(noticeGetUrl === "") return;
+    const eventSource = new EventSource(noticeGetUrl, { withCredentials: true });
+    eventSource.addEventListener("sse", function (event) {
+      console.log(event);
+      const data = JSON.parse(event.data);
+      console.log(data);//확인하고 지우기
+      setNoticeCount(data.count);
+    });
+  }, [noticeGetUrl]);
 
   return(
     <div className={Style.pageCover}>
