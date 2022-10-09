@@ -22,8 +22,6 @@ function App() {
 
     //sse알림 설정
     setNoticeGetUrl(`https://api.cleanbook.site/test/${res.data.data.userId}`);//<----------나중에 잘 되면 apiUrl에 옮기기
-
-    window.location.href="/main";//페이지 이동
   };
 
   //Access token이 만료되었을 수 있는 상황에서 refresh Token을 통해 다시 발급받는다.
