@@ -5,19 +5,33 @@ import {
   Switch,
   Redirect
 } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
 import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl } from './apiUrl';
 axios.defaults.withCredentials = true;
 
 function App() {
+  //로그인 시 받아올 알림과 채팅의 개수
+  const [noticeCount, setNoticeCount] = useState(0);
 
   //로그인시 refresh token을 local Storage에 저장하는 기능 앞에 Bearer 가 붙어있다.
   const loginFunc = (res) => {
-    console.log(res);
-    //alert("Welcome");
-    localStorage.setItem("rft", res.headers.authorization);
+    console.log(res);//로그인의 응답
+    localStorage.setItem("rft", res.headers.authorization);//rft설정
+
+    //sse알림 설정
+    const id = 6;//<------------------------------------------------------------res에서 id받아야함
+    const url = `/local/test/${id}`;//<----------나중에 잘 되면 apiUrl에 옮기기
+
+    const eventSource = new EventSource(url);
+    eventSource.addEventListener("sse", function (event) {
+      console.log(event);
+      const data = JSON.parse(event.data);
+      console.log(data);//확인하고 지우기
+      setNoticeCount(data.count);//<--------------------------------------------------------여기 작성 해야함
+    });
+
     window.location.href="/main";
   };
 
@@ -99,7 +113,7 @@ function App() {
       */}
       <Switch>
         <Route path="/main">
-          <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken}/>
+          <Home noticeCount={noticeCount} logout={logoutFunc} refreshAccessToken={refreshAccessToken}/>
         </Route>
         <Route path="/">
           <Login login={loginFunc} />

@@ -34,7 +34,7 @@ import {
 } from "../../../apiUrl";
 import axios from 'axios';
 
-const Home = ({ logout, refreshAccessToken }) => {
+const Home = ({ noticeCount, logout, refreshAccessToken }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting //newChat // hastTagPage
@@ -235,38 +235,7 @@ const Home = ({ logout, refreshAccessToken }) => {
   //setting 변경 함수
   const SettingChangeHandler = (val) => {
     setSettingState(val);
-  }
-
-  //읽지 않은 채팅 개수 읽어들이기 <---------------------------------구현해야함(아래랑 아주 유사하게 구현)
-  const [chatNumber, setChatNumber] = useState(0);
-  const getChatNumberFunc = () => {
-
   };
-  useEffect(getChatNumberFunc, [rightBookState]);
-
-  //읽지 않은 알림 개수 읽어들이기
-  const [noticeNumber, setNoticeNumber] = useState(0);
-  const getNoticeNumberFunc = () => {
-    if(rightBookState === "notice"){//notice부분을 보는 중이라면 알림부분을 없앤다.
-      setNoticeNumber(0);
-      return;
-    }
-    else{//그 외의 부분을 보는 중이라면 알림의 개수를 읽어서 반영한다.
-      axios.get(getNoticeNumber)
-      .then((res) => {
-        setNoticeNumber(res.data.count);
-      })
-      .catch((res) =>{
-        if(res.status === 401){
-          refreshAccessToken();
-        }
-        else{
-          console.log("알림의 개수를 불러오지 못했습니다.");
-        }
-      });
-      }
-  };
-  useEffect(getNoticeNumberFunc, [rightBookState]);
 
   //페이지에서 글을 클릭하면 글 중앙으로 오게 하기 - 가운데 글을 위한 UseState
   const [pageId, setPageId] = useState(-1);
@@ -314,6 +283,8 @@ const Home = ({ logout, refreshAccessToken }) => {
   };
   useEffect(getUserIdHandler, []);
 
+  /*************************알림 관련******************************/
+
   return(
     <div className={Style.pageCover}>
       {/* 좌 상단 - 로고와 검색창 */}
@@ -341,7 +312,7 @@ const Home = ({ logout, refreshAccessToken }) => {
               </div>
             </div>
             <div className={Style.noticeArea}>
-              {/*noticeNumber === 0 ? null : <NumberNotice number={chatNumber} />*/}
+              {/*chatCount === 0 ? null : <NumberNotice number={chatCount} />*/}
             </div>
           </div>
           <div className={Style.Cover}>
@@ -351,7 +322,7 @@ const Home = ({ logout, refreshAccessToken }) => {
               </div>
             </div>
             <div className={Style.noticeArea}>
-              {chatNumber === 0 ? null : <NumberNotice number={noticeNumber} />}
+              {noticeCount === 0 ? null : <NumberNotice number={noticeCount} />}
             </div>
           </div>
           <div className={Style.Cover}>
@@ -393,7 +364,7 @@ const Home = ({ logout, refreshAccessToken }) => {
             <div className={Style.Cover}>
               { rightBookState === "newPost" ? <RightNewPost newPostLikeNotice={newPostLikeNotice} setNewPostLikeNotice={setNewPostLikeNotice} newPostCommentNotice={newPostCommentNotice} setNewPostCommentNotice={setNewPostCommentNotice} newPostReadPostAuth={newPostReadPostAuth} setNewPostReadPostAuth={setNewPostReadPostAuth} newPostReadCommentAuth={newPostReadCommentAuth} setNewPostReadCommentAuth={setNewPostReadCommentAuth} newPostWriteCommentAuth={newPostWriteCommentAuth} setNewPostWriteCommentAuth={setNewPostWriteCommentAuth} newPostReadLikeAuth={newPostReadLikeAuth} setNewPostReadLikeAuth={setNewPostReadLikeAuth}/> :  null}
               { rightBookState === "chat" ? <RightChat refreshAccessToken={refreshAccessToken} /> : null}
-              { rightBookState === "notice" ? <RightNotice leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken} setPageId={setPageId}/> : null}
+              { rightBookState === "notice" ? <RightNotice leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken} setPageId={setPageId} noticeCount={noticeCount}/> : null}
               { rightBookState === "friend" ? <RightFriend leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken}/> : null}
               { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout}/> : null}
             </div>

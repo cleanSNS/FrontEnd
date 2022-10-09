@@ -101,7 +101,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
     );
 };
 
-const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId}) => {
+const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noticeCount}) => {
     const [noticeList, setNoticeList] = useState([]);
     const [lastNotice, inView] = useInView();
     const [noticeStartId, setNoticeStartId] = useState(987654321);
@@ -134,9 +134,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId}) => 
             }
         })
     };
-
-    //초기 설정
-    useEffect(NoticeRead, []);
+    useEffect(NoticeRead, [noticeCount]);//알림의 수가 달라질 때마다 부른다.
 
     //마지막 요소를 보는 중이며, 아직 알림이 남은 경우 notice를 더 불러오게 하는 함수
     const infiniteLoad = () => {
