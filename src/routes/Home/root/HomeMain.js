@@ -271,6 +271,7 @@ const Home = ({ logout, refreshAccessToken }) => {
     axios.get(getMyUserIdUrl)
     .then((res) => {
       setUserId(res.data.data.userId);
+      console.log(res.data.data.userId);
     })
     .catch((res) => {
       if(res.status === 401){
@@ -287,7 +288,6 @@ const Home = ({ logout, refreshAccessToken }) => {
   const [noticeCount, setNoticeCount] = useState(0);
 
   useEffect(() => {
-    console.log(userId);
     if(userId === -1) return;//초기상태에서 그냥 종료
     const eventSource = new EventSource(`https://api.cleanbook.site/test/${userId}`, { withCredentials: true });
     eventSource.addEventListener("sse", function (event) {

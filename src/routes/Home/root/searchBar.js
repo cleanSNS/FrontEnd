@@ -17,8 +17,8 @@ const SingleSearchList = ({data, clickFunc}) => {
         </div>
         :
         <div id={`cover_${data.userId}`} className={Style.content} onMouseOver={mouseOverHandler} onMouseOut={mouseOutHandler} onClick={clickFunc}>
-            <img src={data.imgUrl} className={Style.searchedUserImage} onClick={clickFunc}/>
-            <p className={Style.searchedUserNickname} onClick={clickFunc}>{data.nickname}</p>
+            <img id={`image_${data.userId}`} src={data.imgUrl} className={Style.searchedUserImage} onClick={clickFunc}/>
+            <p id={`nickname_${data.userId}`} className={Style.searchedUserNickname} onClick={clickFunc}>{data.nickname}</p>
         </div>
     );
 };
