@@ -23,7 +23,7 @@ function App() {
     //sse알림 설정
     const url = `https://api.cleanbook.site/test/${res.data.data.userId}`;//<----------나중에 잘 되면 apiUrl에 옮기기
 
-    const eventSource = new EventSource(url);
+    const eventSource = new EventSource(url, { withCredentials: true });
     eventSource.addEventListener("sse", function (event) {
       console.log(event);
       const data = JSON.parse(event.data);
