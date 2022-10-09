@@ -341,7 +341,7 @@ const Home = ({ logout, refreshAccessToken }) => {
               </div>
             </div>
             <div className={Style.noticeArea}>
-              {noticeNumber === 0 ? null : <NumberNotice number={chatNumber} />}
+              {/*noticeNumber === 0 ? null : <NumberNotice number={chatNumber} />*/}
             </div>
           </div>
           <div className={Style.Cover}>
