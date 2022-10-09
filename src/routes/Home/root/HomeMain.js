@@ -284,6 +284,7 @@ const Home = ({ noticeGetUrl, logout, refreshAccessToken }) => {
   useEffect(getUserIdHandler, []);
 
   /*************************알림 관련******************************/
+  console.log(noticeGetUrl);
   const [noticeCount, setNoticeCount] = useState(0);
   const eventSource = new EventSource(noticeGetUrl, { withCredentials: true });
   eventSource.addEventListener("sse", function (event) {
