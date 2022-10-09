@@ -10,7 +10,7 @@ import {
     NaverLoginUrl,
 } from "../../../apiUrl";
 
-const Main = ({toFindPasswordPage, toSignUpPage, login, setNoticeGetUrl}) => {
+const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
     //변수 선언
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -48,9 +48,7 @@ const Main = ({toFindPasswordPage, toSignUpPage, login, setNoticeGetUrl}) => {
         })
             .then((res) => {
                 setWrong("clear");
-                const url = login(res);
-                setNoticeGetUrl(url);
-                console.log(url);//확인 후 지우기
+                login(res);
                 window.location.href="/main";
             })
             .catch((res) => {

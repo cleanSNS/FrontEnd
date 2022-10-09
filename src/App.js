@@ -12,16 +12,10 @@ import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl } 
 axios.defaults.withCredentials = true;
 
 function App() {
-  //로그인 시 받아올 알림과 채팅의 개수
-  const [noticeGetUrl, setNoticeGetUrl] = useState("");
-
   //로그인시 refresh token을 local Storage에 저장하는 기능 앞에 Bearer 가 붙어있다.
   const loginFunc = (res) => {
     console.log(res);//로그인의 응답
     localStorage.setItem("rft", res.headers.authorization);//rft설정
-
-    //sse알림 설정
-    return `https://api.cleanbook.site/test/${res.data.data.userId}`;//설정할 값을 return
   };
 
   //Access token이 만료되었을 수 있는 상황에서 refresh Token을 통해 다시 발급받는다.
@@ -102,10 +96,10 @@ function App() {
       */}
       <Switch>
         <Route path="/main">
-          <Home noticeGetUrl={noticeGetUrl} logout={logoutFunc} refreshAccessToken={refreshAccessToken}/>
+          <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken}/>
         </Route>
         <Route path="/">
-          <Login login={loginFunc} setNoticeGetUrl={setNoticeGetUrl}/>
+          <Login login={loginFunc}/>
         </Route>
       </Switch>
     </Router>

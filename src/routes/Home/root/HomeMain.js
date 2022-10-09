@@ -34,7 +34,7 @@ import {
 } from "../../../apiUrl";
 import axios from 'axios';
 
-const Home = ({ noticeGetUrl, logout, refreshAccessToken }) => {
+const Home = ({ logout, refreshAccessToken }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting //newChat // hastTagPage
@@ -287,16 +287,16 @@ const Home = ({ noticeGetUrl, logout, refreshAccessToken }) => {
   const [noticeCount, setNoticeCount] = useState(0);
 
   useEffect(() => {
-    console.log(noticeGetUrl);
-    if(noticeGetUrl === "") return;
-    const eventSource = new EventSource(noticeGetUrl, { withCredentials: true });
+    console.log(userId);
+    if(userId === -1) return;//초기상태에서 그냥 종료
+    const eventSource = new EventSource(`https://api.cleanbook.site/test/${userId}`, { withCredentials: true });
     eventSource.addEventListener("sse", function (event) {
       console.log(event);
       const data = JSON.parse(event.data);
       console.log(data);//확인하고 지우기
       setNoticeCount(data.count);
     });
-  }, [noticeGetUrl]);
+  }, [userId]);
 
   return(
     <div className={Style.pageCover}>

@@ -8,7 +8,7 @@ import {
     loginApiUrl
 } from "../../../apiUrl";
 
-const SignUp = ({login, toLoginPage, setNoticeGetUrl}) => {
+const SignUp = ({login, toLoginPage}) => {
     //변수 선언
     const [email, setEmail] = useState("");
     const [password,setPassword] = useState("");
@@ -154,9 +154,7 @@ const SignUp = ({login, toLoginPage, setNoticeGetUrl}) => {
                 password: password,
             })
             .then((res) => {
-                const url = login(res);
-                console.log(url);//확인 후 지우기
-                setNoticeGetUrl(url);
+                login(res);
                 window.location.href="/main";
             })
             .catch((res) => {
