@@ -155,7 +155,7 @@ const SignUp = ({login, toLoginPage}) => {
             })
             .then((res) => {
                 login(res);
-                //window.location.href="/main";
+                window.location.href="/main";
             })
             .catch((res) => {
                 alert("문제 발생. 다시 로그인 시도해주십시오.");
