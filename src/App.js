@@ -21,7 +21,7 @@ function App() {
     localStorage.setItem("rft", res.headers.authorization);//rft설정
 
     //sse알림 설정
-    const url = `https://api.cleanbook.site/test/${res.data.userId}`;//<----------나중에 잘 되면 apiUrl에 옮기기
+    const url = `https://api.cleanbook.site/test/${res.data.data.userId}`;//<----------나중에 잘 되면 apiUrl에 옮기기
 
     const eventSource = new EventSource(url);
     eventSource.addEventListener("sse", function (event) {
