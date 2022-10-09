@@ -21,7 +21,7 @@ function App() {
     localStorage.setItem("rft", res.headers.authorization);//rft설정
 
     //sse알림 설정
-    setNoticeGetUrl(`https://api.cleanbook.site/test/${res.data.data.userId}`);//<----------나중에 잘 되면 apiUrl에 옮기기
+    return `https://api.cleanbook.site/test/${res.data.data.userId}`;//설정할 값을 return
   };
 
   //Access token이 만료되었을 수 있는 상황에서 refresh Token을 통해 다시 발급받는다.
@@ -105,7 +105,7 @@ function App() {
           <Home noticeGetUrl={noticeGetUrl} logout={logoutFunc} refreshAccessToken={refreshAccessToken}/>
         </Route>
         <Route path="/">
-          <Login login={loginFunc} />
+          <Login login={loginFunc} setNoticeGetUrl={setNoticeGetUrl}/>
         </Route>
       </Switch>
     </Router>

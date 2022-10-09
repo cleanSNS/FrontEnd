@@ -3,7 +3,7 @@ import Style from "./LoginMain.module.css";
 import Logo from "../../../logo/loginLogo";
 import MainInnerStuff from "./mainInnerStuff";
 
-const Login = ({login}) => {
+const Login = ({login, setNoticeGetUrl}) => {
     return(
         <div className={Style.Mother}>
             <div className={Style.Cover}>
@@ -17,7 +17,7 @@ const Login = ({login}) => {
                 <div className={Style.spring4} />
                 <div className={Style.book}>
                     <Logo />
-                    <MainInnerStuff login={login} />
+                    <MainInnerStuff login={login} setNoticeGetUrl={setNoticeGetUrl}/>
                 </div>
             </div>
             {/* 스타일 부분 */}

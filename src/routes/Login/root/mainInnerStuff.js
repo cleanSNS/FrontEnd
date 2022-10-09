@@ -5,7 +5,7 @@ import SignUp from "../inner/innerSignUp";
 import FindPW from "../inner/innerFindPW";
 import Style from "./mainInnerStuff.module.css";
 
-const MainInnerStuff = ({login}) =>{
+const MainInnerStuff = ({login, setNoticeGetUrl}) =>{
     //가능한 경우 : LoginMain, FindPassword, SignUp
     const [content, setContent] = useState("loginMain");
     const toLoginPage = () => {
@@ -19,9 +19,9 @@ const MainInnerStuff = ({login}) =>{
     };
     return(
         <div className={Style.Cover}>
-            {content === "loginMain" ? <Main login={login} toFindPasswordPage={toFindPasswordPage} toSignUpPage={toSignUpPage} /> : null}
+            {content === "loginMain" ? <Main login={login} toFindPasswordPage={toFindPasswordPage} toSignUpPage={toSignUpPage} setNoticeGetUrl={setNoticeGetUrl} /> : null}
             {content === "findPassword" ? <FindPW toLoginPage={toLoginPage} toSignUpPage={toSignUpPage} /> : null}
-            {content === "signUp" ? <SignUp login={login} toLoginPage={toLoginPage} /> : null}
+            {content === "signUp" ? <SignUp login={login} toLoginPage={toLoginPage} setNoticeGetUrl={setNoticeGetUrl} /> : null}
         </div>
     )
 }
