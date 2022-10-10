@@ -28,6 +28,7 @@ import userTagImg from "./tagImages/user.png";
 import {
   newPostUrl,
   getNoticeNumber,
+  presetNoticeNumeber,
   getMyUserIdUrl,
   getUserNicknameAndImageUrl,
   pageloadHashtagNumUrl,
@@ -285,8 +286,28 @@ const Home = ({ logout, refreshAccessToken }) => {
   useEffect(getUserIdHandler, []);
 
   /*************************알림 관련******************************/
-  const [noticeCount, setNoticeCount] = useState(0);
+  const [noticeCount, setNoticeCount] = useState(-1);
 
+  //처음 로그인 시 알림의 수를 받아오는 함수
+  const presetNoticeCount = () => {
+    if(noticeCount === -1){
+      axios.get(presetNoticeNumeber)
+      .then((res) => {
+        setNoticeCount(res.data.data.count);
+      })
+      .catch((res) => {
+        if(res.status === 401){
+          refreshAccessToken();
+        }
+        else{
+          alert("알림을 불러오지 못했습니다.");
+        }
+      })
+    }
+  };
+  useEffect(presetNoticeCount, []);//초기상태에서만 진행
+
+  //SSE이벤트 오픈
   useEffect(() => {
     if(userId === -1) return;//초기상태에서 그냥 종료
     const eventSource = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
@@ -334,7 +355,7 @@ const Home = ({ logout, refreshAccessToken }) => {
               </div>
             </div>
             <div className={Style.noticeArea}>
-              {noticeCount === 0 ? null : <NumberNotice number={noticeCount} />}
+              {noticeCount === -1 ? null : <NumberNotice number={noticeCount} />}
             </div>
           </div>
           <div className={Style.Cover}>
