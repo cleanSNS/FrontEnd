@@ -9,8 +9,7 @@ import {
 } from '../../../../apiUrl';
 import closeBtn from './close_btn.png';
 
-const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, checked, lastNotice, leftBookChangeHandler, ListDeleteHandler, index, setPageId}) => {
-
+const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, checked, lastNotice, leftBookChangeHandler, ListDeleteHandler, index, setPageId, setNoticeCount}) => {
     //초기 설정으로, 이미 읽은 알림의 경우 연하게 스타일 변경
     const noticePreset = () => {
         if(checked){
@@ -30,11 +29,13 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
     const onNoticeScripsClickHandler = (event) => {
         event.preventDefault();
 
+        //읽음 처리
         axios.post(readNoticeUrl + notificationId.toString(), {
             notificationId: notificationId,
         })
         .then((res) => {
             console.log("해당 알림 읽기 처리 완료");
+            setNoticeCount((cur) => cur - 1);//알림 하나 읽은 것으로 처리
             document.querySelector(`#noticeScript${notificationId}`).style.color ="gray";
         })
         .catch((res) => {
@@ -42,6 +43,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
             console.log("에러 발생");
         });
 
+        //페이지 이동
         if(type === "FOLLOW"){
             leftBookChangeHandler("pList/" + targetUserId);
         }
@@ -57,14 +59,14 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
             notificationId: notificationId
         })
         .then((res) => {
-            console.log("삭제 완료")
+            console.log("삭제 완료");
+            ListDeleteHandler(event);//보이는 내용 처리
+            setNoticeCount((cur) => cur - 1);//알림 하나 읽은 것으로 처리
         })
         .catch((res) => {
             console.log(res);
-            console.log("에러 발생")
+            console.log("에러 발생");
         })
-        //보이는 내용 처리
-        ListDeleteHandler(event);
     }
 
     return(//마지막 요소는 설정을 더해준다.
@@ -101,7 +103,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
     );
 };
 
-const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noticeCount}) => {
+const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noticeCount, setNoticeCount}) => {
     const [noticeList, setNoticeList] = useState([]);
     const [lastNotice, inView] = useInView();
     const [noticeStartId, setNoticeStartId] = useState(987654321);
@@ -147,7 +149,6 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
     //닫기 버튼 누른 경우 - Notice 요소 안에 선언하려면 list를 요소마다 복사해서 변수로 가져야 하므로 여기에 선언
     const ListDeleteHandler = (event) => {
         event.preventDefault();
-        console.log(event.target.id);
         const tmp = [...noticeList];
         tmp.splice(Number(event.target.id), 1);
         setNoticeList(tmp);
@@ -174,6 +175,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
                         ListDeleteHandler={ListDeleteHandler}
                         index={index}
                         setPageId={setPageId}
+                        setNoticeCount={setNoticeCount}
                     />
                     :
                     <Notice
@@ -189,6 +191,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
                         ListDeleteHandler={ListDeleteHandler}
                         index={index}
                         setPageId={setPageId}
+                        setNoticeCount={setNoticeCount}
                     />
                 ))
             }

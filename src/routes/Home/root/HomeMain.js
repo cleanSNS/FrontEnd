@@ -289,11 +289,10 @@ const Home = ({ logout, refreshAccessToken }) => {
 
   useEffect(() => {
     if(userId === -1) return;//초기상태에서 그냥 종료
-    const eventSource = new EventSource(`https://api.cleanbook.site/test/${userId}`, { withCredentials: true });
+    const eventSource = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
     eventSource.addEventListener("sse", function (event) {
       console.log(event);
       const data = JSON.parse(event.data);
-      console.log(data);//확인하고 지우기
       setNoticeCount(data.count);
     });
   }, [userId]);
@@ -377,7 +376,7 @@ const Home = ({ logout, refreshAccessToken }) => {
             <div className={Style.Cover}>
               { rightBookState === "newPost" ? <RightNewPost newPostLikeNotice={newPostLikeNotice} setNewPostLikeNotice={setNewPostLikeNotice} newPostCommentNotice={newPostCommentNotice} setNewPostCommentNotice={setNewPostCommentNotice} newPostReadPostAuth={newPostReadPostAuth} setNewPostReadPostAuth={setNewPostReadPostAuth} newPostReadCommentAuth={newPostReadCommentAuth} setNewPostReadCommentAuth={setNewPostReadCommentAuth} newPostWriteCommentAuth={newPostWriteCommentAuth} setNewPostWriteCommentAuth={setNewPostWriteCommentAuth} newPostReadLikeAuth={newPostReadLikeAuth} setNewPostReadLikeAuth={setNewPostReadLikeAuth}/> :  null}
               { rightBookState === "chat" ? <RightChat refreshAccessToken={refreshAccessToken} /> : null}
-              { rightBookState === "notice" ? <RightNotice leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken} setPageId={setPageId} noticeCount={noticeCount}/> : null}
+              { rightBookState === "notice" ? <RightNotice leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken} setPageId={setPageId} noticeCount={noticeCount} setNoticeCount={setNoticeCount}/> : null}
               { rightBookState === "friend" ? <RightFriend leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken}/> : null}
               { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout}/> : null}
             </div>

@@ -147,4 +147,4 @@ export const readNoticeUrl = `${apiUrl}/user/notification?notificationId=`;
 export const deleteNoticeUrl = `${apiUrl}/user/notification?notificationId=`;
 
 //읽지 않은 알림 수 조회
-export const getNoticeNumber = `${apiUrl}/user/notification/count`;
+export const getNoticeNumber = `${apiUrl}/test`;
