@@ -70,22 +70,6 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
     }
 
     return(//마지막 요소는 설정을 더해준다.
-        lastNotice === null ?//null이면 별도의 설정이 필요 없다.
-        <div className={Style.noticeCover}>
-                <div className={Style.Cover}>
-                    <img src={userImgUrl} className={Style.noticeImg} onClick={onUserImageClickHandler}/>
-                </div>
-                <div className={Style.Cover}>
-                    {type === "COMMENT" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 댓글이 달렸습니다.</p> : null}
-                    {type === "FOLLOW" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>팔로우 요청이 왔습니다.</p> : null}
-                    {type === "NESTED" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 댓글에 답글이 달렸습니다.</p> : null}
-                    {type === "LIKE" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 좋아요가 눌렸습니다.</p> : null}
-                </div>
-                <div className={Style.Cover}>
-                    <img src={closeBtn} className={Style.deleteBtn} onClick={deleteBtnClickHandler} id={index}/>
-                </div>
-        </div>
-        ://null이 아니면 ref를 추가해준다.
         <div className={Style.noticeCover} ref={lastNotice}>
                 <div className={Style.Cover}>
                     <img src={userImgUrl} className={Style.noticeImg} onClick={onUserImageClickHandler}/>
@@ -161,7 +145,6 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
                 <p className={Style.noNoticeScript}>도착한 알림이 없습니다.</p>
                 :
                 noticeList.map((data, index) =>(//마지막 요소는 last가 true이다.
-                    index === (noticeList.length - 1) ?
                     <Notice
                         notificationId={data.notificationId}//알림의 id
                         userImgUrl={data.userImgUrl}//알림의 대상의 프로필 사진
@@ -170,23 +153,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
                         resourceId={data.resourceId}//근원지 (FOLLOW의 경우 null이다.)
                         checked={data.checked}//해당 알림을 확인했었는지 안했는지
                         key={index}
-                        lastNotice={lastNotice}
-                        leftBookChangeHandler={leftBookChangeHandler}
-                        ListDeleteHandler={ListDeleteHandler}
-                        index={index}
-                        setPageId={setPageId}
-                        setNoticeCount={setNoticeCount}
-                    />
-                    :
-                    <Notice
-                        notificationId={data.notificationId}//알림의 id
-                        userImgUrl={data.userImgUrl}//알림의 대상의 프로필 사진
-                        targetUserId={data.userId}//알림의 대상의 id
-                        type={data.type}//알림의 타입
-                        resourceId={data.resourceId}//근원지 (FOLLOW의 경우 null이다.)
-                        checked={data.checked}//해당 알림을 확인했었는지 안했는지
-                        key={index}
-                        lastNotice={null}
+                        lastNotice={index === (noticeList.length - 1) ? lastNotice : null}
                         leftBookChangeHandler={leftBookChangeHandler}
                         ListDeleteHandler={ListDeleteHandler}
                         index={index}
