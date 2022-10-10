@@ -8,7 +8,7 @@
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 5fr;
+    grid-template-rows: 1fr 7fr;
 }
 
 .Cover{
@@ -24,7 +24,7 @@
 .friendProfileCover{
     display: block;
     width: 90%;
-    height: 18%;
+    height: 13%;
     margin-left: 5%;
     margin-right: 5%;
 }
