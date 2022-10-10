@@ -293,6 +293,8 @@ const Home = ({ logout, refreshAccessToken }) => {
     if(noticeCount === -1){
       axios.get(presetNoticeNumeber)
       .then((res) => {
+        console.log(res.data);
+        console.log(res.data.data.count);
         setNoticeCount(res.data.data.count);
       })
       .catch((res) => {
@@ -355,7 +357,7 @@ const Home = ({ logout, refreshAccessToken }) => {
               </div>
             </div>
             <div className={Style.noticeArea}>
-              {noticeCount === -1 ? null : <NumberNotice number={noticeCount} />}
+              {(noticeCount === -1 || noticeCount === 0)? null : <NumberNotice number={noticeCount} />}
             </div>
           </div>
           <div className={Style.Cover}>
