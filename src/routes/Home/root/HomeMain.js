@@ -290,11 +290,9 @@ const Home = ({ logout, refreshAccessToken }) => {
 
   //처음 로그인 시 알림의 수를 받아오는 함수
   const presetNoticeCount = () => {
-    if(noticeCount === -1){
+    if(noticeCount === -1){//초기상태에서만 이 함수를 이용한다.
       axios.get(presetNoticeNumeber)
       .then((res) => {
-        console.log(res.data);
-        console.log(res.data.data.count);
         setNoticeCount(res.data.data.count);
       })
       .catch((res) => {
