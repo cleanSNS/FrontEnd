@@ -35,7 +35,9 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
         })
         .then((res) => {
             console.log("해당 알림 읽기 처리 완료");
-            setNoticeCount((cur) => cur - 1);//알림 하나 읽은 것으로 처리
+            if(document.querySelector(`#noticeScript${notificationId}`).style.color !== "gray"){//이미 읽은것으로 처리되어있는 경우가 아닐 때 1을 뺀다.
+                setNoticeCount((cur) => cur - 1);//알림 하나 읽은 것으로 처리
+            }
             document.querySelector(`#noticeScript${notificationId}`).style.color = "gray";
         })
         .catch((res) => {
