@@ -310,22 +310,22 @@ const Home = ({ logout, refreshAccessToken }) => {
   useEffect(presetNoticeCount, []);//초기상태에서만 진행
 
   //SSE이벤트 오픈
-  const [eventSource, setEventSource] = useState(null);
   useEffect(() => {
     if(userId === -1) return;//초기상태에서 그냥 종료
-    const eventSourcetmp = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
-    setEventSource(eventSourcetmp);
-  }, [userId]);
-
-  useEffect(() => {
-    if(eventSource !== -1) return;//초기상태에서 그냥 종료
-
+    const eventSource = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
     eventSource.addEventListener("sse", function (event) {
       console.log(event);
       const data = JSON.parse(event.data);
       setNoticeCount(data.count);
     });
-  }, [eventSource]);//eventSource발생시 addEvent Listener를 한다.
+
+    window.onbeforeunload = function(event) {
+      console.log(event);
+      alert("새로 고침");
+      eventSource.close();
+    };
+  }, [userId]);
+
 
   
 
