@@ -310,24 +310,29 @@ const Home = ({ logout, refreshAccessToken }) => {
   useEffect(presetNoticeCount, []);//초기상태에서만 진행
 
   //SSE이벤트 오픈
+  const [eventSource, setEventSource] = useState(null);
   useEffect(() => {
     if(userId === -1) return;//초기상태에서 그냥 종료
-    const eventSource = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
-    eventSource.addEventListener("sse", function (event) {
+    const eventSourcetmp = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
+
+    /* 이거 나중에 밖으로 옮겨야함 */
+    eventSourcetmp.addEventListener("sse", function (event) {
       console.log(event);
       const data = JSON.parse(event.data);
       setNoticeCount(data.count);
     });
 
-    window.onbeforeunload = function(event) {
-      console.log(event);
-      alert("새로 고침");
-      eventSource.close();
-    };
+    setEventSource(eventSourcetmp);
+
   }, [userId]);
 
+  window.onbeforeunload = function(event){
+    event.preventDefault();
+    event.returnValue = 'hello';
+    eventSource.close();
+    setEventSource(null);
+  };
 
-  
 
   return(
     <div className={Style.pageCover}>

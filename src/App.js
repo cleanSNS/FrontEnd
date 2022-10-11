@@ -16,6 +16,7 @@ function App() {
   const loginFunc = (res) => {
     console.log(res);//로그인의 응답
     localStorage.setItem("rft", res.headers.authorization);//rft설정
+    window.location.href="/main";
   };
 
   //Access token이 만료되었을 수 있는 상황에서 refresh Token을 통해 다시 발급받는다.
