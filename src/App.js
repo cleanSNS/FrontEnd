@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
-import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl, getNoticeNumber, getMyUserIdUrl } from './apiUrl';
+import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl} from './apiUrl';
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -16,30 +16,7 @@ function App() {
   const loginFunc = (res) => {
     console.log(res);//로그인의 응답
     localStorage.setItem("rft", res.headers.authorization);//rft설정
-
-    let userId = "";
-
-    axios.get(getMyUserIdUrl)
-    .then((res) => {
-      userId = res.data.data.userId;
-      console.log(res.data.data.userId);
-    })
-    .catch((res) => {
-      if(res.status === 401){
-        refreshAccessToken();
-      }
-      else{
-        console.log("유저 아이디를 불러오지 못했습니다.");
-      }
-    });
-
-    const eventSource = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
-    console.log(eventSource);
-    const tmp = JSON.stringify(eventSource);
-    console.log(tmp)
-    localStorage.setItem("eventSourceObject", JSON.stringify(eventSource));
-
-    //window.location.href="/main";
+    window.location.href="/main";
   };
 
   //Access token이 만료되었을 수 있는 상황에서 refresh Token을 통해 다시 발급받는다.
