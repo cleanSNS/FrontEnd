@@ -242,15 +242,12 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             //시간 연산부분
             const now = Temporal.Now.plainDateTimeISO();//현재 시간 세팅
             const postedDate = Temporal.PlainDateTime.from(res.data.data.pageDto.createdDate);
-            console.log(now);//확인용
-            console.log(postedDate);//확인용
             const result = now.since(postedDate);
-            console.log(result.toString());
             console.log(`${result.minutes}분전`);
             console.log(`${result.hours}시간전`);
-            console.log(`${result.days}일전`);
-            console.log(`${result.months}달전`);
-            console.log(`${result.years}년전`);
+            console.log(result.days === 0);//1이라 false나와야함
+            console.log(result.months === 0);//0이라 true나와야함
+            console.log(result.years === 0);//0이라 true나와야함
         })
         .catch((res) => {
             if(res.status === 401){
