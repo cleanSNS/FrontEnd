@@ -155,8 +155,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
     //신고 클릭함수
     const reportClickHandler = (event) => {
         const target = event.target.id.split('_')[1];
-        const ans = confirm("정말 신고하시겠습니까?");
-        if(ans){//다시 한 번 물어보고 실행
+        if(window.confirm("정말 신고하시겠습니까?")){//다시 한 번 물어보고 실행
             axios.post(ReportUrl, {
                 targetId: target,
                 type: "COMMENT",
@@ -179,8 +178,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
     //삭제 클릭 함수
     const deleteClickHandler = (event) => {
         const target = event.target.id.split('_')[1];
-        const ans = confirm("정말 삭제하시겠습니까?");
-        if(ans){
+        if(window.confirm("정말 삭제하시겠습니까?")){
             axios.delete(`${deleteCommentUrl}${pageId}/comment/${target}`)
             .then((res) => {
                 alert("삭제되었습니다.");
@@ -477,8 +475,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
 
     /*****************글 영역 - 신고*********************/
     const pageReportClickHandler = () => {
-        const ans = confirm("정말 신고하시겠습니까?");
-        if(ans){
+        if(window.confirm("정말 신고하시겠습니까?")){
             axios.post(ReportUrl, {
                 targetId: pageId,
                 type: "PAGE",
@@ -500,8 +497,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
 
     /******************글 영역- 삭제*********************/
     const pageDeleteClickHandler = () => {
-        const ans = confirm("정말 삭제하시겠습니까?");
-        if(ans){
+        if(window.confirm("정말 삭제하시겠습니까?")){
             axios.delete(`${deletePageUrl}${pageId}`)
             .then((res) => {
                 alert("글을 삭제했습니다.");
