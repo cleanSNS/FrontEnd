@@ -19,6 +19,32 @@ import {
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
 
+//시간 계산 함수
+/** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
+const calculateTimeFrom = (calTime) => {
+    const now = Temporal.Now.plainDateTimeISO();//현재 시간 세팅
+    const postedDate = Temporal.PlainDateTime.from(calTime);
+    const result = now.since(postedDate);
+    if(result.minutes === 0){//0분이내인 경우
+        return "방금 전";
+    }
+    else if(result.hours === 0){//1시간보다는 아래인 경우
+        return `${result.minutes}분 전`;
+    }
+    else if(result.days === 0){//1일보다는 아래인 경우
+        return `${result.hours}시간 전`;
+    }
+    else if(result.months === 0){//1달보다는 아래인 경우
+        return `${result.days}일 전`;
+    }
+    else if(result.years === 0){//1년보다는 아래인 경우
+        return `${result.months}달 전`;
+    }
+    else{//1년 이상인 경우
+        return `${result.years}년 전`;
+    }
+};
+
 //대댓글
 const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadCommentOfComment, userClickHandler, refreshAccessToken, reportClickHandler, userId}) => {
     const [toggle, setToggle] = useState(false);//대댓글을 보여주는 toggle이다.
@@ -86,22 +112,25 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
                         <p className={Style.UserNickname} id={`commentOfCommentUserNickname_${data.userDto.userId}`} onClick={userClickHandler}>{data.userDto.nickname}</p>
                     </div>
                     <p className={Style.commentText}>{data.content}</p>
-                    <div className={Style.commentbtnArea}>
-                        <img src={heartImg} className={Style.buttonImg} />
-                        <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요${data.likeCount}개`}</p>
-                        <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                        {
-                            userId === data.userDto.userId ?
-                            /* 내 댓글인 경우 수정, 삭제 가능 */
-                            <div className={Style.commentbtnArea} style={{padding: "0", margin: "0"}}>
-                                <p className={Style.likeandCommentCount}>댓글 수정</p>
-                                <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                                <p className={Style.likeandCommentCount}>댓글 삭제</p>
-                            </div>
-                            :
-                            /* 남의 댓글인 경우 신고 가능 */
-                            <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
-                        }
+                    <div className={Style.likeTimeArea}>
+                        <div className={Style.cover}>
+                            <img src={heartImg} className={Style.buttonImg} />
+                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요${data.likeCount}개`}</p>
+                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                            {
+                                userId === data.userDto.userId ?
+                                /* 내 댓글인 경우 수정, 삭제 가능 */
+                                <div className={Style.commentbtnArea} style={{padding: "0", margin: "0"}}>
+                                    <p className={Style.likeandCommentCount}>댓글 수정</p>
+                                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                                    <p className={Style.likeandCommentCount}>댓글 삭제</p>
+                                </div>
+                                :
+                                /* 남의 댓글인 경우 신고 가능 */
+                                <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
+                            }
+                        </div>
+                        <p className={Style.time}>{calculateTimeFrom(data.createdDate)}</p>
                     </div>
                 </div>
             )
@@ -165,24 +194,27 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                                     <p className={Style.UserNickname} id={`commentUserNickname_${data.userDto.userId}`} onClick={userClickHandler}>{data.userDto.nickname}</p>
                                 </div>
                                 <p id={`commentContent/${index}`} className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
-                                <div className={Style.commentbtnArea}>
-                                    <img src={heartImg} className={Style.buttonImg}/>
-                                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${data.likeCount}개`}</p>
-                                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                                    <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
-                                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                                    {
-                                        userId === data.userDto.userId ?
-                                        /* 내 댓글인 경우 수정, 삭제 가능 */
-                                        <div className={Style.commentbtnArea} style={{padding: "0", margin: "0"}}>
-                                            <p className={Style.likeandCommentCount}>댓글 수정</p>
-                                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                                            <p className={Style.likeandCommentCount}>댓글 삭제</p>
-                                        </div>
-                                        :
-                                        /* 남의 댓글인 경우 신고 가능 */
-                                        <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
-                                    }
+                                <div className={Style.likeTimeArea}>
+                                    <div className={Style.cover}>
+                                        <img src={heartImg} className={Style.buttonImg}/>
+                                        <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${data.likeCount}개`}</p>
+                                        <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                                        <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
+                                        <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                                        {
+                                            userId === data.userDto.userId ?
+                                            /* 내 댓글인 경우 수정, 삭제 가능 */
+                                            <div className={Style.commentbtnArea} style={{padding: "0", margin: "0"}}>
+                                                <p className={Style.likeandCommentCount}>댓글 수정</p>
+                                                <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                                                <p className={Style.likeandCommentCount}>댓글 삭제</p>
+                                            </div>
+                                            :
+                                            /* 남의 댓글인 경우 신고 가능 */
+                                            <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
+                                        }
+                                    </div>
+                                    <p className={Style.time}>{calculateTimeFrom(data.createdDate)}</p>
                                 </div>
                         </div>
                         <RenderCommentOfComment pageId={pageId} groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} userClickHandler={userClickHandler} refreshAccessToken={refreshAccessToken} reportClickHandler={reportClickHandler} userId={userId}/>
@@ -240,27 +272,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setCommentStartId(res.data.data.commentDtoList.startId);
 
             //시간 연산부분
-            const now = Temporal.Now.plainDateTimeISO();//현재 시간 세팅
-            const postedDate = Temporal.PlainDateTime.from(res.data.data.pageDto.createdDate);
-            const result = now.since(postedDate);
-            if(result.minutes === 0){//0분이내인 경우
-                setPostedTime("방금 전");
-            }
-            else if(result.hours === 0){//1시간보다는 아래인 경우
-                setPostedTime(`${result.minutes}분 전`);
-            }
-            else if(result.days === 0){//1일보다는 아래인 경우
-                setPostedTime(`${result.hours}시간 전`);
-            }
-            else if(result.months === 0){//1달보다는 아래인 경우
-                setPostedTime(`${result.days}일 전`);
-            }
-            else if(result.years === 0){//1년보다는 아래인 경우
-                setPostedTime(`${result.months}달 전`);
-            }
-            else{//1년 이상인 경우
-                setPostedTime(`${result.years}년 전`);
-            }
+            setPostedTime(calculateTimeFrom(res.data.data.pageDto.createdDate));
         })
         .catch((res) => {
             if(res.status === 401){
