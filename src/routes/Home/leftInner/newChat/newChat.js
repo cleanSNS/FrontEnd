@@ -6,21 +6,32 @@ import {
     getfollowerListUrl
 } from '../../../../apiUrl';
 
-const SingleFriend = ({data, setChosenFriendList, chosenFriendList}) => {
-    //유저가 선택되면 outputFriendList가 변경된다. 이를 처리하는 함수
+const SingleFriend = ({data, setChosenFriendList, chosenFriendList, addStyle}) => {
+    //유저를 클릭하면 chosenfriendList를 변경한다. => 이미 선택중이면 거기서 제외되고, 선택중이 아니면 추가된다.
     const addFriend = () => {
-        const tmp = [...chosenFriendList];//지금까지 선택된 친구들
-        tmp.push(data);//클릭된 유저를 집어넣는다.
-        setChosenFriendList(tmp);//선택된 유저를 변경한다.
+        if(addStyle === null){
+            const tmp = [...chosenFriendList];//지금까지 선택된 친구들
+            tmp.push(data);//클릭된 유저를 집어넣는다.
+            setChosenFriendList(tmp);//선택된 유저를 변경한다.
+        }
+        else{
+            const tmp = [...chosenFriendList];//지금까지 선택된 친구들
+            const JSONtmp = tmp.map(d => JSON.stringify(d));
+            const JSONdata = JSON.stringify(data);
+            const JSONnext = JSONtmp.filter(x => x !== JSONdata);//선택되지 않은 친구들만 집어넣는다.
+            setChosenFriendList(JSONnext.map(d => JSON.parse(d)));
+        }
     };
 
     return(
-        <div className={Style.singleFriend} onClick={addFriend}>
-            <div className={Style.flexBox}>
-                <img src={data.imgUrl} className={Style.friendImg} />
-            </div>
-            <div className={Style.flexBox}>
-                <p className={Style.friendNickname}>{data.nickname}</p>
+        <div className={Style.singleFriendCover}>
+            <div className={Style.singleFriend} onClick={addFriend} style={addStyle}>
+                <div className={Style.flexBox}>
+                    <img src={data.imgUrl} className={Style.friendImg} />
+                </div>
+                <div className={Style.flexBox}>
+                    <p className={Style.friendNickname}>{data.nickname}</p>
+                </div>
             </div>
         </div>
     );
@@ -31,65 +42,12 @@ const LeftNewChat = ({refreshAccessToken}) => {
     const [outputFriendList, setOutputFriendList] = useState([]);//실제로 출력할 친구 리스트
     const [wholeFriendList, setWholeFriendList] = useState([]);//받아온 친구 리스트
     const [chosenFriendList, setChosenFriendList] = useState([]);//선택된 친구 리스트
-    const [followerList, setFollowerList] = useState([
-        {
-            "userId": 1,
-            "nickname": "홍길동",
-            "imgUrl": null
-        },
-        {
-            "userId": 2,
-            "nickname": "김철수",
-            "imgUrl": null
-        },
-        {
-            "userId": 3,
-            "nickname": "이영희",
-            "imgUrl": null
-        },
-        {
-            "userId": 4,
-            "nickname": "박민철",
-            "imgUrl": null
-        },
-    ]);//친구를 받기 위해 followerList를 받아온다.
-    const [followeeList, setFolloweeList] = useState([
-        {
-            "userId": 2,
-            "nickname": "김철수",
-            "imgUrl": null
-        },
-        {
-            "userId": 3,
-            "nickname": "이영희",
-            "imgUrl": null
-        },
-        {
-            "userId": 4,
-            "nickname": "박민철",
-            "imgUrl": null
-        },
-    ]);//친구를 받기 위해 followeeList를 받아온다.
+    const [followerList, setFollowerList] = useState([]);//친구를 받기 위해 followerList를 받아온다.
+    const [followeeList, setFolloweeList] = useState([]);//친구를 받기 위해 followeeList를 받아온다.
 
     const friendSearchInputChangeHandler = (event) => {
         setFriendSearchInput(event.target.value);
     };
-
-    /*
-    과정
-    1. 초기 상태에 Follower, Followee를 불러온다.
-    2. Follower, Followee를 이용해서 friendList를 생성한다.
-    3. friendList를 아래 조건들을 맞춰 진행한다.
-
-    조건1) 유저가 검색을 한 경우
-        검색한 글을 포함하는 친구들만 outputFriendList에 넣는다.
-    조건2) 유저를 추가한 경우
-        유저를 클릭할 때마다 해당 유저를 chosenFriendList에 넣고 outputFriendList의 상단에 고정한다.
-        => 해결법 : outputFriendList = chosenFriendList + 조건1에 맞는 friendList(에서 chosenFriendList에 있는 경우 제거)
-    => 조건1,2 변경시마다 outPutFriendList를 업데이트한다.
-
-    4. outputFriendList를 출력한다.
-    */
 
     //팔로워와 팔로잉을 불러오는 함수
     const presetFollowerAndFollowee = () => {
@@ -132,6 +90,13 @@ const LeftNewChat = ({refreshAccessToken}) => {
     };
     useEffect(presetFriendList, [followerList, followeeList]);
 
+    //친구 리스트가 확정되면 일단 그 리스트를 output에 넣는다.
+    const presetOutputFriendList = () => {
+        const tmp = [...wholeFriendList];
+        setOutputFriendList(tmp);
+    };
+    useEffect(presetOutputFriendList, [wholeFriendList]);
+
     //유저를 검색하면 outputFriendList가 변경된다. 이를 처리하는 함수
     const changeOutputFriendListbySearch = (event) => {
         event.preventDefault();
@@ -142,14 +107,20 @@ const LeftNewChat = ({refreshAccessToken}) => {
 
     //선택된 유저 리스트가 변경되면 output친구 리스트를 변경해야한다.
     const changeOutputFriendListbyClick = () => {
-        const JSONOutputFriendList = outputFriendList.map(d => JSON.stringify(d));
+        const JSONWholeFriendList = wholeFriendList.map(d => JSON.stringify(d));
         const JSONChosenFriendList = chosenFriendList.map(d => JSON.stringify(d));
-        const leftOverList = JSONOutputFriendList.filter(x => !JSONChosenFriendList.includes(x));//출력값중에서 친구리스트에 없는 친구들이 남은 애들이다.
-        const preList = [...chosenFriendList];
-        const next = preList.concat(leftOverList);
-        setOutputFriendList(next);
+        const leftOverList = JSONWholeFriendList.filter(x => !JSONChosenFriendList.includes(x));//출력값중에서 친구리스트에 없는 친구들이 남은 애들이다.
+        setOutputFriendList(leftOverList.map(d => JSON.parse(d)));
+        setFriendSearchInput("");//검색을 하고있었을 수 있는데 친구를 클릭하면 검색하던 내용을 없앤다.
     };
     useEffect(changeOutputFriendListbyClick, [chosenFriendList]);
+
+    //채팅방 생성함수<----------------------------------------------------------------------------작업해야함
+    const createChatClickHandler = (event) => {
+        event.preventDefault();
+        console.log(chosenFriendList);
+        console.log("이들을 바탕으로 채팅방을 만듭니다.");
+    }
 
     return(
         <div className={Style.wholeCover}>
@@ -166,15 +137,38 @@ const LeftNewChat = ({refreshAccessToken}) => {
             <div className={Style.friendBox}>
                 <div className={Style.friendList}>
                     {
-                        outputFriendList.map((data,index) => (
-                            <SingleFriend key={index} data={data} setChosenFriendList={setChosenFriendList} chosenFriendList={chosenFriendList}/>
+                        chosenFriendList.length === 0 && outputFriendList.length === 0 ?
+                        <p style={{width: "100%", textAlign: 'center'}}>친구가 없습니다..</p>
+                        :
+                        null
+                    }
+                    {
+                        chosenFriendList.map((data, index) => (
+                            <SingleFriend 
+                                key={index}
+                                data={data}
+                                setChosenFriendList={setChosenFriendList}
+                                chosenFriendList={chosenFriendList}
+                                addStyle={{backgroundColor: "gray"}}
+                            />
+                        ))
+                    }
+                    {
+                        outputFriendList.map((data, index) => (
+                            <SingleFriend 
+                                key={index}
+                                data={data}
+                                setChosenFriendList={setChosenFriendList}
+                                chosenFriendList={chosenFriendList}
+                                addStyle={null}
+                            />
                         ))
                     }
                 </div>
             </div>
             {/* 생성 버튼 */}
             <div className={Style.flexBoxRight}>
-                <button className={Style.submitBtn}>생 성</button>
+                <button className={Style.submitBtn} onClick={createChatClickHandler}>생 성</button>
             </div>
         </div>
     );
