@@ -315,14 +315,7 @@ const Home = ({ logout, refreshAccessToken }) => {
     if(userId === -1) return;//초기상태에서 그냥 종료
     const eventSourcetmp = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
 
-    /* 이거 나중에 밖으로 옮겨야함 */
-    eventSourcetmp.addEventListener("sse", function (event) {
-      console.log(event);
-      const data = JSON.parse(event.data);
-      setNoticeCount(data.count);
-    });
-
-    setEventSource(eventSourcetmp);
+    eventSourcetmp.close();
 
   }, [userId]);
 
@@ -331,7 +324,6 @@ const Home = ({ logout, refreshAccessToken }) => {
     eventSource.close();
     setEventSource(null);
   };
-
 
   return(
     <div className={Style.pageCover}>
