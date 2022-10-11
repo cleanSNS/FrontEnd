@@ -6,6 +6,7 @@ import heartImg from './heart_outline.png';
 import heartImgFill from './heart_fill.png';
 import leftArrow from './caret_left.png';
 import rightArrow from './caret_right.png';
+
 import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
@@ -16,6 +17,7 @@ import {
     ReportUrl,
 } from './../../../apiUrl';
 import axios from 'axios';
+import { Temporal } from '@js-temporal/polyfill';
 
 //대댓글
 const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadCommentOfComment, userClickHandler, refreshAccessToken, reportClickHandler, userId}) => {
@@ -238,39 +240,17 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setCommentStartId(res.data.data.commentDtoList.startId);
 
             //시간 연산부분
-            const now = new Date();
-            const postedTime = new Date(res.data.data.pageDto.createdDate);
-            let timeCal = (now - postedTime) / 1000;//초단위로 계산
-            if(timeCal < 1){//1초보다 더 빨리 이전에 올린 경우
-                setPostedTime("방금전");
-            }
-            else{//1초 이상인 경우
-                if(timeCal < 60){//1초부터 59초의 경우
-                    setPostedTime((Math.floor(timeCal)).toString() + "초전");
-                }
-                else{//60초 이상인 경우
-                    timeCal /= 60; //분단위로 계산
-                    if(timeCal < 60){//1분부터 59분의 경우
-                        setPostedTime((Math.floor(timeCal)).toString() + "분전");
-                    }
-                    else{//60분 이상인 경우
-                        timeCal /= 60; //시간단위로 계산
-                        if(timeCal < 24){//1시간부터 23시간의 경우
-                            setPostedTime((Math.floor(timeCal)).toString() + "시간전");
-                        }
-                        else{//24시간이상의 경우
-                            timeCal /= 24; //일단위로 계산
-                            if(timeCal < 365){//1일부터 364일의 경우
-                                setPostedTime((Math.floor(timeCal)).toString() + "일전");
-                            }
-                            else{//그 이상의 경우
-                                timeCal /= 365;
-                                setPostedTime((Math.floor(timeCal)).toString() + "년전");
-                            }
-                        }
-                    }
-                }
-            }
+            const now = Temporal.Now.plainDateTimeISO();//현재 시간 세팅
+            const postedDate = Temporal.PlainDateTime.from(res.data.data.pageDto.createdDate);
+            console.log(now);//확인용
+            console.log(postedDate);//확인용
+            const result = postedDate.since(today);
+            console.log(result.toString());
+            console.log(`${result.minutes}분전`);
+            console.log(`${result.hours}시간전`);
+            console.log(`${result.days}일전`);
+            console.log(`${result.months}달전`);
+            console.log(`${result.years}년전`);
         })
         .catch((res) => {
             if(res.status === 401){
