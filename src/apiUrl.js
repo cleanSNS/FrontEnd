@@ -58,6 +58,12 @@ export const checkILikedThisPageOrComment = `${apiUrl}/user/like`;
 //댓글 생성 Url
 export const newCommentUrl = `${apiUrl}/page/`;
 
+//댓글 삭제 Url
+export const deleteCommentUrl = `${apiUrl}/page/`;
+
+//게시글 삭제 Url
+export const deletePageUrl = `${apiUrl}/page/`;
+
 
 /***************************설정 관련 URl***********************************/
 //지금 프로필 가져오는 Url

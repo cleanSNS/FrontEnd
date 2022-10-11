@@ -15,6 +15,8 @@ import {
     checkILikedThisPageOrComment,
     newCommentUrl,
     ReportUrl,
+    deleteCommentUrl,
+    deletePageUrl,
 } from './../../../apiUrl';
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
@@ -46,7 +48,7 @@ const calculateTimeFrom = (calTime) => {
 };
 
 //대댓글
-const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadCommentOfComment, userClickHandler, refreshAccessToken, reportClickHandler, userId}) => {
+const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadCommentOfComment, userClickHandler, refreshAccessToken, reportClickHandler, userId, deleteClickHandler}) => {
     const [toggle, setToggle] = useState(false);//대댓글을 보여주는 toggle이다.
     const [commentOfCommentList, setCommentOfCommentList] = useState([]);//대댓글 리스트
     const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//첫 로드시에는 1이온다.
@@ -119,12 +121,8 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
                             <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                             {
                                 userId === data.userDto.userId ?
-                                /* 내 댓글인 경우 수정, 삭제 가능 */
-                                <div className={Style.commentbtnArea} style={{padding: "0", margin: "0"}}>
-                                    <p className={Style.likeandCommentCount}>댓글 수정</p>
-                                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                                    <p className={Style.likeandCommentCount}>댓글 삭제</p>
-                                </div>
+                                /* 내 댓글인 경우 삭제 가능 */
+                                <p className={Style.likeandCommentCount} id={`deleteComment_${data.commntId}`} onClick={deleteClickHandler}>댓글 삭제</p>
                                 :
                                 /* 남의 댓글인 경우 신고 가능 */
                                 <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
@@ -157,22 +155,44 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
     //신고 클릭함수
     const reportClickHandler = (event) => {
         const target = event.target.id.split('_')[1];
-        axios.post(ReportUrl, {
-            targetId: target,
-            type: "COMMENT",
-        })
-        .then((res) => {
-            alert("신고가 접수되었습니다.");
-        })
-        .catch((res) => {
-            if(res.status === 401){
-                refreshAccessToken();
-            }
-            else{
-                console.log(res);
-                alert("신고하지 못했습니다.");
-            }
-        });
+        if(confirm("정말 신고하시겠습니까?")){//다시 한 번 물어보고 실행
+            axios.post(ReportUrl, {
+                targetId: target,
+                type: "COMMENT",
+            })
+            .then((res) => {
+                alert("신고가 접수되었습니다.");
+            })
+            .catch((res) => {
+                if(res.status === 401){
+                    refreshAccessToken();
+                }
+                else{
+                    console.log(res);
+                    alert("신고하지 못했습니다.");
+                }
+            });
+        }
+    }
+
+    //삭제 클릭 함수
+    const deleteClickHandler = (event) => {
+        const target = event.target.id.split('_')[1];
+        if(confirm("정말 삭제하시겠습니까?")){
+            axios.delete(`${deleteCommentUrl}${pageId}/comment/${target}`)
+            .then((res) => {
+                alert("삭제되었습니다.");
+            })
+            .catch((res) => {
+                if(res.status === 401){
+                    refreshAccessToken();
+                }
+                else{
+                    console.log(res);
+                    alert("삭제하지 못했습니다.");
+                }
+            })
+        }
     }
 
     /*************************상위 요소 전달용 함수들*****************************/
@@ -204,11 +224,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                                         {
                                             userId === data.userDto.userId ?
                                             /* 내 댓글인 경우 수정, 삭제 가능 */
-                                            <div className={Style.commentbtnArea} style={{padding: "0", margin: "0"}}>
-                                                <p className={Style.likeandCommentCount}>댓글 수정</p>
-                                                <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                                                <p className={Style.likeandCommentCount}>댓글 삭제</p>
-                                            </div>
+                                            <p className={Style.likeandCommentCount} id={`deleteComment_${data.commentId}`} onClick={deleteClickHandler}>댓글 삭제</p>
                                             :
                                             /* 남의 댓글인 경우 신고 가능 */
                                             <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
@@ -217,7 +233,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                                     <p className={Style.time}>{calculateTimeFrom(data.createdDate)}</p>
                                 </div>
                         </div>
-                        <RenderCommentOfComment pageId={pageId} groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} userClickHandler={userClickHandler} refreshAccessToken={refreshAccessToken} reportClickHandler={reportClickHandler} userId={userId}/>
+                        <RenderCommentOfComment pageId={pageId} groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} userClickHandler={userClickHandler} refreshAccessToken={refreshAccessToken} reportClickHandler={reportClickHandler} userId={userId} deleteClickHandler={deleteClickHandler}/>
                     </div>
                 ))
             }
@@ -459,22 +475,45 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
 
     /*****************글 영역 - 신고*********************/
     const pageReportClickHandler = () => {
-        axios.post(ReportUrl, {
-            targetId: pageId,
-            type: "PAGE",
-        })
-        .then((res) => {
-            alert("게시글을 신고했습니다.");
-        })
-        .catch((res) => {
-            if(res.status === 401){
-                refreshAccessToken();
-            }
-            else{
-                console.log(res);
-                alert("게시글을 신고하지 못했습니다.");
-            }
-        });
+        if(confirm("정말 신고하시겠습니까?")){
+            axios.post(ReportUrl, {
+                targetId: pageId,
+                type: "PAGE",
+            })
+            .then((res) => {
+                alert("게시글을 신고했습니다.");
+            })
+            .catch((res) => {
+                if(res.status === 401){
+                    refreshAccessToken();
+                }
+                else{
+                    console.log(res);
+                    alert("게시글을 신고하지 못했습니다.");
+                }
+            });
+        }
+    };
+
+    /******************글 영역- 삭제*********************/
+    const pageDeleteClickHandler = () => {
+        if(confirm("정말 삭제하시겠습니까?")){
+            axios.delete(`${deletePageUrl}${pageId}`)
+            then((res) => {
+                alert("글을 삭제했습니다.");
+                setPageId(-1);
+                window.location.href = '/main';
+            })
+            .catch((res) => {
+                if(res.status === 401){
+                    refreshAccessToken();
+                }
+                else{
+                    console.log(res);
+                    alert("게시글을 삭제하지 못했습니다.");
+                }
+            });
+        }
     };
 
     return(
@@ -517,7 +556,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                 {
                                     pageUploadUserId === userId ?
                                     /* 내 글인 경우 글 삭제 기능이 있음 */
-                                    <p className={Style.likeandCommentCount}>게시글 삭제</p>
+                                    <p className={Style.likeandCommentCount} onClick={pageDeleteClickHandler}>게시글 삭제</p>
                                     :
                                     /* 타인의 글인 경우 글 신고 기능이 있음 */
                                     <p className={Style.likeandCommentCount} onClick={pageReportClickHandler}>글 신고</p>
