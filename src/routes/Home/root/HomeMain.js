@@ -328,6 +328,10 @@ const Home = ({ logout, refreshAccessToken }) => {
     event.returnValue = false;
   };
 
+  window.onhashchange = function(event){
+    console.log("hi");
+  }
+
   return(
     <div className={Style.pageCover}>
       {/* 좌 상단 - 로고와 검색창 */}
