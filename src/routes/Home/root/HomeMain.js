@@ -327,8 +327,7 @@ const Home = ({ logout, refreshAccessToken }) => {
   }, [userId]);
 
   window.onbeforeunload = function(event){
-    event.preventDefault();
-    event.returnValue = 'hello';
+    event.returnValue = false;
     eventSource.close();
     setEventSource(null);
   };
