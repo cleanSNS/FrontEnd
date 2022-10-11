@@ -8,14 +8,35 @@ import {
 import { useEffect, useState } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
-import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl } from './apiUrl';
+import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl, getNoticeNumber, getMyUserIdUrl } from './apiUrl';
 axios.defaults.withCredentials = true;
 
 function App() {
   //로그인시 refresh token을 local Storage에 저장하는 기능 앞에 Bearer 가 붙어있다.
+  const [eventSource, setEventSource] = useState(null);
+  const [userId, setUserId] = useState(-1);
+
   const loginFunc = (res) => {
     console.log(res);//로그인의 응답
     localStorage.setItem("rft", res.headers.authorization);//rft설정
+
+    let userId = ""
+
+    axios.get(getMyUserIdUrl)
+    .then((res) => {
+      userId = res.data.data.userId;
+      setUserId(res.data.data.userId);
+    })
+    .catch((res) => {
+      if(res.status === 401){
+        refreshAccessToken();
+      }
+      else{
+        console.log("유저 아이디를 불러오지 못했습니다.");
+      }
+    });
+    const eventSourcetmp = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
+    setEventSource(eventSourcetmp);
   };
 
   //Access token이 만료되었을 수 있는 상황에서 refresh Token을 통해 다시 발급받는다.
@@ -96,7 +117,7 @@ function App() {
       */}
       <Switch>
         <Route path="/main">
-          <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken}/>
+          <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken} eventSource={eventSource} userId={userId}/>
         </Route>
         <Route path="/">
           <Login login={loginFunc}/>
