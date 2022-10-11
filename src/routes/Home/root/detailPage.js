@@ -139,6 +139,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
 //댓글
 const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken, userClickHandler, userId, presetComment, setCommentStartId, setIsLastComment}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
+    const [isDeleted, setIsDeleted] = useState(false);//댓글 삭제 상태인지 확인
 
     //대댓글을 켜는 함수
     const onLoadCommentOfCommentClickHandler = (event) => {
@@ -182,9 +183,9 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
             axios.delete(`${deleteCommentUrl}${pageId}/comment/${target}`)
             .then((res) => {
                 alert("삭제되었습니다.");
-                presetComment();//삭제되었으니 댓글 다시 로드
                 setCommentStartId(0);//다시 로드되도록 초기값으로 설정
                 setIsLastComment(false);//원활한 로드를 위해 설정
+                setIsDeleted(true);
             })
             .catch((res) => {
                 if(res.status === 401){
@@ -197,6 +198,14 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
             })
         }
     }
+
+    //댓글 삭제 사후 처리 함수
+    useEffect(() => {
+        if(isDeleted){//만약 댓글 삭제를 한 경우, 다시 불러와야한다.
+            presetComment();//삭제되었으니 댓글 다시 로드
+            setIsDeleted(false);
+        }
+    }, [isDeleted])
 
     /*************************상위 요소 전달용 함수들*****************************/
     //댓글에 대댓글을 달 수 있도록 변경하는 함수
