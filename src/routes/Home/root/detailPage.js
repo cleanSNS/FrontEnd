@@ -137,7 +137,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
 }
 
 //댓글
-const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken, userClickHandler, userId, presetComment, setIsLastComment}) => {
+const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken, userClickHandler, userId, presetComment, setCommentStartId, setIsLastComment}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
 
     //대댓글을 켜는 함수
@@ -500,7 +500,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     };
 
     /******************글 영역- 삭제*********************/
-    const pageDeleteClickHandler = () => {t 
+    const pageDeleteClickHandler = () => {
         if(window.confirm("정말 삭제하시겠습니까?")){
             axios.delete(`${deletePageUrl}${pageId}`)
             .then((res) => {
