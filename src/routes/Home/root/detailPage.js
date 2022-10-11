@@ -137,7 +137,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
 }
 
 //댓글
-const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken, userClickHandler, userId}) => {
+const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken, userClickHandler, userId, presetComment, setIsLastComment}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
 
     //대댓글을 켜는 함수
@@ -182,6 +182,9 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
             axios.delete(`${deleteCommentUrl}${pageId}/comment/${target}`)
             .then((res) => {
                 alert("삭제되었습니다.");
+                presetComment();//삭제되었으니 댓글 다시 로드
+                setCommentStartId(0);//다시 로드되도록 초기값으로 설정
+                setIsLastComment(false);//원활한 로드를 위해 설정
             })
             .catch((res) => {
                 if(res.status === 401){
@@ -461,6 +464,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setUserCommentInput("");//댓글 부분 초기화
             setCommentToWhom(["p", -1, ""]);//댓글 대상 초기화
             presetComment();//댓글 내가 쓴거까지 로드된내용 불러오기
+            setIsLastComment(false);//원활하게 다시 호출 되도록 세팅
         })
         .catch((res) => {
             if(res.status === 401){
@@ -496,7 +500,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     };
 
     /******************글 영역- 삭제*********************/
-    const pageDeleteClickHandler = () => {
+    const pageDeleteClickHandler = () => {t 
         if(window.confirm("정말 삭제하시겠습니까?")){
             axios.delete(`${deletePageUrl}${pageId}`)
             .then((res) => {
@@ -574,6 +578,9 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         refreshAccessToken={refreshAccessToken}
                         userClickHandler={userClickHandler}
                         userId={userId}
+                        presetComment={presetComment}
+                        setCommentStartId={setCommentStartId}
+                        setIsLastComment={setIsLastComment}
                     />
                     {/* 댓글 입력 영역 */}
                     <form className={Style.userCommentArea} onSubmit={userCommentSubmitHandler}>
