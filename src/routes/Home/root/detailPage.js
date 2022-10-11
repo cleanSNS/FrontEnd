@@ -137,7 +137,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
 }
 
 //댓글
-const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken, userClickHandler, userId, presetComment, setCommentStartId, setIsLastComment}) => {
+const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken, userClickHandler, userId, presetComment, setCommentStartId, setIsLastComment, setCommentList}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
     const [isDeleted, setIsDeleted] = useState(false);//댓글 삭제 상태인지 확인
 
@@ -186,6 +186,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                 setCommentStartId(0);//다시 로드되도록 초기값으로 설정
                 setIsLastComment(false);//원활한 로드를 위해 설정
                 setIsDeleted(true);
+                setCommentList([]);//지금까지 로드된 댓글 지우기
             })
             .catch((res) => {
                 if(res.status === 401){
@@ -590,6 +591,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         presetComment={presetComment}
                         setCommentStartId={setCommentStartId}
                         setIsLastComment={setIsLastComment}
+                        setCommentList={setCommentList}
                     />
                     {/* 댓글 입력 영역 */}
                     <form className={Style.userCommentArea} onSubmit={userCommentSubmitHandler}>
