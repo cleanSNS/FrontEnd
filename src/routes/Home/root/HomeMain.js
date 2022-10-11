@@ -322,17 +322,13 @@ const Home = ({ logout, refreshAccessToken }) => {
     });
     setEventSource(eventSourcetmp);
   }, [userId]);
-
-  if(eventSource !== null){
-    eventSource.close();
-  }
-  /*
+  
   window.onbeforeunload = function(event){
     console.log("delete");
     eventSource.close();
     event.returnValue = false;
   }
-  */
+  
 
   return(
     <div className={Style.pageCover}>
