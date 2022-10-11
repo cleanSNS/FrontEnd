@@ -34,9 +34,12 @@ function App() {
     });
 
     const eventSource = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
+    console.log(eventSource);
+    const tmp = JSON.stringify(eventSource);
+    console.log(tmp)
     localStorage.setItem("eventSourceObject", JSON.stringify(eventSource));
 
-    window.location.href="/main";
+    //window.location.href="/main";
   };
 
   //Access token이 만료되었을 수 있는 상황에서 refresh Token을 통해 다시 발급받는다.
