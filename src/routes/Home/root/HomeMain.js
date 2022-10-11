@@ -269,19 +269,21 @@ const Home = ({ logout, refreshAccessToken }) => {
   //접속한 유저의 id를 불러와서 필요한 곳에서 사용
   const [userId, setUserId] = useState(-1);
   const getUserIdHandler = () => {
-    axios.get(getMyUserIdUrl)
-    .then((res) => {
-      setUserId(res.data.data.userId);
-      console.log(res.data.data.userId);
-    })
-    .catch((res) => {
-      if(res.status === 401){
-        refreshAccessToken();
-      }
-      else{
-        console.log("유저 아이디를 불러오지 못했습니다.");
-      }
-    });
+    if(userId === -1){//초기 상황에서 한번만 호출
+      axios.get(getMyUserIdUrl)
+      .then((res) => {
+        setUserId(res.data.data.userId);
+        console.log(res.data.data.userId);
+      })
+      .catch((res) => {
+        if(res.status === 401){
+          refreshAccessToken();
+        }
+        else{
+          console.log("유저 아이디를 불러오지 못했습니다.");
+        }
+      });
+    }
   };
   useEffect(getUserIdHandler, []);
 
@@ -310,6 +312,7 @@ const Home = ({ logout, refreshAccessToken }) => {
   //SSE이벤트 오픈
   useEffect(() => {
     if(userId === -1) return;//초기상태에서 그냥 종료
+    console.log("SSE연결");
     const eventSource = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
     eventSource.addEventListener("sse", function (event) {
       console.log(event);
