@@ -243,11 +243,24 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             const now = Temporal.Now.plainDateTimeISO();//현재 시간 세팅
             const postedDate = Temporal.PlainDateTime.from(res.data.data.pageDto.createdDate);
             const result = now.since(postedDate);
-            console.log(`${result.minutes}분전`);
-            console.log(`${result.hours}시간전`);
-            console.log(result.days === 0);//1이라 false나와야함
-            console.log(result.months === 0);//0이라 true나와야함
-            console.log(result.years === 0);//0이라 true나와야함
+            if(result.minutes === 0){//0분이내인 경우
+                setPostedTime("방금 전");
+            }
+            else if(result.hours === 0){//1시간보다는 아래인 경우
+                setPostedTime(`${result.minutes}분 전`);
+            }
+            else if(result.days === 0){//1일보다는 아래인 경우
+                setPostedTime(`${result.hours}시간 전`);
+            }
+            else if(result.months === 0){//1달보다는 아래인 경우
+                setPostedTime(`${result.days}일 전`);
+            }
+            else if(result.years === 0){//1년보다는 아래인 경우
+                setPostedTime(`${result.months}달 전`);
+            }
+            else{//1년 이상인 경우
+                setPostedTime(`${result.years}년 전`);
+            }
         })
         .catch((res) => {
             if(res.status === 401){
