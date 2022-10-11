@@ -35,7 +35,7 @@ import {
 } from "../../../apiUrl";
 import axios from 'axios';
 
-const Home = ({ logout, refreshAccessToken, eventSource, userId }) => {
+const Home = ({ logout, refreshAccessToken }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting //newChat // hastTagPage
@@ -267,7 +267,6 @@ const Home = ({ logout, refreshAccessToken, eventSource, userId }) => {
   useEffect(pushStateHandler, [rightBookState, leftBookState, pageId]);
 
   //접속한 유저의 id를 불러와서 필요한 곳에서 사용
-  /*
   const [userId, setUserId] = useState(-1);
   const getUserIdHandler = () => {
     if(userId === -1){//초기 상황에서 한번만 호출
@@ -287,7 +286,6 @@ const Home = ({ logout, refreshAccessToken, eventSource, userId }) => {
     }
   };
   useEffect(getUserIdHandler, []);
-  */
 
   /*************************알림 관련******************************/
   const [noticeCount, setNoticeCount] = useState(-1);
@@ -312,11 +310,24 @@ const Home = ({ logout, refreshAccessToken, eventSource, userId }) => {
   useEffect(presetNoticeCount, []);//초기상태에서만 진행
 
   //SSE이벤트 오픈
-  eventSource.addEventListener("sse", function (event) {
-    console.log(event);
-    const data = JSON.parse(event.data);
-    setNoticeCount(data.count);
-  });
+  const [eventSource, setEventSource] = useState(null);
+  useEffect(() => {
+    if(userId === -1) return;//초기상태에서 그냥 종료
+    const eventSourcetmp = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
+    setEventSource(eventSourcetmp);
+  }, [userId]);
+
+  useEffect(() => {
+    if(eventSource !== -1) return;//초기상태에서 그냥 종료
+
+    eventSource.addEventListener("sse", function (event) {
+      console.log(event);
+      const data = JSON.parse(event.data);
+      setNoticeCount(data.count);
+    });
+  }, [eventSource]);//eventSource발생시 addEvent Listener를 한다.
+
+  
 
   return(
     <div className={Style.pageCover}>
