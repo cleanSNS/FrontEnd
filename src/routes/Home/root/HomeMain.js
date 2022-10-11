@@ -324,11 +324,9 @@ const Home = ({ logout, refreshAccessToken }) => {
   }, [userId]);
   
   window.onbeforeunload = function(event){
-    console.log("delete");
-    eventSource.close();
+    console.log(eventSource.close());
     event.returnValue = false;
-  }
-  
+  };
 
   return(
     <div className={Style.pageCover}>
