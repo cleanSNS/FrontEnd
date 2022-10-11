@@ -323,8 +323,17 @@ const Home = ({ logout, refreshAccessToken }) => {
     setEventSource(eventSourcetmp);
   }, [userId]);
 
-  console.log(eventSource);
-  
+  if(eventSource !== null){
+    eventSource.close();
+  }
+  /*
+  window.onbeforeunload = function(event){
+    console.log("delete");
+    eventSource.close();
+    event.returnValue = false;
+  }
+  */
+
   return(
     <div className={Style.pageCover}>
       {/* 좌 상단 - 로고와 검색창 */}
