@@ -244,7 +244,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             const postedDate = Temporal.PlainDateTime.from(res.data.data.pageDto.createdDate);
             console.log(now);//확인용
             console.log(postedDate);//확인용
-            const result = postedDate.since(now);
+            const result = now.since(postedDate);
             console.log(result.toString());
             console.log(`${result.minutes}분전`);
             console.log(`${result.hours}시간전`);
