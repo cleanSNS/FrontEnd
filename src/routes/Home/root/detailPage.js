@@ -294,6 +294,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setPostedPersonNickname(res.data.data.pageDto.userDto.nickname);
             setPostedWord(res.data.data.pageDto.content);
             setLikeNumber(res.data.data.pageDto.likeCount);
+            setIsLiked(res.data.data.likeReadAuth);
 
             //댓글 초기 세팅 부분
             const tmp = [...res.data.data.commentDtoList.data];
@@ -420,12 +421,12 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     //좋아요 상태 변경 시 style변경
     const likeStyleChangeHandler = () => {
         if(isLiked){//좋아요가 눌린 경우
-            document.querySelector("#likeBtn").src = heartImgFill;
+            document.querySelector("#pageLikeBtn").src = heartImgFill;
         }
         else{//좋아요가 눌리지 않은 경우
-            document.querySelector("#likeBtn").src = heartImg;
+            document.querySelector("#pageLikeBtn").src = heartImg;
         }
-    }
+    };
     useEffect(likeStyleChangeHandler, [isLiked]);
 
     /*********************글 영역 - 댓글 관련**********************/
@@ -564,7 +565,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
-                                <img id="likeBtn" src={heartImg} className={Style.buttonImg} onClick={pageLikeClickHandler} />
+                                <img id="pageLikeBtn" src={heartImg} className={Style.buttonImg} onClick={pageLikeClickHandler} />
                                 <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${likeNumber}개`}</p>
                                 <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                                 {
