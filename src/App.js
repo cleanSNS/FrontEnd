@@ -34,6 +34,9 @@ function App() {
 
     const eventSourcetmp = new EventSource(`${getNoticeNumber}/${tmpUserId}`, { withCredentials: true });
     setNoticeEventSource(eventSourcetmp);
+
+    history.pushState(null, null, '');//소셜 로그인등은 code가 생기므로 그거 없애기
+
     setIsLogin("login");//메인화면으로 이동
   };
 
