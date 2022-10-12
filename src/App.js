@@ -42,6 +42,10 @@ function App() {
     const rft = localStorage.getItem("rft");
     if(rft === null) return;//rft가 없다면 종료한다.
 
+    if(isLogin === "logout"){//새로고침해서 불필요하게 여기로 돌아온 경우이다. 이 경우, SSE, userId가 유실된다.
+
+    }
+
     axios.get(refreshNewAccessTokenUrl, {
       headers:{
         "REFRESH-TOKEN": rft
@@ -50,9 +54,6 @@ function App() {
     .then((res) => {
       console.log(res);
       console.log("토큰 재발급 되었습니다.");
-      if(isLogin === "logout"){//새로고침해서 불필요하게 여기로 돌아온 경우이다. 이 경우, SSE가 유실된다.
-
-      }
     })
     .catch((res) =>{
       console.log(res);
@@ -64,8 +65,10 @@ function App() {
 
   //로그아웃 함수
   const logoutFunc = () => {
-    noticeEventSource.close();
-    setNoticeEventSource(null);
+    if(noticeEventSource !== null) {
+      noticeEventSource.close();
+      setNoticeEventSource(null);
+    }
     axios.get(logoutApiUrl)
     .then((res) => {
       console.log(res);

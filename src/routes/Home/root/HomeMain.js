@@ -286,7 +286,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   };
   useEffect(presetNoticeCount, []);//초기상태에서만 진행
 
-  //SSE이벤트 오픈
+  //SSE이벤트 오픈 - notice개수
   useEffect(() => {
     if(noticeEventSource === null) {
       console.log("SSE에 문제가 있음");
@@ -299,7 +299,8 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     });
   }, [noticeEventSource]);
   
-  window.onbeforeunload = function(event){
+  window.onbeforeunload = function(event){//로그아웃 하지 않고 그냥 화면을 새로고침 / 닫는 경우이다.
+    noticeEventSource.close();
     event.returnValue = "새로고침 시 사용하던 정보가 삭제될 수 있습니다.";
   };
 
