@@ -66,11 +66,12 @@ function App() {
     })
     .catch((res) =>{
       console.log(res);
-      if(isLogin === "login"){//로그인 상태(새로고침X)였는데 error가 생기면 단순히 RT이 시간초과된 것이다.
+      if(res.data.message === "만료된 토큰입니다."){//너무 오래된 경우 isLogin의 상태와 무관하게 만료되면 logout한다.
         alert("장시간 로그인되어, 자동 로그아웃되었습니다. 다시 로그인해주세요.");
         logoutFunc(); //정상작동 확인되면 앞 주석 지우기
+        return;//해당 부분만 실행한다.
       }
-      if(isLogin === "logout"){//로그아웃 상태였는데 error가 생기면 RT초과가 아니고 AT이 아직 만료가 안된 것이다. 걍 복귀하면 된다.
+      if(isLogin === "logout"){//만료되지 않았으나 호출 => 새로고침 그래서 Accesstoken이 만료되지않았다는 오류가 발생
         getUserIdANdOpenSSEHandler();
         setIsLogin("login");
       }
