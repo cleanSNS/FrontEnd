@@ -289,7 +289,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //SSE이벤트 오픈 - notice개수
   useEffect(() => {
     if(noticeEventSource === null) {
-      console.log("SSE에 문제가 있음");
       return;
     }
     noticeEventSource.addEventListener("sse", function (event) {
@@ -301,7 +300,8 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   
   window.onbeforeunload = function(event){//로그아웃 하지 않고 그냥 화면을 새로고침 / 닫는 경우이다.
     noticeEventSource.close();
-    event.returnValue = "새로고침 시 사용하던 정보가 삭제될 수 있습니다.";
+    event.returnValue = false;
+    return "새로고침 시 사용하던 정보가 삭제될 수 있습니다.";
   };
 
   /**************로고에 넣을 함수****************/
