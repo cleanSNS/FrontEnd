@@ -66,7 +66,9 @@ function App() {
     })
     .catch((res) =>{
       console.log(res);
-      console.log(res.status);
+      console.log(res.response.status);
+      console.log(res.response.data);
+      console.log(res.response.data.message);
       if(res.data.message === "만료된 토큰입니다."){//너무 오래된 경우 isLogin의 상태와 무관하게 만료되면 logout한다.
         alert("장시간 로그인되어, 자동 로그아웃되ㅅ ㅁ었습니다. 다시 로그인해주세요.");
         logoutFunc(); //정상작동 확인되면 앞 주석 지우기
