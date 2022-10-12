@@ -36,7 +36,6 @@ function App() {
     setNoticeEventSource(eventSourcetmp);
 
     window.history.pushState(null, null, "https://cleanbook.site/");//소셜 로그인등은 code가 생기므로 그거 없애기
-
     setIsLogin("login");//메인화면으로 이동
   };
 
@@ -53,7 +52,7 @@ function App() {
 
     axios.get(refreshNewAccessTokenUrl, {
       headers:{
-        "REFRESH-TOKEN": rft
+        "Authorization": rft
       }
     })
     .then((res) => {

@@ -288,9 +288,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
 
   //SSE이벤트 오픈 - notice개수
   useEffect(() => {
-    if(noticeEventSource === null) {
-      return;
-    }
+    if(noticeEventSource === null) return;
     noticeEventSource.addEventListener("sse", function (event) {
       console.log(event);
       const data = JSON.parse(event.data);
@@ -298,7 +296,8 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     });
   }, [noticeEventSource]);
   
-  window.onbeforeunload = function(event){//로그아웃 하지 않고 그냥 화면을 새로고침 / 닫는 경우이다.
+  //로그아웃 하지 않고 그냥 화면을 새로고침 / 닫는 경우이다.
+  window.onbeforeunload = function(event){
     noticeEventSource.close();
     event.returnValue = false;
     return "새로고침 시 사용하던 정보가 삭제될 수 있습니다.";

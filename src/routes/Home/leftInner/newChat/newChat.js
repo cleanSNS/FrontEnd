@@ -118,7 +118,8 @@ const LeftNewChat = ({refreshAccessToken}) => {
     //채팅방 생성함수<----------------------------------------------------------------------------작업해야함
     const createChatClickHandler = (event) => {
         event.preventDefault();
-        console.log(chosenFriendList);
+        const chosenFriendUserIdList = chosenFriendList.map(d => d.userId);
+        console.log(chosenFriendUserIdList);
         console.log("이들을 바탕으로 채팅방을 만듭니다.");
     }
 
