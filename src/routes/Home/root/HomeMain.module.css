@@ -7,9 +7,9 @@
 /*전체 커버*/
 .pageCover{
     position: absolute;
-    height: 99vh;
+    height: 98.7vh;
     /*min-height: 1100px;*/
-    width: 99vw;
+    width: 95vw;
     /*min-width: 1350px;*/
 
     display: grid;

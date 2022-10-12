@@ -324,13 +324,8 @@ const Home = ({ logout, refreshAccessToken }) => {
   }, [userId]);
   
   window.onbeforeunload = function(event){
-    console.log(eventSource.close());
-    event.returnValue = false;
+    event.returnValue = "새로고침 시 사용하던 정보가 삭제될 수 있습니다.";
   };
-
-  window.onhashchange = function(event){
-    console.log("hi");
-  }
 
   /**************로고에 넣을 함수****************/
   const logoClickHandler = () => {

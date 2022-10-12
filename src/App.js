@@ -19,6 +19,9 @@ function App() {
   const refreshAccessToken = () => {
     const rft = localStorage.getItem("rft");
     if(rft === null) return;//rft가 없다면 종료한다.
+    if(isLogin === "logout"){//rft는 있는데 로그아웃되어있는 경우이다. => 즉 불필요하게 새로고침 된 경우이다.
+      setIsLogin("login");//그냥 로그인 시켜줘도 된다. 쿠키와 리프레시토큰이 이미 있기 때문
+    }
 
     axios.get(refreshNewAccessTokenUrl, {
       headers:{
