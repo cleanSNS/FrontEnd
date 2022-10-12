@@ -153,7 +153,7 @@ export const readNoticeUrl = `${apiUrl}/user/notification?notificationId=`;
 export const deleteNoticeUrl = `${apiUrl}/user/notification?notificationId=`;
 
 //읽지 않은 알림 수 조회 SSE용
-export const getNoticeNumber = `${apiUrl}/test`;
+export const getNoticeNumber = `${apiUrl}/subscribe`;
 
 //알림 수 조회
 export const presetNoticeNumeber = `${apiUrl}/user/notification/count`;

@@ -12,12 +12,9 @@ function App() {
 
   //userId를 받고 SSE를 여는 함수
   const getUserIdANdOpenSSEHandler = () => {
-    let tmpUserId = -1;
-
     axios.get(getMyUserIdUrl)
     .then((res) => {
       setUserId(res.data.data.userId);
-      tmpUserId = res.data.data.userId;
       console.log(res.data.data.userId);
     })
     .catch((res) => {
@@ -29,7 +26,7 @@ function App() {
       }
     });
 
-    const eventSourcetmp = new EventSource(`${getNoticeNumber}/${tmpUserId}`, { withCredentials: true });
+    const eventSourcetmp = new EventSource(getNoticeNumber, { withCredentials: true });
     setNoticeEventSource(eventSourcetmp);
   };
 
