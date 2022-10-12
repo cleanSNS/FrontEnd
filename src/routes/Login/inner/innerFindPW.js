@@ -26,11 +26,11 @@ const FindPW = ({toLoginPage, toSignUpPage}) => {
         })
         .then((res) => {
             alert("이매일을 보냈습니다. 비밀번호를 확인하고 입력해 주세요.");
-            window.location.href = '/';
+            toLoginPage();
         })
         .catch((res) => {
             alert("가입되지 않은 이메일입니다.");
-            window.location.href = '/';
+            toLoginPage();
         });
     }
     return(

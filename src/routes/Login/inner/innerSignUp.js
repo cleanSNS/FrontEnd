@@ -155,7 +155,6 @@ const SignUp = ({login, toLoginPage}) => {
             })
             .then((res) => {
                 login(res);
-                window.location.href="/main";
             })
             .catch((res) => {
                 alert("문제 발생. 다시 로그인 시도해주십시오.");
@@ -170,7 +169,7 @@ const SignUp = ({login, toLoginPage}) => {
                 document.querySelector("#emailInput").select();
             }
             else{
-                console.log("error");
+                alert("예상치 못한 문제가 발생했습니다.");
                 console.log(res);
             }
         });

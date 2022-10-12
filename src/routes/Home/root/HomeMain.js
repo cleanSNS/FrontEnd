@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Style from "./HomeMain.module.css";
-import Logo from "../../../logo/mainLogo";
+import Logo from "../../../logo/Logo";
 import SearchBar from "./searchBar";
 import NumberNotice from "./numberNotice";
 import DetailPage from './detailPage';
@@ -332,12 +332,19 @@ const Home = ({ logout, refreshAccessToken }) => {
     console.log("hi");
   }
 
+  /**************로고에 넣을 함수****************/
+  const logoClickHandler = () => {
+    setRightBookState("friend");
+    setLeftBookState("page");
+    setSettingState("initial");
+  };
+
   return(
     <div className={Style.pageCover}>
       {/* 좌 상단 - 로고와 검색창 */}
       <div className={Style.Cover}>
         <div className={Style.leftHeader}>
-          <Logo />
+          <Logo preset={logoClickHandler}/>
           <div />
           <SearchBar userSearch={userSearch} hashtagPageNumber={hashtagPageNumber} userSearchChangeHandler={userSearchChangeHandler} userSearchSubmitHandler={userSearchSubmitHandler} isSubmitted={isSubmitted} searchedList={searchedList} searchedUserClickHandler={searchedUserClickHandler} searchedHashtagClickHandler={searchedHashtagClickHandler}/>
         </div>

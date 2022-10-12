@@ -49,7 +49,6 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
             .then((res) => {
                 setWrong("clear");
                 login(res);
-                window.location.href="/main";
             })
             .catch((res) => {
                 console.log(res);
