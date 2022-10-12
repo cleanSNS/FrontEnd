@@ -2,16 +2,38 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
-import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl} from './apiUrl';
+import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl, getNoticeNumber, getMyUserIdUrl } from './apiUrl';
 axios.defaults.withCredentials = true;
 
 function App() {
   const [isLogin, setIsLogin] = useState("logout");//처음에는 로그인 되지 않은상태이다. => "login" // "logout"가능
+  const [noticeEventSource, setNoticeEventSource] = useState(null);
+  const [userId, setUserId] = useState(-1);
 
   //로그인시 refresh token을 local Storage에 저장하는 기능 앞에 Bearer 가 붙어있다.
   const loginFunc = (res) => {
     console.log(res);//로그인의 응답
     localStorage.setItem("rft", res.headers.authorization);//rft설정
+
+    let tmpUserId = -1;
+
+    axios.get(getMyUserIdUrl)
+    .then((res) => {
+      setUserId(res.data.data.userId);
+      tmpUserId = res.data.data.userId;
+      console.log(res.data.data.userId);
+    })
+    .catch((res) => {
+      if(res.status === 401){
+        refreshAccessToken();
+      }
+      else{
+        console.log("유저 아이디를 불러오지 못했습니다.");
+      }
+    });
+
+    const eventSourcetmp = new EventSource(`${getNoticeNumber}/${tmpUserId}`, { withCredentials: true });
+    setNoticeEventSource(eventSourcetmp);
     setIsLogin("login");//메인화면으로 이동
   };
 
@@ -19,10 +41,6 @@ function App() {
   const refreshAccessToken = () => {
     const rft = localStorage.getItem("rft");
     if(rft === null) return;//rft가 없다면 종료한다.
-    if(isLogin === "logout"){//rft는 있는데 로그아웃되어있는 경우이다. => 즉 불필요하게 새로고침 된 경우이다.
-      setIsLogin("login");//그냥 로그인 시켜줘도 된다. 쿠키와 리프레시토큰이 이미 있기 때문
-      return;
-    }
 
     axios.get(refreshNewAccessTokenUrl, {
       headers:{
@@ -32,6 +50,9 @@ function App() {
     .then((res) => {
       console.log(res);
       console.log("토큰 재발급 되었습니다.");
+      if(isLogin === "logout"){//새로고침해서 불필요하게 여기로 돌아온 경우이다. 이 경우, SSE가 유실된다.
+
+      }
     })
     .catch((res) =>{
       console.log(res);
@@ -43,6 +64,8 @@ function App() {
 
   //로그아웃 함수
   const logoutFunc = () => {
+    noticeEventSource.close();
+    setNoticeEventSource(null);
     axios.get(logoutApiUrl)
     .then((res) => {
       console.log(res);
@@ -95,7 +118,7 @@ function App() {
 
   return (
     <div>
-      {isLogin === "login" ? <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken}/> : null}
+      {isLogin === "login" ? <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken} noticeEventSource={noticeEventSource} userId={userId}/> : null}
       {isLogin === "logout" ? <Login login={loginFunc}/> : null}
     </div>
   );

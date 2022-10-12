@@ -27,15 +27,13 @@ import userTagImg from "./tagImages/user.png";
 
 import {
   newPostUrl,
-  getNoticeNumber,
   presetNoticeNumeber,
-  getMyUserIdUrl,
   getUserNicknameAndImageUrl,
   pageloadHashtagNumUrl,
 } from "../../../apiUrl";
 import axios from 'axios';
 
-const Home = ({ logout, refreshAccessToken }) => {
+const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting //newChat // hastTagPage
@@ -266,27 +264,6 @@ const Home = ({ logout, refreshAccessToken }) => {
   };
   useEffect(pushStateHandler, [rightBookState, leftBookState, pageId]);
 
-  //접속한 유저의 id를 불러와서 필요한 곳에서 사용
-  const [userId, setUserId] = useState(-1);
-  const getUserIdHandler = () => {
-    if(userId === -1){//초기 상황에서 한번만 호출
-      axios.get(getMyUserIdUrl)
-      .then((res) => {
-        setUserId(res.data.data.userId);
-        console.log(res.data.data.userId);
-      })
-      .catch((res) => {
-        if(res.status === 401){
-          refreshAccessToken();
-        }
-        else{
-          console.log("유저 아이디를 불러오지 못했습니다.");
-        }
-      });
-    }
-  };
-  useEffect(getUserIdHandler, []);
-
   /*************************알림 관련******************************/
   const [noticeCount, setNoticeCount] = useState(-1);
 
@@ -310,18 +287,17 @@ const Home = ({ logout, refreshAccessToken }) => {
   useEffect(presetNoticeCount, []);//초기상태에서만 진행
 
   //SSE이벤트 오픈
-  const [eventSource, setEventSource] = useState(null);
   useEffect(() => {
-    if(userId === -1) return;//초기상태에서 그냥 종료
-    const eventSourcetmp = new EventSource(`${getNoticeNumber}/${userId}`, { withCredentials: true });
-    /* 이거 나중에 밖으로 옮겨야함 */
-    eventSourcetmp.addEventListener("sse", function (event) {
+    if(noticeEventSource === null) {
+      console.log("SSE에 문제가 있음");
+      return;
+    }
+    noticeEventSource.addEventListener("sse", function (event) {
       console.log(event);
       const data = JSON.parse(event.data);
       setNoticeCount(data.count);
     });
-    setEventSource(eventSourcetmp);
-  }, [userId]);
+  }, [noticeEventSource]);
   
   window.onbeforeunload = function(event){
     event.returnValue = "새로고침 시 사용하던 정보가 삭제될 수 있습니다.";
