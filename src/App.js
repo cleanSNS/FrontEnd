@@ -42,6 +42,8 @@ function App() {
     const rft = localStorage.getItem("rft");
     if(rft === null) return;//rft가 없다면 종료한다.
 
+    if(rft === "kakao" || rft === "naver") return;//소셜 로그인된 상황이므로, 해당 함수 그냥 종료.
+
     if(isLogin === "logout"){//새로고침해서 불필요하게 여기로 돌아온 경우이다. 이 경우, SSE, userId가 유실된다.
       
     }
