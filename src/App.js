@@ -52,7 +52,7 @@ function App() {
 
     axios.get(refreshNewAccessTokenUrl, {
       headers:{
-        "Authorization": rft
+        Authorization: rft
       }
     })
     .then((res) => {
