@@ -298,9 +298,9 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   
   //로그아웃 하지 않고 그냥 화면을 새로고침 / 닫는 경우이다.
   window.onbeforeunload = function(event){
-    noticeEventSource.close();
+    event.preventDefault();
+    noticeEventSource.close();//진짜 이거 하나만 해주면 되는데 즈엔장
     event.returnValue = false;
-    return "새로고침 시 사용하던 정보가 삭제될 수 있습니다.";
   };
 
   /**************로고에 넣을 함수****************/

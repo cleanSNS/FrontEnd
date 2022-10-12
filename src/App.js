@@ -10,11 +10,8 @@ function App() {
   const [noticeEventSource, setNoticeEventSource] = useState(null);
   const [userId, setUserId] = useState(-1);
 
-  //로그인시 refresh token을 local Storage에 저장하는 기능 앞에 Bearer 가 붙어있다.
-  const loginFunc = (res) => {
-    console.log(res);//로그인의 응답
-    localStorage.setItem("rft", res.headers.authorization);//rft설정
-
+  //userId를 받고 SSE를 여는 함수
+  const getUserIdANdOpenSSEHandler = () => {
     let tmpUserId = -1;
 
     axios.get(getMyUserIdUrl)
@@ -34,6 +31,14 @@ function App() {
 
     const eventSourcetmp = new EventSource(`${getNoticeNumber}/${tmpUserId}`, { withCredentials: true });
     setNoticeEventSource(eventSourcetmp);
+  };
+
+  //로그인시 refresh token을 local Storage에 저장하는 기능 앞에 Bearer 가 붙어있다.
+  const loginFunc = (res) => {
+    console.log(res);//로그인의 응답
+    localStorage.setItem("rft", res.headers.authorization);//rft설정
+
+    getUserIdANdOpenSSEHandler();
 
     window.history.pushState(null, null, "https://cleanbook.site/");//소셜 로그인등은 code가 생기므로 그거 없애기
     setIsLogin("login");//메인화면으로 이동
@@ -46,8 +51,16 @@ function App() {
 
     if(rft === "kakao" || rft === "naver") return;//소셜 로그인된 상황이므로, 해당 함수 그냥 종료.
 
-    if(isLogin === "logout"){//새로고침해서 불필요하게 여기로 돌아온 경우이다. 이 경우, SSE, userId가 유실된다.
-      
+    if(isLogin === "logout"){
+      //소셜 로그인도 아닌데 rft가 존재하는 경우는 단 한가지이다.
+      //새로고침해서 불필요하게 여기로 돌아온 경우이다. 이 경우, JS에 선언된SSE, userId가 유실된다.
+      //반대로 브라우저상에 선언된 Cookie와 rft는 존재한다.
+      //근데 SSE유실 문제는 해결되지 않는다.
+
+      /* 이렇게 하면 당연히 원래대로 돌아갈 수는 있다. 하지만 SSE유실이 문제다. */
+      getUserIdANdOpenSSEHandler();
+      setIsLogin("login");
+      return;
     }
 
     axios.get(refreshNewAccessTokenUrl, {
@@ -76,7 +89,6 @@ function App() {
     axios.get(logoutApiUrl)
     .then((res) => {
       console.log(res);
-      alert("로그아웃 했습니다.");
       localStorage.removeItem("rft");//refresh token 지우기
       setIsLogin("logout");//로그인 화면으로 이동
     })
