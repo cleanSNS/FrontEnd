@@ -294,7 +294,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       const data = JSON.parse(event.data);
       setNoticeCount(data.count);
     });
-  }, [noticeEventSource]);
+  }, [noticeCount]);
   
   //로그아웃 하지 않고 그냥 화면을 새로고침 / 닫는 경우이다.
   window.onbeforeunload = function(event){

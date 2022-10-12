@@ -1,6 +1,6 @@
 .cover{
     position: absolute;
-    transform: translate(30%, 160%);
+    transform: translate(20%, 30%);
 
     background-color: rgba(255, 0, 0, 0.5);
     width: 25px;
