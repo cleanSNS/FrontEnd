@@ -20,7 +20,7 @@ const Login = ({login}) => {
     };
 
     return(
-        <div style={{width: "100vw", height: "100vh"}}>
+        <div>
             <div className={Style.Cover}>
                 {/*스타일을 위한 부분 */}
                 <div className={Style.circle1} />
