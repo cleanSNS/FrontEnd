@@ -61,7 +61,7 @@ const LeftNewChat = ({refreshAccessToken}) => {
                 setFollowerList(tmp2);//팔로워 저장
             })
             .catch((res) => {
-                if(res.status === 401){
+                if(res.response.status === 401){
                     refreshAccessToken();
                 }
                 else{
@@ -70,7 +70,7 @@ const LeftNewChat = ({refreshAccessToken}) => {
             });
         })
         .catch((res) =>{
-            if(res.status === 401){
+            if(res.response.status === 401){
                 refreshAccessToken();
             }
             else{

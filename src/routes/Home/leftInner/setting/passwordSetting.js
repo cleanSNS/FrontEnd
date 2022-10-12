@@ -56,7 +56,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
                 //window.location.href = '/main';
             })
             .catch((res) => {
-                if(res.status === 401){//access token이 만료된 경우이다.
+                if(res.response.status === 401){//access token이 만료된 경우이다.
                     refreshAccessToken();
                 }
                 else{
@@ -67,7 +67,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
             })
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{

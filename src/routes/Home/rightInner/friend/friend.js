@@ -42,7 +42,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
             setFolloweeList(tmp);
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -58,7 +58,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
             setFollowerList(tmp);
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -74,7 +74,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
             setMyProfileImage(res.data.data.imgUrl);
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -89,7 +89,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
             setMyId(res.data.data.userId);
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{

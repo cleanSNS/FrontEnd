@@ -62,7 +62,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
             }
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
                 profileSettingPreset();
             }
@@ -93,7 +93,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
             //window.location.href = "/main";
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{

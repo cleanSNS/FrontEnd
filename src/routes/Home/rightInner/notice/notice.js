@@ -114,7 +114,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
             setNoticeStartId(res.data.startId);
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{

@@ -32,7 +32,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
             setFilterFollowee(res.data.data.filterFollowee);
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -48,7 +48,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
             setAddedUserList(tmp);
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -126,7 +126,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
             alert("설정을 변경했습니다.");
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -159,7 +159,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
                 setAddedUserList(tmp);
             })
             .catch((res) => {
-                if(res.status === 401){//access token이 만료된 경우이다.
+                if(res.response.status === 401){//access token이 만료된 경우이다.
                     refreshAccessToken();
                 }
                 else{
@@ -169,7 +169,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
             })
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -196,7 +196,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
             setAddedUserList(tmp);
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -241,7 +241,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
             setSearchedUserList(tmp);
         })
         .catch((res) => {
-            if(res.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{

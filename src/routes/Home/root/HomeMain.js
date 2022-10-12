@@ -95,7 +95,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         setIsSubmitted(true);
       })
       .catch((res) => {
-        if(res.status === 401){
+        if(res.response.status === 401){
           refreshAccessToken();
         }
         else{
@@ -105,7 +105,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       });
     })
     .catch((res) => {
-      if(res.status === 401){
+      if(res.response.status === 401){
         refreshAccessToken();
       }
       else{
@@ -175,7 +175,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       window.location.href = "/main";
     })
     .catch((res) => {
-      if(res.status === 401){//access token이 만료된 경우이다.
+      if(res.response.status === 401){//access token이 만료된 경우이다.
         refreshAccessToken();
       }
       else{
@@ -275,7 +275,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         setNoticeCount(res.data.data.count);
       })
       .catch((res) => {
-        if(res.status === 401){
+        if(res.response.status === 401){
           refreshAccessToken();
         }
         else{

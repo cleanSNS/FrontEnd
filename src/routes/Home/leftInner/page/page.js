@@ -127,7 +127,7 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
             setPageStartId(res.data.startId);
         })
         .catch((res) => {
-            if(res.status === 401){
+            if(res.response.status === 401){
                 refreshAccessToken();
             }
             else{

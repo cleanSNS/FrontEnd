@@ -82,7 +82,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
                 setCommentOfCommentStartId(res.data.startId);
             })
             .catch((res) =>{
-                if(res.status === 401){
+                if(res.response.status === 401){
                     refreshAccessToken();
                 }
                 else{
@@ -165,7 +165,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                 alert("신고가 접수되었습니다.");
             })
             .catch((res) => {
-                if(res.status === 401){
+                if(res.response.status === 401){
                     refreshAccessToken();
                 }
                 else{
@@ -189,7 +189,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
                 setCommentList([]);//지금까지 로드된 댓글 지우기
             })
             .catch((res) => {
-                if(res.status === 401){
+                if(res.response.status === 401){
                     refreshAccessToken();
                 }
                 else{
@@ -305,7 +305,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setPostedTime(calculateTimeFrom(res.data.data.pageDto.createdDate));
         })
         .catch((res) => {
-            if(res.status === 401){
+            if(res.response.status === 401){
                 refreshAccessToken();
             }
             else{
@@ -319,7 +319,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setIsLiked(res.data.data.like);
         })
         .catch((res) => {
-            if(res.status === 401){
+            if(res.response.status === 401){
                 refreshAccessToken();
             }
             else{
@@ -346,7 +346,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setCommentStartId(res.data.startId); // startId업데이트
         })
         .catch((res) => {
-            if(res.status === 401){
+            if(res.response.status === 401){
                 refreshAccessToken();
             }
             else{
@@ -408,7 +408,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             console.log("페이지에 좋아요했습니다.");
         })
         .catch((res) => {
-            if(res.status === 401){
+            if(res.response.status === 401){
                 refreshAccessToken();
             }
             else{
@@ -478,7 +478,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setIsLastComment(false);//원활하게 다시 호출 되도록 세팅
         })
         .catch((res) => {
-            if(res.status === 401){
+            if(res.response.status === 401){
                 refreshAccessToken();
             }
             else{
@@ -499,7 +499,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                 alert("게시글을 신고했습니다.");
             })
             .catch((res) => {
-                if(res.status === 401){
+                if(res.response.status === 401){
                     refreshAccessToken();
                 }
                 else{
@@ -520,7 +520,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                 window.location.href = '/main';
             })
             .catch((res) => {
-                if(res.status === 401){
+                if(res.response.status === 401){
                     refreshAccessToken();
                 }
                 else{
