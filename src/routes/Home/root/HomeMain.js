@@ -295,13 +295,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       setNoticeCount(data.count);
     });
   }, [noticeCount]);
-  
-  //로그아웃 하지 않고 그냥 화면을 새로고침 / 닫는 경우이다.
-  window.onbeforeunload = function(event){
-    event.preventDefault();
-    noticeEventSource.close();//진짜 이거 하나만 해주면 되는데 즈엔장
-    event.returnValue = false;
-  };
 
   /**************로고에 넣을 함수****************/
   const logoClickHandler = () => {

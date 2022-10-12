@@ -81,6 +81,7 @@ function App() {
   //로그아웃 함수
   const logoutFunc = () => {
     if(noticeEventSource !== null) {
+      console.log("SSE close");
       noticeEventSource.close();
       setNoticeEventSource(null);
     }
