@@ -48,20 +48,7 @@ function App() {
   const refreshAccessToken = () => {
     const rft = localStorage.getItem("rft");
     if(rft === null) return;//rft가 없다면 종료한다.
-
     if(rft === "kakao" || rft === "naver") return;//소셜 로그인된 상황이므로, 해당 함수 그냥 종료.
-
-    if(isLogin === "logout"){
-      //소셜 로그인도 아닌데 rft가 존재하는 경우는 단 한가지이다.
-      //새로고침해서 불필요하게 여기로 돌아온 경우이다. 이 경우, JS에 선언된SSE, userId가 유실된다.
-      //반대로 브라우저상에 선언된 Cookie와 rft는 존재한다.
-      //근데 SSE유실 문제는 해결되지 않는다.
-
-      /* 이렇게 하면 당연히 원래대로 돌아갈 수는 있다. 하지만 SSE유실이 문제다. */
-      getUserIdANdOpenSSEHandler();
-      setIsLogin("login");
-      return;
-    }
 
     axios.get(refreshNewAccessTokenUrl, {
       headers:{
@@ -69,13 +56,27 @@ function App() {
       }
     })
     .then((res) => {
+      //state가 login이든 아니든 재발급은 AT은 시간초과, RT은 시간 초과가 안된 시점이다.
       console.log(res);
       console.log("토큰 재발급 되었습니다.");
+      if(isLogin === "logout"){
+        //새로고침했는데 마침 AT만 시간초과된 경우.
+        //JS에 선언된SSE, userId가 유실된 상태이므로 복구하고 login상태로 만든다.
+        getUserIdANdOpenSSEHandler();
+        setIsLogin("login");
+        return;
+      }
     })
     .catch((res) =>{
       console.log(res);
-      alert("장시간 로그인되어, 자동 로그아웃되었습니다. 다시 로그인해주세요.");
-      logoutFunc(); //정상작동 확인되면 앞 주석 지우기
+      if(isLogin === "login"){//로그인 상태(새로고침X)였는데 error가 생기면 단순히 RT이 시간초과된 것이다.
+        alert("장시간 로그인되어, 자동 로그아웃되었습니다. 다시 로그인해주세요.");
+        logoutFunc(); //정상작동 확인되면 앞 주석 지우기
+      }
+      if(isLogin === "logout"){//로그아웃 상태였는데 error가 생기면 RT초과가 아니고 AT이 아직 만료가 안된 것이다. 걍 복귀하면 된다.
+        getUserIdANdOpenSSEHandler();
+        setIsLogin("login");
+      }
     })
   };
   useEffect(refreshAccessToken, []);//처음 화면을 켰을 때, 한번 자동으로 실행해서 실수로 껐더라도 자동 로그인이 되게 한다.
