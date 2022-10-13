@@ -6,7 +6,7 @@ import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl, g
 axios.defaults.withCredentials = true;
 
 function App() {
-  const [isLogin, setIsLogin] = useState("login");//처음에는 로그인 되지 않은상태이다. => "login" // "logout"가능
+  const [isLogin, setIsLogin] = useState("logout");//처음에는 로그인 되지 않은상태이다. => "login" // "logout"가능
   const [noticeEventSource, setNoticeEventSource] = useState(null);
   const [userId, setUserId] = useState(-1);
 
