@@ -63,6 +63,13 @@
     align-items: center;
 }
 
+.flexBoxcol{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .chatImg{
     width: 70px;
     height: 70px;
@@ -74,8 +81,24 @@
 
 .chatName{
     margin: 0;
+    margin-top: 10px;
     padding: 0;
     width: 100%;
     text-align: center;
     cursor: pointer;
+}
+
+.lastChat{
+    margin: 0;
+    margin-top: 5px;
+    padding: 0;
+    width: 90%;
+    text-align: center;
+    font-size: small;
+    color: gray;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break:break-all;
 }

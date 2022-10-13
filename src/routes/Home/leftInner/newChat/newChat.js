@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
     getFolloweeListUrl,
-    getfollowerListUrl
+    getfollowerListUrl,
+    makeNewChattingRoomUrl,
 } from '../../../../apiUrl';
 
 const SingleFriend = ({data, setChosenFriendList, chosenFriendList, addStyle}) => {
@@ -37,8 +38,9 @@ const SingleFriend = ({data, setChosenFriendList, chosenFriendList, addStyle}) =
     );
 };
 
-const LeftNewChat = ({refreshAccessToken}) => {
+const LeftNewChat = ({refreshAccessToken, setLeftBookState}) => {
     const [friendSearchInput, setFriendSearchInput] = useState("");//친구 검색용
+    const [chattingRoomNameInput, setChattingRoomNameInput] = useState("");//채팅방 이름 입력
     const [outputFriendList, setOutputFriendList] = useState([]);//실제로 출력할 친구 리스트
     const [wholeFriendList, setWholeFriendList] = useState([]);//받아온 친구 리스트
     const [chosenFriendList, setChosenFriendList] = useState([]);//선택된 친구 리스트
@@ -47,6 +49,10 @@ const LeftNewChat = ({refreshAccessToken}) => {
 
     const friendSearchInputChangeHandler = (event) => {
         setFriendSearchInput(event.target.value);
+    };
+
+    const chattingRoomNameInputChangeHandler = (event) => {
+        setChattingRoomNameInput(event.target.value);
     };
 
     //팔로워와 팔로잉을 불러오는 함수
@@ -115,13 +121,37 @@ const LeftNewChat = ({refreshAccessToken}) => {
     };
     useEffect(changeOutputFriendListbyClick, [chosenFriendList]);
 
-    //채팅방 생성함수<----------------------------------------------------------------------------작업해야함
+    //채팅방 생성함수
     const createChatClickHandler = (event) => {
         event.preventDefault();
-        const chosenFriendUserIdList = chosenFriendList.map(d => d.userId);
-        console.log(chosenFriendUserIdList);
-        console.log("이들을 바탕으로 채팅방을 만듭니다.");
-    }
+        if(chosenFriendList.length === 0){//아무도 선택되지 않은 경우 함수 종료
+            alert("1명 이상의 친구를 선택해 주세요.");
+            return;
+        }
+
+        const chosenFriendUserIdList = chosenFriendList.map(d => (d.userId));//id만 뽑아서 배열 생성
+        let chattingRoomName = chattingRoomNameInput;//채팅방 이름 설정
+        if(chattingRoomName === ""){//사용자가 채팅방 명을 정해주지 않은 경우 이름 자동 생성
+            chattingRoomName = `${chosenFriendList[0].nickname}외${chosenFriendList.length - 1}명`
+        }
+
+        axios.post(makeNewChattingRoomUrl, {
+            name: chattingRoomName,
+            userIdList: chosenFriendUserIdList,
+        })
+        .then((res) => {
+            //자동으로 생성된 채팅방으로 이동할 수 있게 leftState를 바꿔야함
+            //setLeftBookState(`chat/${res.data.data.모시깽이}`);
+        })
+        .catch((res) => {
+            if(res.response.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                alert("채팅방을 생성하지 못했습니다.");
+            }
+        })
+    };
 
     return(
         <div className={Style.wholeCover}>
@@ -169,6 +199,13 @@ const LeftNewChat = ({refreshAccessToken}) => {
             </div>
             {/* 생성 버튼 */}
             <div className={Style.flexBoxRight}>
+                <input 
+                    className={Style.friendInput}
+                    placeholder="채팅방의 이름을 설정하세요..(최대 10자)"
+                    maxLength={10}
+                    onChange={chattingRoomNameInputChangeHandler}
+                    value={chattingRoomNameInput}
+                />
                 <button className={Style.submitBtn} onClick={createChatClickHandler}>생 성</button>
             </div>
         </div>

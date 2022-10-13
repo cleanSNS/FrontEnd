@@ -157,3 +157,6 @@ export const getNoticeNumber = `${apiUrl}/subscribe`;
 
 //알림 수 조회
 export const presetNoticeNumeber = `${apiUrl}/user/notification/count`;
+
+/********************************채팅 관련********************************/
+export const makeNewChattingRoomUrl = `${apiUrl}/chat/chatroom`;

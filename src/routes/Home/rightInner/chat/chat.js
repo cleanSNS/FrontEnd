@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 
 const RightChat = ({refreshAccessToken, setLeftBookState}) => {
     const [chatSearchInput, setChatSearchInput] = useState("");//검색창에 입력된 정보
+    const [chattingRoomList, setChattingRoomList] = useState([]);//채팅방들의 정보를 가진 리스트
 
     //채팅방 검색 input change Handler
     const chatSearchInputChangeHandler = (event) => {
@@ -18,7 +19,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState}) => {
 
     //새 채팅방 click Handler
     const newChatClickHandler = () => {
-        setLeftBookState("newChat");
+        setLeftBookState("makeNewC");
     };
 
     return(
@@ -42,8 +43,9 @@ const RightChat = ({refreshAccessToken, setLeftBookState}) => {
                         <div className={Style.flexBox}>
                             <img className={Style.chatImg} onClick={chatClickHandler} />
                         </div>
-                        <div className={Style.flexBox}>
+                        <div className={Style.flexBoxcol}>
                             <p className={Style.chatName} onClick={chatClickHandler}>Chat Name</p>
+                            <p className={Style.lastChat} onClick={chatClickHandler}>마지막 채팅이 있음ㄹㄴㅇㄹㄴㅇㄹㅇㄴㄹㅇㄴㄹㄴㅇㄹ</p>
                         </div>
                     </div>
             </div>
