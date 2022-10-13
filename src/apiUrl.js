@@ -162,3 +162,5 @@ export const presetNoticeNumeber = `${apiUrl}/user/notification/count`;
 export const makeNewChattingRoomUrl = `${apiUrl}/chat/chatroom`;
 
 export const getChattingRoomListUrl = `${apiUrl}/chat/chatroom`;
+
+export const getChattingListUrl = `${apiUrl}/chat`;
