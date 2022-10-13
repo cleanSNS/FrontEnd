@@ -70,13 +70,34 @@
     align-items: center;
 }
 
-.chatImg{
+.chatImgBig{
     width: 70px;
     height: 70px;
     border-radius: 0.25rem;
     border: 1px solid black;
+}
+
+.chatImgSmall{
+    width: 34px;
+    height: 34px;
+    border-radius: 0.25rem;
+    border: 1px solid black;
+}
+
+.singleImgFlex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    margin-left: 5px;
+}
+
+.overDoubleImgFlex{
+    width: 70px;
+    height: 70px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    cursor: pointer;
 }
 
 .chatName{
@@ -92,7 +113,7 @@
     margin: 0;
     margin-top: 5px;
     padding: 0;
-    width: 90%;
+    width: 80%;
     text-align: center;
     font-size: small;
     color: gray;
