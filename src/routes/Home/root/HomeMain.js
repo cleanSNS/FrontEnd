@@ -37,7 +37,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting // makeNewC // hastTagPage
-  const [leftBookState, setLeftBookState] = useState("page");
+  const [leftBookState, setLeftBookState] = useState("chat/0");
   //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
   const [settingState, setSettingState] = useState("initial");
 
