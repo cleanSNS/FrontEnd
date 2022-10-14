@@ -123,7 +123,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     const presetChattingRoomId = () => {
         setChattingRoomId(leftBookState.split('/')[1]);
     }
-    useEffect(presetChattingRoomId, []);//초기 실행
+    useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
 
     //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
     const presetChattingList = () => {
@@ -166,7 +166,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
             event.preventDefault();
         }
         if(userChatInput === "") return;//입력한게 없으면 제출 X
-        
+
         stompClient.send(`https://api.cleanbook.site/pub/${chattingRoomId}`, {},
             JSON.stringify({
                 userDto:{
