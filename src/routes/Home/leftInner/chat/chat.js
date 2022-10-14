@@ -104,10 +104,10 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //소켓 설정해주는 함수
     const socketConnect = () => {
-        const socket = new SockJS("api.cleanbook.site/ws");
+        const socket = new SockJS("ws://api.cleanbook.site/ws");
         const tmp = Stomp.over(socket);
         tmp.connect({}, function (frame) {
-            tmp.subscribe(`api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {//구독
+            tmp.subscribe(`ws://api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {//구독
                 console.log(JSON.parse(chatMessage.body));//chatMessage.body
                 console.log()
             });
@@ -162,8 +162,10 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
             event.preventDefault();
         }
         if(userChatInput === "") return;//입력한게 없으면 제출 X
+        
+        const now = new Date();
 
-        stompClient.send(`api.cleanbook.site/pub/${chattingRoomId}`, {},
+        stompClient.send(`ws://api.cleanbook.site/pub/${chattingRoomId}`, {},
             JSON.stringify({
                 userDto:{
                     userId: 5,
@@ -171,7 +173,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                     imgUrl: null
                 },
                 message: userChatInput,
-                createdDate : "2020-10-10T10:10:10.123456789",
+                createdDate : now,
             })
         );
     };
