@@ -68,7 +68,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState}) => {
     const presetChattingRoomList = () => {
         axios.get(getChattingRoomListUrl)
         .then((res) => {
-            const tmp = [...res.data];
+            const tmp = [...res.data.data];
             setChattingRoomList(tmp);
         })
         .catch((res) => {
