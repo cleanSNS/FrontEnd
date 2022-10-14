@@ -93,6 +93,7 @@ function App() {
     })
     .catch((res)=>{
       console.log(res);
+      localStorage.removeItem("rft");//refresh token 지우기
       alert("로그아웃에 문제가 발생했습니다");
     });
   };

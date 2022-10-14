@@ -99,13 +99,25 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         }
     }
 
+    //소켓 설정해주는 함수
+    const socketConnect = () => {
+        const socket = new SockJS(`https://api.cleanbook.site/ws`);
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            //구독
+            stompClient.subscribe(`https://api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {
+                console.log(JSON.parse(chatMessage.body));//chatMessage.body
+            });
+        });
+    };
+
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
         setChattingRoomId(leftBookState.split('/')[1]);
     }
     useEffect(presetChattingRoomId, []);//초기 실행
 
-    //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러온다.<------------바뀔 수 있음(이름 불러오는 api도 추가해야 함)
+    //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
     const presetChattingList = () => {
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
         .then((res) => {
@@ -117,6 +129,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
             axios.get(`${getChattingRoomNameUrl}/${chattingRoomId}/name`)
             .then((res) => {
                 setChattingRoomName(res.data.data.chatroomName);
+                socketConnect();//소캣 연결까지 완료한다.
             })
             .catch((res) => {
                 if(res.response.status === 401){
