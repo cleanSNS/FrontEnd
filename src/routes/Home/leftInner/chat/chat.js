@@ -112,7 +112,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     useEffect(() => {
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
-            console.log(frame);
             stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
                 console.log("받아지고 있는거야?");
                 const tmp = [...chattingList];
@@ -183,8 +182,15 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                     createdDate : now,
                 })
             );
+            stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
+                console.log("받아지고 있는거야?");
+                const tmp = [...chattingList];
+                tmp.push(JSON.parse(chatMessage.body));
+                setChattingList(tmp);
+            });
         });
         setUserChatInput("");
+        return () => stompClient.disconnect();
     };
 
     return(
