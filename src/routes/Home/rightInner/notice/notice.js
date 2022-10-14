@@ -80,7 +80,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
                 </div>
                 <div className={Style.Cover}>
                     {type === "COMMENT" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 댓글이 달렸습니다.</p> : null}
-                    {type === "FOLLOW" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>팔로우 요청이 왔습니다.</p> : null}
+                    {type === "FOLLOW" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>팔로우를 했습니다.</p> : null}
                     {type === "NESTED" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 댓글에 답글이 달렸습니다.</p> : null}
                     {type === "LIKE" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 좋아요가 눌렸습니다.</p> : null}
                 </div>

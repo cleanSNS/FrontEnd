@@ -55,7 +55,7 @@ const SingleChattingRoom = ({data, setLeftBookState}) => {
     );
 };
 
-const RightChat = ({refreshAccessToken, setLeftBookState}) => {
+const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState}) => {
     const [chatSearchInput, setChatSearchInput] = useState("");//검색창에 입력된 정보
     const [chattingRoomList, setChattingRoomList] = useState([]);//채팅방들의 정보를 가진 리스트
 
@@ -80,7 +80,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState}) => {
             }
         })
     };
-    useEffect(presetChattingRoomList, []);
+    useEffect(presetChattingRoomList, [leftBookState]);
 
     //새 채팅방 click Handler
     const newChatClickHandler = () => {
