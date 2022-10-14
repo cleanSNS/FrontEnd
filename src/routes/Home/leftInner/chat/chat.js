@@ -121,12 +121,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                 setChattingList(tmp);
             });
         });
-        stompClient.subscribe(`https://api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {//구독
-                console.log("받아지고 있는거야?");
-                const tmp = [...chattingList];
-                tmp.push(JSON.parse(chatMessage.body));
-                setChattingList(tmp);
-        });
     }, [stompClient]);
 
     //가장 먼저 채팅방의 아이디를 가져온다.
