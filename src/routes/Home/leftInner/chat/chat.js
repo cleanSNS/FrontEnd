@@ -114,8 +114,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
             stompClient.subscribe(`https://api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {//구독
-                console.log(JSON.parse(chatMessage.body));//chatMessage.body
-                console.log("되는지 정말 궁금하다.");
+                console.log(chatMessage);
             });
         });
     }, [stompClient]);
