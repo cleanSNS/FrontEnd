@@ -104,20 +104,16 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //소켓 설정해주는 함수
     const socketConnect = () => {
-        const socket = new SockJS(`https://api.cleanbook.site/ws`);
+        const socket = new SockJS("https://api.cleanbook.site/ws");
         const tmp = Stomp.over(socket);
-        setStompClient(tmp);
-    };
-
-    //소켓이 결정되면 그에 대한 함수 추가
-    useEffect(()=>{
-        if(stompClient === null) return;//초기상황에서는 그냥 종료
-        stompClient.connect({}, function (frame) {
-            stompClient.subscribe(`https://api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {//구독
+        tmp.connect({}, function (frame) {
+            tmp.subscribe(`https://api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {//구독
                 console.log(JSON.parse(chatMessage.body));//chatMessage.body
+                console.log()
             });
         });
-    }, [stompClient]);
+        setStompClient(tmp);
+    };
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
