@@ -110,8 +110,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         setStompClient(tmp);
     };
 
-    useEffect(() => {
-        if(stompClient === null) return; //초기 상황에는 그냥 종료
+    if(stompClient !==null){
         stompClient.connect({}, function (frame) {
             console.log(frame);
             stompClient.subscribe(`https://api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {//구독
@@ -121,7 +120,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                 setChattingList(tmp);
             });
         });
-    }, [stompClient]);
+    }
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
