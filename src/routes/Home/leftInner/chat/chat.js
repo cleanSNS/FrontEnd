@@ -165,14 +165,16 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         if(event !== null) {//이벤트가 submit일 수도 있고 그냥 엔터눌러서 온 걸 수도 있다. 엔터면 그냥 넘어가고 submit이면 preventDefault()한다.
             event.preventDefault();
         }
-        stompClient.send("/pub/"+roomId, {},
+        if(userChatInput === "") return;//입력한게 없으면 제출 X
+        
+        stompClient.send(`https://api.cleanbook.site/pub/${chattingRoomId}`, {},
             JSON.stringify({
                 userDto:{
-                    userId: 1,
-                    nickname: "user1",
+                    userId: 5,
+                    nickname: "testing",
                     imgUrl: null
                 },
-                message: "ㅎㅇㅎㅇ",
+                message: userChatInput,
                 createdDate : "2020-10-10T10:10:10.123456789",
             })
         );
