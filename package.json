@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@js-temporal/polyfill": "^0.4.2",
+    "@stomp/stompjs": "^6.1.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -19,7 +20,8 @@
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",
     "stomp-websocket": "^2.3.4-next",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "websocket": "^1.0.34"
   },
   "scripts": {
     "start": "export PORT=443 && HTTPS=true SSL_CRT_FILE=../certificate.crt SSL_KEY_FILE=../private.key react-scripts start",

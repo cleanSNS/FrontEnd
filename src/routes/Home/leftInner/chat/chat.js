@@ -8,8 +8,7 @@ import {
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
 import SockJS from 'sockjs-client';
-import Stomp from 'stomp-websocket';
-import userEvent from '@testing-library/user-event';
+import { Stomp } from '@stomp/stompjs';
 
 const SingleChat = ({data, setLeftBookState, userId}) => {
     //유저의 이미지나 이름을 클릭하면 해당 유저의 페이지로 이동한다. <---------------이동이 있는 곳!
@@ -112,7 +111,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     useEffect(() => {
         if(stompClient === null) return; //초기 상황에는 그냥 종료
-        stompClient.connect("","", function (frame) {
+        stompClient.connect({}, function (frame) {
             console.log(frame);
             stompClient.subscribe(`https://api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {//구독
                 console.log("받아지고 있는거야?");
