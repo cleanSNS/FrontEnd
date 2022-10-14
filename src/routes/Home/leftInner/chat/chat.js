@@ -7,6 +7,8 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
+import SockJS from 'sockjs-client';
+
 
 const SingleChat = ({data, setLeftBookState, userId}) => {
     //유저의 이미지나 이름을 클릭하면 해당 유저의 페이지로 이동한다. <---------------이동이 있는 곳!
