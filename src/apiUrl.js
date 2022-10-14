@@ -159,8 +159,14 @@ export const getNoticeNumber = `${apiUrl}/subscribe`;
 export const presetNoticeNumeber = `${apiUrl}/user/notification/count`;
 
 /********************************채팅 관련********************************/
+//채팅방을 만드는 Url
 export const makeNewChattingRoomUrl = `${apiUrl}/chat/chatroom`;
 
+//채팅방 리스트를 가져오는 Url
 export const getChattingRoomListUrl = `${apiUrl}/chat/chatroom`;
 
+//채팅방의 이름을 불러오는 Url
+export const getChattingRoomNameUrl = `${apiUrl}/chat/chatroom`
+
+//채팅방 내에서 그 채팅방의 채팅들을 불러오는 Url
 export const getChattingListUrl = `${apiUrl}/chat`;

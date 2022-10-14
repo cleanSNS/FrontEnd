@@ -9,7 +9,7 @@ import {
 const SingleChattingRoom = ({data, setLeftBookState}) => {
     //임시 테스트용 click Handler<------------------------------변동 가능성 높음
     const chatClickHandler = () => {
-        //setLeftBookState(`chat/${data.모시깽이}`);이런식으로 id가 필요
+        setLeftBookState(`chat/${data.chatroomId}`);
     };
 
     return(
@@ -18,32 +18,32 @@ const SingleChattingRoom = ({data, setLeftBookState}) => {
             {
                 data.headCount === 1 ?
                 <div className={Style.singleImgFlex}>
-                    <img src={data.userList[0]} className={Style.chatImgBig} onClick={chatClickHandler} />
+                    <img src={data.userImgUrlList[0]} className={Style.chatImgBig} onClick={chatClickHandler} />
                 </div> : 
                 data.headCount === 2 ?
                 <div className={Style.flexBox}>
                     <div className={Style.overDoubleImgFlex}>
-                        <img src={data.userList[0]} className={Style.chatImgSmall} onClick={chatClickHandler} />
+                        <img src={data.userImgUrlList[0]} className={Style.chatImgSmall} onClick={chatClickHandler} />
                         <div />
                         <div />
-                        <img src={data.userList[1]} className={Style.chatImgSmall} onClick={chatClickHandler} />
+                        <img src={data.userImgUrlList[1]} className={Style.chatImgSmall} onClick={chatClickHandler} />
                     </div>
                 </div> : 
                 data.headCount === 3 ?
                 <div className={Style.flexBox}>
                     <div className={Style.overDoubleImgFlex}>
-                        <img src={data.userList[0]} className={Style.chatImgSmall} onClick={chatClickHandler} />
-                        <img src={data.userList[1]} className={Style.chatImgSmall} onClick={chatClickHandler} />
-                        <img src={data.userList[2]} className={Style.chatImgSmall} onClick={chatClickHandler} />
+                        <img src={data.userImgUrlList[0]} className={Style.chatImgSmall} onClick={chatClickHandler} />
+                        <img src={data.userImgUrlList[1]} className={Style.chatImgSmall} onClick={chatClickHandler} />
+                        <img src={data.userImgUrlList[2]} className={Style.chatImgSmall} onClick={chatClickHandler} />
                         <div />
                     </div>
                 </div> : 
                 <div className={Style.flexBox}>
                     <div className={Style.overDoubleImgFlex}>
-                        <img src={data.userList[0]} className={Style.chatImgSmall} onClick={chatClickHandler} />
-                        <img src={data.userList[1]} className={Style.chatImgSmall} onClick={chatClickHandler} />
-                        <img src={data.userList[2]} className={Style.chatImgSmall} onClick={chatClickHandler} />
-                        <img src={data.userList[3]} className={Style.chatImgSmall} onClick={chatClickHandler} />
+                        <img src={data.userImgUrlList[0]} className={Style.chatImgSmall} onClick={chatClickHandler} />
+                        <img src={data.userImgUrlList[1]} className={Style.chatImgSmall} onClick={chatClickHandler} />
+                        <img src={data.userImgUrlList[2]} className={Style.chatImgSmall} onClick={chatClickHandler} />
+                        <img src={data.userImgUrlList[3]} className={Style.chatImgSmall} onClick={chatClickHandler} />
                     </div>
                 </div>
             }

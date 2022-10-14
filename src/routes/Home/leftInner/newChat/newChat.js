@@ -140,8 +140,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState}) => {
             userIdList: chosenFriendUserIdList,
         })
         .then((res) => {
-            //자동으로 생성된 채팅방으로 이동할 수 있게 leftState를 바꿔야함
-            //setLeftBookState(`chat/${res.data.data.모시깽이}`);
+            setLeftBookState(`chat/${res.data.data.chatroomId}`);
         })
         .catch((res) => {
             if(res.response.status === 401){

@@ -37,7 +37,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting // makeNewC // hastTagPage
-  const [leftBookState, setLeftBookState] = useState("chat/0");
+  const [leftBookState, setLeftBookState] = useState("page");
   //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
   const [settingState, setSettingState] = useState("initial");
 
@@ -366,7 +366,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
             <div className={Style.Cover}>
                 {leftBookState.includes("page") ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setPageId={setPageId}/> : null}
                 {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
-                {leftBookState.includes("chat") ? <LeftChat refreshAccessToken={refreshAccessToken} leftBookState={leftBookState}/> : null}
+                {leftBookState.includes("chat") ? <LeftChat refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId}/> : null}
                 {leftBookState === "makeNewC" ? <LeftNewChat setLeftBookState={setLeftBookState} /> : null}
                 {leftBookState.includes("hashtagPage") ? <LeftHashtagPage leftBookState={leftBookState} setPageId={setPageId}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
