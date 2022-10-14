@@ -119,6 +119,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                 setChattingList(tmp);
             });
         });
+        return () => stompClient.disconnect();
     }, [stompClient]);
 
     //가장 먼저 채팅방의 아이디를 가져온다.
