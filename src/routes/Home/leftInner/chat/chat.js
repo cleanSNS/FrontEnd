@@ -104,7 +104,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //소켓 설정해주는 함수
     const socketConnect = () => {
-        const socket = new SockJS("https://api.cleanbook.site/ws");
+        const socket = new SockJS("https://api.cleanbook.site/wss");
         const tmp = Stomp.over(socket);
         setStompClient(tmp);
     };
