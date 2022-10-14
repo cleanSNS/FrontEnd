@@ -171,17 +171,19 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         if(userChatInput === "") return;//입력한게 없으면 제출 X
         
         const now = new Date();
-        stompClient.send(`/pub/${chattingRoomId}`, {},
-            JSON.stringify({
-                userDto:{
-                    userId: 5,
-                    nickname: "testing",
-                    imgUrl: null
-                },
-                message: userChatInput,
-                createdDate : now,
-            })
-        );
+        stompClient.connect({}, function (frame) {
+            stompClient.send(`/pub/${chattingRoomId}`, {},
+                JSON.stringify({
+                    userDto:{
+                        userId: 5,
+                        nickname: "testing",
+                        imgUrl: null
+                    },
+                    message: userChatInput,
+                    createdDate : now,
+                })
+            );
+        });
         setUserChatInput("");
     };
 
