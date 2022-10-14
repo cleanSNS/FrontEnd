@@ -120,7 +120,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
             });
             stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));
         });
-        return () => stompClient.disconnect();
     }, [stompClient]);
 
     //가장 먼저 채팅방의 아이디를 가져온다.
@@ -175,8 +174,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         stompClient.send(`/pub/${chattingRoomId}`, {sender: userId},
             JSON.stringify({
                 userDto:{
-                    userId: 5,
-                    nickname: "testing",
+                    userId: 1,
+                    nickname: "user1",
                     imgUrl: null
                 },
                 message: userChatInput,
@@ -184,7 +183,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
             })
         );
         setUserChatInput("");
-        return () => stompClient.disconnect();
     };
 
     return(
