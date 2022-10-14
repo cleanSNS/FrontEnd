@@ -118,6 +118,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                 tmp.push(JSON.parse(chatMessage.body));
                 setChattingList(tmp);
             });
+            stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));
         });
         return () => stompClient.disconnect();
     }, [stompClient]);
@@ -171,25 +172,17 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         if(userChatInput === "") return;//입력한게 없으면 제출 X
         
         const now = new Date();
-        stompClient.connect({}, function (frame) {
-            stompClient.send(`/pub/${chattingRoomId}`, {},
-                JSON.stringify({
-                    userDto:{
-                        userId: 5,
-                        nickname: "testing",
-                        imgUrl: null
-                    },
-                    message: userChatInput,
-                    createdDate : now,
-                })
-            );
-            stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
-                console.log("받아지고 있는거야?");
-                const tmp = [...chattingList];
-                tmp.push(JSON.parse(chatMessage.body));
-                setChattingList(tmp);
-            });
-        });
+        stompClient.send(`/pub/${chattingRoomId}`, {sender: userId},
+            JSON.stringify({
+                userDto:{
+                    userId: 5,
+                    nickname: "testing",
+                    imgUrl: null
+                },
+                message: userChatInput,
+                createdDate : now,
+            })
+        );
         setUserChatInput("");
         return () => stompClient.disconnect();
     };
