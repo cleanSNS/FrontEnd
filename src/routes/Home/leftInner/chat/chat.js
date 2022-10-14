@@ -184,7 +184,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                 <input 
                     className={Style.chattingRoomName}
                     value={chattingRoomName}
-                    disabled="true"
+                    disabled={true}
                 />
             </form>
             <div className={Style.chattingListArea}>
