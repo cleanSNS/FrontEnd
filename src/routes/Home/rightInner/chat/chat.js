@@ -76,7 +76,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState}) => {
                 refreshAccessToken();
             }
             else{
-                alert("채팅방을 생성하지 못했습니다.");
+                alert("채팅방을 불러오지 못했습니다.");
             }
         })
     };
