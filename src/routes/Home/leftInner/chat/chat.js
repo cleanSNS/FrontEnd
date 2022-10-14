@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
 import SockJS from 'sockjs-client';
-
+import Stomp from 'stomp-websocket';
 
 const SingleChat = ({data, setLeftBookState, userId}) => {
     //유저의 이미지나 이름을 클릭하면 해당 유저의 페이지로 이동한다. <---------------이동이 있는 곳!
@@ -89,6 +89,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     const [oldestChat, inView] = useInView();//가장 오래된(가장 위의) 채팅에게 값을 넣으면 inView값 변경
 
     const [userChatInput, setUserChatInput] = useState("");//사용자의 채팅 내용
+    const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
 
     const onUserChattingChangeHandler = (event) => {
         setUserChatInput(event.target.value);
@@ -104,14 +105,19 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     //소켓 설정해주는 함수
     const socketConnect = () => {
         const socket = new SockJS(`https://api.cleanbook.site/ws`);
-        stompClient = Stomp.over(socket);
+        const tmp = Stomp.over(socket);
+        setStompClient(tmp);
+    };
+
+    //소켓이 결정되면 그에 대한 함수 추가
+    useEffect(()=>{
+        if(stompClient === null) return;//초기상황에서는 그냥 종료
         stompClient.connect({}, function (frame) {
-            //구독
-            stompClient.subscribe(`https://api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {
+            stompClient.subscribe(`https://api.cleanbook.site/sub/${chattingRoomId}`, function (chatMessage) {//구독
                 console.log(JSON.parse(chatMessage.body));//chatMessage.body
             });
         });
-    };
+    }, [stompClient]);
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
@@ -121,6 +127,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
     const presetChattingList = () => {
+        if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
         .then((res) => {
             const cur = [...chattingList];//지금의 채팅방 채팅 리스트
