@@ -21,7 +21,8 @@
     "sockjs-client": "^1.6.1",
     "stomp-websocket": "^2.3.4-next",
     "web-vitals": "^2.1.4",
-    "websocket": "^1.0.34"
+    "websocket": "^1.0.34",
+    "webstomp-client": "^1.2.6"
   },
   "scripts": {
     "start": "export PORT=443 && HTTPS=true SSL_CRT_FILE=../certificate.crt SSL_KEY_FILE=../private.key react-scripts start",
