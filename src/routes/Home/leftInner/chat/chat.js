@@ -74,6 +74,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     const [myuserImgUrl, serMyUserImgUrl] = useState("");//내 이미지
     const [myuserNickname, setMyUserNickname] = useState("");//내 이름
 
+    const [newChat, setNewChat] = useState("");//새로운 채팅을 불러오는 부분
+
     const onUserChattingChangeHandler = (event) => {
         setUserChatInput(event.target.value);
     };
@@ -92,23 +94,31 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         setStompClient(tmp);
     };
 
+    //소켓이 추가되면 그에 맞는 함수를 추가하는 함수
     useEffect(() => {
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
             stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
-                console.log("받은 데이터를 새로 저장하여 반영합니다.")
-                const tmp = [...chattingList];
-                console.log(tmp);
                 let tmpchat = chatMessage.body;
                 tmpchat = JSON.parse(tmpchat);
-                tmp.push(tmpchat);
-                console.log("to");
-                console.log(tmp);
-                setChattingList(tmp);
+                console.log(tmpchat);//지우기
+                console.log("새로 불러왔습니다.");//지우가
+                setNewChat(tmpchat);
             });
             stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));//이거 필요한지 확인 필요
         });
     }, [stompClient]);
+
+    //새로운 채팅이 들어왔을 때 반영하는 함수
+    useEffect(() => {
+        if(newChat === "") return;//초기 상황에는 그냥 종료
+        const tmp = [...chattingList];
+        console.log(tmp);
+        tmp.push(newChat);
+        console.log(tmp);
+
+        setChattingList
+    }, [newChat])
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
