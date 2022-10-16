@@ -111,7 +111,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //새로운 채팅이 들어왔을 때 반영하는 함수
     useEffect(() => {
-        document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
         if(newChat === "") return;//초기 상황에는 그냥 종료
         const tmp = [...chattingList];
         tmp.push(newChat);
@@ -123,6 +122,11 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         setChattingRoomId(leftBookState.split('/')[1]);
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
+
+    //채팅이 추가되면 자동으로 스크롤 해주는 함수
+    useEffect(() => {
+        document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
+    }, [chattingList]);
 
     //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
     const presetChattingList = () => {
@@ -203,7 +207,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                     disabled={true}
                 />
             </form>
-            <div id={"chatbox"} className={Style.chattingListArea}>
+            <div id="chatbox" className={Style.chattingListArea}>
                 <div className={Style.chattingListAreaSize}>
                     {
                         chattingList.map((data, index) => (
