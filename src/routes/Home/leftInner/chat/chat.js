@@ -23,7 +23,7 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
         const now = new Date();
         const postedTime = new Date(calTime);
         if(postedTime.getFullYear() === now.getFullYear() &&postedTime.getMonth() === now.getMonth() && postedTime.getDate() === now.getDate()){//연,월,일이 오늘이면, 시간과 분을 쓰고,
-            return `${postedTime.getHours()} : ${postedTime.getMinutes()}`;
+            return `${postedTime.getHours()}:${postedTime.getMinutes()}`;
         }
         else{//연월일이 오늘이 아니면 월 일을 쓴다.
             return `${postedTime.getMonth()}월 ${postedTime.getDate()}일`;
@@ -175,7 +175,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         if(userChatInput === "") return;//입력한게 없으면 제출 X
         
         const nowT = new Date();
-        const now = JSON.stringify(nowT);
+        const now = nowT.toString();
         stompClient.send(`/pub/${chattingRoomId}`, {sender: userId},
             JSON.stringify({
                 userDto:{
@@ -192,9 +192,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //무한 로딩 함수 - 작동 확인함
     useEffect(() => {
-        console.log("일단 무한 로딩이 실행되는가?")
-        console.log(inView);
-        console.log(isFirstChat);
         if(inView && !isFirstChat){
             axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
             .then((res) => {
