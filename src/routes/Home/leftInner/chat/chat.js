@@ -20,12 +20,13 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     //시간 계산 함수
     /** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
     const calculateTimeFrom = (calTime) => {
+        const postedTime = JSON.parse(calTime);
         const now = new Date();
-        if(calTime.getFullYear() === now.getFullYear() &&calTime.getMonth() === now.getMonth() && calTime.getDate() === now.getDate()){//연,월,일이 오늘이면, 시간과 분을 쓰고,
-            return `${calTime.getHours()} : ${calTime.getMinutes()}`;
+        if(postedTime.getFullYear() === now.getFullYear() &&postedTime.getMonth() === now.getMonth() && postedTime.getDate() === now.getDate()){//연,월,일이 오늘이면, 시간과 분을 쓰고,
+            return `${postedTime.getHours()} : ${postedTime.getMinutes()}`;
         }
         else{//연월일이 오늘이 아니면 월 일을 쓴다.
-            return `${calTime.getMonth()}월 ${calTime.getDate()}일`;
+            return `${postedTime.getMonth()}월 ${postedTime.getDate()}일`;
         }
     };
 
@@ -182,7 +183,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                     imgUrl: myuserImgUrl
                 },
                 message: userChatInput,
-                createdDate : now,
+                createdDate : JSON.stringify(now),
             })
         );
         setUserChatInput("");
