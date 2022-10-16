@@ -203,8 +203,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                     disabled={true}
                 />
             </form>
-            <div className={Style.chattingListArea}>
-                <div id={"chatbox"} className={Style.chattingListAreaSize}>
+            <div id={"chatbox"} className={Style.chattingListArea}>
+                <div className={Style.chattingListAreaSize}>
                     {
                         chattingList.map((data, index) => (
                             <SingleChat data={data} key={index} setLeftBookState={setLeftBookState} userId={userId}/>
