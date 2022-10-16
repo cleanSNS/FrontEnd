@@ -22,25 +22,12 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     /** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
     const calculateTimeFrom = (calTime) => {
         const now = Temporal.Now.plainDateTimeISO();//현재 시간 세팅
-        const postedDate = Temporal.PlainDateTime.from(calTime);
-        const result = now.since(postedDate);
-        if(result.minutes === 0){//0분이내인 경우
-            return "방금 전";
+        const postedDate = Temporal.PlainDateTime.from(calTime);//받아온 시간
+        if(postedDate.year === now.year &&postedDate.month === now.month && postedDate.day === now.day){//연,월,일이 오늘이면, 시간과 분을 쓰고,
+            return `${postedDate.hour}:${postedDate.minute}`;
         }
-        else if(result.hours === 0){//1시간보다는 아래인 경우
-            return `${result.minutes}분 전`;
-        }
-        else if(result.days === 0){//1일보다는 아래인 경우
-            return `${result.hours}시간 전`;
-        }
-        else if(result.months === 0){//1달보다는 아래인 경우
-            return `${result.days}일 전`;
-        }
-        else if(result.years === 0){//1년보다는 아래인 경우
-            return `${result.months}달 전`;
-        }
-        else{//1년 이상인 경우
-            return `${result.years}년 전`;
+        else{//연월일이 오늘이 아니면 월 일을 쓴다.
+            return `${postedDate.month}월 ${postedDate.day}일`;
         }
     };
 
@@ -118,16 +105,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         setChattingList(tmp);
     }, [newChat]);
 
-    //가장 먼저 채팅방의 아이디를 가져온다. + 혹시모르니 초기화까지
+    //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
-        setChattingRoomName("채팅방의 이름이 오는 자리입니다.");//채팅방 이름
-        setChattingList([]);//채팅방의 채팅들
-        setChattingListStartId(987654321);//채팅방의 채팅을 불러오는 startId
-        setIsFirstChat(false);//가장 오래된 채팅이 로드되면 값을 true로 변경. 더 이상 로드할게 없다.
-        setUserChatInput("");//사용자의 채팅 내용
-        setStompClient(null);//소켓 연결이 된 친구
-        serMyUserImgUrl("");//내 이미지
-        setMyUserNickname("");//내 이름
         setChattingRoomId(leftBookState.split('/')[1]);
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
@@ -211,7 +190,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         setUserChatInput("");
     };
 
-    //무한 로딩 함수
+    //무한 로딩 함수 - 작동 확인함
     useEffect(() => {
         console.log("일단 무한 로딩이 실행되는가?")
         console.log(inView);

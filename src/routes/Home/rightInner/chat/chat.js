@@ -17,11 +17,11 @@ const SingleChattingRoom = ({data, setLeftBookState}) => {
             {/* 이미지 영역 유저(data.headCount)가 1,2,3,4(혹은 그 이상) 일 때를 각각 만드는게 좋을듯 */}
             {
                 data.headCount === 1 ?
-                <div className={Style.singleImgFlex}>
+                <div className={Style.singleImgFlex} style={{width: "20%"}}>
                     <img src={data.userImgUrlList[0]} className={Style.chatImgBig} onClick={chatClickHandler} />
                 </div> : 
                 data.headCount === 2 ?
-                <div className={Style.flexBox}>
+                <div className={Style.flexBox} style={{width: "20%"}}>
                     <div className={Style.overDoubleImgFlex}>
                         <img src={data.userImgUrlList[0]} className={Style.chatImgSmall} onClick={chatClickHandler} />
                         <div />
@@ -30,7 +30,7 @@ const SingleChattingRoom = ({data, setLeftBookState}) => {
                     </div>
                 </div> : 
                 data.headCount === 3 ?
-                <div className={Style.flexBox}>
+                <div className={Style.flexBox} style={{width: "20%"}}>
                     <div className={Style.overDoubleImgFlex}>
                         <img src={data.userImgUrlList[0]} className={Style.chatImgSmall} onClick={chatClickHandler} />
                         <img src={data.userImgUrlList[1]} className={Style.chatImgSmall} onClick={chatClickHandler} />
@@ -38,7 +38,7 @@ const SingleChattingRoom = ({data, setLeftBookState}) => {
                         <div />
                     </div>
                 </div> : 
-                <div className={Style.flexBox}>
+                <div className={Style.flexBox} style={{width: "20%"}}>
                     <div className={Style.overDoubleImgFlex}>
                         <img src={data.userImgUrlList[0]} className={Style.chatImgSmall} onClick={chatClickHandler} />
                         <img src={data.userImgUrlList[1]} className={Style.chatImgSmall} onClick={chatClickHandler} />
@@ -47,7 +47,7 @@ const SingleChattingRoom = ({data, setLeftBookState}) => {
                     </div>
                 </div>
             }
-            <div className={Style.flexBoxcol}>
+            <div className={Style.flexBoxcol} style={{width: "80%"}}>
                 <p className={Style.chatName} onClick={chatClickHandler}>{data.name}</p>
                 <p className={Style.lastChat} onClick={chatClickHandler}>{data.lastChat}</p>
             </div>
