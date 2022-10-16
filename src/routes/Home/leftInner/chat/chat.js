@@ -127,7 +127,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
             axios.get(`${getChattingRoomNameUrl}/${chattingRoomId}/name`)
             .then((res) => {
                 setChattingRoomName(res.data.data.chatroomName);
-                axios.get(`${getUserNicknameAndImageUrl}/${userId}/profile`)
+                axios.get(`${getUserNicknameAndImageUrl}${userId}/profile`)
                 .then((res) =>{
                     serMyUserImgUrl(res.data.data.imgUrl);
                     setMyUserNickname(res.data.data.nickname);
