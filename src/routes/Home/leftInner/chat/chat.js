@@ -118,8 +118,16 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         setChattingList(tmp);
     }, [newChat]);
 
-    //가장 먼저 채팅방의 아이디를 가져온다.
+    //가장 먼저 채팅방의 아이디를 가져온다. + 혹시모르니 초기화까지
     const presetChattingRoomId = () => {
+        setChattingRoomName("채팅방의 이름이 오는 자리입니다.");//채팅방 이름
+        setChattingList([]);//채팅방의 채팅들
+        setChattingListStartId(987654321);//채팅방의 채팅을 불러오는 startId
+        setIsFirstChat(false);//가장 오래된 채팅이 로드되면 값을 true로 변경. 더 이상 로드할게 없다.
+        setUserChatInput("");//사용자의 채팅 내용
+        setStompClient(null);//소켓 연결이 된 친구
+        serMyUserImgUrl("");//내 이미지
+        setMyUserNickname("");//내 이름
         setChattingRoomId(leftBookState.split('/')[1]);
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
@@ -205,6 +213,9 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //무한 로딩 함수
     useEffect(() => {
+        console.log("일단 무한 로딩이 실행되는가?")
+        console.log(inView);
+        console.log(isFirstChat);
         if(inView && !isFirstChat){
             axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
             .then((res) => {
