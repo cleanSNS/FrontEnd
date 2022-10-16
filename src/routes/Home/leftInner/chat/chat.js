@@ -111,12 +111,10 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //새로운 채팅이 들어왔을 때 반영하는 함수
     useEffect(() => {
+        document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
         if(newChat === "") return;//초기 상황에는 그냥 종료
         const tmp = [...chattingList];
-        console.log(tmp);
         tmp.push(newChat);
-        console.log("to");
-        console.log(tmp);
         setChattingList(tmp);
     }, [newChat]);
 
@@ -206,7 +204,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                 />
             </form>
             <div className={Style.chattingListArea}>
-                <div className={Style.chattingListAreaSize}>
+                <div id={"chatbox"} className={Style.chattingListAreaSize}>
                     {
                         chattingList.map((data, index) => (
                             <SingleChat data={data} key={index} setLeftBookState={setLeftBookState} userId={userId}/>
