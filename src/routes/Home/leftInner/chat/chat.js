@@ -51,7 +51,7 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
 
 const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId}) => {
     const [chattingRoomId, setChattingRoomId] = useState(-1);//채팅방의 id
-    const [chattingRoomName, setChattingRoomName] = useState("채팅방의 이름이 오는 자리입니다.");//채팅방 이름
+    const [chattingRoomName, setChattingRoomName] = useState("");//채팅방 이름
     const [chattingList, setChattingList] = useState([]);//채팅방의 채팅들
     const [chattingListStartId, setChattingListStartId] = useState(987654321);//채팅방의 채팅을 불러오는 startId
     const [oldestChat, inView] = useInView();//가장 오래된(가장 위의) 채팅에게 값을 넣으면 inView값 변경
@@ -106,6 +106,14 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
+        setChattingRoomName("");//채팅방 이름
+        setChattingList([]);//채팅방의 채팅들
+        setChattingListStartId(987654321);//채팅방의 채팅을 불러오는 startId
+        setIsFirstChat(false);//가장 오래된 채팅이 로드되면 값을 true로 변경. 더 이상 로드할게 없다.
+        setUserChatInput("");//사용자의 채팅 내용
+        setStompClient(null);//소켓 연결이 된 친구
+        serMyUserImgUrl("");//내 이미지
+        setMyUserNickname("");//내 이름
         setChattingRoomId(leftBookState.split('/')[1]);
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
