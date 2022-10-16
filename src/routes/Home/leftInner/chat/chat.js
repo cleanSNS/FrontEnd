@@ -7,7 +7,6 @@ import {
     getUserNicknameAndImageUrl,
 } from '../../../../apiUrl';
 import axios from 'axios';
-import { Temporal } from '@js-temporal/polyfill';
 import SockJS from 'sockjs-client';
 import Stomp from 'stomp-websocket';
 
@@ -21,13 +20,12 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     //시간 계산 함수
     /** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
     const calculateTimeFrom = (calTime) => {
-        const now = Temporal.Now.plainDateTimeISO();//현재 시간 세팅
-        const postedDate = Temporal.PlainDateTime.from(calTime);//받아온 시간
-        if(postedDate.year === now.year &&postedDate.month === now.month && postedDate.day === now.day){//연,월,일이 오늘이면, 시간과 분을 쓰고,
-            return `${postedDate.hour}:${postedDate.minute}`;
+        const now = new Date();
+        if(calTime.getFullYear() === now.getFullYear() &&calTime.getMonth() === now.getMonth() && calTime.getDate() === now.getDate()){//연,월,일이 오늘이면, 시간과 분을 쓰고,
+            return `${calTime.getHours()} : ${calTime.getMinutes()}`;
         }
         else{//연월일이 오늘이 아니면 월 일을 쓴다.
-            return `${postedDate.month}월 ${postedDate.day}일`;
+            return `${calTime.getMonth()}월 ${calTime.getDate()}일`;
         }
     };
 
