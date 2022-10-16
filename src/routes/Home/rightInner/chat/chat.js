@@ -7,7 +7,7 @@ import {
 } from '../../../../apiUrl';
 
 const SingleChattingRoom = ({data, setLeftBookState}) => {
-    //임시 테스트용 click Handler<------------------------------변동 가능성 높음
+    //임시 테스트용 click Handler
     const chatClickHandler = () => {
         setLeftBookState(`chat/${data.chatroomId}`);
     };

@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import {
     getChattingListUrl,
     getChattingRoomNameUrl,
+    getUserNicknameAndImageUrl,
 } from '../../../../apiUrl';
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
@@ -70,6 +71,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     const [oldestChat, inView] = useInView();//가장 오래된(가장 위의) 채팅에게 값을 넣으면 inView값 변경
     const [userChatInput, setUserChatInput] = useState("");//사용자의 채팅 내용
     const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
+    const [myuserImgUrl, serMyUserImgUrl] = useState("");//내 이미지
+    const [myuserNickname, setMyUserNickname] = useState("");//내 이름
 
     const onUserChattingChangeHandler = (event) => {
         setUserChatInput(event.target.value);
@@ -93,8 +96,12 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
             stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
+                console.log("받은 데이터를 새로 저장하여 반영합니다.")
                 const tmp = [...chattingList];
+                console.log(tmp);
                 tmp.push(JSON.parse(chatMessage.body));
+                console.log("to");
+                console.log(tmp);
                 setChattingList(tmp);
             });
             stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));//이거 필요한지 확인 필요
@@ -120,7 +127,20 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
             axios.get(`${getChattingRoomNameUrl}/${chattingRoomId}/name`)
             .then((res) => {
                 setChattingRoomName(res.data.data.chatroomName);
-                socketConnect();//소캣 연결까지 완료한다.
+                axios.get(`${getUserNicknameAndImageUrl}/${userId}/profile`)
+                .then((res) =>{
+                    serMyUserImgUrl(res.data.data.imgUrl);
+                    setMyUserNickname(res.data.data.nickname);
+                    socketConnect();//소캣 연결까지 완료한다.
+                })
+                .catch((res) => {
+                    if(res.response.status === 401){
+                        refreshAccessToken();
+                    }
+                    else{
+                        alert("내 프로필을 불러오지 못했습니다.");
+                    }
+                })
             })
             .catch((res) => {
                 if(res.response.status === 401){
@@ -153,9 +173,9 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         stompClient.send(`/pub/${chattingRoomId}`, {sender: userId},
             JSON.stringify({
                 userDto:{
-                    userId: 1,
-                    nickname: "user1",
-                    imgUrl: null
+                    userId: userId,
+                    nickname: myuserNickname,
+                    imgUrl: myuserImgUrl
                 },
                 message: userChatInput,
                 createdDate : now,
