@@ -19,7 +19,7 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
 
     //시간 계산 함수
     /** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
-    const calculateTimeFrom = (c) => {
+    const calculateTimeFrom = (calTime) => {
         const now = new Date(calTime);
         if(postedTime.getFullYear() === now.getFullYear() &&postedTime.getMonth() === now.getMonth() && postedTime.getDate() === now.getDate()){//연,월,일이 오늘이면, 시간과 분을 쓰고,
             return `${postedTime.getHours()} : ${postedTime.getMinutes()}`;
