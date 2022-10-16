@@ -53,6 +53,7 @@
 .singleMyChattingArea{/*내 채팅*/
     min-height: 15%;
     height: fit-content;
+    margin-top: 10px;
     width: 100%;
     display: flex;
     justify-content: flex-end;

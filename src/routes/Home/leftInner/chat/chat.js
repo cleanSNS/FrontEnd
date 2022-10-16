@@ -99,7 +99,9 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                 console.log("받은 데이터를 새로 저장하여 반영합니다.")
                 const tmp = [...chattingList];
                 console.log(tmp);
-                tmp.push(JSON.parse(chatMessage.body));
+                let tmpchat = chatMessage.body;
+                tmpchat = JSON.parse(tmpchat);
+                tmp.push(tmpchat);
                 console.log("to");
                 console.log(tmp);
                 setChattingList(tmp);
