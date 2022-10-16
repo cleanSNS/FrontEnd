@@ -65,29 +65,9 @@ const SingleChat = ({data, setLeftBookState, userId}) => {
 const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId}) => {
     const [chattingRoomId, setChattingRoomId] = useState(-1);//채팅방의 id
     const [chattingRoomName, setChattingRoomName] = useState("채팅방의 이름이 오는 자리입니다.");//채팅방 이름
-    const [chattingList, setChattingList] = useState([
-        {
-            "userDto": {
-                "userId": 2,
-                "nickname": "user2",
-                "imgUrl": null
-            },
-            "message": "ㅎㅇㅎㅇ",
-            "createdDate": "2022-10-13T18:40:42.110228"
-        },
-        {
-            "userDto": {
-                "userId": 1,
-                "nickname": "user1",
-                "imgUrl": null
-            },
-            "message": "안녕하세요. 글이 겁나게 길어졌을 때 자동으로 줄 바꿈 되고 줄 바꿈 하면서 height도 그에 맞게 길어지는지 확인 일단 자동으로 줄 바꿈은 되는데 과연 높이도 달라질것인가 달라지는데 이게 이상하게 중앙에 맞춰지는구나 이게 지금 되고있는건가 아닌건가 아아아아아아아아아아아아 되나 이것도? 오 되는거 같다 ㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
-            "createdDate": "2022-10-13T18:39:55.867396"
-        }
-    ]);//채팅방의 채팅들
+    const [chattingList, setChattingList] = useState([]);//채팅방의 채팅들
     const [chattingListStartId, setChattingListStartId] = useState(987654321);//채팅방의 채팅을 불러오는 startId
     const [oldestChat, inView] = useInView();//가장 오래된(가장 위의) 채팅에게 값을 넣으면 inView값 변경
-
     const [userChatInput, setUserChatInput] = useState("");//사용자의 채팅 내용
     const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
 
@@ -113,12 +93,11 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
             stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
-                console.log("받아지고 있는거야?");
                 const tmp = [...chattingList];
                 tmp.push(JSON.parse(chatMessage.body));
                 setChattingList(tmp);
             });
-            stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));
+            stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));//이거 필요한지 확인 필요
         });
     }, [stompClient]);
 
