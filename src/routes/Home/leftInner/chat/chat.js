@@ -115,10 +115,10 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         const tmp = [...chattingList];
         console.log(tmp);
         tmp.push(newChat);
+        console.log("to");
         console.log(tmp);
-
-        setChattingList
-    }, [newChat])
+        setChattingList(tmp);
+    }, [newChat]);
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
