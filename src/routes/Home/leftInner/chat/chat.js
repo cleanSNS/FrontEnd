@@ -11,7 +11,7 @@ import { Temporal } from '@js-temporal/polyfill';
 import SockJS from 'sockjs-client';
 import Stomp from 'stomp-websocket';
 
-const SingleChat = ({data, setLeftBookState, userId}) => {
+const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     //유저의 이미지나 이름을 클릭하면 해당 유저의 페이지로 이동한다. <---------------이동이 있는 곳!
     const goToThatUserPage = (event) => {
         event.preventDefault();
@@ -45,7 +45,7 @@ const SingleChat = ({data, setLeftBookState, userId}) => {
     };
 
     return(
-        <div className={userId !== data.userDto.userId ? Style.singleOtherChattingArea : Style.singleMyChattingArea}>            
+        <div className={userId !== data.userDto.userId ? Style.singleOtherChattingArea : Style.singleMyChattingArea} ref={oldestChat}>            
             {/* 유저의 프로필 이미지가 오는 곳 */
                 userId !== data.userDto.userId ?
                <img src={data.userDto.imgUrl} className={Style.chatUserimg} onClick={goToThatUserPage}/> : null
@@ -69,6 +69,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     const [chattingList, setChattingList] = useState([]);//채팅방의 채팅들
     const [chattingListStartId, setChattingListStartId] = useState(987654321);//채팅방의 채팅을 불러오는 startId
     const [oldestChat, inView] = useInView();//가장 오래된(가장 위의) 채팅에게 값을 넣으면 inView값 변경
+    const [isFirstChat, setIsFirstChat] = useState(false);//가장 오래된 채팅이 로드되면 값을 true로 변경. 더 이상 로드할게 없다.
     const [userChatInput, setUserChatInput] = useState("");//사용자의 채팅 내용
     const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
     const [myuserImgUrl, serMyUserImgUrl] = useState("");//내 이미지
@@ -135,6 +136,10 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         .then((res) => {
             const cur = [...chattingList];//지금의 채팅방 채팅 리스트
             const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
+            if(tmp.length === 0){
+                setIsFirstChat(true);
+                return;
+            }
             const next = cur.concat(tmp);
             setChattingList(next);
             setChattingListStartId(res.data.startId);
@@ -198,6 +203,32 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         setUserChatInput("");
     };
 
+    //무한 로딩 함수
+    useEffect(() => {
+        if(inView && !isFirstChat){
+            axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
+            .then((res) => {
+                const cur = [...chattingList];//지금의 채팅방 채팅 리스트
+                const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
+                if(tmp.length === 0){
+                    setIsFirstChat(true);
+                    return;
+                }
+                const next = cur.concat(tmp);
+                setChattingList(next);
+                setChattingListStartId(res.data.startId);
+            })
+            .catch((res) => {
+                if(res.response.status === 401){
+                    refreshAccessToken();
+                }
+                else{
+                    alert("채팅을 불러오지 못했습니다.");
+                }
+            });
+        }
+    }, [inView]);
+
     return(
         <div className={Style.wholeCover}>
             <form className={Style.chattingRoomNameArea}>
@@ -211,7 +242,10 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                 <div className={Style.chattingListAreaSize}>
                     {
                         chattingList.map((data, index) => (
-                            <SingleChat data={data} key={index} setLeftBookState={setLeftBookState} userId={userId}/>
+                            index === 0 ?
+                            <SingleChat data={data} key={index} setLeftBookState={setLeftBookState} userId={userId} oldestChat={oldestChat}/>
+                            :
+                            <SingleChat data={data} key={index} setLeftBookState={setLeftBookState} userId={userId} oldestChat={null}/>
                         ))
                     }
                 </div>
