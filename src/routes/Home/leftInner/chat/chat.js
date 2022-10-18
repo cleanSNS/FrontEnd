@@ -106,14 +106,14 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
-        setChattingRoomName("");//채팅방 이름
-        setChattingList([]);//채팅방의 채팅들
-        setChattingListStartId(987654321);//채팅방의 채팅을 불러오는 startId
-        setIsFirstChat(false);//가장 오래된 채팅이 로드되면 값을 true로 변경. 더 이상 로드할게 없다.
-        setUserChatInput("");//사용자의 채팅 내용
-        setStompClient(null);//소켓 연결이 된 친구
-        serMyUserImgUrl("");//내 이미지
-        setMyUserNickname("");//내 이름
+        //setChattingRoomName("");//채팅방 이름
+        //setChattingList([]);//채팅방의 채팅들
+        //setChattingListStartId(987654321);//채팅방의 채팅을 불러오는 startId
+        //setIsFirstChat(false);//가장 오래된 채팅이 로드되면 값을 true로 변경. 더 이상 로드할게 없다.
+        //setUserChatInput("");//사용자의 채팅 내용
+        //setStompClient(null);//소켓 연결이 된 친구
+        //serMyUserImgUrl("");//내 이미지
+        //setMyUserNickname("");//내 이름
         setChattingRoomId(leftBookState.split('/')[1]);
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
@@ -123,18 +123,18 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
     }, [chattingList]);
 
+    console.log(chattingListStartId);
+
     //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
     const presetChattingList = () => {
         if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
         .then((res) => {
-            const cur = [...chattingList];//지금의 채팅방 채팅 리스트
-            const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
-            if(tmp.length === 0){
+            const next = [...res.data.data];//받아온 채팅방 채팅 리스트
+            if(next.length === 0){
                 setIsFirstChat(true);
                 return;
             }
-            const next = cur.concat(tmp);
             setChattingList(next);
             setChattingListStartId(res.data.startId);
             axios.get(`${getChattingRoomNameUrl}/${chattingRoomId}/name`)
