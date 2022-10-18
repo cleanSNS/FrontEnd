@@ -314,7 +314,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         })
       }
     }
-  }, [leftBookState])
+  }, [leftBookState]);
 
   return(
     <div className={Style.pageCover}>

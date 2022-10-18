@@ -119,10 +119,11 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         console.log("채팅을 가져옵니다.");
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
         .then((res) => {
-            const next = [...res.data.data];//받아온 채팅방 채팅 리스트
-            if(next.length === 0){
+            const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
+            if(tmp.length === 0){
                 setNoMoreChat(true);
             }
+            const next = tmp.reverse();
             setChattingList(next);
             setChattingListStartId(res.data.startId);
             axios.get(`${getChattingRoomNameUrl}/${chattingRoomId}/name`)
@@ -195,7 +196,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                 if(tmp.length === 0){
                     setNoMoreChat(true);
                 }
-                const next = cur.concat(tmp);
+                const revTmp = tmp.reverse();
+                const next = revTmp.concat(cur);
                 setChattingList(next);
                 setChattingListStartId(res.data.startId);
             })
