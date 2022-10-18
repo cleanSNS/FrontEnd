@@ -100,7 +100,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
-        console.log("채팅방이 처음 로드되어 id를 가져왔습니다.")
+        console.log("채팅방이 처음 로드되어 id를 가져왔습니다.");
         console.log(leftBookState);
         setChattingRoomId(leftBookState.split('/')[1]);
     }
@@ -115,6 +115,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     const presetChattingList = () => {
         if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
 
+        console.log("채팅을 가져옵니다.");
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
         .then((res) => {
             const next = [...res.data.data];//받아온 채팅방 채팅 리스트
