@@ -55,7 +55,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     const [chattingList, setChattingList] = useState([]);//채팅방의 채팅들
     const [chattingListStartId, setChattingListStartId] = useState(987654321);//채팅방의 채팅을 불러오는 startId
     const [oldestChat, inView] = useInView();//가장 오래된(가장 위의) 채팅에게 값을 넣으면 inView값 변경
-    const [isFirstChat, setIsFirstChat] = useState(false);//가장 오래된 채팅이 로드되면 값을 true로 변경. 더 이상 로드할게 없다.
     const [userChatInput, setUserChatInput] = useState("");//사용자의 채팅 내용
     const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
     const [myuserImgUrl, serMyUserImgUrl] = useState("");//내 이미지
@@ -132,10 +131,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                     serMyUserImgUrl(res.data.data.imgUrl);
                     setMyUserNickname(res.data.data.nickname);
                     socketConnect();//소캣 연결까지 완료한다.
-                    if(next.length === 0){
-                        setIsFirstChat(true);
-                        return;
-                    }
                 })
                 .catch((res) => {
                     if(res.response.status === 401){
@@ -196,10 +191,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
             .then((res) => {
                 const cur = [...chattingList];//지금의 채팅방 채팅 리스트
                 const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
-                if(tmp.length === 0){
-                    setIsFirstChat(true);
-                    return;
-                }
                 const next = cur.concat(tmp);
                 setChattingList(next);
                 setChattingListStartId(res.data.startId);
