@@ -49,7 +49,7 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     );
 };
 
-const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient }) => {
+const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId}) => {
     const [chattingRoomId, setChattingRoomId] = useState(-1);//채팅방의 id
     const [chattingRoomName, setChattingRoomName] = useState("");//채팅방 이름
     const [chattingList, setChattingList] = useState([]);//채팅방의 채팅들
@@ -59,6 +59,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     const [userChatInput, setUserChatInput] = useState("");//사용자의 채팅 내용
     const [myuserImgUrl, serMyUserImgUrl] = useState("");//내 이미지
     const [myuserNickname, setMyUserNickname] = useState("");//내 이름
+    const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
 
     const [newChat, setNewChat] = useState("");//새로운 채팅을 불러오는 부분
 
