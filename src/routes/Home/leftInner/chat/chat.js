@@ -22,7 +22,7 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     /** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
     const calculateTimeFrom = (calTime) => {
         const now = Temporal.Now.plainDateTimeISO();
-        const postedTime = Temporal.PlainDateTime.from(calTime);
+        let postedTime = Temporal.PlainDateTime.from(calTime);
         postedTime = postedTime.add({hours: 9});//9시간을 추가한다.
         if(postedTime.year === now.year &&postedTime.month === now.month && postedTime.day === now.day){//연,월,일이 오늘이면, 시간과 분을 쓰고,
             return `${postedTime.hour}:${postedTime.minute}`;
