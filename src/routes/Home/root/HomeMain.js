@@ -303,6 +303,18 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     setSettingState("initial");
   };
 
+  /******************채팅 관련******************/
+  const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
+
+  useState(() => {
+    if(stompClient !== null){//비어있는 상태가 아니라면 실행한다. - 즉, 이전 채팅에 연결되어있었던 경우 실행
+      console.log("소켓 해제");
+      stompClient.disconnect(() => {
+        stompClient.unsubscribe();
+      });
+    }
+  }, [leftBookState]);
+
   return(
     <div className={Style.pageCover}>
       {/* 좌 상단 - 로고와 검색창 */}
@@ -366,7 +378,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
             <div className={Style.Cover}>
                 {leftBookState.includes("page") ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setPageId={setPageId}/> : null}
                 {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
-                {leftBookState.includes("chat") ? <LeftChat refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId}/> : null}
+                {leftBookState.includes("chat") ? <LeftChat refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId} stompClient={stompClient} setStompClient={setStompClient}/> : null}
                 {leftBookState === "makeNewC" ? <LeftNewChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} userId={userId}/> : null}
                 {leftBookState.includes("hashtagPage") ? <LeftHashtagPage leftBookState={leftBookState} setPageId={setPageId}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}

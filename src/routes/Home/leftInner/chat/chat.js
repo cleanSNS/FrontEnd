@@ -49,7 +49,7 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     );
 };
 
-const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId}) => {
+const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient }) => {
     const [chattingRoomId, setChattingRoomId] = useState(-1);//채팅방의 id
     const [chattingRoomName, setChattingRoomName] = useState("");//채팅방 이름
     const [chattingList, setChattingList] = useState([]);//채팅방의 채팅들
@@ -57,7 +57,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     const [oldestChat, inView] = useInView();//가장 오래된(가장 위의) 채팅에게 값을 넣으면 inView값 변경
     const [isFirstChat, setIsFirstChat] = useState(false);//가장 오래된 채팅이 로드되면 값을 true로 변경. 더 이상 로드할게 없다.
     const [userChatInput, setUserChatInput] = useState("");//사용자의 채팅 내용
-    const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
     const [myuserImgUrl, serMyUserImgUrl] = useState("");//내 이미지
     const [myuserNickname, setMyUserNickname] = useState("");//내 이름
 
@@ -92,7 +91,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                 console.log("새로 불러왔습니다.");//지우가
                 setNewChat(tmpchat);
             });
-            stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));//이거 필요한지 확인 필요
         });
     }, [stompClient]);
 
