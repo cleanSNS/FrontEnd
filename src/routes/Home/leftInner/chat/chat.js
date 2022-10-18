@@ -186,7 +186,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //무한 로딩 함수 - 작동 확인함
     useEffect(() => {
-        if(inView && !isFirstChat){
+        if(inView){
             axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
             .then((res) => {
                 const cur = [...chattingList];//지금의 채팅방 채팅 리스트
