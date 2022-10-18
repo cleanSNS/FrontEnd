@@ -76,14 +76,10 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         const socket = new SockJS("https://api.cleanbook.site/ws");
         const tmp = Stomp.over(socket);
         if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우 disconnect하고 지금 생성한 Stomp를 넣어준다.
-            console.log("종료하는 페이즈 실행됨")
             stompClient.disconnect(function(){
                 stompClient.unsubscribe();
             })
         }
-
-
-
         setStompClient(tmp);
     };
 
@@ -98,7 +94,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                 tmp.push(tmpchat);
                 setChattingList(tmp);
             });
-            stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));//이거 필요한지 확인 필요
+            //stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));//이거 필요한지 확인 필요
         });
     }, [stompClient]);
 
