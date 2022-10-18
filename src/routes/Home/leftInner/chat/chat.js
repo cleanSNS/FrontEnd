@@ -103,6 +103,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         console.log("채팅방이 처음 로드되어 id를 가져왔습니다.");
         console.log(leftBookState);
         setChattingRoomId(leftBookState.split('/')[1]);
+        setChattingListStartId(987654321);//초기화 필요
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
 
