@@ -89,7 +89,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
                 let tmpchat = chatMessage.body;
                 tmpchat = JSON.parse(tmpchat);
                 console.log(tmpchat);//지우기
-                console.log("새로 불러왔습니다.");//지우가
+                console.log("새로 불러왔습니다.");//지우기
                 setNewChat(tmpchat);
             });
             stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));//이거 필요한지 확인 필요
@@ -119,27 +119,23 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     const presetChattingList = () => {
         if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
 
-        console.log("초기 함수 실행");
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
         .then((res) => {
             const next = [...res.data.data];//받아온 채팅방 채팅 리스트
-            if(next.length === 0){
-                setIsFirstChat(true);
-                return;
-            }
             setChattingList(next);
             setChattingListStartId(res.data.startId);
-            console.log("채팅방 리스트 불러오기 성공");
             axios.get(`${getChattingRoomNameUrl}/${chattingRoomId}/name`)
             .then((res) => {
-                console.log("채팅방 이름 불러오기 성공");
                 setChattingRoomName(res.data.data.chatroomName);
                 axios.get(`${getUserNicknameAndImageUrl}${userId}/profile`)
                 .then((res) =>{
                     serMyUserImgUrl(res.data.data.imgUrl);
                     setMyUserNickname(res.data.data.nickname);
-                    console.log("유저의 이름과 이미지 불러오기 성공");
                     socketConnect();//소캣 연결까지 완료한다.
+                    if(next.length === 0){
+                        setIsFirstChat(true);
+                        return;
+                    }
                 })
                 .catch((res) => {
                     if(res.response.status === 401){
