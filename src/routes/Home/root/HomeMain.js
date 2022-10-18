@@ -308,7 +308,11 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
 
   useEffect(() => {
     if(!leftBookState.includes('chat')){//leftBookState가 변경되었는데 그 값에 chat이 없는 경우, stompClient를 disconnect하는 작업이 필요하다.
-
+      if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우 disconnect하고 지금 생성한 Stomp를 넣어준다.
+        stompClient.disconnect(function(){
+            stompClient.unsubscribe();
+        })
+      }
     }
   }, [leftBookState])
 

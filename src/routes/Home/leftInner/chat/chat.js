@@ -94,13 +94,14 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                 tmp.push(tmpchat);
                 setChattingList(tmp);
             });
-            //stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));//이거 필요한지 확인 필요
         });
     }, [stompClient]);
 
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
+        console.log("채팅방이 처음 로드되어 id를 가져왔습니다.")
+        console.log(leftBookState);
         setChattingRoomId(leftBookState.split('/')[1]);
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
