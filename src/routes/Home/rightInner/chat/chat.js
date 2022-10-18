@@ -47,11 +47,9 @@ const SingleChattingRoom = ({data, setLeftBookState}) => {
                     </div>
                 </div>
             }
-            <div style={{width: "100%", height: "100%"}}>
-                <div className={Style.flexBoxcol}>
-                    <p className={Style.chatName} onClick={chatClickHandler}>{data.name}</p>
-                    <p className={Style.lastChat} onClick={chatClickHandler}>{data.lastChat}</p>
-                </div>
+            <div className={Style.flexBoxcol}>
+                <p className={Style.chatName} onClick={chatClickHandler}>{data.name}</p>
+                <p className={Style.lastChat} onClick={chatClickHandler}>{data.lastChat}</p>
             </div>
         </div>
     );
