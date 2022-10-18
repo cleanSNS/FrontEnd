@@ -133,7 +133,9 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId}) => {
         chosenFriendUserIdList.push(userId);//나도 집어넣는다.
         let chattingRoomName = chattingRoomNameInput;//채팅방 이름 설정
         if(chattingRoomName === ""){//사용자가 채팅방 명을 정해주지 않은 경우 이름 자동 생성
-            chattingRoomName = `${chosenFriendList[0].nickname}외${chosenFriendUserIdList.length}명`
+            chosenFriendList.length - 1 === 0 ? 
+            chattingRoomName = `${chosenFriendList[0].nickname}` : 
+            chattingRoomName = `${chosenFriendList[0].nickname}외${chosenFriendList.length - 1}명`
         }
 
         axios.post(makeNewChattingRoomUrl, {
