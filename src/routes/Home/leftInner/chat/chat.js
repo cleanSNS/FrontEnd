@@ -75,6 +75,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
 
     //소켓 설정해주는 함수
     const socketConnect = () => {
+        console.log("소켓 생성")
         const socket = new SockJS("https://api.cleanbook.site/ws");
         const tmp = Stomp.over(socket);
         setStompClient(tmp);
@@ -83,6 +84,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     //소켓이 추가되면 그에 맞는 함수를 추가하는 함수
     useEffect(() => {
         if(stompClient === null) return; //초기 상황에는 그냥 종료
+        console.log("connect 실행")
         stompClient.connect({}, function (frame) {
             stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
                 let tmpchat = chatMessage.body;
