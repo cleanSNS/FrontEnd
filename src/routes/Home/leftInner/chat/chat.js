@@ -9,6 +9,7 @@ import {
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import Stomp from 'stomp-websocket';
+import { Temporal } from '@js-temporal/polyfill';
 
 const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     //유저의 이미지나 이름을 클릭하면 해당 유저의 페이지로 이동한다. <---------------이동이 있는 곳!
@@ -20,17 +21,17 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     //시간 계산 함수
     /** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
     const calculateTimeFrom = (calTime) => {
-        const now = new Date();
-        const postedTime = new Date(calTime);
+        const now = Temporal.Now.plainDateTimeISO();
+        const postedTime = Temporal.PlainDateTime.from(calTime);
         console.log("현재 시간");
         console.log(now);
-        console.log("작성 시간");
+        console.log("작성 시간 : 한국 표준시간이 아니다. 9시간 -되어 나온다. => 즉, 9시간을 더할 필요가 있다.");
         console.log(postedTime);
-        if(postedTime.getFullYear() === now.getFullYear() &&postedTime.getMonth() === now.getMonth() && postedTime.getDate() === now.getDate()){//연,월,일이 오늘이면, 시간과 분을 쓰고,
-            return `${postedTime.getHours()}:${postedTime.getMinutes()}`;
+        if(postedTime.year() === now.year() &&postedTime.month() === now.month() && postedTime.day() === now.day()){//연,월,일이 오늘이면, 시간과 분을 쓰고,
+            return `${postedTime.hour()}:${postedTime.minute()}`;
         }
         else{//연월일이 오늘이 아니면 월 일을 쓴다.
-            return `${postedTime.getMonth()}월 ${postedTime.getDate()}일`;
+            return `${postedTime.month()}월 ${postedTime.date()}일`;
         }
     };
 
