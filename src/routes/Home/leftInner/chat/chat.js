@@ -58,9 +58,11 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     const [chattingListStartId, setChattingListStartId] = useState(987654321);//채팅방의 채팅을 불러오는 startId
     const [oldestChat, inView] = useInView();//가장 오래된(가장 위의) 채팅에게 값을 넣으면 inView값 변경
     const [userChatInput, setUserChatInput] = useState("");//사용자의 채팅 내용
+    const [noMoreChat, setNoMoreChat] = useState(false);//더이상 불러올 과거의 채팅이 없는 경우 true로 정한다.
+
     const [myuserImgUrl, serMyUserImgUrl] = useState("");//내 이미지
     const [myuserNickname, setMyUserNickname] = useState("");//내 이름
-    const [noMoreChat, setNoMoreChat] = useState(false);//더이상 불러올 과거의 채팅이 없는 경우 true로 정한다.
+    const [userAndUserImg, setUserAndUserImg] = useState({});//해당 채팅방의 유저 id와 그 유저의 프로필의 value를 넣어둔다. key=id, value=imgUrl
 
     const onUserChattingChangeHandler = (event) => {
         setUserChatInput(event.target.value);
@@ -102,10 +104,9 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
-        console.log("채팅방이 처음 로드되어 id를 가져왔습니다.");
-        console.log(leftBookState);
         setChattingRoomId(leftBookState.split('/')[1]);
         setChattingListStartId(987654321);//초기화 필요
+        setUserAndUserImg({});//초기화 필요
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
 
@@ -131,20 +132,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             axios.get(`${getChattingRoomNameUrl}/${chattingRoomId}/name`)
             .then((res) => {
                 setChattingRoomName(res.data.data.chatroomName);
-                axios.get(`${getUserNicknameAndImageUrl}${userId}/profile`)
-                .then((res) =>{
-                    serMyUserImgUrl(res.data.data.imgUrl);
-                    setMyUserNickname(res.data.data.nickname);
-                    socketConnect();//소캣 연결까지 완료한다.
-                })
-                .catch((res) => {
-                    if(res.response.status === 401){
-                        refreshAccessToken();
-                    }
-                    else{
-                        alert("내 프로필을 불러오지 못했습니다.");
-                    }
-                })
+                //여기서 채팅방 유저의 id들과 프로필 이미지 정보를 받는다.
+                //만약 내 정보가 있다면 그건 내 정보를 저장하는 변수에 set하면 된다.
             })
             .catch((res) => {
                 if(res.response.status === 401){
@@ -176,11 +165,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         const now = new Date();
         stompClient.send(`/pub/${chattingRoomId}`, {sender: userId},
             JSON.stringify({
-                userDto:{
-                    userId: userId,
-                    nickname: myuserNickname,
-                    imgUrl: myuserImgUrl
-                },
+                userId: userId,
                 message: userChatInput,
                 createdDate : now,
             })
