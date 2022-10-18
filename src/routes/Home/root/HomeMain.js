@@ -303,6 +303,15 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     setSettingState("initial");
   };
 
+  /*****************채팅 관련********************/
+  const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
+
+  useEffect(() => {
+    if(!leftBookState.includes('chat')){//leftBookState가 변경되었는데 그 값에 chat이 없는 경우, stompClient를 disconnect하는 작업이 필요하다.
+
+    }
+  }, [leftBookState])
+
   return(
     <div className={Style.pageCover}>
       {/* 좌 상단 - 로고와 검색창 */}
@@ -366,7 +375,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
             <div className={Style.Cover}>
                 {leftBookState.includes("page") ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setPageId={setPageId}/> : null}
                 {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
-                {leftBookState.includes("chat") ? <LeftChat refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId}/> : null}
+                {leftBookState.includes("chat") ? <LeftChat refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId} stompClient={stompClient} setStompClient={setStompClient}/> : null}
                 {leftBookState === "makeNewC" ? <LeftNewChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} userId={userId}/> : null}
                 {leftBookState.includes("hashtagPage") ? <LeftHashtagPage leftBookState={leftBookState} setPageId={setPageId}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}

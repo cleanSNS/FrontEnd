@@ -49,14 +49,13 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     );
 };
 
-const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId}) => {
+const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient}) => {
     const [chattingRoomId, setChattingRoomId] = useState(-1);//채팅방의 id
     const [chattingRoomName, setChattingRoomName] = useState("");//채팅방 이름
     const [chattingList, setChattingList] = useState([]);//채팅방의 채팅들
     const [chattingListStartId, setChattingListStartId] = useState(987654321);//채팅방의 채팅을 불러오는 startId
     const [oldestChat, inView] = useInView();//가장 오래된(가장 위의) 채팅에게 값을 넣으면 inView값 변경
     const [userChatInput, setUserChatInput] = useState("");//사용자의 채팅 내용
-    const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
     const [myuserImgUrl, serMyUserImgUrl] = useState("");//내 이미지
     const [myuserNickname, setMyUserNickname] = useState("");//내 이름
     const [noMoreChat, setNoMoreChat] = useState(false);//더이상 불러올 과거의 채팅이 없는 경우 true로 정한다.
@@ -76,6 +75,15 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     const socketConnect = () => {
         const socket = new SockJS("https://api.cleanbook.site/ws");
         const tmp = Stomp.over(socket);
+        if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우 disconnect하고 지금 생성한 Stomp를 넣어준다.
+            console.log("종료하는 페이즈 실행됨")
+            stompClient.disconnect(function(){
+                stompClient.unsubscribe();
+            })
+        }
+
+
+
         setStompClient(tmp);
     };
 
