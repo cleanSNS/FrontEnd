@@ -27,11 +27,11 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
         console.log(now);
         console.log("작성 시간 : 한국 표준시간이 아니다. 9시간 -되어 나온다. => 즉, 9시간을 더할 필요가 있다.");
         console.log(postedTime);
-        if(postedTime.year() === now.year() &&postedTime.month() === now.month() && postedTime.day() === now.day()){//연,월,일이 오늘이면, 시간과 분을 쓰고,
-            return `${postedTime.hour()}:${postedTime.minute()}`;
+        if(postedTime.year === now.year &&postedTime.month === now.month && postedTime.day === now.day){//연,월,일이 오늘이면, 시간과 분을 쓰고,
+            return `${postedTime.hour}:${postedTime.minute}`;
         }
         else{//연월일이 오늘이 아니면 월 일을 쓴다.
-            return `${postedTime.month()}월 ${postedTime.date()}일`;
+            return `${postedTime.month}월 ${postedTime.date}일`;
         }
     };
 
