@@ -25,7 +25,7 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
         let postedTime = Temporal.PlainDateTime.from(calTime);
         postedTime = postedTime.add({hours: 9});//9시간을 추가한다.
         if(postedTime.year === now.year &&postedTime.month === now.month && postedTime.day === now.day){//연,월,일이 오늘이면, 시간과 분을 쓰고,
-            return `${postedTime.hour}:${postedTime.minute}`;
+            return `${postedTime.hour.toString().padStart(2, "0")}:${postedTime.minute.toString().padStart(2, "0")}`;
         }
         else{//연월일이 오늘이 아니면 월 일을 쓴다.
             return `${postedTime.month}월 ${postedTime.date}일`;
@@ -132,6 +132,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             axios.get(`${getChattingRoomNameUrl}/${chattingRoomId}/name`)
             .then((res) => {
                 setChattingRoomName(res.data.data.chatroomName);
+                socketConnect();//소캣도 연결한다.
                 //여기서 채팅방 유저의 id들과 프로필 이미지 정보를 받는다.
                 //만약 내 정보가 있다면 그건 내 정보를 저장하는 변수에 set하면 된다.
             })
