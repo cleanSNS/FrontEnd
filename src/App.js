@@ -92,9 +92,9 @@ function App() {
       setIsLogin("logout");//로그인 화면으로 이동
     })
     .catch((res)=>{
-      console.log(res);
+      //일반적으로 오류인 경우는 없다 그냥 rft가 만료되었을 뿐이다. 만료되어서 그냥 CORS에러가 뜨니까 다시 로그인 하게 만들기
       localStorage.removeItem("rft");//refresh token 지우기
-      alert("로그아웃에 문제가 발생했습니다");
+      setIsLogin("logout");//로그인 화면으로 이동
     });
   };
 
