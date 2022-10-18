@@ -59,8 +59,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
     const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
     const [myuserImgUrl, serMyUserImgUrl] = useState("");//내 이미지
     const [myuserNickname, setMyUserNickname] = useState("");//내 이름
-
-    const [newChat, setNewChat] = useState("");//새로운 채팅을 불러오는 부분
+    const [noMoreChat, setNoMoreChat] = useState(false);//더이상 불러올 과거의 채팅이 없는 경우 true로 정한다.
 
     const onUserChattingChangeHandler = (event) => {
         setUserChatInput(event.target.value);
@@ -87,21 +86,14 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
             stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
                 let tmpchat = chatMessage.body;
                 tmpchat = JSON.parse(tmpchat);
-                console.log(tmpchat);//지우기
-                console.log("새로 불러왔습니다.");//지우기
-                setNewChat(tmpchat);
+                const tmp = [...chattingList];
+                tmp.push(tmpchat);
+                setChattingList(tmp);
             });
             stompClient.send(`/pub/${chattingRoomId}`, {}, JSON.stringify({ sender: userId, type: "JOIN" }));//이거 필요한지 확인 필요
         });
     }, [stompClient]);
 
-    //새로운 채팅이 들어왔을 때 반영하는 함수
-    useEffect(() => {
-        if(newChat === "") return;//초기 상황에는 그냥 종료
-        const tmp = [...chattingList];
-        tmp.push(newChat);
-        setChattingList(tmp);
-    }, [newChat]);
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
@@ -121,6 +113,9 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
         .then((res) => {
             const next = [...res.data.data];//받아온 채팅방 채팅 리스트
+            if(next.length === 0){
+                setNoMoreChat(true);
+            }
             setChattingList(next);
             setChattingListStartId(res.data.startId);
             axios.get(`${getChattingRoomNameUrl}/${chattingRoomId}/name`)
@@ -185,11 +180,14 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId})
 
     //무한 로딩 함수 - 작동 확인함
     useEffect(() => {
-        if(inView){
+        if(inView && !noMoreChat){
             axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
             .then((res) => {
                 const cur = [...chattingList];//지금의 채팅방 채팅 리스트
                 const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
+                if(tmp.length === 0){
+                    setNoMoreChat(true);
+                }
                 const next = cur.concat(tmp);
                 setChattingList(next);
                 setChattingListStartId(res.data.startId);
