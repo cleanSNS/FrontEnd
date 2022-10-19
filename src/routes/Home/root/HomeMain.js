@@ -352,6 +352,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
                 <img src={notificationTagImg} className={Style.tagImg} onClick={tagClickHandler} id="notice" />
               </div>
               <div className={Style.noticeArea}>
+                <NumberNotice number={30} />
                 {(noticeCount === -1 || noticeCount === 0)? null : <NumberNotice number={30} />}
               </div>
             </div>
