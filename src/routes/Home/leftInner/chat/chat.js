@@ -161,14 +161,15 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             const cur = [...chattingList];//지금의 채팅방 채팅 리스트
             const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
             if(tmp.length === 0){
-                console.log("불러온 채팅이 없습니다. 종료.")
+                console.log("불러온 채팅이 없습니다. 종료.");
                 setNoMoreChat(true);
-                return;
             }
             else{
                 const revTmp = tmp.reverse();
                 const next = revTmp.concat(cur);
                 setChattingList(next);
+                console.log("채팅방이 다음과 같이 재설정 되었습니다.");
+                console.log(next);
                 setChattingListStartId(res.data.startId);
             }
         })
