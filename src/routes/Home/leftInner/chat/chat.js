@@ -116,42 +116,47 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     }, [chattingList]);
 
     //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
-    const presetChattingList = () => {
+    const preSetChattingRoomInfo = () => {
+        axios.get(`${getChattingRoomStuffUrl}/${chattingRoomId}`)
+        .then((res) => {
+            setChattingRoomName(res.data.data.name);
+            const tmpNickname = {};
+            const tmpUserImg = {};
+            res.data.data.userDto.map((data) => {
+                tmpNickname[data.userId] = data.nickname;
+                tmpUserImg[data.userId] = data.imgUrl;
+            });
+            setUserAndUserNickname(tmpNickname);//유저id와 이름 페어 지정
+            setUserAndUserImg(tmpUserImg);//유저id와 프로필 이미지 페어 지정
+            socketConnect();//소캣도 연결한다.
+            //여기서 채팅방 유저의 id들과 프로필 이미지 정보를 받는다.
+            //만약 내 정보가 있다면 그건 내 정보를 저장하는 변수에 set하면 된다.
+        })
+        .catch((res) => {
+            if(res.response.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                alert("채팅방의 이름을 불러오지 못했습니다.");
+            }
+        });
+    };
+    useEffect(preSetChattingRoomInfo, [chattingRoomId]);
+
+    const gettingChattingList = () => {
         if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
 
-        console.log("채팅을 가져옵니다.");
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
         .then((res) => {
+            const cur = [...chattingList];//지금의 채팅방 채팅 리스트
             const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
             if(tmp.length === 0){
                 setNoMoreChat(true);
             }
-            const next = tmp.reverse();
+            const revTmp = tmp.reverse();
+            const next = revTmp.concat(cur);
             setChattingList(next);
             setChattingListStartId(res.data.startId);
-            axios.get(`${getChattingRoomStuffUrl}/${chattingRoomId}`)
-            .then((res) => {
-                setChattingRoomName(res.data.data.name);
-                const tmpNickname = {};
-                const tmpUserImg = {};
-                res.data.data.userDto.map((data) => {
-                    tmpNickname[data.userId] = data.nickname;
-                    tmpUserImg[data.userId] = data.imgUrl;
-                });
-                setUserAndUserNickname(tmpNickname);//유저id와 이름 페어 지정
-                setUserAndUserImg(tmpUserImg);//유저id와 프로필 이미지 페어 지정
-                socketConnect();//소캣도 연결한다.
-                //여기서 채팅방 유저의 id들과 프로필 이미지 정보를 받는다.
-                //만약 내 정보가 있다면 그건 내 정보를 저장하는 변수에 set하면 된다.
-            })
-            .catch((res) => {
-                if(res.response.status === 401){
-                    refreshAccessToken();
-                }
-                else{
-                    alert("채팅방의 이름을 불러오지 못했습니다.");
-                }
-            });
         })
         .catch((res) => {
             if(res.response.status === 401){
@@ -162,7 +167,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             }
         });
     };
-    useEffect(presetChattingList, [chattingRoomId]);//채팅방 아이디를 가져오면 진행
+    useEffect(gettingChattingList, [chattingRoomName]);//채팅방 아이디를 가져오면 진행
 
     //채팅 제출함수<-----------------------------여기 바꿔야함
     const userChattingSubmitHandler = (event) => {
@@ -185,26 +190,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     //무한 로딩 함수 - 작동 확인함
     useEffect(() => {
         if(inView && !noMoreChat){
-            axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
-            .then((res) => {
-                const cur = [...chattingList];//지금의 채팅방 채팅 리스트
-                const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
-                if(tmp.length === 0){
-                    setNoMoreChat(true);
-                }
-                const revTmp = tmp.reverse();
-                const next = revTmp.concat(cur);
-                setChattingList(next);
-                setChattingListStartId(res.data.startId);
-            })
-            .catch((res) => {
-                if(res.response.status === 401){
-                    refreshAccessToken();
-                }
-                else{
-                    alert("채팅을 불러오지 못했습니다.");
-                }
-            });
+            gettingChattingList();
         }
     }, [inView]);
 
