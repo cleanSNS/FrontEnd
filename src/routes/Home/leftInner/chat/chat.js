@@ -118,6 +118,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     }, [chattingList]);
 
     //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
+    const [chattingroomInfoSet, SetchattingRoomInfoSet] = useState(false);//다음 함수 트리거용
     const preSetChattingRoomInfo = () => {
         if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
 
@@ -133,6 +134,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             setUserAndUserNickname(tmpNickname);//유저id와 이름 페어 지정
             setUserAndUserImg(tmpUserImg);//유저id와 프로필 이미지 페어 지정
             socketConnect();//소캣도 연결한다.
+            SetchattingRoomInfoSet(true);
             //여기서 채팅방 유저의 id들과 프로필 이미지 정보를 받는다.
             //만약 내 정보가 있다면 그건 내 정보를 저장하는 변수에 set하면 된다.
         })
@@ -148,7 +150,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     useEffect(preSetChattingRoomInfo, [chattingRoomId]);
 
     const gettingChattingList = () => {
-        if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
+        if(!chattingroomInfoSet) return;//아직 정보를 불러오지 않은 상태이므로 종료
 
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
         .then((res) => {
@@ -174,7 +176,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             }
         });
     };
-    useEffect(gettingChattingList, [chattingRoomName]);//채팅방 이름이 업데이트 되면 진행
+    useEffect(gettingChattingList, [chattingroomInfoSet]);//채팅방 이름이 업데이트 되면 진행
 
     //채팅 제출함수<-----------------------------여기 바꿔야함
     const userChattingSubmitHandler = (event) => {
