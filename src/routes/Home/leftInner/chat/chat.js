@@ -91,10 +91,13 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
             stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
+                console.log("새로 채팅이 불려졌습니다.");
                 let tmpchat = chatMessage.body;
                 tmpchat = JSON.parse(tmpchat);
                 const tmp = [...chattingList];
+                console.log(tmp);
                 tmp.push(tmpchat);
+                console.log(tmp);
                 setChattingList(tmp);
             });
         });
@@ -153,9 +156,9 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             const cur = [...chattingList];//지금의 채팅방 채팅 리스트
             const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
             if(tmp.length === 0){
+                console.log("불러온 채팅이 없습니다. 종료.")
                 setNoMoreChat(true);
-                setChattingListStartId(res.data.startId);
-                return ;
+                return;
             }
             const revTmp = tmp.reverse();
             const next = revTmp.concat(cur);
@@ -171,7 +174,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             }
         });
     };
-    useEffect(gettingChattingList, [chattingRoomName]);//채팅방 아이디를 가져오면 진행
+    useEffect(gettingChattingList, [chattingRoomName]);//채팅방 이름이 업데이트 되면 진행
 
     //채팅 제출함수<-----------------------------여기 바꿔야함
     const userChattingSubmitHandler = (event) => {
