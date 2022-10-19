@@ -117,6 +117,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
 
     //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
     const preSetChattingRoomInfo = () => {
+        if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
+        
         axios.get(`${getChattingRoomStuffUrl}/${chattingRoomId}`)
         .then((res) => {
             setChattingRoomName(res.data.data.name);
