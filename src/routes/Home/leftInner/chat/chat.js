@@ -123,7 +123,9 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
 
     //채팅이 추가되면 자동으로 스크롤 해주는 함수
     useEffect(() => {
-        document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
+        if(document.querySelector("#chatbox").scrollTop !== 0){
+            document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
+        }
     }, [chattingList]);
 
     //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
