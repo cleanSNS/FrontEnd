@@ -536,6 +536,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         }
     };
 
+    console.log(likeCountVisual);
+
     return(
         <div className={Style.wholeCover} onClick={closePage} id="outSide">
             <div className={Style.ImageAndScriptCover}>
