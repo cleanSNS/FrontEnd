@@ -86,7 +86,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         setStompClient(tmp);
     };
 
-    //소켓이 추가되면 그에 맞는 함수를 추가하는 함수
+    //새로 채팅이 불리면 내용을 저장
+    const [newChatting, setNewChatting] = useState("");
     useEffect(() => {
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
@@ -94,15 +95,21 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                 console.log("새로 채팅이 불려졌습니다.");
                 let tmpchat = chatMessage.body;
                 tmpchat = JSON.parse(tmpchat);
-                console.log(chattingList);
-                const tmp = [...chattingList];
-                console.log(tmp);
-                tmp.push(tmpchat);
-                console.log(tmp);
-                //setChattingList(tmp);
+                setNewChatting(tmpchat);
             });
         });
     }, [stompClient]);
+
+    //새로 불린 내용이 있으면 chattingList에 넣기
+    useEffect(() => {
+        if(newChatting === "") return;
+
+        const tmp = [...chattingList];
+        tmp.push(newChatting);
+        setChattingList(tmp);
+
+    }, [newChatting]);
+
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
