@@ -100,6 +100,7 @@
     padding: 15px;
     border-radius: 0.5rem;
     box-shadow: 2px 2px 5px rgb(190, 190, 190);
+    word-break: break-all;
 }
 
 .chatuserName{
