@@ -150,6 +150,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     useEffect(preSetChattingRoomInfo, [chattingRoomId]);
 
     console.log(chattingList);
+    console.log(noMoreChat);
 
     const gettingChattingList = () => {
         if(!chattingroomInfoSet) return;//아직 정보를 불러오지 않은 상태이므로 종료
