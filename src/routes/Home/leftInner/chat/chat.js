@@ -174,7 +174,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         const now = new Date();
         stompClient.send(`/pub/${chattingRoomId}`, {},
             JSON.stringify({
-                sender: userId,
+                userId: userId,
                 message: userChatInput,
                 createdDate : now,
             })
