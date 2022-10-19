@@ -166,7 +166,7 @@ export const makeNewChattingRoomUrl = `${apiUrl}/chat/chatroom`;
 export const getChattingRoomListUrl = `${apiUrl}/chat/chatroom`;
 
 //채팅방의 이름을 불러오는 Url
-export const getChattingRoomNameUrl = `${apiUrl}/chat/chatroom`
+export const getChattingRoomStuffUrl = `${apiUrl}/chat/chatroom`
 
 //채팅방 내에서 그 채팅방의 채팅들을 불러오는 Url
 export const getChattingListUrl = `${apiUrl}/chat`;

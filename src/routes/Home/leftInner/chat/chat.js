@@ -3,15 +3,15 @@ import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
     getChattingListUrl,
-    getChattingRoomNameUrl,
-    getUserNicknameAndImageUrl,
+    getChattingRoomStuffUrl,
 } from '../../../../apiUrl';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import Stomp from 'stomp-websocket';
 import { Temporal } from '@js-temporal/polyfill';
+import { data } from 'jquery';
 
-const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
+const SingleChat = ({data, setLeftBookState, userId, userAndUserImg, userAndUserNickname, oldestChat}) => {
     //유저의 이미지나 이름을 클릭하면 해당 유저의 페이지로 이동한다. <---------------이동이 있는 곳!
     const goToThatUserPage = (event) => {
         event.preventDefault();
@@ -33,18 +33,18 @@ const SingleChat = ({data, setLeftBookState, userId, oldestChat}) => {
     };
 
     return(
-        <div className={userId !== data.userDto.userId ? Style.singleOtherChattingArea : Style.singleMyChattingArea} ref={oldestChat}>            
+        <div className={userId !== data.userId ? Style.singleOtherChattingArea : Style.singleMyChattingArea} ref={oldestChat}>            
             {/* 유저의 프로필 이미지가 오는 곳 */
-                userId !== data.userDto.userId ?
-               <img src={data.userDto.imgUrl} className={Style.chatUserimg} onClick={goToThatUserPage}/> : null
+                userId !== data.userId ?
+               <img src={userAndUserImg[data.userId]} className={Style.chatUserimg} onClick={goToThatUserPage}/> : null
             }
             <div className={Style.userchatFlexBox}>
                 {/* 유저의 이름이 오는 곳 */
-                    userId !== data.userDto.userId ?
-                    <p className={Style.chatuserName} onClick={goToThatUserPage}>{data.userDto.nickname}</p> : null
+                    userId !== data.userId ?
+                    <p className={Style.chatuserName} onClick={goToThatUserPage}>{userAndUserNickname[data.userId]}</p> : null
                 }
                 {/* 유저의 채팅 내용이 오는 곳 */}
-                <div className={Style.chattingText} style={userId !== data.userDto.userId ? null : {backgroundColor: "#F4DEDE"}}>{data.message}</div>
+                <div className={Style.chattingText} style={userId !== data.userId ? null : {backgroundColor: "#F4DEDE"}}>{data.message}</div>
                 <p className={Style.chatTime}>{calculateTimeFrom(data.createdDate)}</p>
             </div>
         </div>
@@ -60,9 +60,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     const [userChatInput, setUserChatInput] = useState("");//사용자의 채팅 내용
     const [noMoreChat, setNoMoreChat] = useState(false);//더이상 불러올 과거의 채팅이 없는 경우 true로 정한다.
 
-    const [myuserImgUrl, serMyUserImgUrl] = useState("");//내 이미지
-    const [myuserNickname, setMyUserNickname] = useState("");//내 이름
     const [userAndUserImg, setUserAndUserImg] = useState({});//해당 채팅방의 유저 id와 그 유저의 프로필의 value를 넣어둔다. key=id, value=imgUrl
+    const [userAndUserNickname, setUserAndUserNickname] = useState({});//해당 채팅방의 유저 id와 그 유저의 닉네임의 value를 넣어둔다. key=id, value=닉네임
 
     const onUserChattingChangeHandler = (event) => {
         setUserChatInput(event.target.value);
@@ -107,6 +106,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         setChattingRoomId(leftBookState.split('/')[1]);
         setChattingListStartId(987654321);//초기화 필요
         setUserAndUserImg({});//초기화 필요
+        setUserAndUserNickname({});//초기화 필요
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
 
@@ -129,9 +129,17 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             const next = tmp.reverse();
             setChattingList(next);
             setChattingListStartId(res.data.startId);
-            axios.get(`${getChattingRoomNameUrl}/${chattingRoomId}/name`)
+            axios.get(`${getChattingRoomStuffUrl}/${chattingRoomId}`)
             .then((res) => {
-                setChattingRoomName(res.data.data.chatroomName);
+                setChattingRoomName(res.data.data.name);
+                const tmpNickname = {};
+                const tmpUserImg = {};
+                res.data.data.userDto.map((data) => {
+                    tmpNickname[data.userId] = data.nickname;
+                    tmpUserImg[data.userId] = data.imgUrl;
+                });
+                setUserAndUserNickname(tmpNickname);//유저id와 이름 페어 지정
+                setUserAndUserImg(tmpUserImg);//유저id와 프로필 이미지 페어 지정
                 socketConnect();//소캣도 연결한다.
                 //여기서 채팅방 유저의 id들과 프로필 이미지 정보를 받는다.
                 //만약 내 정보가 있다면 그건 내 정보를 저장하는 변수에 set하면 된다.
@@ -214,9 +222,9 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                     {
                         chattingList.map((data, index) => (
                             index === 0 ?
-                            <SingleChat data={data} key={index} setLeftBookState={setLeftBookState} userId={userId} oldestChat={oldestChat}/>
+                            <SingleChat data={data} key={index} setLeftBookState={setLeftBookState} userId={userId} userAndUserImg={userAndUserImg} userAndUserNickname={userAndUserNickname} oldestChat={oldestChat}/>
                             :
-                            <SingleChat data={data} key={index} setLeftBookState={setLeftBookState} userId={userId} oldestChat={null}/>
+                            <SingleChat data={data} key={index} setLeftBookState={setLeftBookState} userId={userId} userAndUserImg={userAndUserImg} userAndUserNickname={userAndUserNickname} oldestChat={null}/>
                         ))
                     }
                 </div>
