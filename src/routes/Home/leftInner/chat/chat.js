@@ -125,12 +125,17 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
 
     //채팅이 추가되면 자동으로 스크롤 해주는 함수
     const [needScroll, setNeedScroll] = useState(false);
+    const [currentScrollHeight, setCurrentScrollHeight] = useState(0);
     useEffect(() => {
-        if(needScroll){
+        if(needScroll){//채팅이 하나 추가된 것이나, 첫 상황으로 아래로 그냥 내려가면 된다. 이 때의 높이를 기록한다.
             document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
             setNeedScroll(false);
         }
-    }, [needScroll]);
+        else{//상단에 추가된 경우
+            document.querySelector("#chatbox").scrollTop = (document.querySelector("#chatbox").scrollHeight - currentScrollHeight);
+        }
+        setCurrentScrollHeight(document.querySelector("#chatbox").scrollHeight);
+    }, [chattingList]);
 
     //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
     const [chattingroomInfoSet, SetchattingRoomInfoSet] = useState(false);//다음 함수 트리거용
