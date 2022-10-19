@@ -149,6 +149,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     };
     useEffect(preSetChattingRoomInfo, [chattingRoomId]);
 
+    console.log(chattingList);
+
     const gettingChattingList = () => {
         if(!chattingroomInfoSet) return;//아직 정보를 불러오지 않은 상태이므로 종료
 
@@ -162,10 +164,12 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                 setNoMoreChat(true);
                 return;
             }
-            const revTmp = tmp.reverse();
-            const next = revTmp.concat(cur);
-            setChattingList(next);
-            setChattingListStartId(res.data.startId);
+            else{
+                const revTmp = tmp.reverse();
+                const next = revTmp.concat(cur);
+                setChattingList(next);
+                setChattingListStartId(res.data.startId);
+            }
         })
         .catch((res) => {
             if(res.response.status === 401){
