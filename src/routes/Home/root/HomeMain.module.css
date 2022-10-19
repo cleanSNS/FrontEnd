@@ -114,6 +114,6 @@
 
 .noticeArea{
     position: absolute;
-    top: 0;
-    right: 50%;
+    top: -30%;
+    right: 60%;
 }
