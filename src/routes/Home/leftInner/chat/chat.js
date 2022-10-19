@@ -94,6 +94,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                 console.log("새로 채팅이 불려졌습니다.");
                 let tmpchat = chatMessage.body;
                 tmpchat = JSON.parse(tmpchat);
+                console.log(chattingList);
                 const tmp = [...chattingList];
                 console.log(tmp);
                 tmp.push(tmpchat);
