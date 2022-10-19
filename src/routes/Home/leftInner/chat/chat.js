@@ -172,7 +172,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         if(userChatInput === "") return;//입력한게 없으면 제출 X
         
         const now = new Date();
-        stompClient.send(`/pub/${chattingRoomId}`, {},
+        stompClient.send(`/pub/${chattingRoomId}`, {sender: userId},
             JSON.stringify({
                 sender: userAndUserNickname[userId],
                 message: userChatInput,
