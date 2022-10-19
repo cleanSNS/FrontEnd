@@ -106,6 +106,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         const tmp = [...chattingList];
         tmp.push(newChatting);
         setChattingList(tmp);
+        setNeedScroll(true);
 
     }, [newChatting]);
 
@@ -122,11 +123,13 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
 
     //채팅이 추가되면 자동으로 스크롤 해주는 함수
+    const [needScroll, setNeedScroll] = useState(false);
     useEffect(() => {
-        if(document.querySelector("#chatbox").scrollTop !== 0){
+        if(needScroll){
             document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
+            setNeedScroll(false);
         }
-    }, [chattingList]);
+    }, [needScroll]);
 
     //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
     const [chattingroomInfoSet, SetchattingRoomInfoSet] = useState(false);//다음 함수 트리거용
@@ -172,6 +175,9 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                 const revTmp = tmp.reverse();
                 const next = revTmp.concat(cur);
                 setChattingList(next);
+            }
+            if(chattingListStartId === 987654321){
+                setNeedScroll(true);
             }
             setChattingListStartId(res.data.startId);
         })
