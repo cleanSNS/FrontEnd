@@ -247,7 +247,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     if(event.state === null) return;
     setRightBookState(event.state.rightBookState);
     setLeftBookState(event.state.leftBookState);
-    setPageId(event.state.pageId);
     setGoBack(true);
   };
 
@@ -259,10 +258,9 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     window.history.pushState({
       rightBookState: rightBookState,
       leftBookState: leftBookState,
-      pageId: pageId
     },null, '');
   };
-  useEffect(pushStateHandler, [rightBookState, leftBookState, pageId]);
+  useEffect(pushStateHandler, [rightBookState, leftBookState]);
 
   /*************************알림 관련******************************/
   const [noticeCount, setNoticeCount] = useState(-1);
@@ -296,8 +294,8 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     });
   }, [noticeCount]);
 
-  /**************로고에 넣을 함수****************/
-  const logoClickHandler = () => {
+  /**************로고에 넣을 함수 - 초기 상태로 만드는 함수****************/
+  const resetPage = () => {
     setRightBookState("friend");
     setLeftBookState("page");
     setSettingState("initial");
@@ -321,7 +319,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       {/* 좌 상단 - 로고와 검색창 */}
       <div className={Style.Cover}>
         <div className={Style.leftHeader}>
-          <Logo preset={logoClickHandler}/>
+          <Logo preset={resetPage}/>
           <div />
           <SearchBar userSearch={userSearch} hashtagPageNumber={hashtagPageNumber} userSearchChangeHandler={userSearchChangeHandler} userSearchSubmitHandler={userSearchSubmitHandler} isSubmitted={isSubmitted} searchedList={searchedList} searchedUserClickHandler={searchedUserClickHandler} searchedHashtagClickHandler={searchedHashtagClickHandler}/>
         </div>
@@ -402,7 +400,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
           </div>
         </div>
       </div>
-      {pageId === -1 ? null : <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} leftBookChangeHandler={leftBookChangeHandler} userId={userId}/>}
+      {pageId === -1 ? null : <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} leftBookChangeHandler={leftBookChangeHandler} userId={userId} resetPage={resetPage}/>}
       {/*<DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId}/>*/}{/* 테스트용. */}
     </div>
   );

@@ -264,7 +264,7 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
     댓글 부르기 트리거는 가장 하단의 댓글을 사용자가 확인했을 때이고,
     대댓글 부르기는 댓글 부르기함수가 호출된 상황 자체이다 - 호출 시 groupId가 달라진다.
 */
-const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandler, userId}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
+const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandler, userId, resetPage}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
     const [pageUploadUserId, setPageUploadUserId] = useState("");//page를 올린 사람의 id
     const [postedImageList, setPostedImageList] = useState([]);//올린 이미지 list
     const [postedPersonImage, setPostedPersonImage] = useState("");//올린 사람의 이미지
@@ -522,7 +522,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             .then((res) => {
                 alert("글을 삭제했습니다.");
                 setPageId(-1);
-                window.location.href = '/main';
+                resetPage();
             })
             .catch((res) => {
                 if(res.response.status === 401){
