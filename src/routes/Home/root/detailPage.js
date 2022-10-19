@@ -409,6 +409,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             type: "PAGE"
         })
         .then((res) => {
+            isLiked ? setLikeNumber(cur => cur - 1) : setLikeNumber(cur => cur + 1) //임시로라도 반영
             setIsLiked((cur) => !cur);
             console.log("페이지에 좋아요혹은 좋아요 취소했습니다.");
         })

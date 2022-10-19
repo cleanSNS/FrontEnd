@@ -172,7 +172,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       setNewPostReadCommentAuth(true);
       setNewPostWriteCommentAuth(true);
       setNewPostReadLikeAuth(true);
-      window.location.href = "/main";
+      resetPage();
     })
     .catch((res) => {
       if(res.response.status === 401){//access token이 만료된 경우이다.
@@ -299,6 +299,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     setRightBookState("friend");
     setLeftBookState("page");
     setSettingState("initial");
+    setPageId(-1);
   };
 
   /*****************채팅 관련********************/
