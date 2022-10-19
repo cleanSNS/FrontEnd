@@ -341,9 +341,9 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
               <div className={Style.Cover}>
                 <img src={messageTagImg} className={Style.tagImg} onClick={tagClickHandler} id="chat" />
               </div>
-            </div>
-            <div className={Style.noticeArea}>
+              <div className={Style.noticeArea}>
               {/*chatCount === 0 ? null : <NumberNotice number={chatCount} />*/}
+            </div>
             </div>
           </div>
           <div className={Style.Cover}>
@@ -351,9 +351,9 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
               <div className={Style.Cover}>
                 <img src={notificationTagImg} className={Style.tagImg} onClick={tagClickHandler} id="notice" />
               </div>
-            </div>
-            <div className={Style.noticeArea}>
-              {(noticeCount === -1 || noticeCount === 0)? null : <NumberNotice number={noticeCount} />}
+              <div className={Style.noticeArea}>
+                {(noticeCount === -1 || noticeCount === 0)? null : <NumberNotice number={30} />}
+              </div>
             </div>
           </div>
           <div className={Style.Cover}>
