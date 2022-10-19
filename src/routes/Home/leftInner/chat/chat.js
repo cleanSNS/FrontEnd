@@ -99,7 +99,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                 console.log(tmp);
                 tmp.push(tmpchat);
                 console.log(tmp);
-                setChattingList(tmp);
+                //setChattingList(tmp);
             });
         });
     }, [stompClient]);
