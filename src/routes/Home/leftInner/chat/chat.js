@@ -92,7 +92,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
             stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
-                console.log("새로 채팅이 불려졌습니다.");
                 let tmpchat = chatMessage.body;
                 tmpchat = JSON.parse(tmpchat);
                 setNewChatting(tmpchat);
@@ -143,8 +142,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             setUserAndUserImg(tmpUserImg);//유저id와 프로필 이미지 페어 지정
             socketConnect();//소캣도 연결한다.
             SetchattingRoomInfoSet(true);
-            //여기서 채팅방 유저의 id들과 프로필 이미지 정보를 받는다.
-            //만약 내 정보가 있다면 그건 내 정보를 저장하는 변수에 set하면 된다.
         })
         .catch((res) => {
             if(res.response.status === 401){
@@ -157,29 +154,22 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     };
     useEffect(preSetChattingRoomInfo, [chattingRoomId]);
 
-    console.log(chattingList);
-    console.log(noMoreChat);
-
     const gettingChattingList = () => {
         if(!chattingroomInfoSet) return;//아직 정보를 불러오지 않은 상태이므로 종료
 
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
         .then((res) => {
-            console.log("채팅들을 불러오는 함수 실행");
             const cur = [...chattingList];//지금의 채팅방 채팅 리스트
             const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
             if(tmp.length === 0){
-                console.log("불러온 채팅이 없습니다. 종료.");
                 setNoMoreChat(true);
             }
             else{
                 const revTmp = tmp.reverse();
                 const next = revTmp.concat(cur);
                 setChattingList(next);
-                console.log("채팅방이 다음과 같이 재설정 되었습니다.");
-                console.log(next);
-                setChattingListStartId(res.data.startId);
             }
+            setChattingListStartId(res.data.startId);
         })
         .catch((res) => {
             if(res.response.status === 401){
@@ -213,7 +203,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     //무한 로딩 함수 - 작동 확인함
     useEffect(() => {
         if(inView && !noMoreChat){
-            console.log("무한 로딩 함수 실행");
             gettingChattingList();
         }
     }, [inView]);
