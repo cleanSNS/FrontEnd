@@ -296,7 +296,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setPostedPersonNickname(res.data.data.pageDto.userDto.nickname);
             setPostedWord(res.data.data.pageDto.content);
             setLikeNumber(res.data.data.pageDto.likeCount);
-            setLikeCountVisual(res.data.data.likeReadAuth);
+            setLikeCountVisual(res.data.data.pageDto.likeReadAuth);
 
             //댓글 초기 세팅 부분
             const tmp = [...res.data.data.commentDtoList.data];
@@ -535,8 +535,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             });
         }
     };
-
-    console.log(likeCountVisual);
 
     return(
         <div className={Style.wholeCover} onClick={closePage} id="outSide">
