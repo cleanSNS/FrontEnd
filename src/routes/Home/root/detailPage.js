@@ -17,6 +17,7 @@ import {
     ReportUrl,
     deleteCommentUrl,
     deletePageUrl,
+    unlikeThisPageUrl,
 } from './../../../apiUrl';
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
@@ -272,6 +273,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     const [likeNumber, setLikeNumber] = useState(0); //좋아요 개수
     const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장)
     const [isLiked, setIsLiked] = useState(false);//해당 페이지를 좋아요했는지 저장
+    const [likeCountVisual, setLikeCountVisual] = useState(true);//글 작성자가 해당 페이지 좋아요 개수를 보여주도록 허용했는지 아닌지 알려주는 함수
     const [imageIndex, setImageIndex] = useState(0);//보고있는 이미지의 index
     const [commentToWhom, setCommentToWhom] = useState(["p", -1, ""]);//[0]은 페이지에 댓글인지 댓글에 대댓글인지(c) 표시 // [1]은 대댓글인 경우 groupId를 의미 댓글이면 -1 // [2]는 대댓글인 경우 유저의 닉네임 댓글이면 ""
     const [userCommentInput, setUserCommentInput] = useState("");//유저가 작성하고있는 댓글
@@ -294,7 +296,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setPostedPersonNickname(res.data.data.pageDto.userDto.nickname);
             setPostedWord(res.data.data.pageDto.content);
             setLikeNumber(res.data.data.pageDto.likeCount);
-            setIsLiked(res.data.data.likeReadAuth);
+            setLikeCountVisual(res.data.data.likeReadAuth);
 
             //댓글 초기 세팅 부분
             const tmp = [...res.data.data.commentDtoList.data];
@@ -324,7 +326,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             }
             else{
                 console.log(res);
-                alert("글을 불러오지 못했습니다.");
+                alert("좋아요 여부를 불러오지 못했습니다.");
             }
         });
     };
@@ -399,13 +401,16 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     /*********************글 영역 - 좋아요 관련**********************/
     //글의 좋아요 클릭 handler
     const pageLikeClickHandler = (event) => {
-        axios.post(likeThisPageUrl, {
+        let url = ""
+        isLiked ? url = unlikeThisPageUrl : url = likeThisPageUrl
+
+        axios.post(url, {
             targetId: pageId,
             type: "PAGE"
         })
         .then((res) => {
-            setIsLiked(true);
-            console.log("페이지에 좋아요했습니다.");
+            setIsLiked((cur) => !cur);
+            console.log("페이지에 좋아요혹은 좋아요 취소했습니다.");
         })
         .catch((res) => {
             if(res.response.status === 401){
@@ -413,7 +418,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             }
             else{
                 console.log(res);
-                alert("좋아요를 누르지 못했습니다.");
+                alert("좋아요정보를 보내지 못했습니다.");
             }
         });
     };
@@ -566,7 +571,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
                                 <img id="pageLikeBtn" src={heartImg} className={Style.buttonImg} onClick={pageLikeClickHandler} />
-                                <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${likeNumber}개`}</p>
+                                <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{likeCountVisual ? `좋아요 ${likeNumber} 개` : `좋아요 여러 개`}</p>
                                 <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                                 {
                                     pageUploadUserId === userId ?

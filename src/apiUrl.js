@@ -52,6 +52,9 @@ export const LoadDetailPageUrl = `${apiUrl}/page/`;
 //글에 좋아요 하기
 export const likeThisPageUrl = `${apiUrl}/user/like`;
 
+//글에 좋아요 취소하기
+export const unlikeThisPageUrl = `${apiUrl}/user/unlike`;
+
 //좋아요 여부 확인
 export const checkILikedThisPageOrComment = `${apiUrl}/user/like`;
 
