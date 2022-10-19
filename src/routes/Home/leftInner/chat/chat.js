@@ -117,6 +117,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         setUserAndUserImg({});//초기화 필요
         setUserAndUserNickname({});//초기화 필요
         setChattingList([]);//초기화 필요
+        SetchattingRoomInfoSet(false);//초기화 필요
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
 
