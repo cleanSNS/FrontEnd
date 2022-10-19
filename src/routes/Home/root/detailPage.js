@@ -138,7 +138,7 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
 }
 
 //댓글
-const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refreshAccessToken, userClickHandler, userId, presetComment, setCommentStartId, setIsLastComment, setCommentList}) => {
+const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, presetComment, setCommentStartId, setIsLastComment, setCommentList}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
     const [isDeleted, setIsDeleted] = useState(false);//댓글 삭제 상태인지 확인
 
@@ -207,51 +207,59 @@ const RenderComment = ({pageId, commentList, lastComment, setCommentToWhom, refr
             presetComment();//삭제되었으니 댓글 다시 로드
             setIsDeleted(false);
         }
-    }, [isDeleted])
+    }, [isDeleted]);
+
+    //댓글에 유저 클릭 함수
+    const commentUserClickHandler = () => {
+        setPageId(-1);//현재 페이지에서 나감
+        leftBookChangeHandler(`pList/${data.userDto.userId}`);//해당 유저의 페이지로 이동
+    };
 
     /*************************상위 요소 전달용 함수들*****************************/
     //댓글에 대댓글을 달 수 있도록 변경하는 함수
     const changeCommentToComment = (event) => {
         event.preventDefault();
-        const tmp = (event.target.id).split('/');
-        setCommentToWhom(["c", commentList[Number(tmp[1])].group, commentList[Number(tmp[1])].userDto.nickname]);
-    }
+        setCommentToWhom(["c", data.group, data.userDto.nickname]);
+    };
 
     return(
-        <div className={Style.CommentArea}>
-            {
-                commentList.map((data, index) => (
-                    <div key={index} className={Style.singleCommentArea} ref={index === (commentList.length - 1) ? lastComment : null}>
-                        <div className={Style.CommentBox} style={{width:"100%"}}>
-                                <div className={Style.CommentProfileArea}>
-                                    <img src={data.userDto.imgUrl} className={Style.UserImage} id={`commentUserImage_${data.userDto.userId}`} onClick={userClickHandler}/>
-                                    <p className={Style.UserNickname} id={`commentUserNickname_${data.userDto.userId}`} onClick={userClickHandler}>{data.userDto.nickname}</p>
-                                </div>
-                                <p id={`commentContent/${index}`} className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
-                                <div className={Style.likeTimeArea}>
-                                    <div className={Style.cover}>
-                                        <img src={heartImg} className={Style.buttonImg}/>
-                                        <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${data.likeCount}개`}</p>
-                                        <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                                        <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
-                                        <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                                        {
-                                            userId === data.userDto.userId ?
-                                            /* 내 댓글인 경우 수정, 삭제 가능 */
-                                            <p className={Style.likeandCommentCount} id={`deleteComment_${data.commentId}`} onClick={deleteClickHandler}>댓글 삭제</p>
-                                            :
-                                            /* 남의 댓글인 경우 신고 가능 */
-                                            <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
-                                        }
-                                    </div>
-                                    <p className={Style.time}>{calculateTimeFrom(data.createdDate)}</p>
-                                </div>
-                        </div>
-                        <RenderCommentOfComment pageId={pageId} groupId={data.group} setLoadCommentOfComment={setLoadCommentOfComment} loadCommentOfComment={loadCommentOfComment} userClickHandler={userClickHandler} refreshAccessToken={refreshAccessToken} reportClickHandler={reportClickHandler} userId={userId} deleteClickHandler={deleteClickHandler}/>
+            <div key={index} className={Style.singleCommentArea} ref={lastComment}>
+                <div className={Style.CommentBox} style={{width:"100%"}}>
+                    <div className={Style.CommentProfileArea}>
+                        <img src={data.userDto.imgUrl} className={Style.UserImage} onClick={commentUserClickHandler}/>
+                        <p className={Style.UserNickname} onClick={commentUserClickHandler}>{data.userDto.nickname}</p>
                     </div>
-                ))
-            }
-        </div>
+                    <p className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
+                    <div className={Style.likeTimeArea}>
+                        <div className={Style.cover}>
+                            <img src={heartImg} className={Style.buttonImg}/>
+                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${data.likeCount}개`}</p>
+                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                            <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
+                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                            {
+                                userId === data.userDto.userId ?
+                                /* 내 댓글인 경우 수정, 삭제 가능 */
+                                <p className={Style.likeandCommentCount} id={`deleteComment_${data.commentId}`} onClick={deleteClickHandler}>댓글 삭제</p>
+                                :
+                                /* 남의 댓글인 경우 신고 가능 */
+                                <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
+                            }
+                        </div>
+                        <p className={Style.time}>{calculateTimeFrom(data.createdDate)}</p>
+                    </div>
+                </div>
+                <RenderCommentOfComment 
+                    pageId={pageId} 
+                    groupId={data.group} 
+                    setLoadCommentOfComment={setLoadCommentOfComment} 
+                    loadCommentOfComment={loadCommentOfComment} 
+                    refreshAccessToken={refreshAccessToken} 
+                    reportClickHandler={reportClickHandler} 
+                    userId={userId} 
+                    deleteClickHandler={deleteClickHandler}
+                />
+            </div>
     );
 };
 
@@ -393,9 +401,9 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     useEffect(moveImageHandler, [imageIndex]);
 
     /********************글 영역 - 유저 클릭 관련*********************/
-    const userClickHandler = (event) => {
+    const pageUserClickHandler = (event) => {
         setPageId(-1);//현재 페이지에서 나감
-        leftBookChangeHandler(`pList/${event.target.id.split('_')[1]}`);//해당 유저의 페이지로 이동
+        leftBookChangeHandler(`pList/${pageUploadUserId}`);//해당 유저의 페이지로 이동
     };
 
     /*********************글 영역 - 좋아요 관련**********************/
@@ -563,8 +571,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                     {/* 글 영역 */}
                     <div className={Style.pageScriptArea}>
                         <div className={Style.postPersonProfileArea}>
-                            <img src={postedPersonImage} className={Style.UserImage} id={`pageUploadUserImage_${pageUploadUserId}`} onClick={userClickHandler}/>
-                            <p className={Style.UserNickname} id={`pageUploadUserName_${pageUploadUserId}`} onClick={userClickHandler}>{postedPersonNickname}</p>
+                            <img src={postedPersonImage} className={Style.UserImage} onClick={pageUserClickHandler}/>
+                            <p className={Style.UserNickname} onClick={pageUserClickHandler}>{postedPersonNickname}</p>
                         </div>
                         <div className={Style.contentArea}>
                             <p onClick={changeCommentToPage} className={Style.content}>{postedWord}</p>
@@ -587,19 +595,40 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         </div>
                     </div>
                     {/* 댓글 영역 */}
-                    <RenderComment 
-                        commentList={commentList}
-                        pageId={pageId}
-                        lastComment={lastComment}
-                        setCommentToWhom={setCommentToWhom}
-                        refreshAccessToken={refreshAccessToken}
-                        userClickHandler={userClickHandler}
-                        userId={userId}
-                        presetComment={presetComment}
-                        setCommentStartId={setCommentStartId}
-                        setIsLastComment={setIsLastComment}
-                        setCommentList={setCommentList}
-                    />
+                    <div className={Style.CommentArea}>
+                        {
+                            commentList.map((data, index) => (
+                                index === commentList.length - 1 ?
+                                <RenderComment 
+                                    data={data}
+                                    key={index}
+                                    pageId={pageId}
+                                    lastComment={lastComment}
+                                    setCommentToWhom={setCommentToWhom}
+                                    refreshAccessToken={refreshAccessToken}
+                                    userId={userId}
+                                    presetComment={presetComment}
+                                    setCommentStartId={setCommentStartId}
+                                    setIsLastComment={setIsLastComment}
+                                    setCommentList={setCommentList}
+                                />
+                                :
+                                <RenderComment 
+                                    data={data}
+                                    key={index}
+                                    pageId={pageId}
+                                    lastComment={null}
+                                    setCommentToWhom={setCommentToWhom}
+                                    refreshAccessToken={refreshAccessToken}
+                                    userId={userId}
+                                    presetComment={presetComment}
+                                    setCommentStartId={setCommentStartId}
+                                    setIsLastComment={setIsLastComment}
+                                    setCommentList={setCommentList}
+                                />
+                            ))
+                        }
+                    </div>
                     {/* 댓글 입력 영역 */}
                     <form className={Style.userCommentArea} onSubmit={userCommentSubmitHandler}>
                         <div className={Style.cover}>
