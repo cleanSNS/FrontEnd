@@ -66,16 +66,19 @@
   height: 60px;
   border: 1px solid black;
   border-radius: 0.5rem;
+  cursor: pointer;
 }
 
 .profileNickname{
   width: fit-content;
   padding-left: 30px;
+  cursor: pointer;
 }
 
 .profileSetting{
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 
 /*이미지 영역*/
