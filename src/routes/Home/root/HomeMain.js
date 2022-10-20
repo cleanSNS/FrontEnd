@@ -30,6 +30,7 @@ import {
   presetNoticeNumeber,
   getUserNicknameAndImageUrl,
   pageloadHashtagNumUrl,
+  uploadImageUrl,
 } from "../../../apiUrl";
 import axios from 'axios';
 
@@ -148,44 +149,61 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     }
 
     //이미지 api로 처리하는 부분 필요<---------------------------------------------------------------
-
-    axios.post(newPostUrl, {
-      content: newPostContent,
-      pageSetting : {
-        notificationLike: newPostLikeNotice,
-        notificationComment: newPostCommentNotice,
-        readAuth: newPostReadPostAuth,
-        commentReadAuth: newPostReadCommentAuth,
-        commentWriteAuth: newPostWriteCommentAuth,
-        likeReadAuth: newPostReadLikeAuth,
-      },
-      imgUrlList: newPostImages,
-      pageHashtagList: newPostHashtag,
+    let uploadImages = [];
+    axios.post(`${uploadImageUrl}page`,{
+      file: newPostImages
     })
     .then((res) => {
-      alert("업로드 되었습니다.");
-      setNewPostImages([]);
-      setNewPostHashtag([]);
-      setNewPostContent("");
-      setNewPostLikeNotice(true);
-      setNewPostCommentNotice(true);
-      setNewPostReadPostAuth("ALL");
-      setNewPostReadCommentAuth(true);
-      setNewPostWriteCommentAuth(true);
-      setNewPostReadLikeAuth(true);
-      resetPage();
+      uploadImages = [...res.data]
     })
     .catch((res) => {
       if(res.response.status === 401){//access token이 만료된 경우이다.
         refreshAccessToken();
       }
       else{
-        console.log("잘못된 양식입니다.");
-        console.log(res);
-        alert("문제 발생");
-        //window.location.href = "/main";
+        alert("이미지 처리에 실패했습니다.");
       }
     });
+
+    if(uploadImages.length !== 0){//이미지 처리에 성공해서 렌더링할 파일이 있는 경우
+      axios.post(newPostUrl, {
+        content: newPostContent,
+        pageSetting : {
+          notificationLike: newPostLikeNotice,
+          notificationComment: newPostCommentNotice,
+          readAuth: newPostReadPostAuth,
+          commentReadAuth: newPostReadCommentAuth,
+          commentWriteAuth: newPostWriteCommentAuth,
+          likeReadAuth: newPostReadLikeAuth,
+        },
+        imgUrlList: uploadImages,
+        pageHashtagList: newPostHashtag,
+      })
+      .then((res) => {
+        alert("업로드 되었습니다.");
+        setNewPostImages([]);
+        setNewPostHashtag([]);
+        setNewPostContent("");
+        setNewPostLikeNotice(true);
+        setNewPostCommentNotice(true);
+        setNewPostReadPostAuth("ALL");
+        setNewPostReadCommentAuth(true);
+        setNewPostWriteCommentAuth(true);
+        setNewPostReadLikeAuth(true);
+        resetPage();
+      })
+      .catch((res) => {
+        if(res.response.status === 401){//access token이 만료된 경우이다.
+          refreshAccessToken();
+        }
+        else{
+          console.log("잘못된 양식입니다.");
+          console.log(res);
+          alert("문제 발생");
+          //window.location.href = "/main";
+        }
+      });
+    }
   };
 
 

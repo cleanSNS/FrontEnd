@@ -1,5 +1,5 @@
 import Style from './newPost.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import addImage from '../../root/tagImages/add.png';
 
 const HashtagList = ({deleteTag, newPostHashtag}) => {
@@ -31,6 +31,13 @@ const ImageList = ({deleteImage, renderedNewPostImages}) => {
 const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPostHashtag, newPostContent, setNewPostContent, uploadNewPostHandler }) => {
     const [hashtag, setHashtag] = useState("");//임시로 입력되는 값 변경하는 State.
     const [renderedNewPostImages, setRenderedNewPostImages] = useState([]);
+
+    //트리거로 초기화
+    useEffect(() => {
+        if(renderedNewPostImages.length === 0){
+            setRenderedNewPostImages([]);
+        }
+    }, [newPostImages]);
 
     //글 내용 변경 함수
     const contentHandler = (event) => {
@@ -84,6 +91,7 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
                     console.log(renderTmp);
                 }
             });
+            setNewPostImages(inputFile);//지금 들어온 파일을 파일 그대로 보낼 배열에 넣기
         }
         setRenderedNewPostImages(renderTmp);
 

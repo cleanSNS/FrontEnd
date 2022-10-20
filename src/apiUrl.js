@@ -176,3 +176,6 @@ export const getChattingRoomStuffUrl = `${apiUrl}/chat/chatroom`
 
 //채팅방 내에서 그 채팅방의 채팅들을 불러오는 Url
 export const getChattingListUrl = `${apiUrl}/chat`;
+
+/********************************이미지 처리 관련********************************/
+export const uploadImageUrl = `${apiUrl}/upload?category=`;
