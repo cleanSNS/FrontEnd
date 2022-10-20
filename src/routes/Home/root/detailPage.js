@@ -48,8 +48,87 @@ const calculateTimeFrom = (calTime) => {
     }
 };
 
-//대댓글
-const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadCommentOfComment, userClickHandler, refreshAccessToken, reportClickHandler, userId, deleteClickHandler}) => {
+//대댓글 부분
+const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, refreshAccessToken, pageId, leftBookChangeHandler, setToggle, setCommentOfCommentList, setCommentOfCommentStartId, setIsLastCommentOfComment}) => {
+    const CommentofCommentUserClickHandler = () => {
+        setPageId(-1);//현재 페이지에서 나감
+        leftBookChangeHandler(`pList/${data.userDto.userId}`);//해당 유저의 페이지로 이동
+    };
+
+        //신고 클릭함수
+        const COCreportClickHandler = () => {
+            if(window.confirm("정말 신고하시겠습니까?")){//다시 한 번 물어보고 실행
+                axios.post(ReportUrl, {
+                    targetId: data.commentId,
+                    type: "COMMENT",
+                })
+                .then((res) => {
+                    alert("신고가 접수되었습니다.");
+                })
+                .catch((res) => {
+                    if(res.response.status === 401){
+                        refreshAccessToken();
+                    }
+                    else{
+                        console.log(res);
+                        alert("신고하지 못했습니다.");
+                    }
+                });
+            }
+        }
+    
+        //삭제 클릭 함수
+        const COCdeleteClickHandler = () => {
+            if(window.confirm("정말 삭제하시겠습니까?")){
+                axios.delete(`${deleteCommentUrl}${pageId}/comment/${data.commentId}`)
+                .then((res) => {
+                    alert("삭제되었습니다.");
+                    setCommentOfCommentStartId(1)//대댓글 startId 초기화
+                    setIsLastCommentOfComment(false)//대댓글 lastcomment fasle
+                    setToggle(false)//토글 값 강제로 false로
+                    setCommentOfCommentList([])//대댓글 지우기
+                })
+                .catch((res) => {
+                    if(res.response.status === 401){
+                        refreshAccessToken();
+                    }
+                    else{
+                        console.log(res);
+                        alert("삭제하지 못했습니다.");
+                    }
+                })
+            }
+        }
+
+    return(
+        <div className={Style.CommentBox} style={{width:"80%"}} ref={lastCommentOfComment}>
+            <div className={Style.CommentProfileArea}>
+                <img src={data.userDto.imgUrl} className={Style.UserImage} onClick={CommentofCommentUserClickHandler}/>
+                <p className={Style.UserNickname} onClick={CommentofCommentUserClickHandler}>{data.userDto.nickname}</p>
+            </div>
+            <p className={Style.commentText}>{data.content}</p>
+            <div className={Style.likeTimeArea}>
+                <div className={Style.cover}>
+                    <img src={heartImg} className={Style.buttonImg} />
+                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요${data.likeCount}개`}</p>
+                    <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                    {
+                        userId === data.userDto.userId ?
+                        /* 내 댓글인 경우 삭제 가능 */
+                        <p className={Style.likeandCommentCount} onClick={COCdeleteClickHandler}>댓글 삭제</p>
+                        :
+                        /* 남의 댓글인 경우 신고 가능 */
+                        <p className={Style.likeandCommentCount} onClick={COCreportClickHandler}>댓글 신고하기</p>
+                    }
+                </div>
+                <p className={Style.time}>{calculateTimeFrom(data.createdDate)}</p>
+            </div>
+        </div>
+    )
+};
+
+//대댓글 toggle과 불러오는 부분
+const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfComment, loadCommentOfComment, refreshAccessToken, userId, leftBookChangeHandler}) => {
     const [toggle, setToggle] = useState(false);//대댓글을 보여주는 toggle이다.
     const [commentOfCommentList, setCommentOfCommentList] = useState([]);//대댓글 리스트
     const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//첫 로드시에는 1이온다.
@@ -109,36 +188,43 @@ const RenderCommentOfComment = ({pageId, groupId, setLoadCommentOfComment, loadC
             null
             :
             commentOfCommentList.map((data, index) =>
-                <div key={index} className={Style.CommentBox} style={{width:"80%"}} ref={index === (commentOfCommentList.length - 1) ? lastCommentOfComment : null}>
-                    <div className={Style.CommentProfileArea}>
-                        <img src={data.userDto.imgUrl} className={Style.UserImage} id={`commentOfCommentUserImage_${data.userDto.userId}`} onClick={userClickHandler}/>
-                        <p className={Style.UserNickname} id={`commentOfCommentUserNickname_${data.userDto.userId}`} onClick={userClickHandler}>{data.userDto.nickname}</p>
-                    </div>
-                    <p className={Style.commentText}>{data.content}</p>
-                    <div className={Style.likeTimeArea}>
-                        <div className={Style.cover}>
-                            <img src={heartImg} className={Style.buttonImg} />
-                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요${data.likeCount}개`}</p>
-                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                            {
-                                userId === data.userDto.userId ?
-                                /* 내 댓글인 경우 삭제 가능 */
-                                <p className={Style.likeandCommentCount} id={`deleteComment_${data.commntId}`} onClick={deleteClickHandler}>댓글 삭제</p>
-                                :
-                                /* 남의 댓글인 경우 신고 가능 */
-                                <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
-                            }
-                        </div>
-                        <p className={Style.time}>{calculateTimeFrom(data.createdDate)}</p>
-                    </div>
-                </div>
+                index === (commentOfCommentList.length - 1) ?
+                <SingleCommentOfComment 
+                    data={data}
+                    key={index}
+                    lastCommentOfComment={lastCommentOfComment}
+                    leftBookChangeHandler={leftBookChangeHandler}
+                    setPageId={setPageId}
+                    userId={userId}
+                    pageId={pageId}
+                    refreshAccessToken={refreshAccessToken}
+                    setToggle={setToggle}
+                    setCommentOfCommentList={setCommentOfCommentList}
+                    setCommentOfCommentStartId={setCommentOfCommentStartId}
+                    setIsLastCommentOfComment={setIsLastCommentOfComment}
+                />
+                :
+                <SingleCommentOfComment 
+                    data={data}
+                    key={index}
+                    lastCommentOfComment={null}
+                    leftBookChangeHandler={leftBookChangeHandler}
+                    setPageId={setPageId}
+                    userId={userId}
+                    pageId={pageId}
+                    refreshAccessToken={refreshAccessToken}
+                    setToggle={setToggle}
+                    setCommentOfCommentList={setCommentOfCommentList}
+                    setCommentOfCommentStartId={setCommentOfCommentStartId}
+                    setIsLastCommentOfComment={setIsLastCommentOfComment}
+                />
             )
         : null
     );
 }
 
 //댓글
-const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, presetComment, setCommentStartId, setIsLastComment, setCommentList}) => {
+const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, presetComment, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
     const [isDeleted, setIsDeleted] = useState(false);//댓글 삭제 상태인지 확인
 
@@ -155,11 +241,10 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
     };
 
     //신고 클릭함수
-    const reportClickHandler = (event) => {
-        const target = event.target.id.split('_')[1];
+    const reportClickHandler = () => {
         if(window.confirm("정말 신고하시겠습니까?")){//다시 한 번 물어보고 실행
             axios.post(ReportUrl, {
-                targetId: target,
+                targetId: data.commentId,
                 type: "COMMENT",
             })
             .then((res) => {
@@ -178,10 +263,9 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
     }
 
     //삭제 클릭 함수
-    const deleteClickHandler = (event) => {
-        const target = event.target.id.split('_')[1];
+    const deleteClickHandler = () => {
         if(window.confirm("정말 삭제하시겠습니까?")){
-            axios.delete(`${deleteCommentUrl}${pageId}/comment/${target}`)
+            axios.delete(`${deleteCommentUrl}${pageId}/comment/${data.commentId}`)
             .then((res) => {
                 alert("삭제되었습니다.");
                 setCommentStartId(0);//다시 로드되도록 초기값으로 설정
@@ -223,7 +307,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
     };
 
     return(
-            <div key={index} className={Style.singleCommentArea} ref={lastComment}>
+            <div className={Style.singleCommentArea} ref={lastComment}>
                 <div className={Style.CommentBox} style={{width:"100%"}}>
                     <div className={Style.CommentProfileArea}>
                         <img src={data.userDto.imgUrl} className={Style.UserImage} onClick={commentUserClickHandler}/>
@@ -240,10 +324,10 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                             {
                                 userId === data.userDto.userId ?
                                 /* 내 댓글인 경우 수정, 삭제 가능 */
-                                <p className={Style.likeandCommentCount} id={`deleteComment_${data.commentId}`} onClick={deleteClickHandler}>댓글 삭제</p>
+                                <p className={Style.likeandCommentCount} onClick={deleteClickHandler}>댓글 삭제</p>
                                 :
                                 /* 남의 댓글인 경우 신고 가능 */
-                                <p className={Style.likeandCommentCount} id={`reportComment_${data.commentId}`} onClick={reportClickHandler}>댓글 신고하기</p>
+                                <p className={Style.likeandCommentCount} onClick={reportClickHandler}>댓글 신고하기</p>
                             }
                         </div>
                         <p className={Style.time}>{calculateTimeFrom(data.createdDate)}</p>
@@ -258,6 +342,8 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                     reportClickHandler={reportClickHandler} 
                     userId={userId} 
                     deleteClickHandler={deleteClickHandler}
+                    leftBookChangeHandler={leftBookChangeHandler}
+                    setPageId={setPageId}
                 />
             </div>
     );
@@ -603,6 +689,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     data={data}
                                     key={index}
                                     pageId={pageId}
+                                    setPageId={setPageId}
                                     lastComment={lastComment}
                                     setCommentToWhom={setCommentToWhom}
                                     refreshAccessToken={refreshAccessToken}
@@ -611,12 +698,14 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setCommentStartId={setCommentStartId}
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
+                                    leftBookChangeHandler={leftBookChangeHandler}
                                 />
                                 :
                                 <RenderComment 
                                     data={data}
                                     key={index}
                                     pageId={pageId}
+                                    setPageId={setPageId}
                                     lastComment={null}
                                     setCommentToWhom={setCommentToWhom}
                                     refreshAccessToken={refreshAccessToken}
@@ -625,6 +714,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setCommentStartId={setCommentStartId}
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
+                                    leftBookChangeHandler={leftBookChangeHandler}
                                 />
                             ))
                         }
