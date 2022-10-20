@@ -68,13 +68,15 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
         const inputFile = [...event.dataTransfer?.files];//지금 들어온 파일이다.
         if(ImageValid(inputFile)){//유효한 파일인 경우 집어넣는다.
             //이미지를 랜더링 해서 집어넣는다.
-            const reader = new FileReader();
-            reader.readAsDataURL(inputFile[0]);
-            reader.onload = (imageData) => {
-                const curPreview = [...newPostImages];
-                curPreview.push(imageData.target.result);
-                setNewPostImages(curPreview);
-            }
+            inputFile.map((data) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(data);
+                reader.onload = (imageData) => {
+                    const curPreview = [...newPostImages];
+                    curPreview.push(imageData.target.result);
+                    setNewPostImages(curPreview);
+                }
+            });
         }
 
         //CSS는 반드시 실행된다.
