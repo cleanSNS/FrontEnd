@@ -43,7 +43,7 @@ const ImageArea = ({imgList, pageIndex, pageClickFunc}) => {
                         {
                             imgList.map((imageUrl, index) =>
                                 <div style={{height: "100%", width: `${100 / imgList.length}%`, float: "left"}} key={index}>
-                                    <img src={imageUrl} style={{width: "100%", height: "100%", objectFit: "contain"}}/>
+                                    <img src={imageUrl} style={{width: "100%", height: "100%", objectFit: "contain", cursor: "pointer"}}/>
                                 </div>
                             )
                         }
