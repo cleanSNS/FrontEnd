@@ -152,12 +152,21 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
 
     //이미지 api로 처리하는 부분 필요<---------------------------------------------------------------
     const fileData = new FormData();
-    fileData.append('image', newPostImages[0]);
 
-    console.log(fileData);
+    newPostImages.map((data) => {
+      fileData.append('image', data);
+    });
+
+    fileData.forEach((v) => console.log(v));
 
     let uploadImages = [];
-    axios.post(`${uploadImageUrl}page`, fileData)
+    axios.post(`${uploadImageUrl}page`, {
+      file: fileData
+    },{
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
     .then((res) => {
       uploadImages = [...res.data]
     })
