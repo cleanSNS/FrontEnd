@@ -249,7 +249,8 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     };
 
     //채팅방 이름 더블클릭 시 변경 가능하게 바꾸기
-    const onChatnameDoubleClickHandler = (event) => {
+    const onChatnameClickHandler = (event) => {
+        console.log("클릭함");
         event.target.disabled = false;
     }
 
@@ -261,7 +262,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                     className={Style.chattingRoomName}
                     value={chattingRoomName}
                     onChange={onChattingRoomNameChangeHandler}
-                    onDoubleClick={onChatnameDoubleClickHandler}
+                    onClick={onChatnameClickHandler}
                     disabled={true}
                     style={{cursor: "pointer"}}
                 />
