@@ -66,8 +66,6 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         event.preventDefault();
 
         const inputFile = [...event.dataTransfer?.files];//지금 들어온 파일이다.
-        console.log("업로드 된 파일의 배열");
-        console.log(inputFile);//업로드된 파일의 배열
 
         const renderTmp = [...renderedNewPostImages];
         if(ImageValid(inputFile)){//유효한 파일인 경우 집어넣는다.
@@ -75,13 +73,9 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
             inputFile.map((data) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(data);
-                console.log("다음 데이터를 렌더링 합니다.");
-                console.log(data);
                 reader.onload = (imageData) => {
                     renderTmp.push(imageData.target.result);
-                    console.log("배열을 업데이트 합니다.");
-                    console.log(renderTmp);
-                    setRenderedNewPostImages(renderTmp);
+                    setRenderedNewPostImages(renderTmp);//이유는 모르겠으나 이렇게 해야 render가 된다.
                 }
             });
             setNewPostImages(inputFile);//지금 들어온 파일을 파일 그대로 보낼 배열에 넣기

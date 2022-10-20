@@ -1,5 +1,6 @@
 import Style from './chat.module.css';
 import chatAddBtn from './message_plus_alt.png';
+import deletechattingRoom from './close_big.png';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import {
@@ -7,7 +8,7 @@ import {
 } from '../../../../apiUrl';
 
 const SingleChattingRoom = ({data, setLeftBookState}) => {
-    //임시 테스트용 click Handler
+    //click Handler
     const chatClickHandler = () => {
         setLeftBookState(`chat/${data.chatroomId}`);
     };
