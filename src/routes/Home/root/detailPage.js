@@ -224,9 +224,8 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
 }
 
 //댓글
-const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, presetDetailPage, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
+const RenderComment = ({data, pageId, isDeleted, setIsDeleted, lastComment, setCommentToWhom, refreshAccessToken, userId, presetDetailPage, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
-    const [isDeleted, setIsDeleted] = useState(false);//댓글 삭제 상태인지 확인
 
     //대댓글을 켜는 함수
     const onLoadCommentOfCommentClickHandler = (event) => {
@@ -285,8 +284,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
         }
     };
 
-
-    console.log(isDeleted);
+    
     //댓글 삭제 사후 처리 함수
     useEffect(() => {
         console.log("삭제 되었습니다. 게시글을 다시 불러옵니다.");
@@ -379,6 +377,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     const [commentStartId, setCommentStartId] = useState(0);//불러올 댓글의 index
     const [isLastComment, setIsLastComment] = useState(false);//마지막 댓글이 불린 경우 true로 설정
     const [lastComment, inView] = useInView();//마지막 댓글을 인식할 inView
+    const [isDeleted, setIsDeleted] = useState(false);//댓글 삭제 상태인지 확인
 
     /*********************초기 화면 세팅**********************/
     //초기 화면 로드 - 글 내용 + 초기 댓글
@@ -702,6 +701,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
                                     leftBookChangeHandler={leftBookChangeHandler}
+                                    isDeleted={isDeleted}
+                                    setIsDeleted={setIsDeleted}
                                 />
                                 :
                                 <RenderComment 
@@ -718,6 +719,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
                                     leftBookChangeHandler={leftBookChangeHandler}
+                                    isDeleted={isDeleted}
+                                    setIsDeleted={setIsDeleted}
                                 />
                             ))
                         }
