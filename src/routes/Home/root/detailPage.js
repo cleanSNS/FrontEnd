@@ -224,7 +224,7 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
 }
 
 //댓글
-const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, presetComment, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
+const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, presetDetailPage, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
     const [isDeleted, setIsDeleted] = useState(false);//댓글 삭제 상태인지 확인
 
@@ -283,12 +283,12 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                 }
             })
         }
-    }
+    };
 
     //댓글 삭제 사후 처리 함수
     useEffect(() => {
         if(isDeleted){//만약 댓글 삭제를 한 경우, 다시 불러와야한다.
-            presetComment();//삭제되었으니 댓글 다시 로드
+            presetDetailPage();//삭제되었으니 댓글 다시 로드
             setIsDeleted(false);
         }
     }, [isDeleted]);
@@ -694,7 +694,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setCommentToWhom={setCommentToWhom}
                                     refreshAccessToken={refreshAccessToken}
                                     userId={userId}
-                                    presetComment={presetComment}
+                                    presetDetailPage={presetDetailPage}
                                     setCommentStartId={setCommentStartId}
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
@@ -710,7 +710,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setCommentToWhom={setCommentToWhom}
                                     refreshAccessToken={refreshAccessToken}
                                     userId={userId}
-                                    presetComment={presetComment}
+                                    presetDetailPage={presetDetailPage}
                                     setCommentStartId={setCommentStartId}
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
