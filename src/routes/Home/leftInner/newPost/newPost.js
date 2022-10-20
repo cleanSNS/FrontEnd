@@ -81,11 +81,12 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                     renderTmp.push(imageData.target.result);
                     console.log("배열을 업데이트 합니다.");
                     console.log(renderTmp);
+                    setRenderedNewPostImages(renderTmp);
                 }
             });
             setNewPostImages(inputFile);//지금 들어온 파일을 파일 그대로 보낼 배열에 넣기
         }
-        setRenderedNewPostImages(renderTmp);
+        //setRenderedNewPostImages(renderTmp);
 
         //CSS는 반드시 실행된다.
         const imageUploadArea = document.querySelector("#imageUploadArea");
