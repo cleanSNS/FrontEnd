@@ -14,7 +14,7 @@ import {
     unlikeThisPageUrl,
 } from "../../../../apiUrl";
 
-const ImageArea = ({imgList, pageIndex}) => {
+const ImageArea = ({imgList, pageIndex, userProfileClickHandler}) => {
     const [imageIndex, setImageIndex] = useState(0);//보고있는 이미지의 index
 
     /* 이미지 영역 */
@@ -36,7 +36,7 @@ const ImageArea = ({imgList, pageIndex}) => {
     useEffect(moveImageHandler, [imageIndex]);
 
     return(
-        <div className={Style.imageArea}>
+        <div className={Style.imageArea} onClick={userProfileClickHandler}>
             <div className={Style.onlyImageArea}>
                 <div style={{overflow:"hidden"}}>
                     <div id={`onlyImageArea_${pageIndex}`} style={{width:`${100 * imgList.length}%`, height: "100%", transition: "transform 0.5s"}}>
@@ -74,7 +74,7 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
     };
 
     const userProfileClickHandler = () => {
-        setLeftBookState(data.pageDto.userDto.userId);
+        setLeftBookState(`pList/${data.pageDto.userDto.userId}`);
     };
 
     //좋아요 초기 설정
@@ -123,7 +123,7 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
                 </div>
             </div>
             {/* 이미지 영역 */}
-            <ImageArea imgList={data.imgUrlList} pageIndex={index}/>
+            <ImageArea imgList={data.imgUrlList} pageIndex={index} userProfileClickHandler={userProfileClickHandler}/>
             {/* 아래 좋아요랑 글 영역 */}
             <div className={Style.pageLikeAndContentArea}>
                 <div className={Style.pagelikearea}>
