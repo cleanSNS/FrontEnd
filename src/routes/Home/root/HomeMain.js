@@ -157,13 +157,14 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       fileData.append('image', data);
     });
 
-    fileData.forEach((v) => console.log(v));
-
     let uploadImages = [];
-    axios.post(`${uploadImageUrl}page`, fileData,{
-      headers: {
+    axios({
+      url: `${uploadImageUrl}page`,
+      method: 'POST',
+      data: fileData,
+      headers:{
         'Content-Type': 'multipart/form-data',
-      }
+      },
     })
     .then((res) => {
       uploadImages = [...res.data]
