@@ -116,7 +116,7 @@
   height: 25%;
   display: flex;
   flex-direction: column;
-  cursor: pointer;
+  padding: 10px;
 }
 
 .pagelikearea{
@@ -130,7 +130,7 @@
   width: 25px;
   height: 25px;
   cursor: pointer;
-  margin: 10px 20px 0px 20px;
+  margin: 0px 20px 0px 10px;
 }
 
 .pageContentArea{

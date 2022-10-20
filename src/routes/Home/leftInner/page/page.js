@@ -125,12 +125,12 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
             {/* 이미지 영역 */}
             <ImageArea imgList={data.imgUrlList} pageIndex={index}/>
             {/* 아래 좋아요랑 글 영역 */}
-            <div className={Style.pageLikeAndContentArea} onClick={pageClickFunc}>
+            <div className={Style.pageLikeAndContentArea}>
                 <div className={Style.pagelikearea}>
                     <img src={isLiked ? heartFillBtn : heartBtn} className={Style.pageLikeBtn} onClick={likeClickHandler}/>
-                    <p>{data.pageDto.likeReadAuth ? `좋아요 ${likeCount} 개` : `좋아요 여러 개`}</p>
+                    <p style={{margin: "0"}}>{data.pageDto.likeReadAuth ? `좋아요 ${likeCount} 개` : `좋아요 여러 개`}</p>
                 </div>
-                <div className={Style.pageContentArea}>
+                <div className={Style.pageContentArea} style={{cursor: "pointer"}} onClick={pageClickFunc}>
                     <p className={Style.pageContent}>{data.pageDto.content}</p>
                 </div>
             </div>
