@@ -160,9 +160,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     fileData.forEach((v) => console.log(v));
 
     let uploadImages = [];
-    axios.post(`${uploadImageUrl}page`, {
-      file: fileData
-    },{
+    axios.post(`${uploadImageUrl}page`, fileData,{
       headers: {
         'Content-Type': 'multipart/form-data',
       }
