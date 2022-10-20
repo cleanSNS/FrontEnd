@@ -65,7 +65,7 @@ const ImageArea = ({imgList, pageIndex}) => {
     );
 };
 
-const Pages = ({data, lastPage, setPageId, setLeftBookState}) => {
+const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAccessToken}) => {
     const [isLiked, setIsLiked] = useState(false);//좋아요 여부
     const [likeCount, setLikeCount] = useState(0);//좋아요 개수
 
@@ -89,7 +89,7 @@ const Pages = ({data, lastPage, setPageId, setLeftBookState}) => {
         isLiked ? url = unlikeThisPageUrl : url = likeThisPageUrl
 
         axios.post(url, {
-            targetId: pageId,
+            targetId: data.pageDto.pageId,
             type: "PAGE"
         })
         .then((res) => {
@@ -187,9 +187,9 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeC
                     :
                     pageList.map((data, index) => (
                         index === (pageList.length - 1) ?
-                        <Pages data={data} key={index} lastPage={lastPage} setPageId={setPageId} setLeftBookState={setLeftBookState}/>
+                        <Pages data={data} key={index} index={index} lastPage={lastPage} setPageId={setPageId} setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken}/>
                         :
-                        <Pages data={data} key={index} lastPage={null} setPageId={setPageId} setLeftBookState={setLeftBookState}/>
+                        <Pages data={data} key={index} index={index} lastPage={null} setPageId={setPageId} setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken}/>
                     ))
                 }
             </div>
