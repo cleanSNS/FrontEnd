@@ -250,20 +250,21 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
 
     //채팅방 이름 더블클릭 시 변경 가능하게 바꾸기
     const onChatnameClickHandler = (event) => {
+        event.preventDefault();
         console.log("클릭함");
-        event.target.disabled = false;
+        document.querySelector("#chattingRoomName").disabled = false;
     }
 
     return(
         <div className={Style.wholeCover}>
             <form className={Style.chattingRoomNameArea} onSubmit={chattingRoomNamechangeSubmitHandler}>
+                <button onClick={onChatnameClickHandler}>hi</button>
                 <input
                     id="chattingRoomName"
                     className={Style.chattingRoomName}
                     value={chattingRoomName}
                     onChange={onChattingRoomNameChangeHandler}
-                    onClick={onChatnameClickHandler}
-                    disabled='true'
+                    disabled={true}
                     style={{cursor: "pointer"}}
                 />
             </form>
