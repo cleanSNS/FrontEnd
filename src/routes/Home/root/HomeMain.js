@@ -154,7 +154,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     const fileData = new FormData();
     newPostImages.map((data) => {
       console.log(data);
-      fileData.append('image', data);
+      console.log(fileData.append('image', data));
     });
 
     console.log(fileData);
