@@ -18,6 +18,7 @@ import {
     deleteCommentUrl,
     deletePageUrl,
     unlikeThisPageUrl,
+    checkLikeUrl,
 } from './../../../apiUrl';
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
@@ -226,6 +227,8 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
 //댓글
 const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, presetDetailPage, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
+    const [CIsLiked, setCIsLiked] = useState(false);//댓글이 좋아요 된 상태인지
+    const [CLikeCount, setCLikeCount] = useState(0);//댓글 좋아요 개수
 
     //대댓글을 켜는 함수
     const onLoadCommentOfCommentClickHandler = (event) => {
@@ -296,6 +299,50 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
         setCommentToWhom(["c", data.group, data.userDto.nickname]);
     };
 
+    /********************************좋아요 관련************************************/
+    //먼저 댓글이 로드될 때마다 해당 댓글에 좋아요를 눌렀었는지 반영해야한다.
+    useEffect(() => {
+        setCLikeCount(data.likeCount);
+        axios.get(`${checkLikeUrl}?targetId=${data.commentId}&type=COMMENT`)
+        .then((res) => {
+            setCIsLiked(res.data.data.like);
+        })
+        .catch((res) => {
+            if(res.response.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("삭제하지 못했습니다.");
+            }
+        })
+    }, []);
+
+    //좋아요 클릭 handler
+    const CommentLikeClickHandler = (event) => {
+        let url = ""
+        CIsLiked ? url = unlikeThisPageUrl : url = likeThisPageUrl
+
+        axios.post(url, {
+            targetId: data.commentId,
+            type: "COMMENT"
+        })
+        .then((res) => {
+            CIsLiked ? setCLikeCount(cur => cur - 1) : setCLikeCount(cur => cur + 1) //임시로라도 반영
+            setCIsLiked((cur) => !cur);
+            console.log("페이지에 좋아요혹은 좋아요 취소했습니다.");
+        })
+        .catch((res) => {
+            if(res.response.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("좋아요정보를 보내지 못했습니다.");
+            }
+        });
+    };
+
     return(
             <div className={Style.singleCommentArea} ref={lastComment}>
                 <div className={Style.CommentBox} style={{width:"100%"}}>
@@ -306,8 +353,8 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                     <p className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
                     <div className={Style.likeTimeArea}>
                         <div className={Style.cover}>
-                            <img src={heartImg} className={Style.buttonImg}/>
-                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${data.likeCount}개`}</p>
+                            <img src={CIsLiked ? heartImgFill : heartImg} className={Style.buttonImg} onClick={CommentLikeClickHandler}/>
+                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${CLikeCount}개`}</p>
                             <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                             <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
                             <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
@@ -509,17 +556,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         });
     };
 
-    //좋아요 상태 변경 시 style변경
-    const likeStyleChangeHandler = () => {
-        if(isLiked){//좋아요가 눌린 경우
-            document.querySelector("#pageLikeBtn").src = heartImgFill;
-        }
-        else{//좋아요가 눌리지 않은 경우
-            document.querySelector("#pageLikeBtn").src = heartImg;
-        }
-    };
-    useEffect(likeStyleChangeHandler, [isLiked]);
-
     /*********************글 영역 - 댓글 관련**********************/
     //댓글 작성 대상 글로 변경함수
     const changeCommentToPage = (event) => {
@@ -656,7 +692,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
-                                <img id="pageLikeBtn" src={heartImg} className={Style.buttonImg} onClick={pageLikeClickHandler} />
+                                <img src={isLiked ? heartImgFill : heartImg} className={Style.buttonImg} onClick={pageLikeClickHandler} />
                                 <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{likeCountVisual ? `좋아요 ${likeNumber} 개` : `좋아요 여러 개`}</p>
                                 <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                                 {

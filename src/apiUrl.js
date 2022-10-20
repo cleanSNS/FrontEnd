@@ -67,6 +67,9 @@ export const deleteCommentUrl = `${apiUrl}/page/`;
 //게시글 삭제 Url
 export const deletePageUrl = `${apiUrl}/page/`;
 
+//댓글 좋아요 여부 확인 Url
+export const checkLikeUrl = `${apiUrl}/user/like`
+
 
 /***************************설정 관련 URl***********************************/
 //지금 프로필 가져오는 Url
