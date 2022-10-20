@@ -74,8 +74,12 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
             inputFile.map((data) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(data);
+                console.log("다음 데이터를 렌더링 합니다.");
+                console.log(data);
                 reader.onload = (imageData) => {
                     renderTmp.push(imageData.target.result);
+                    console.log("배열을 업데이트 합니다.");
+                    console.log(renderTmp);
                 }
             });
             setNewPostImages(renderTmp);
