@@ -55,7 +55,7 @@ const SingleChattingRoom = ({data, setLeftBookState}) => {
             }
             <div className={Style.flexBoxcol}>
                 <div className={Style.flexBoxRight}>
-                    <img src={deletechattingRoom} onclick={chattingRoomDeleteClickHandler}/>
+                    <img src={deletechattingRoom} onClick={chattingRoomDeleteClickHandler} style={{cursor: "pointer"}}/>
                 </div>
                 <p className={Style.chatName} onClick={chatClickHandler}>{data.name}</p>
                 <p className={Style.lastChat} onClick={chatClickHandler}>{data.lastChat}</p>
