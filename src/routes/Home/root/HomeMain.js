@@ -41,16 +41,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
   const [settingState, setSettingState] = useState("initial");
 
-  /* 새 글을 올리는 기능을 위한 부분 */
-  /* 좌, 우로 나뉘어져있는 정보를 추합해서 서버에 보내야 하기 때문에 상위 요소에서 작성 */
-  //아래는 좌측 페이지로 이동할 정보
-  //이미지 리스트
-  const [newPostImages, setNewPostImages] = useState([]);
-  //해시태그 리스트
-  const [newPostHashtag, setNewPostHashtag] = useState([]);
-  //글
-  const [newPostContent, setNewPostContent] = useState("");
-
   //아래는 우측 페이지로 이동할 정보
   //좋아요 알림
   const [newPostLikeNotice, setNewPostLikeNotice] = useState(true);
@@ -136,6 +126,15 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   };
 
   /*****************************new Post 관련*********************************/
+  /* 좌, 우로 나뉘어져있는 정보를 추합해서 서버에 보내야 하기 때문에 상위 요소에서 작성 */
+  //아래는 좌측 페이지로 이동할 정보
+  //이미지 리스트 - 파일을 api에 보낼 수 있게 처리한 리스트이다.
+  const [newPostImages, setNewPostImages] = useState([]);
+  //해시태그 리스트
+  const [newPostHashtag, setNewPostHashtag] = useState([]);
+  //글
+  const [newPostContent, setNewPostContent] = useState("");
+
   //글 올리는 함수 => 좌측 페이지로 넘어가야한다.
   const uploadNewPostHandler = (event) => {
     event.preventDefault();
@@ -147,6 +146,8 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       alert("글을 입력해 주세요/.");
       return;
     }
+
+    //이미지 api로 처리하는 부분 필요<---------------------------------------------------------------
 
     axios.post(newPostUrl, {
       content: newPostContent,
