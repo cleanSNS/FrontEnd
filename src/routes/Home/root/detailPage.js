@@ -224,7 +224,7 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
 }
 
 //댓글
-const RenderComment = ({data, pageId, isDeleted, setIsDeleted, lastComment, setCommentToWhom, refreshAccessToken, userId, presetDetailPage, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
+const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, presetDetailPage, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
 
     //대댓글을 켜는 함수
@@ -270,7 +270,6 @@ const RenderComment = ({data, pageId, isDeleted, setIsDeleted, lastComment, setC
                 setCommentStartId(0);//다시 로드되도록 초기값으로 설정
                 setIsLastComment(false);//원활한 로드를 위해 설정
                 setCommentList([]);//지금까지 로드된 댓글 지우기
-                setIsDeleted(true);
             })
             .catch((res) => {
                 if(res.response.status === 401){
@@ -283,16 +282,6 @@ const RenderComment = ({data, pageId, isDeleted, setIsDeleted, lastComment, setC
             })
         }
     };
-
-    
-    //댓글 삭제 사후 처리 함수
-    useEffect(() => {
-        console.log("삭제 되었습니다. 게시글을 다시 불러옵니다.");
-        if(isDeleted){//만약 댓글 삭제를 한 경우, 다시 불러와야한다.
-            presetDetailPage();//삭제되었으니 댓글 다시 로드
-            setIsDeleted(false);
-        }
-    }, [isDeleted]);
 
     //댓글에 유저 클릭 함수
     const commentUserClickHandler = () => {
@@ -377,12 +366,12 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     const [commentStartId, setCommentStartId] = useState(0);//불러올 댓글의 index
     const [isLastComment, setIsLastComment] = useState(false);//마지막 댓글이 불린 경우 true로 설정
     const [lastComment, inView] = useInView();//마지막 댓글을 인식할 inView
-    const [isDeleted, setIsDeleted] = useState(false);//댓글 삭제 상태인지 확인
 
     /*********************초기 화면 세팅**********************/
     //초기 화면 로드 - 글 내용 + 초기 댓글
     const presetDetailPage = () => {
         if(pageId === -1) return;
+        if(commentStartId !== 0) return;//초기에 댓글을 로드한 상황이 아니면 실행하지 않는다.
 
         axios.get(`${LoadDetailPageUrl}${pageId}/detail`)//글 불러오기
         .then((res) => {
@@ -426,7 +415,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             }
         });
     };
-    useEffect(presetDetailPage, []);
+    useEffect(presetDetailPage, [commentStartId]);
 
     //댓글로드 함수 - 추가 댓글
     const presetComment = () => {
@@ -701,8 +690,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
                                     leftBookChangeHandler={leftBookChangeHandler}
-                                    isDeleted={isDeleted}
-                                    setIsDeleted={setIsDeleted}
                                 />
                                 :
                                 <RenderComment 
@@ -719,8 +706,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
                                     leftBookChangeHandler={leftBookChangeHandler}
-                                    isDeleted={isDeleted}
-                                    setIsDeleted={setIsDeleted}
                                 />
                             ))
                         }
