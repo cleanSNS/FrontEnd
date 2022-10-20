@@ -180,5 +180,8 @@ export const getChattingListUrl = `${apiUrl}/chat`;
 //채팅방 이름 변경 Url
 export const changeChattingRoomNameUrl = `${apiUrl}/chat/chatroom`
 
+//채팅방 삭제 Url
+export const deleteChattingRoomUrl = `${apiUrl}/chat/chatroom`;
+
 /********************************이미지 처리 관련********************************/
 export const uploadImageUrl = `${apiUrl}/upload?category=`;
