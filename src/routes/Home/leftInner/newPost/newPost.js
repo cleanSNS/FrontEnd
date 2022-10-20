@@ -40,11 +40,6 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
     //받은 파일리스트가 유효한지 검사하는 함수
     const ImageValid = (data) => {
         let answer = true;
-        //먼저 받은 데이터가 1개인지 확인
-        if(data.length !== 1){
-            alert("한 번에 하나의 이미지를 드랍해주십시오.");
-            return false;
-        }
 
         //받은 input들에 대해서 이미지 여부, 용량 여부(5메가 이하),
         data.map((d, index) => {
