@@ -29,6 +29,7 @@
   border-radius: 0.3rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .flexBoxCenter{
@@ -115,10 +116,11 @@
 
 /*글 영역*/
 .pageLikeAndContentArea{
-  width: 100%;
+  width: 95%;
   height: 25%;
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding: 10px;
 }
 
@@ -138,12 +140,14 @@
 
 .pageContentArea{
   height: 80%;
-  width: 100%;
+  width: 90%;
   display: flex;
   justify-content: center;
 }
 
 .pageContent{
-  width: 80%;
+  width: 100%;
   margin-top : 0;
+  word-break: break-all;
+  overflow: hidden;
 }
