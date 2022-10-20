@@ -66,17 +66,20 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
         event.preventDefault();
 
         const inputFile = [...event.dataTransfer?.files];//지금 들어온 파일이다.
+        console.log("업로드 된 파일의 배열");
+        console.log(inputFile);//업로드된 파일의 배열
         if(ImageValid(inputFile)){//유효한 파일인 경우 집어넣는다.
             //이미지를 랜더링 해서 집어넣는다.
+            const renderTmp = [...newPostImages];
             inputFile.map((data) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(data);
                 reader.onload = (imageData) => {
-                    const curPreview = [...newPostImages];
-                    curPreview.push(imageData.target.result);
+                    renderTmp.push(imageData.target.result);
                     setNewPostImages(curPreview);
                 }
             });
+            setNewPostImages(renderTmp);
         }
 
         //CSS는 반드시 실행된다.
