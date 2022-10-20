@@ -270,8 +270,8 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                 alert("삭제되었습니다.");
                 setCommentStartId(0);//다시 로드되도록 초기값으로 설정
                 setIsLastComment(false);//원활한 로드를 위해 설정
-                setIsDeleted(true);
                 setCommentList([]);//지금까지 로드된 댓글 지우기
+                setIsDeleted(true);
             })
             .catch((res) => {
                 if(res.response.status === 401){
@@ -285,8 +285,11 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
         }
     };
 
+
+    console.log(isDeleted);
     //댓글 삭제 사후 처리 함수
     useEffect(() => {
+        console.log("삭제 되었습니다. 게시글을 다시 불러옵니다.");
         if(isDeleted){//만약 댓글 삭제를 한 경우, 다시 불러와야한다.
             presetDetailPage();//삭제되었으니 댓글 다시 로드
             setIsDeleted(false);
