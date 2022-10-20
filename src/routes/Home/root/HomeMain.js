@@ -150,11 +150,12 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       return;
     }
 
-    //이미지 api로 처리하는 부분 필요<---------------------------------------------------------------
     const fileData = new FormData();
+    console.log(newPostImages);
     for(let i = 0; i < newPostImages.length; i++){
       fileData.append('image', newPostImages[i]);
     }
+    console.log(fileData.entries());
 
     let uploadImages = [];
     axios({
@@ -196,6 +197,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         alert("업로드 되었습니다.");
         setNewPostImages([]);
         setNewPostHashtag([]);
+        setRenderedNewPostImages([]);
         setNewPostContent("");
         setNewPostLikeNotice(true);
         setNewPostCommentNotice(true);
@@ -210,10 +212,8 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
           refreshAccessToken();
         }
         else{
-          console.log("잘못된 양식입니다.");
           console.log(res);
-          alert("문제 발생");
-          //window.location.href = "/main";
+          alert("글을 올리지 못했습니다.");
         }
       });
     }
