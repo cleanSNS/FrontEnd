@@ -8,7 +8,7 @@ import {
     deleteChattingRoomUrl,
 } from '../../../../apiUrl';
 
-const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, presetChattingRoomList}) => {
+const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, presetChattingRoomList, leftBookState}) => {
     //click Handler
     const chatClickHandler = () => {
         setLeftBookState(`chat/${data.chatroomId}`);
@@ -20,6 +20,9 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, presetC
             axios.delete(`${deleteChattingRoomUrl}/${data.chatroomId}`)
             .then((res) => {
                 alert("채팅방에서 나갔습니다.");
+                if(leftBookState === `chat/${data.chatroomId}`){//나간 방에 들어와 있는 상태라면 나가야한다.
+                    setLeftBookState("page");//걍 나간다.
+                }
                 presetChattingRoomList();//채팅방 다시 로드
             })
             .catch((res) => {
@@ -129,7 +132,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState}) => {
                 </div>
                 {
                     chattingRoomList.map((data, index) => (
-                        <SingleChattingRoom key={index} data={data} setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken} presetChattingRoomList={presetChattingRoomList}/>
+                        <SingleChattingRoom key={index} data={data} setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken} presetChattingRoomList={presetChattingRoomList} leftBookState={leftBookState} />
                     ))
                 }
             </div>
