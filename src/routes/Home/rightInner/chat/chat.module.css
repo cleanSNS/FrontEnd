@@ -70,6 +70,13 @@
     align-items: center;
 }
 
+.flexBoxRight{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
 .chatImgBig{
     width: 70px;
     height: 70px;

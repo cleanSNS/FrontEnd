@@ -13,6 +13,11 @@ const SingleChattingRoom = ({data, setLeftBookState}) => {
         setLeftBookState(`chat/${data.chatroomId}`);
     };
 
+    //채팅방 닫기 클릭 handler
+    const chattingRoomDeleteClickHandler = (event) => {
+        console.log("ㄹㅇ 닫을건가요? 진짜 겁나 할거많다 ㅎㅎ");
+    }
+
     return(
         <div className={Style.singleChat}>
             {/* 이미지 영역 유저(data.headCount)가 1,2,3,4(혹은 그 이상) 일 때를 각각 만드는게 좋을듯 */}
@@ -49,6 +54,9 @@ const SingleChattingRoom = ({data, setLeftBookState}) => {
                 </div>
             }
             <div className={Style.flexBoxcol}>
+                <div className={Style.flexBoxRight}>
+                    <img src={deletechattingRoom} onclick={chattingRoomDeleteClickHandler}/>
+                </div>
                 <p className={Style.chatName} onClick={chatClickHandler}>{data.name}</p>
                 <p className={Style.lastChat} onClick={chatClickHandler}>{data.lastChat}</p>
             </div>
