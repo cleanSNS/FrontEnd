@@ -19,8 +19,8 @@
 .flexBoxRight{
     width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 /*채팅방 이름이 있는 공간*/
