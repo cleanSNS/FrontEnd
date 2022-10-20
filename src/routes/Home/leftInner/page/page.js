@@ -65,7 +65,7 @@ const ImageArea = ({imgList, pageIndex, pageClickFunc}) => {
     );
 };
 
-const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAccessToken}) => {
+const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAccessToken, detailPageLikeClick, setDetailPageLikeClick}) => {
     const [isLiked, setIsLiked] = useState(false);//좋아요 여부
     const [likeCount, setLikeCount] = useState(0);//좋아요 개수
 
@@ -107,6 +107,17 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
             }
         });
     };
+
+    //detailpage에서 클릭 시 어떤 페이지를 클릭했는지 확인하고, 그 페이지의 좋아요 여부를 반영 - api호출은 이미 했으므로 할 필요 없다.
+    useEffect(() => {
+        if(detailPageLikeClick !== data.pageDto.pageId) return;//초기 상황도 -1이므로 동시에 잡을 수 있다.
+
+        isLiked ? setLikeCount(cur => cur - 1) : setLikeCount(cur => cur + 1) //임시로라도 반영
+        setIsLiked((cur) => !cur);
+        console.log("detailpage에서 클릭한 여부를 반영했습니다.")
+        setDetailPageLikeClick(-1);//다시 초기화한다.
+
+    }, [detailPageLikeClick]);
 
     return(
         <div className={Style.singlePageCover} ref={lastPage}>
@@ -187,9 +198,29 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeC
                     :
                     pageList.map((data, index) => (
                         index === (pageList.length - 1) ?
-                        <Pages data={data} key={index} index={index} lastPage={lastPage} setPageId={setPageId} setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken}/>
+                        <Pages 
+                            data={data}
+                            key={index}
+                            index={index} 
+                            lastPage={lastPage}
+                            setPageId={setPageId}
+                            setLeftBookState={setLeftBookState}
+                            refreshAccessToken={refreshAccessToken}
+                            detailPageLikeClick={detailPageLikeClick}
+                            setDetailPageLikeClick={setDetailPageLikeClick}
+                        />
                         :
-                        <Pages data={data} key={index} index={index} lastPage={null} setPageId={setPageId} setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken}/>
+                        <Pages 
+                            data={data}
+                            key={index}
+                            index={index} 
+                            lastPage={null}
+                            setPageId={setPageId}
+                            setLeftBookState={setLeftBookState}
+                            refreshAccessToken={refreshAccessToken}
+                            detailPageLikeClick={detailPageLikeClick}
+                            setDetailPageLikeClick={setDetailPageLikeClick}
+                        />
                     ))
                 }
             </div>
