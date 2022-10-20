@@ -315,11 +315,10 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     }
   }, [leftBookState]);
 
-  //detailpage에서 좋아요 클릭 시 일반 pagelist에 반영하기 위해 trigger가 되는 값
+  //detailpage에서 좋아요 클릭 시 일반 pagelist에 반영하기 위해 trigger가 되는 값 - detailpage에서 좋아요를 누른 글의 id가 변수의 값이 된다.
   //detailpage에서 변경 시 leftBookState가 page인지 확인하고 누르기
-  //like가 눌린 페이지는 pageId 변수이다.
   //단, page에 띄워져있는 리스트에 해당 글이 없는 경우도 존재할 수 있으니 고려해야한다.
-  const [detailPageLikeClick, setDetailPageLikeClick] = useState(false);
+  const [detailPageLikeClick, setDetailPageLikeClick] = useState(-1);
   console.log("과연 트리거가 작동하는가?");
   console.log(detailPageLikeClick);
 
@@ -385,7 +384,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         <div className={Style.bookCover}>
           <div className={Style.leftbook}>
             <div className={Style.Cover}>
-                {leftBookState.includes("page") ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setPageId={setPageId} detailPageLikeClick={detailPageLikeClick} setDetailPageLikeClick={setDetailPageLikeClick} setLeftBookState={setLeftBookState}/> : null}
+                {leftBookState === "page" ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setPageId={setPageId} detailPageLikeClick={detailPageLikeClick} setDetailPageLikeClick={setDetailPageLikeClick} setLeftBookState={setLeftBookState}/> : null}
                 {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
                 {leftBookState.includes("chat") ? <LeftChat refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId} stompClient={stompClient} setStompClient={setStompClient}/> : null}
                 {leftBookState === "makeNewC" ? <LeftNewChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} userId={userId}/> : null}

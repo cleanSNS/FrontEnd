@@ -601,7 +601,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             }
         });
         if(leftBookState.includes("page")){//좌측 페이지가 page들이 있는 페이지 상태라면 좋아요를 triger줘야한다.
-            setDetailPageLikeClick(true);
+            setDetailPageLikeClick(pageId);
         }
     };
 
