@@ -1,4 +1,5 @@
 import Style from './chat.module.css';
+import moreStuffImg from './moreStuff.png';
 import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
@@ -258,7 +259,9 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     return(
         <div className={Style.wholeCover}>
             <form className={Style.chattingRoomNameArea} onSubmit={chattingRoomNamechangeSubmitHandler}>
-                <button onClick={onChatnameClickHandler}>hi</button>
+                <div className={Style.flexBoxRight}>
+                    <img src={moreStuffImg} onClick={onChatnameClickHandler} style={{cursor: "pointer"}} />
+                </div>
                 <input
                     id="chattingRoomName"
                     className={Style.chattingRoomName}

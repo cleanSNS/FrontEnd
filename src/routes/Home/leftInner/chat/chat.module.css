@@ -16,23 +16,34 @@
     align-items: center;
 }
 
+.flexBoxRight{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
 /*채팅방 이름이 있는 공간*/
+
 .chattingRoomNameArea{
     width: 100%;
     height: 10%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
 }
 
 .chattingRoomName{
     font-size: larger;
+    height: 50%;
     width: 80%;
     border: 0;
     text-align: center;
+    background-color: white;
 }
 .chattingRoomName:focus{
     outline: none;
+    background-color: lightgray;
 }
 
 /*채팅들을 볼 수 있는 공간*/
