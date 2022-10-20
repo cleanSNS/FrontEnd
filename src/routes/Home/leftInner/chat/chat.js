@@ -245,7 +245,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
             else{
                 alert("채팅방 이름을 바꾸지 못했습니다.");
             }
-        })
+        });
     };
 
     //채팅방 이름 더블클릭 시 변경 가능하게 바꾸기
@@ -263,7 +263,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                     value={chattingRoomName}
                     onChange={onChattingRoomNameChangeHandler}
                     onClick={onChatnameClickHandler}
-                    disabled={true}
+                    disabled='true'
                     style={{cursor: "pointer"}}
                 />
             </form>
