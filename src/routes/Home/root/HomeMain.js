@@ -153,6 +153,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     //이미지 api로 처리하는 부분 필요<---------------------------------------------------------------
     const fileData = new FormData();
     newPostImages.map((data) => {
+      console.log(data);
       fileData.append('image', data);
     });
 
