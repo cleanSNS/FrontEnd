@@ -86,7 +86,6 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
             });
             setNewPostImages(inputFile);//지금 들어온 파일을 파일 그대로 보낼 배열에 넣기
         }
-        //setRenderedNewPostImages(renderTmp);
 
         //CSS는 반드시 실행된다.
         const imageUploadArea = document.querySelector("#imageUploadArea");
