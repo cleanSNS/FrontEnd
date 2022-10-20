@@ -21,7 +21,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, presetC
             .then((res) => {
                 alert("채팅방에서 나갔습니다.");
                 if(leftBookState === `chat/${data.chatroomId}`){//나간 방에 들어와 있는 상태라면 나가야한다.
-                    setLeftBookState("page");//걍 나간다.
+                    setLeftBookState("page");//다른 화면으로 강제 전환시킨다.
                 }
                 presetChattingRoomList();//채팅방 다시 로드
             })
