@@ -319,8 +319,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //detailpage에서 변경 시 leftBookState가 page인지 확인하고 누르기
   //단, page에 띄워져있는 리스트에 해당 글이 없는 경우도 존재할 수 있으니 고려해야한다.
   const [detailPageLikeClick, setDetailPageLikeClick] = useState(-1);
-  console.log("과연 트리거가 작동하는가?");
-  console.log(detailPageLikeClick);
 
 
   return(

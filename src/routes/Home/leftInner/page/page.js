@@ -114,7 +114,7 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
 
         isLiked ? setLikeCount(cur => cur - 1) : setLikeCount(cur => cur + 1) //임시로라도 반영
         setIsLiked((cur) => !cur);
-        console.log("detailpage에서 클릭한 여부를 반영했습니다.")
+        console.log("detailpage에서 클릭한 여부를 반영했습니다.");
         setDetailPageLikeClick(-1);//다시 초기화한다.
 
     }, [detailPageLikeClick]);
