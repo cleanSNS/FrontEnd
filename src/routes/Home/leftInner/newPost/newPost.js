@@ -28,16 +28,8 @@ const ImageList = ({deleteImage, renderedNewPostImages}) => {
     );
 };
 
-const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPostHashtag, newPostContent, setNewPostContent, uploadNewPostHandler }) => {
+const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostImages, setNewPostImages, newPostHashtag, setNewPostHashtag, newPostContent, setNewPostContent, uploadNewPostHandler }) => {
     const [hashtag, setHashtag] = useState("");//임시로 입력되는 값 변경하는 State.
-    const [renderedNewPostImages, setRenderedNewPostImages] = useState([]);
-
-    //트리거로 초기화
-    useEffect(() => {
-        if(renderedNewPostImages.length === 0){
-            setRenderedNewPostImages([]);
-        }
-    }, [newPostImages]);
 
     //글 내용 변경 함수
     const contentHandler = (event) => {
@@ -59,7 +51,7 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
                 alert(`50MB 이상의 이미지는 업로드 불가합니다.\n${d.name}`);
                 answer = false;
             }
-            renderedNewPostImages.map((cd, index) => {
+            newPostImages.map((cd, index) => {
                 if(cd.name === d.name){
                     alert(`같은 이름의 파일이 이미 업로드 되어있습니다.\n${d.name}`);
                     answer = false;

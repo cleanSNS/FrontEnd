@@ -131,6 +131,8 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //아래는 좌측 페이지로 이동할 정보
   //이미지 리스트 - 파일을 api에 보낼 수 있게 처리한 리스트이다.
   const [newPostImages, setNewPostImages] = useState([]);
+  //이미지 리스트 - 파일을 임시로 띄우기 위해 렌더링한 리스트이다.
+  const [renderedNewPostImages, setRenderedNewPostImages] = useState([]);
   //해시태그 리스트
   const [newPostHashtag, setNewPostHashtag] = useState([]);
   //글
@@ -406,7 +408,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
                 {leftBookState.includes("chat") ? <LeftChat refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId} stompClient={stompClient} setStompClient={setStompClient}/> : null}
                 {leftBookState === "makeNewC" ? <LeftNewChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} userId={userId}/> : null}
                 {leftBookState.includes("hashtagPage") ? <LeftHashtagPage leftBookState={leftBookState} setPageId={setPageId}/> : null}
-                {leftBookState === "newPost" ? <LeftNewPost newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
+                {leftBookState === "newPost" ? <LeftNewPost renderedNewPostImages={renderedNewPostImages} setRenderedNewPostImages={setRenderedNewPostImages} newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
                 {leftBookState === "setting" ? <LeftSetting settingState={settingState} refreshAccessToken={refreshAccessToken}/> : null}
             </div>
           </div>
