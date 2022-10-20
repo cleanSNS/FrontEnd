@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import {
     getChattingListUrl,
     getChattingRoomStuffUrl,
+    changeChattingRoomNameUrl,
 } from '../../../../apiUrl';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
@@ -65,6 +66,10 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     const onUserChattingChangeHandler = (event) => {
         setUserChatInput(event.target.value);
     };
+
+    const onChattingRoomNameChangeHandler = (event) => {
+        setChattingRoomName(event.target.value)
+    }
 
     const onUserChattingEnterClickHandler = (event) => {
         if(event.keyCode === 13){//엔터 입력 시
@@ -222,13 +227,43 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         }
     }, [inView]);
 
+    //채팅방 이름 변경
+    const chattingRoomNamechangeSubmitHandler = (event) => {
+        event.preventDefault();
+        document.querySelector("#chattingRoomName").disabled = true;
+        axios.post(`${changeChattingRoomNameUrl}/${chattingRoomId}`,{
+            name: chattingRoomName,
+        })
+        .then((res) =>{
+            console.log(res);
+            console.log("채팅방 이름을 바꿨습니다.");
+        })
+        .catch((res) => {
+            if(res.response.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                alert("채팅방 이름을 바꾸지 못했습니다.");
+            }
+        })
+    };
+
+    //채팅방 이름 더블클릭 시 변경 가능하게 바꾸기
+    const onChatnameDoubleClickHandler = (event) => {
+        event.target.disabled = false;
+    }
+
     return(
         <div className={Style.wholeCover}>
-            <form className={Style.chattingRoomNameArea}>
-                <input 
+            <form className={Style.chattingRoomNameArea} onSubmit={chattingRoomNamechangeSubmitHandler}>
+                <input
+                    id="chattingRoomName"
                     className={Style.chattingRoomName}
                     value={chattingRoomName}
+                    onChange={onChattingRoomNameChangeHandler}
+                    onDoubleClick={onChatnameDoubleClickHandler}
                     disabled={true}
+                    style={{cursor: "pointer"}}
                 />
             </form>
             <div id="chatbox" className={Style.chattingListArea}>
