@@ -441,7 +441,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
     댓글 부르기 트리거는 가장 하단의 댓글을 사용자가 확인했을 때이고,
     대댓글 부르기는 댓글 부르기함수가 호출된 상황 자체이다 - 호출 시 groupId가 달라진다.
 */
-const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandler, userId, resetPage}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
+const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandler, userId, resetPage, setDetailPageLikeClick, leftBookState}) => {//pageId가 -1이 되면 DetailPage가 사라진다.
     const [pageUploadUserId, setPageUploadUserId] = useState("");//page를 올린 사람의 id
     const [postedImageList, setPostedImageList] = useState([]);//올린 이미지 list
     const [postedPersonImage, setPostedPersonImage] = useState("");//올린 사람의 이미지
@@ -600,6 +600,9 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                 alert("좋아요정보를 보내지 못했습니다.");
             }
         });
+        if(leftBookState.includes("page")){//좌측 페이지가 page들이 있는 페이지 상태라면 좋아요를 triger줘야한다.
+            setDetailPageLikeClick(true);
+        }
     };
 
     /*********************글 영역 - 댓글 관련**********************/

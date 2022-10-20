@@ -10,6 +10,8 @@ import axios from 'axios';
 import Style from './page.module.css';
 import {
     pageloadUrl,
+    likeThisPageUrl,
+    unlikeThisPageUrl,
 } from "../../../../apiUrl";
 
 const ImageArea = ({imgList, pageIndex}) => {
@@ -63,50 +65,80 @@ const ImageArea = ({imgList, pageIndex}) => {
     );
 };
 
-const Pages = ({pageList, lastPage, setPageId}) => {
+const Pages = ({data, lastPage, setPageId, setLeftBookState}) => {
+    const [isLiked, setIsLiked] = useState(false);//좋아요 여부
+    const [likeCount, setLikeCount] = useState(0);//좋아요 개수
+
     const pageClickFunc = () => {
-        setPageId(document.querySelector('[id^=singlePageId]').id.split('_')[1]);
+        setPageId(data.pageDto.pageId);
+    };
+
+    const userProfileClickHandler = () => {
+        setLeftBookState(data.pageDto.userDto.userId);
+    };
+
+    //좋아요 초기 설정
+    useEffect(() => {
+        setLikeCount(data.pageDto.likeCount);//좋아요 개수 불러오기
+        setIsLiked(data.like);//좋아요 여부 불러오기
+    }, [])
+
+    //좋아요 클릭 handler
+    const likeClickHandler = () => {
+        let url = ""
+        isLiked ? url = unlikeThisPageUrl : url = likeThisPageUrl
+
+        axios.post(url, {
+            targetId: pageId,
+            type: "PAGE"
+        })
+        .then((res) => {
+            isLiked ? setLikeCount(cur => cur - 1) : setLikeCount(cur => cur + 1) //임시로라도 반영
+            setIsLiked((cur) => !cur);
+            console.log("페이지에 좋아요혹은 좋아요 취소했습니다.");
+        })
+        .catch((res) => {
+            if(res.response.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("좋아요정보를 보내지 못했습니다.");
+            }
+        });
     };
 
     return(
-        <div className={Style.pageListArea}>
-            {
-                pageList.length === 0 ?
-                <p className={Style.noPageText}>글이 존재하지 않습니다.. 너무도 조용합니다..</p>
-                :
-                pageList.map((data, index) => (
-                    <div className={Style.singlePageCover} key={index} id={`singlePageId_${data.pageDto.pageId}`} ref={index === (pageList.length - 1) ? lastPage : null}>
-                        {/* 프로필 영역 */}
-                        <div className={Style.profileArea}>
-                            <div className={Style.flexBoxCenter}>
-                                <img src={data.pageDto.userDto.imgUrl} className={Style.profileImage} />
-                            </div>
-                            <div className={Style.flexBoxStart}>
-                                <p className={Style.profileNickname}>{data.pageDto.userDto.nickname}</p>
-                            </div>
-                            <div className={Style.flexBoxCenter}>
-                                <img src={moreStuff} className={Style.profileSetting} />
-                            </div>
-                        </div>
-                        {/* 이미지 영역 */}
-                        <ImageArea imgList={data.imgUrlList} pageIndex={index}/>
-                        {/* 아래 좋아요랑 글 영역 */}
-                        <div className={Style.pageLikeAndContentArea} onClick={pageClickFunc}>
-                            <div className={Style.pagelikearea}>
-                                <img src={heartBtn} className={Style.pageLikeBtn} />
-                            </div>
-                            <div className={Style.pageContentArea}>
-                                <p className={Style.pageContent}>{data.pageDto.content}</p>
-                            </div>
-                        </div>
-                    </div>
-                ))
-            }
+        <div className={Style.singlePageCover} ref={lastPage}>
+            {/* 프로필 영역 */}
+            <div className={Style.profileArea}>
+                <div className={Style.flexBoxCenter}>
+                    <img src={data.pageDto.userDto.imgUrl} className={Style.profileImage} onClick={userProfileClickHandler}/>
+                </div>
+                <div className={Style.flexBoxStart}>
+                    <p className={Style.profileNickname} onClick={userProfileClickHandler}>{data.pageDto.userDto.nickname}</p>
+                </div>
+                <div className={Style.flexBoxCenter}>
+                    <img src={moreStuff} className={Style.profileSetting} />
+                </div>
+            </div>
+            {/* 이미지 영역 */}
+            <ImageArea imgList={data.imgUrlList} pageIndex={index}/>
+            {/* 아래 좋아요랑 글 영역 */}
+            <div className={Style.pageLikeAndContentArea} onClick={pageClickFunc}>
+                <div className={Style.pagelikearea}>
+                    <img src={isLiked ? heartFillBtn : heartBtn} className={Style.pageLikeBtn} onClick={likeClickHandler}/>
+                    <p>{data.pageDto.likeReadAuth ? `좋아요 ${likeCount} 개` : `좋아요 여러 개`}</p>
+                </div>
+                <div className={Style.pageContentArea}>
+                    <p className={Style.pageContent}>{data.pageDto.content}</p>
+                </div>
+            </div>
         </div>
     );
 };
 
-const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
+const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeClick, setDetailPageLikeClick, setLeftBookState}) => {
     const [pageStartId, setPageStartId] = useState(987654321);//글 리스트의 startId
     const [pageList, setPageList] = useState([]); //글 리스트
     const [lastPage, inView] = useInView(); //이게 ref된 요소가 화면에 보이면 inView가 true로 변경
@@ -148,7 +180,19 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId}) => {
 
     return(
         <div className={Style.wholeCover}>
-            <Pages pageList={pageList} lastPage={lastPage} setPageId={setPageId}/>
+            <div className={Style.pageListArea}>
+                {
+                    pageList.length === 0 ?
+                    <p className={Style.noPageText}>글이 존재하지 않습니다.. 너무도 조용합니다..</p>
+                    :
+                    pageList.map((data, index) => (
+                        index === (pageList.length - 1) ?
+                        <Pages data={data} key={index} lastPage={lastPage} setPageId={setPageId} setLeftBookState={setLeftBookState}/>
+                        :
+                        <Pages data={data} key={index} lastPage={null} setPageId={setPageId} setLeftBookState={setLeftBookState}/>
+                    ))
+                }
+            </div>
         </div>
     );
 }
