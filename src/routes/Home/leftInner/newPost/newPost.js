@@ -76,7 +76,6 @@ const LeftNewPost = ({ newPostImages, setNewPostImages, newPostHashtag, setNewPo
                 reader.readAsDataURL(data);
                 reader.onload = (imageData) => {
                     renderTmp.push(imageData.target.result);
-                    setNewPostImages(curPreview);
                 }
             });
             setNewPostImages(renderTmp);
