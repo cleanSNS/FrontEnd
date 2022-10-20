@@ -17,6 +17,7 @@
 }
 
 .flexBoxRight{
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -40,6 +41,7 @@
     border: 0;
     text-align: center;
     background-color: white;
+    border-radius: 0.5rem;
 }
 .chattingRoomName:focus{
     outline: none;

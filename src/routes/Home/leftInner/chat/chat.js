@@ -254,6 +254,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
         event.preventDefault();
         console.log("클릭함");
         document.querySelector("#chattingRoomName").disabled = false;
+        document.querySelector("#chattingRoomName").select();
     }
 
     return(
@@ -267,6 +268,7 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
                     className={Style.chattingRoomName}
                     value={chattingRoomName}
                     onChange={onChattingRoomNameChangeHandler}
+                    maxLength={10}
                     disabled={true}
                     style={{cursor: "pointer"}}
                 />
