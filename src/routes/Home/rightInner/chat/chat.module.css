@@ -132,3 +132,12 @@
     white-space: nowrap;
     word-break:break-all;
 }
+
+.chatNumber{
+    width: 30px;
+    height: 24px;
+    border-radius: 12px;
+    background-color: rgba(255, 0, 0, 0.5);
+    border: 0;
+    text-align: center;
+}

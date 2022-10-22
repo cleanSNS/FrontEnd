@@ -77,6 +77,9 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, presetC
                 </div>
                 <p className={Style.chatName} onClick={chatClickHandler}>{data.name}</p>
                 <p className={Style.lastChat} onClick={chatClickHandler}>{data.lastChat}</p>
+                <div className={Style.flexBoxRight}>
+                    <p className={Style.chatNumber}>{data.uncheckedChatCount}</p>
+                </div>
             </div>
         </div>
     );
