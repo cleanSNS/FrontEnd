@@ -84,7 +84,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
         
         const fileData = new FormData();
         console.log(ps_userImageSend);
-        fileData.append('image_profile', ps_userImageSend);
+        fileData.append('file', ps_userImageSend);
 
         let userProfileUploaded = "";
         axios({
