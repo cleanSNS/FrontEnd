@@ -48,7 +48,7 @@ const BlockSetting = ({refreshAccessToken}) => {
 
         //차단하는 api호출 event.target.id이용
         axios.post(blockUserUrl, {
-            targetUserId: event.target.id,
+            userId: event.target.id,
         })
         .then((res) => {//문제가 없는 상황이므로 추가된 차단 리스트를 불러와서 변경하기
             axios.get(getCurrentBlockedPersonUrl)
@@ -84,7 +84,7 @@ const BlockSetting = ({refreshAccessToken}) => {
 
         //차단 취소하는 api호출 event.target.id이용
         axios.post(blockUserCancleUrl,{
-            targetUserId: event.target.id,
+            userId: event.target.id,
         })
         .then((res) => {//문제가 없는 상황이므로 삭제하기.
             console.log(res);
