@@ -323,10 +323,12 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   useEffect(() => {
     if(noticeEventSource === null) return;
     noticeEventSource.addEventListener("sse", function (event) {
+      console.log("notice 개수를 불러오는 SSE가 실행되었습니다.");
       const data = JSON.parse(event.data);
       setNoticeCount(data.count);
     });
   }, [noticeCount]);
+  console.log(noticeCount);//<--------------------------------------------------------알림이 갑자기 걍 없어지는 오류 확인용
 
   /**************로고에 넣을 함수 - 초기 상태로 만드는 함수****************/
   const resetPage = () => {
@@ -355,6 +357,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     if(chattingTrigerEventSource === null && rightBookState === "chat"){//초기 상황이거나, 내가 지금 chatting으로 들어온 경우
       const eventSourcetmp = new EventSource(getChatTriger, { withCredentials: true });
       eventSourcetmp.addEventListener("sse", function (event) {
+        console.log("채팅방에 있는 누군가가 채팅을 보낸 SSE가 실행되었습니다.");
         const data = JSON.parse(event.data);
         console.log(data);
         setChattingTriger(true);
@@ -370,8 +373,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       return;
     }
   }, [rightBookState]);
-
-  //console.log(chattingTriger);
 
   /***********************page를 볼 수 있는 두 공간의 연결************************/
   //detailpage에서 좋아요 클릭 시 일반 pagelist에 반영하기 위해 trigger가 되는 값 - detailpage에서 좋아요를 누른 글의 id가 변수의 값이 된다.
