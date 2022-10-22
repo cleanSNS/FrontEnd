@@ -299,6 +299,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
 
   /*************************알림 관련******************************/
   const [noticeCount, setNoticeCount] = useState(-1);
+  const [chatCount, setChatCount] = useState(-1);
 
   //처음 로그인 시 알림의 수를 받아오는 함수
   const presetNoticeCount = () => {
@@ -319,16 +320,16 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   };
   useEffect(presetNoticeCount, []);//초기상태에서만 진행
 
-  //SSE이벤트 오픈 - notice개수
+  //SSE이벤트 오픈 - notice개수 및 
   useEffect(() => {
     if(noticeEventSource === null) return;
     noticeEventSource.addEventListener("sse", function (event) {
       console.log("notice 개수를 불러오는 SSE가 실행되었습니다.");
       const data = JSON.parse(event.data);
-      setNoticeCount(data.count);
+      setNoticeCount(data.notificationCount);
+      setChatCount(data.chatCount);
     });
   }, [noticeCount]);
-  console.log(noticeCount);//<--------------------------------------------------------알림이 갑자기 걍 없어지는 오류 확인용
 
   /**************로고에 넣을 함수 - 초기 상태로 만드는 함수****************/
   const resetPage = () => {
@@ -357,9 +358,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     if(chattingTrigerEventSource === null && rightBookState === "chat"){//초기 상황이거나, 내가 지금 chatting으로 들어온 경우
       const eventSourcetmp = new EventSource(getChatTriger, { withCredentials: true });
       eventSourcetmp.addEventListener("sse", function (event) {
-        console.log("채팅방에 있는 누군가가 채팅을 보낸 SSE가 실행되었습니다.");
         const data = JSON.parse(event.data);
-        console.log(data);
         setChattingTriger(true);
       });
       setChattingTrigerEventSource(eventSourcetmp);
@@ -407,7 +406,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
                 <img src={messageTagImg} className={Style.tagImg} onClick={tagClickHandler} id="chat" />
               </div>
               <div className={Style.noticeArea}>
-                {/*chatCount === 0 ? null : <NumberNotice number={chatCount} />*/}
+                {(chatCount === 0 || chatCount === -1 ) && rightBookState !== "chat"? null : <NumberNotice number={chatCount} />}
               </div>
             </div>
           </div>
@@ -417,7 +416,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
                 <img src={notificationTagImg} className={Style.tagImg} onClick={tagClickHandler} id="notice" />
               </div>
               <div className={Style.noticeArea}>
-                {(noticeCount === -1 || noticeCount === 0)? null : <NumberNotice number={noticeCount} />}
+                {(noticeCount === -1 || noticeCount === 0) && rightBookState !== "notice"? null : <NumberNotice number={noticeCount} />}
               </div>
             </div>
           </div>
