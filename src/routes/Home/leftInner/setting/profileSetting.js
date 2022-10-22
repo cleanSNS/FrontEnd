@@ -96,7 +96,9 @@ const ProfileSetting = ({refreshAccessToken}) => {
             },
         })
         .then((res) => {
-            userProfileUploaded = res.data[0]
+            console.log(res.data);
+            console.log(res.data[0]);
+            userProfileUploaded = res.data[0];
         })
         .catch((res) => {
             if(res.response.status === 401){//access token이 만료된 경우이다.
