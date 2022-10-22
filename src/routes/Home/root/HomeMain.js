@@ -355,6 +355,12 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     if(chattingTrigerEventSource === null && rightBookState === "chat"){//초기 상황이거나, 내가 지금 chatting으로 들어온 경우
       const eventSourcetmp = new EventSource(getChatTriger, { withCredentials: true });
       setChattingTrigerEventSource(eventSourcetmp);
+      return;
+    }
+
+    if(chattingTrigerEventSource !== null && rightBookState !== "chat"){//채팅방 부분을 벗어난 경우, 하지만 여전히 연결되어있는 경우
+      chattingTrigerEventSource.close();
+      return;
     }
   }, [rightBookState]);
   useEffect(() => {//sse이벤트 설정
