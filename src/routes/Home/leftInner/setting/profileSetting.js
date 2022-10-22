@@ -110,6 +110,8 @@ const ProfileSetting = ({refreshAccessToken}) => {
             }
         });
 
+        console.log(userProfileUploaded);
+
         if(userProfileUploaded !== ""){
             axios.post(submitProfileSettingUrl,{
                 nickname: ps_userName,

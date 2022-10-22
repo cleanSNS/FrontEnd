@@ -149,13 +149,16 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       alert("글을 입력해 주세요/.");
       return;
     }
-
+/*
     //formData에 파일들 append하기 - 파일명은 image_파일명 으로 생성
     const fileData = new FormData();
     console.log(newPostImages);
     for(let i = 0; i < newPostImages.length; i++){
       fileData.append(`image_${newPostImages[i].name.split('.')[0]}`, newPostImages[i]);
     }
+*/
+    const fileData = new FormData();
+    fileData.append(`file`, newPostImages);
 
     for (var pair of fileData.entries()) {
       console.log(pair[0]+ ', ' + pair[1]);
