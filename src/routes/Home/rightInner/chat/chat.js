@@ -94,7 +94,6 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
     /*****************채팅창 불러오기******************/
     const presetChattingRoomList = () => {
         if(rightBookState === "chat"){//오른쪽이 chat일 때만 실행
-            console.log("preset ChattingRoom");
             axios.get(getChattingRoomListUrl)
             .then((res) => {
                 const tmp = [...res.data.data];
@@ -114,8 +113,6 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
 
 
     useEffect(() => {
-        console.log(chattingTriger);
-        console.log("트리거 발생하는 곳");
         if(chattingTriger){//트리거가 발생한 순간에만 로딩
             axios.get(getChattingRoomListUrl)
             .then((res) => {
