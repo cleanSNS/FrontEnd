@@ -78,7 +78,8 @@ const ProfileSetting = ({refreshAccessToken}) => {
     };
     useEffect(profileSettingPreset, []);
 
-    //submit함수
+    //submit함수 - 2개가 순차적으로 call된다.
+    const [userProfileUploaded, setUserProfileuploaded] = useState("");
     const profileSettingSubmitHandler = (event) => {//작성필요
         event.preventDefault();
         
@@ -86,7 +87,6 @@ const ProfileSetting = ({refreshAccessToken}) => {
         console.log(ps_userImageSend);
         fileData.append('file', ps_userImageSend);
 
-        let userProfileUploaded = "";
         axios({
             url: `${uploadImageUrl}profile`,
             method: 'POST',
@@ -96,9 +96,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
             },
         })
         .then((res) => {
-            console.log(res.data);
-            console.log(res.data[0]);
-            userProfileUploaded = res.data[0];
+            setUserProfileuploaded(res.data[0]);
         })
         .catch((res) => {
             if(res.response.status === 401){//access token이 만료된 경우이다.
@@ -109,10 +107,10 @@ const ProfileSetting = ({refreshAccessToken}) => {
                 alert("이미지 처리에 실패했습니다.");
             }
         });
+    }
 
-        console.log(userProfileUploaded);
-
-        if(userProfileUploaded !== ""){
+    useEffect(() => {
+        if(userProfileUploaded !== ""){//초기상황에 자동종료
             axios.post(submitProfileSettingUrl,{
                 nickname: ps_userName,
                 age: ps_userAge,
@@ -137,7 +135,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
                 }
             });
         }
-    }
+    }, [userProfileUploaded]);
 
     //이미지 변경 함수 - ps_nextUserImage를 바꾼다.
     const profileImageChangeHandler = (event) => {
