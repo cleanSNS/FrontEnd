@@ -31,6 +31,7 @@ import {
   getUserNicknameAndImageUrl,
   pageloadHashtagNumUrl,
   uploadImageUrl,
+  getChatTriger,
 } from "../../../apiUrl";
 import axios from 'axios';
 
@@ -348,6 +349,23 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     }
   }, [leftBookState]);
 
+  const [chattingTrigerEventSource, setChattingTrigerEventSource] = useState(null);//채팅 관련된 SSE가 들어있는 곳
+  const [chattingTriger, setChattingTriger] = useState(null);//이 변수가 이제 오른쪽 채팅에 들어가서 이게 true면 
+  useEffect(() => {//상황을 인지해서 eventSource 이벤트 생성
+    if(chattingTrigerEventSource === null && rightBookState === "chat"){//초기 상황이거나, 내가 지금 chatting으로 들어온 경우
+      const eventSourcetmp = new EventSource(getChatTriger, { withCredentials: true });
+      setChattingTrigerEventSource(eventSourcetmp);
+    }
+  }, [rightBookState]);
+  useEffect(() => {//sse이벤트 설정
+    if(chattingTrigerEventSource !== null){
+      chattingTrigerEventSource.addEventListener("sse", function (event) {
+        const data = JSON.parse(event.data);
+        setChattingTriger(true);
+      });
+    }
+  }, [chattingTrigerEventSource]);
+
   //detailpage에서 좋아요 클릭 시 일반 pagelist에 반영하기 위해 trigger가 되는 값 - detailpage에서 좋아요를 누른 글의 id가 변수의 값이 된다.
   //detailpage에서 변경 시 leftBookState가 page인지 확인하고 누르기
   //단, page에 띄워져있는 리스트에 해당 글이 없는 경우도 존재할 수 있으니 고려해야한다.
@@ -432,7 +450,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
           <div className={Style.rightbook}>
             <div className={Style.Cover}>
               { rightBookState === "newPost" ? <RightNewPost newPostLikeNotice={newPostLikeNotice} setNewPostLikeNotice={setNewPostLikeNotice} newPostCommentNotice={newPostCommentNotice} setNewPostCommentNotice={setNewPostCommentNotice} newPostReadPostAuth={newPostReadPostAuth} setNewPostReadPostAuth={setNewPostReadPostAuth} newPostReadCommentAuth={newPostReadCommentAuth} setNewPostReadCommentAuth={setNewPostReadCommentAuth} newPostWriteCommentAuth={newPostWriteCommentAuth} setNewPostWriteCommentAuth={setNewPostWriteCommentAuth} newPostReadLikeAuth={newPostReadLikeAuth} setNewPostReadLikeAuth={setNewPostReadLikeAuth}/> :  null}
-              { rightBookState === "chat" ? <RightChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} leftBookState={leftBookState}/> : null}
+              { rightBookState === "chat" ? <RightChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} leftBookState={leftBookState} rightBookState={rightBookState} chattingTriger={chattingTriger} setChattingTriger={setChattingTriger}/> : null}
               { rightBookState === "notice" ? <RightNotice leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken} setPageId={setPageId} noticeCount={noticeCount} setNoticeCount={setNoticeCount}/> : null}
               { rightBookState === "friend" ? <RightFriend leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken}/> : null}
               { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout}/> : null}

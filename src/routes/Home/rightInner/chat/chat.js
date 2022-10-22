@@ -82,7 +82,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, presetC
     );
 };
 
-const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState}) => {
+const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBookState, chattingTriger, setChattingTriger}) => {
     const [chatSearchInput, setChatSearchInput] = useState("");//검색창에 입력된 정보
     const [chattingRoomList, setChattingRoomList] = useState([]);//채팅방들의 정보를 가진 리스트
 
@@ -93,10 +93,32 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState}) => {
 
     /*****************채팅창 불러오기******************/
     const presetChattingRoomList = () => {
+        if(rightBookState === "chat"){//오른쪽이 chat일 때만 실행
+            axios.get(getChattingRoomListUrl)
+            .then((res) => {
+                const tmp = [...res.data.data];
+                setChattingRoomList(tmp);
+            })
+            .catch((res) => {
+                if(res.response.status === 401){
+                    refreshAccessToken();
+                }
+                else{
+                    alert("채팅방을 불러오지 못했습니다.");
+                }
+            })
+        }
+    };
+    useEffect(presetChattingRoomList, [rightBookState]);
+
+
+    useEffect(() => {
+        if(!chattingTriger) return;//트리거가 발생한 순간에만 로딩
         axios.get(getChattingRoomListUrl)
         .then((res) => {
             const tmp = [...res.data.data];
             setChattingRoomList(tmp);
+            setChattingTriger(false);
         })
         .catch((res) => {
             if(res.response.status === 401){
@@ -105,9 +127,8 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState}) => {
             else{
                 alert("채팅방을 불러오지 못했습니다.");
             }
-        })
-    };
-    useEffect(presetChattingRoomList, [leftBookState]);
+        });
+    }, [chattingTriger]);
 
     //새 채팅방 click Handler
     const newChatClickHandler = () => {

@@ -159,7 +159,7 @@ export const readNoticeUrl = `${apiUrl}/user/notification?notificationId=`;
 export const deleteNoticeUrl = `${apiUrl}/user/notification?notificationId=`;
 
 //읽지 않은 알림 수 조회 SSE용
-export const getNoticeNumber = `${apiUrl}/subscribe`;
+export const getNoticeNumber = `${apiUrl}/subscribe/notification`;
 
 //알림 수 조회
 export const presetNoticeNumeber = `${apiUrl}/user/notification/count`;
@@ -182,6 +182,9 @@ export const changeChattingRoomNameUrl = `${apiUrl}/chat/chatroom`
 
 //채팅방 삭제 Url
 export const deleteChattingRoomUrl = `${apiUrl}/chat/chatroom`;
+
+//읽지 않은 알림 수 조회 SSE용
+export const getChatTriger = `${apiUrl}/subscribe/chat`;
 
 /********************************이미지 처리 관련********************************/
 export const uploadImageUrl = `${apiUrl}/upload?category=`;
