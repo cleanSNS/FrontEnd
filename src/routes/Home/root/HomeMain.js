@@ -138,7 +138,8 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //글
   const [newPostContent, setNewPostContent] = useState("");
 
-  //글 올리는 함수 => 좌측 페이지로 넘어가야한다.
+  //글 올리는 함수 => 좌측 페이지로 넘어가야한다. - 두가지가 순차적으로 실행
+  const [uploadImages, setUploadImages] = useState([]);
   const uploadNewPostHandler = (event) => {
     event.preventDefault();
     if(newPostImages.length === 0){
@@ -157,11 +158,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       fileData.append(`file`, newPostImages[i]);
     }
 
-    for (var pair of fileData.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]);
-    }
-
-    let uploadImages = [];
     axios({
       url: `${uploadImageUrl}page`,
       method: 'POST',
@@ -171,7 +167,8 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       },
     })
     .then((res) => {
-      uploadImages = [...res.data]
+      const tmp = [...res.data]
+      setUploadImages(tmp);
     })
     .catch((res) => {
       if(res.response.status === 401){//access token이 만료된 경우이다.
@@ -182,7 +179,9 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         alert("이미지 처리에 실패했습니다.");
       }
     });
+  };
 
+  useEffect(() => {
     if(uploadImages.length !== 0){//이미지 처리에 성공해서 렌더링할 파일이 있는 경우
       axios.post(newPostUrl, {
         content: newPostContent,
@@ -221,8 +220,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         }
       });
     }
-  };
-
+  }, [uploadImages]);
 
   //첫 render시 친구 tag를 칠해준다.
   const firstRender = () => {
