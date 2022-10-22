@@ -367,11 +367,15 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     if(chattingTrigerEventSource !== null){
       chattingTrigerEventSource.addEventListener("sse", function (event) {
         const data = JSON.parse(event.data);
+        console.log(data);
         setChattingTriger(true);
       });
     }
   }, [chattingTrigerEventSource]);
 
+  console.log(chattingTriger);
+
+  /***********************page를 볼 수 있는 두 공간의 연결************************/
   //detailpage에서 좋아요 클릭 시 일반 pagelist에 반영하기 위해 trigger가 되는 값 - detailpage에서 좋아요를 누른 글의 id가 변수의 값이 된다.
   //detailpage에서 변경 시 leftBookState가 page인지 확인하고 누르기
   //단, page에 띄워져있는 리스트에 해당 글이 없는 경우도 존재할 수 있으니 고려해야한다.
