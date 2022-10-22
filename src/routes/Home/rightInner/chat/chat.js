@@ -113,21 +113,22 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
 
 
     useEffect(() => {
-        if(!chattingTriger) return;//트리거가 발생한 순간에만 로딩
-        axios.get(getChattingRoomListUrl)
-        .then((res) => {
-            const tmp = [...res.data.data];
-            setChattingRoomList(tmp);
-            setChattingTriger(false);
-        })
-        .catch((res) => {
-            if(res.response.status === 401){
-                refreshAccessToken();
-            }
-            else{
-                alert("채팅방을 불러오지 못했습니다.");
-            }
-        });
+        if(chattingTriger){//트리거가 발생한 순간에만 로딩
+            axios.get(getChattingRoomListUrl)
+            .then((res) => {
+                const tmp = [...res.data.data];
+                setChattingRoomList(tmp);
+                setChattingTriger(false);
+            })
+            .catch((res) => {
+                if(res.response.status === 401){
+                    refreshAccessToken();
+                }
+                else{
+                    alert("채팅방을 불러오지 못했습니다.");
+                }
+            });
+        }
     }, [chattingTriger]);
 
     //새 채팅방 click Handler
