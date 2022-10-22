@@ -156,10 +156,12 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       fileData.append(`image_${newPostImages[i].name.split('.')[0]}`, newPostImages[i]);
     }
 
+    const fileArray = [];
     for (var pair of fileData.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]); 
+      console.log(pair[0]+ ', ' + pair[1]);
+      fileArray.append(pair[1]);
     }
-
+    console.log(fileArray);
 
     let uploadImages = [];
     axios({
