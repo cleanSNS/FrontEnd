@@ -159,7 +159,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     const fileArray = [];
     for (var pair of fileData.entries()) {
       console.log(pair[0]+ ', ' + pair[1]);
-      fileArray.append(pair[1]);
+      fileArray.push(pair[1]);
     }
     console.log(fileArray);
 
