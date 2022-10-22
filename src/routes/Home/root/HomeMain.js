@@ -324,6 +324,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     if(noticeEventSource === null) return;
     noticeEventSource.addEventListener("sse", function (event) {
       const data = JSON.parse(event.data);
+      console.log(data);
       setNoticeCount(data.count);
     });
   }, [noticeCount]);
@@ -350,7 +351,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   }, [leftBookState]);
 
   const [chattingTrigerEventSource, setChattingTrigerEventSource] = useState(null);//채팅 관련된 SSE가 들어있는 곳
-  const [chattingTriger, setChattingTriger] = useState(null);//이 변수가 이제 오른쪽 채팅에 들어가서 이게 true면 
+  const [chattingTriger, setChattingTriger] = useState(false);//이 변수가 이제 오른쪽 채팅에 들어가서 이게 true면 
   useEffect(() => {//상황을 인지해서 eventSource 이벤트 생성
     if(chattingTrigerEventSource === null && rightBookState === "chat"){//초기 상황이거나, 내가 지금 chatting으로 들어온 경우
       const eventSourcetmp = new EventSource(getChatTriger, { withCredentials: true });
