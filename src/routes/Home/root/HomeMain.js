@@ -324,7 +324,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     if(noticeEventSource === null) return;
     noticeEventSource.addEventListener("sse", function (event) {
       const data = JSON.parse(event.data);
-      console.log(data);
       setNoticeCount(data.count);
     });
   }, [noticeCount]);
