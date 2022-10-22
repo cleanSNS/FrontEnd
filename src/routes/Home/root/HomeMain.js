@@ -150,24 +150,18 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       return;
     }
 
+    //formData에 파일들 append하기 - 파일명은 image_파일명 으로 생성
     const fileData = new FormData();
     console.log(newPostImages);
     for(let i = 0; i < newPostImages.length; i++){
       fileData.append(`image_${newPostImages[i].name.split('.')[0]}`, newPostImages[i]);
     }
 
-    const fileArray = [];
-    for (var pair of fileData.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]);
-      fileArray.push(pair[1]);
-    }
-    console.log(fileArray);
-
     let uploadImages = [];
     axios({
       url: `${uploadImageUrl}page`,
       method: 'POST',
-      data: fileData,
+      data: {file: newPostImages},
       headers:{
         'Content-Type': 'multipart/form-data',
       },
