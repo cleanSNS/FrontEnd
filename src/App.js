@@ -15,7 +15,6 @@ function App() {
     axios.get(getMyUserIdUrl)
     .then((res) => {
       setUserId(res.data.data.userId);
-      console.log(res.data.data.userId);
     })
     .catch((res) => {
       if(res.response.status === 401){
@@ -32,7 +31,6 @@ function App() {
 
   //로그인시 refresh token을 local Storage에 저장하는 기능 앞에 Bearer 가 붙어있다.
   const loginFunc = (res) => {
-    console.log(res);//로그인의 응답
     localStorage.setItem("rft", res.headers.authorization);//rft설정
 
     getUserIdANdOpenSSEHandler();

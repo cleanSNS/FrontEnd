@@ -322,7 +322,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   useEffect(() => {
     if(noticeEventSource === null) return;
     noticeEventSource.addEventListener("sse", function (event) {
-      console.log(event);
       const data = JSON.parse(event.data);
       setNoticeCount(data.count);
     });
