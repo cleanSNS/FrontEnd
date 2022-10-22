@@ -4,12 +4,15 @@ import nullImage from '../../root/anonymous.png';
 import {
     getcurrentProfileUrl,
     submitProfileSettingUrl,
+    uploadImageUrl,
 } from '../../../../apiUrl';
 import axios from 'axios';
+import { ActivationState } from '@stomp/stompjs';
 
 const ProfileSetting = ({refreshAccessToken}) => {
     //api에 보낼 내용 + input에 반영해야하므로 useState로 선언
-    const [ps_userImage, setPs_UserImage] = useState("");
+    const [ps_userImage, setPs_UserImage] = useState(null);
+    const [ps_userImageSend, setPs_userImage] = useState(null);
     const [ps_userName, setPs_UserName] = useState("");
     const [ps_userAge, setPs_UserAge] = useState("");
     const [ps_userAgeVisible, setPs_UserAgeVisible] = useState("");
@@ -78,19 +81,22 @@ const ProfileSetting = ({refreshAccessToken}) => {
     //submit함수
     const profileSettingSubmitHandler = (event) => {//작성필요
         event.preventDefault();
-        axios.post(submitProfileSettingUrl,{
-            nickname: ps_userName,
-            age: ps_userAge,
-            gender: ps_userGender,
-            ageVisible: ps_userAgeVisible,
-            genderVisible:ps_userGenderVisible,
-            imgUrl: ps_userImage,
-            selfIntroduction: ps_userIntroduce,
+        
+        const fileData = new FormData();
+        console.log(ps_userImageSend);
+        fileData.append('image_profile', ps_userImageSend);
+
+        let userProfileUploaded = "";
+        axios({
+            url: `${uploadImageUrl}profile`,
+            method: 'POST',
+            data: fileData,
+            headers:{
+                'Content-Type': 'multipart/form-data',
+            },
         })
         .then((res) => {
-            console.log(res);
-            alert("설정을 변경했습니다.");
-            //window.location.href = "/main";
+            userProfileUploaded = res.data[0]
         })
         .catch((res) => {
             if(res.response.status === 401){//access token이 만료된 경우이다.
@@ -98,9 +104,35 @@ const ProfileSetting = ({refreshAccessToken}) => {
             }
             else{
                 console.log(res);
-                alert("문제가 발생했습니다.");
+                alert("이미지 처리에 실패했습니다.");
             }
-        })
+        });
+
+        if(userProfileUploaded !== ""){
+            axios.post(submitProfileSettingUrl,{
+                nickname: ps_userName,
+                age: ps_userAge,
+                gender: ps_userGender,
+                ageVisible: ps_userAgeVisible,
+                genderVisible:ps_userGenderVisible,
+                imgUrl: userProfileUploaded,
+                selfIntroduction: ps_userIntroduce,
+            })
+            .then((res) => {
+                console.log(res);
+                alert("설정을 변경했습니다.");
+                //window.location.href = "/main";
+            })
+            .catch((res) => {
+                if(res.response.status === 401){//access token이 만료된 경우이다.
+                    refreshAccessToken();
+                }
+                else{
+                    console.log(res);
+                    alert("문제가 발생했습니다.");
+                }
+            });
+        }
     }
 
     //이미지 변경 함수 - ps_nextUserImage를 바꾼다.
@@ -112,6 +144,8 @@ const ProfileSetting = ({refreshAccessToken}) => {
         reader.onload = (imageData) => {
             setPs_UserImage(imageData.target.result);
         }
+
+        setPs_userImage(event.target.files[0]);//파일 자체를 집어넣는다.
     };
 
     //값 변경 함수
@@ -145,15 +179,8 @@ const ProfileSetting = ({refreshAccessToken}) => {
             <div className={Style.Cover}>
                 <div className={Style.MyprofileExample}>
                     <div className={Style.Cover}>
-                        <label
-                            htmlFor='UserProfileImage'>
-                            {
-                                (ps_userImage === undefined || ps_userImage === null)
-                                ? 
-                                <img src={nullImage} className={Style.myprofileImage}/>
-                                :
-                                <img src={ps_userImage} className={Style.myprofileImage}/>
-                            }
+                        <label htmlFor='UserProfileImage'>
+                            <img src={ps_userImage === null ? nullImage : ps_userImage} className={Style.myprofileImage}/>
                         </label>
                         <input 
                             type="file"

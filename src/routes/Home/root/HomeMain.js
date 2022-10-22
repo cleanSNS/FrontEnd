@@ -157,11 +157,15 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       fileData.append(`image_${newPostImages[i].name.split('.')[0]}`, newPostImages[i]);
     }
 
+    for (var pair of fileData.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]);
+    }
+
     let uploadImages = [];
     axios({
       url: `${uploadImageUrl}page`,
       method: 'POST',
-      data: {file: newPostImages},
+      data: fileData,
       headers:{
         'Content-Type': 'multipart/form-data',
       },
