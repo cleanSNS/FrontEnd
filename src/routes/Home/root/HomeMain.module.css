@@ -8,9 +8,9 @@
 .pageCover{
     position: absolute;
     height: 98.7vh;
-    /*min-height: 1100px;*/
+    min-height: 1100px;
     width: 95vw;
-    /*min-width: 1350px;*/
+    min-width: 1350px;
 
     display: grid;
     grid-template-columns: 7fr 3fr;
