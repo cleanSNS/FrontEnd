@@ -55,6 +55,8 @@ const BlockSetting = ({refreshAccessToken}) => {
             .then((res) => {
                 const tmp = [...res.data.data];
                 setAddedUserList(tmp);
+                //이후에 검색했던 리스트도 초기화
+                setSearchedUserList([]);
             })
             .catch((res) => {
                 if(res.response.status === 401){//access token이 만료된 경우이다.
