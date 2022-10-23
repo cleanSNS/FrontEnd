@@ -94,6 +94,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
             const tmp = [...AddedUserList];
             tmp.splice(Number(event.target.value), 1);
             setAddedUserList(tmp);
+            setSearchedUserList([]);//삭제하고 나면 검색된 유저들 초기화
         })
         .catch((res) => {
             if(res.stresponse.statusatus === 401){//access token이 만료된 경우이다.
