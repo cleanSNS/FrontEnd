@@ -137,7 +137,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
         axios.get(searchUserUrl + userInput)
         .then((res) => {
             const tmp = [...res.data.data]
-            const withoutMe = tmp.map((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다.
+            const withoutMe = tmp.filter((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다.
             setSearchedUserList(withoutMe);
         })
         .catch((res) => {
