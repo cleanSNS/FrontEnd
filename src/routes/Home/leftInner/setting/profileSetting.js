@@ -1,13 +1,11 @@
 import {useState, useEffect} from 'react';
 import Style from './profileSetting.module.css';
-import nullImage from '../../root/anonymous.png';
 import {
     getcurrentProfileUrl,
     submitProfileSettingUrl,
     uploadImageUrl,
 } from '../../../../apiUrl';
 import axios from 'axios';
-import { ActivationState } from '@stomp/stompjs';
 
 const ProfileSetting = ({refreshAccessToken}) => {
     //api에 보낼 내용 + input에 반영해야하므로 useState로 선언
@@ -182,7 +180,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
                 <div className={Style.MyprofileExample}>
                     <div className={Style.Cover}>
                         <label htmlFor='UserProfileImage'>
-                            <img src={ps_userImage === null ? nullImage : ps_userImage} className={Style.myprofileImage}/>
+                            <img src={ps_userImage} className={Style.myprofileImage}/>
                         </label>
                         <input 
                             type="file"
