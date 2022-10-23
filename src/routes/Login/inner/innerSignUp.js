@@ -200,6 +200,7 @@ const SignUp = ({login, toLoginPage}) => {
                     </div>
                     <div className={Style.Cover}>
                         <button
+                            type="button"
                             className={Style.emailButton}
                             onClick={emailSubmitHandler}>
                             인증
