@@ -7,8 +7,8 @@
 /*전체 커버*/
 .pageCover{
     position: absolute;
-    height: 98.7vh;
-    min-height: 1100px;
+    height: 98vh;
+    min-height: 900px;
     width: 95vw;
     min-width: 1350px;
 
