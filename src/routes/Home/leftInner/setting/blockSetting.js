@@ -172,7 +172,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
                     onChange={userInputChangeHandler}
                 />
             </div>
-            <div className={Style.Cover}>
+            <div className={Style.Cover} style={{overflow: "auto"}}>
                 <div className={Style.userListArea}>
                     {
                         searchedUserList.map((person, index) => (
@@ -193,7 +193,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
                     }
                 </div>
             </div>
-            <div className={Style.Cover}>
+            <div className={Style.Cover} style={{overflow: "auto"}}>
                 <div className={Style.userListArea}>
                     {
                         AddedUserList.map((person, index) => (

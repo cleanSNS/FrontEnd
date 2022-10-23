@@ -48,7 +48,6 @@
 
 /*검색된 유저들이 뜨는 공간*/
 .userListArea{
-  overflow: auto;
   width: 100%;
   height: 100%;
 }
