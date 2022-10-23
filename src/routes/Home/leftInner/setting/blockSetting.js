@@ -12,7 +12,7 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const BlockSetting = ({refreshAccessToken}) => {
+const BlockSetting = ({refreshAccessToken, userId}) => {
     const [userInput, setUserInput] = useState("");
     const [searchedUserList, setSearchedUserList] = useState([]);//검색된 사람들
     const [AddedUserList, setAddedUserList] = useState([]);//차단된 사람들
@@ -137,7 +137,8 @@ const BlockSetting = ({refreshAccessToken}) => {
         axios.get(searchUserUrl + userInput)
         .then((res) => {
             const tmp = [...res.data.data]
-            setSearchedUserList(tmp);
+            const withoutMe = tmp.map((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다.
+            setSearchedUserList(withoutMe);
         })
         .catch((res) => {
             if(res.response.status === 401){//access token이 만료된 경우이다.
