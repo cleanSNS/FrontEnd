@@ -158,6 +158,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
             .then((res) => {
                 const tmp = [...res.data.data];
                 setAddedUserList(tmp);
+                setSearchedUserList([]);
             })
             .catch((res) => {
                 if(res.response.status === 401){//access token이 만료된 경우이다.
@@ -195,6 +196,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
             const tmp = [...AddedUserList];
             tmp.splice(Number(event.target.value), 1);
             setAddedUserList(tmp);
+            setSearchedUserList([]);
         })
         .catch((res) => {
             if(res.response.status === 401){//access token이 만료된 경우이다.
