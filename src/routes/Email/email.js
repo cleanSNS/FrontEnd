@@ -7,6 +7,8 @@ import axios from 'axios';
 
 const Email = ({authInfo}) => {
   useEffect(() => {//한 번만 실행한다.
+    if(authInfo === {}) return;//비어있으면 그냥 종료한다.
+    
     axios.post(`${emailAuthUrl}email=${authInfo.email}&authToken=${authInfo.authToken}`,{
       email: authInfo.email,
       authToken: authInfo.authToken,
@@ -19,7 +21,7 @@ const Email = ({authInfo}) => {
       console.log(res);
       alert("인증에 문제가 있습니다.");
     })
-  }, []);
+  }, [authInfo]);
 
   return(
     <div className={Style.WholeCover}>
