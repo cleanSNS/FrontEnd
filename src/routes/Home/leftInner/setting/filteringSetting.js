@@ -14,10 +14,11 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const FilteringSetting = ({refreshAccessToken}) => {
+const FilteringSetting = ({refreshAccessToken, userId}) => {
     const [filterAll, setFilterAll] = useState(false);
     const [filterFollower, setFilterFollower] = useState(false);
     const [filterFollowee, setFilterFollowee] = useState(false);
+
     const [userInput, setUserInput] = useState("");
     const [searchedUserList, setSearchedUserList] = useState([]);//검색된 사람들
     const [AddedUserList, setAddedUserList] = useState([]);//예외로 설정된 사람들
@@ -238,7 +239,8 @@ const FilteringSetting = ({refreshAccessToken}) => {
         axios.get(searchUserUrl + userInput)
         .then((res) => {
             const tmp = [...res.data.data]
-            setSearchedUserList(tmp);
+            const withoutMe = tmp.filter((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다.
+            setSearchedUserList(withoutMe);
         })
         .catch((res) => {
             if(res.response.status === 401){//access token이 만료된 경우이다.
@@ -333,7 +335,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
                     <div className={Style.Cover}>
                         <div className={Style.userListArea}>
                             {
-                                searchedUserList.map((person, index) => {
+                                searchedUserList.map((person, index) => (
                                     <div className={Style.userArea} key={index} style={{backgroundColor: "white"}}>
                                         <div className={Style.userdetail}>
                                             <div className={Style.userImageArea}>
@@ -347,14 +349,14 @@ const FilteringSetting = ({refreshAccessToken}) => {
                                             </div>
                                         </div>
                                     </div>
-                                })
+                                ))
                             }
                         </div>
                     </div>
                     <div className={Style.Cover}>
                         <div className={Style.userListArea}>
                             {
-                                AddedUserList.map((person, index) => {
+                                AddedUserList.map((person, index) => (
                                     <div className={Style.userArea} key={index} style={{backgroundColor: "#F4DEDE"}}>
                                         <div className={Style.userdetail}>
                                             <div className={Style.userImageArea}>
@@ -368,7 +370,7 @@ const FilteringSetting = ({refreshAccessToken}) => {
                                             </div>
                                         </div>
                                     </div>
-                                })
+                                ))
                             }
                         </div>
                     </div>
