@@ -1,0 +1,20 @@
+.WholeCover{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 10px solid #F4DEDE;
+  border-radius: 0.5rem;
+  box-shadow: 3px 3px 10px lightgray;
+  width: 500px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.comment{
+  margin: 0;
+  text-align: center;
+  width: 100%;
+}
