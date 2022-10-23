@@ -4,7 +4,7 @@ import addImage from '../../root/tagImages/add.png';
 
 const HashtagList = ({deleteTag, newPostHashtag}) => {
     return (
-        <div>
+        <div style={{width: "100%", height: "100%"}}>
             {
                 newPostHashtag.map((data, index) =>(
                     <button className={Style.singleHashTag} onClick={deleteTag} key={index} value={index}>
@@ -18,7 +18,7 @@ const HashtagList = ({deleteTag, newPostHashtag}) => {
 
 const ImageList = ({deleteImage, renderedNewPostImages}) => {
     return (
-        <div>
+        <div style={{width: "100%", height: "100%"}}>
             {
                 renderedNewPostImages.map((data, index) =>(
                     <img className={Style.singlepicture} src={data} key={index} id={index} onClick={deleteImage} />
@@ -165,7 +165,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                 </div>
             </div>
             {/* 올린 이미지 미리 보기 영역 */}
-            <div className={Style.ListArea}>
+            <div className={Style.ListArea} style={{overFlowX: "auto"}}>
                 <ImageList deleteImage={deleteImage} renderedNewPostImages={renderedNewPostImages} />
             </div>
             {/* hashtag label 영역 */}
@@ -178,7 +178,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                 className={Style.hashtagInput}
             />
             {/* hashtag list 영역 */}
-            <div className={Style.ListArea}>
+            <div className={Style.ListArea} style={{overflowY: "auto"}}>
                 <HashtagList deleteTag={deleteTag} newPostHashtag={newPostHashtag}/>
             </div>
             {/* word label 영역 */}
