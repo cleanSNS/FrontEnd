@@ -8,11 +8,8 @@ import axios from 'axios';
 const Email = ({authInfo}) => {
   useEffect(() => {//한 번만 실행한다.
     if(authInfo === {}) return;//비어있으면 그냥 종료한다.
-    
-    axios.post(`${emailAuthUrl}email=${authInfo.email}&authToken=${authInfo.authToken}`,{
-      email: authInfo.email,
-      authToken: authInfo.authToken,
-    })
+
+    axios.get(`${emailAuthUrl}email=${authInfo.email}&authToken=${authInfo.authToken}`)
     .then((res) => {
       alert("정상적으로 인증되었습니다.");
       console.log("인증이 정상적으로 되었습니다.");
