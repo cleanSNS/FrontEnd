@@ -38,7 +38,7 @@ const SingleFriend = ({data, setChosenFriendList, chosenFriendList, addStyle}) =
     );
 };
 
-const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId}) => {
+const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingTriger}) => {
     const [friendSearchInput, setFriendSearchInput] = useState("");//친구 검색용
     const [chattingRoomNameInput, setChattingRoomNameInput] = useState("");//채팅방 이름 입력
     const [outputFriendList, setOutputFriendList] = useState([]);//실제로 출력할 친구 리스트
@@ -144,6 +144,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId}) => {
         })
         .then((res) => {
             setLeftBookState(`chat/${res.data.data.chatroomId}`);
+            setChattingTriger(true);
         })
         .catch((res) => {
             if(res.response.status === 401){

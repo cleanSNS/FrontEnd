@@ -105,7 +105,6 @@ const BlockSetting = ({refreshAccessToken}) => {
                 //window.location.href="/main"; 
             }
         })
-
     };
 
     //유저 추가 버튼 마우스 올렸을 때 이미지 스타일 변경 Handler
