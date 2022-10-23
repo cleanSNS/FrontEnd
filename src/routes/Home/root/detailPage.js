@@ -1,7 +1,5 @@
 //가운데에 띄우는 화면
 import Style from './detailPage.module.css';
-import moreStuff from './moreStuff.png';
-import reportBtn from './warning.png';
 import heartImg from './heart_outline.png';
 import heartImgFill from './heart_fill.png';
 import leftArrow from './caret_left.png';
