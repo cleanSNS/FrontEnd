@@ -325,10 +325,12 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     if(noticeEventSource === null) return;
     noticeEventSource.addEventListener("sse", function (event) {
       const data = JSON.parse(event.data);
-      console.log(data.notificationCount);
-      console.log(data.chatCount);
-      setNoticeCount(data.notificationCount);
-      setChatCount(data.chatCount);
+      if(data.notificationCount !== undefined){//명시되어있는 경우만 변경
+        setNoticeCount(data.notificationCount);
+      }
+      if(data.chatCount !== undefined){//명시되어있는 경우만 변경
+        setChatCount(data.chatCount);
+      }
     });
   }, [noticeCount]);
 
