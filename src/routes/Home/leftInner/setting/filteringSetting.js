@@ -246,7 +246,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
             //이제 검색된 리스트에서 기존에 추가되어있던 유저들은 검색되지 않아야한다.
             const JSONWithoutMeList = withoutMe.map(d => JSON.stringify(d));
             const JSONAlreadyAddedList = AddedUserList.map(d => JSON.stringify(d));
-            const JSONFriendList = JSONWithoutMeList.filter(x => JSONAlreadyAddedList.includes(x));
+            const JSONFriendList = JSONWithoutMeList.filter(x => !JSONAlreadyAddedList.includes(x));
             setSearchedUserList(JSONFriendList.map(d => JSON.parse(d)));
         })
         .catch((res) => {
