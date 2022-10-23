@@ -241,8 +241,13 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         axios.get(searchUserUrl + userInput)
         .then((res) => {
             const tmp = [...res.data.data]
-            const withoutMe = tmp.filter((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다.
-            setSearchedUserList(withoutMe);
+            const withoutMe = tmp.filter((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다. 내가 없는 검색된 리스트
+
+            //이제 검색된 리스트에서 기존에 추가되어있던 유저들은 검색되지 않아야한다.
+            const JSONWithoutMeList = withoutMe.map(d => JSON.stringify(d));
+            const JSONAlreadyAddedList = AddedUserList.map(d => JSON.stringify(d));
+            const JSONFriendList = JSONWithoutMeList.filter(x => JSONAlreadyAddedList.includes(x));
+            setSearchedUserList(JSONFriendList.map(d => JSON.parse(d)));
         })
         .catch((res) => {
             if(res.response.status === 401){//access token이 만료된 경우이다.
