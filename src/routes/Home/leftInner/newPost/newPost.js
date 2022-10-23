@@ -165,7 +165,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                 </div>
             </div>
             {/* 올린 이미지 미리 보기 영역 */}
-            <div className={Style.ListArea} style={{overFlowX: "auto"}}>
+            <div className={Style.ListArea} style={{overflow: "auto"}}>
                 <ImageList deleteImage={deleteImage} renderedNewPostImages={renderedNewPostImages} />
             </div>
             {/* hashtag label 영역 */}
@@ -178,7 +178,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                 className={Style.hashtagInput}
             />
             {/* hashtag list 영역 */}
-            <div className={Style.ListArea} style={{overflowY: "auto"}}>
+            <div className={Style.ListArea} style={{overflow: "auto"}}>
                 <HashtagList deleteTag={deleteTag} newPostHashtag={newPostHashtag}/>
             </div>
             {/* word label 영역 */}
