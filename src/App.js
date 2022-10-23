@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
+import Email from "./routes/Email/email";
 import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl, getNoticeNumber, getMyUserIdUrl } from './apiUrl';
 axios.defaults.withCredentials = true;
 
@@ -133,10 +134,27 @@ function App() {
   };
   useEffect(socialLogin, []);
 
+  //이메일 인증을 위해 페이지로 들어온 것인지 여부를 확인
+  const [authInfo, setAuthInfo] = useState({});
+  const emailCheck = () => {
+    const params = new URL(window.location.href).searchParams;
+    const email = params.get("email");
+    const authToken = params.get("authToken");
+    if(email !== null || authToken !== null){//이메일 인증 중이라면 넘겨줄 정보를 세팅하고, email로 바꿔준다.
+      setAuthInfo({
+        email: email,
+        authToken: authToken,
+      });
+      setIsLogin("email");
+    }
+  };
+  useEffect(emailCheck, []);
+
   return (
     <div>
       {isLogin === "login" ? <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken} noticeEventSource={noticeEventSource} userId={userId}/> : null}
       {isLogin === "logout" ? <Login login={loginFunc}/> : null}
+      {isLogin === "email" ? <Email authInfo={authInfo} /> : null}
       <button type="button" onClick={(event) => {setIsLogin("login")}}>관리자 버튼</button>{/* 나중에 삭제해야함 */}
     </div>
   );

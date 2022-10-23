@@ -32,6 +32,8 @@ export const findPWUrl = `${apiUrl}/user/mypage/password/reset`;
 //access 토큰 재발급 Url
 export const refreshNewAccessTokenUrl = `${apiUrl}/user/auth/refresh`;
 
+//이메일 인증 Url
+export const emailAuthUrl = `${apiUrl}/user/auth/signup/confirm?`;
 
 /***************************글 관련 URl***********************************/
 //새 글 피드 가져오는 Url
