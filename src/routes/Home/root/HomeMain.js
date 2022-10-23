@@ -324,8 +324,9 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   useEffect(() => {
     if(noticeEventSource === null) return;
     noticeEventSource.addEventListener("sse", function (event) {
-      console.log("notice 개수를 불러오는 SSE가 실행되었습니다.");
       const data = JSON.parse(event.data);
+      console.log(data.notificationCount);
+      console.log(data.chatCount);
       setNoticeCount(data.notificationCount);
       setChatCount(data.chatCount);
     });
