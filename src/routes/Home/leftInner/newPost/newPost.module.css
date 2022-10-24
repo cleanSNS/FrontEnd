@@ -11,11 +11,11 @@
 .pictureArea{/*영역*/
     display: flex;
     align-items: center;
-    height: 200px;
+    height: 180px;
 }
 .picture{/*실제 스타일*/
     position: absolute;
-    height: 200px;
+    height: 180px;
     width: 100%;
     border: 5px dashed rgb(190, 190, 190);
     border-radius: 0.75rem;
