@@ -73,11 +73,11 @@
 /*하나의 해시태그 들어있는 영역*/
 .singleHashTag{
     border: none;
-    background-color: rgb(153, 221, 255);
+    background-color: #F4DEDE;
     margin: 5px;
     padding: 10px;
     border-radius: 0.5rem;
-    box-shadow: 2px 2px 2px rgb(236, 236, 236);
+    box-shadow: 2px 2px 2px rgb(152, 152, 152);
     font-weight: 700;
     cursor: pointer;
 }
