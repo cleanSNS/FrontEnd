@@ -1,5 +1,5 @@
 import Style from './newPost.module.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import addImage from '../../root/tagImages/add.png';
 
 const HashtagList = ({deleteTag, newPostHashtag}) => {
