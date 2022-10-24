@@ -77,10 +77,13 @@ const ProfileSetting = ({refreshAccessToken}) => {
     useEffect(profileSettingPreset, []);
 
     //submit함수 - 2개가 순차적으로 call된다.
-    const [userProfileUploaded, setUserProfileuploaded] = useState("");
+    const [userProfileUploaded, setUserProfileuploaded] = useState(null);
     const profileSettingSubmitHandler = (event) => {//작성필요
         event.preventDefault();
         
+        if(ps_userImageSend === null){//사용자 지정 없이 그냥 제출한 경우
+            setUserProfileuploaded("");
+        }
         const fileData = new FormData();
         console.log(ps_userImageSend);
         fileData.append('file', ps_userImageSend);
@@ -108,7 +111,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
     }
 
     useEffect(() => {
-        if(userProfileUploaded !== ""){//초기상황에 자동종료
+        if(userProfileUploaded !== null){//초기상황에 자동종료
             axios.post(submitProfileSettingUrl,{
                 nickname: ps_userName,
                 age: ps_userAge,
