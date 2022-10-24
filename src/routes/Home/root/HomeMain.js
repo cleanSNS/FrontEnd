@@ -32,6 +32,7 @@ import {
   pageloadHashtagNumUrl,
   uploadImageUrl,
   getChatTriger,
+  presetChatNumber,
 } from "../../../apiUrl";
 import axios from 'axios';
 
@@ -313,7 +314,21 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
           refreshAccessToken();
         }
         else{
-          alert("알림을 불러오지 못했습니다.");
+          alert("알림의 개수를 불러오지 못했습니다.");
+        }
+      })
+    }
+    if(chatCount === -1){//초기상태에서만 이 함수를 이용한다.
+      axios.get(presetChatNumber)
+      .then((res) => {
+        setChatCount(res.data.data.count);
+      })
+      .catch((res) => {
+        if(res.response.status === 401){
+          refreshAccessToken();
+        }
+        else{
+          alert("채팅 알림의 개수를 불러오지 못했습니다.");
         }
       })
     }

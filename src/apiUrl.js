@@ -188,5 +188,8 @@ export const deleteChattingRoomUrl = `${apiUrl}/chat/chatroom`;
 //읽지 않은 알림 수 조회 SSE용
 export const getChatTriger = `${apiUrl}/subscribe/chat`;
 
+//채팅 전채 개수를 불러오는 Url - 초기값용
+export const presetChatNumber = `${apiUrl}/chat/count`;
+
 /********************************이미지 처리 관련********************************/
 export const uploadImageUrl = `${apiUrl}/upload?category=`;

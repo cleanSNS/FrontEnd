@@ -8,10 +8,14 @@ import {
     deleteChattingRoomUrl,
 } from '../../../../apiUrl';
 
-const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, presetChattingRoomList, leftBookState}) => {
+const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, gettingChattingRoomList, leftBookState, searched, setSearched}) => {
     //click Handler
     const chatClickHandler = () => {
         setLeftBookState(`chat/${data.chatroomId}`);
+        if(searched){
+            gettingChattingRoomList();//검색된 상태면 다시 채팅방 리스트를 불러온다.
+            setSearched(false);
+        }
     };
 
     //채팅방 닫기 클릭 handler
@@ -23,7 +27,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, presetC
                 if(leftBookState === `chat/${data.chatroomId}`){//나간 방에 들어와 있는 상태라면 나가야한다.
                     setLeftBookState("page");//다른 화면으로 강제 전환시킨다.
                 }
-                presetChattingRoomList();//채팅방 다시 로드
+                gettingChattingRoomList();//채팅방 다시 로드
             })
             .catch((res) => {
                 if(res.response.status === 401){
@@ -91,49 +95,45 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, presetC
 const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBookState, chattingTriger, setChattingTriger}) => {
     const [chatSearchInput, setChatSearchInput] = useState("");//검색창에 입력된 정보
     const [chattingRoomList, setChattingRoomList] = useState([]);//채팅방들의 정보를 가진 리스트
+    const [searched, setSearched] = useState(false);//채팅방이 검색된 상태인지 알려주는 변수
 
     //채팅방 검색 input change Handler
     const chatSearchInputChangeHandler = (event) => {
         setChatSearchInput(event.target.value);
+        if(searched){
+            gettingChattingRoomList();//검색된 상태면 다시 채팅방 리스트를 불러온다.
+            setSearched(false);
+        }
+    };
+
+    const gettingChattingRoomList = () => {
+        axios.get(getChattingRoomListUrl)
+        .then((res) => {
+            const tmp = [...res.data.data];
+            setChattingRoomList(tmp);
+            setChattingTriger(false);
+        })
+        .catch((res) => {
+            if(res.response.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                alert("채팅방을 불러오지 못했습니다.");
+            }
+        });
     };
 
     /*****************채팅창 불러오기******************/
-    const presetChattingRoomList = () => {
+    useEffect(() => {
         if(rightBookState === "chat"){//오른쪽이 chat일 때만 실행
-            axios.get(getChattingRoomListUrl)
-            .then((res) => {
-                const tmp = [...res.data.data];
-                setChattingRoomList(tmp);
-            })
-            .catch((res) => {
-                if(res.response.status === 401){
-                    refreshAccessToken();
-                }
-                else{
-                    alert("채팅방을 불러오지 못했습니다.");
-                }
-            })
+            gettingChattingRoomList();
         }
-    };
-    useEffect(presetChattingRoomList, [rightBookState]);
+    }, [rightBookState]);//초기 설정
 
 
     useEffect(() => {
         if(chattingTriger){//트리거가 발생한 순간에만 로딩
-            axios.get(getChattingRoomListUrl)
-            .then((res) => {
-                const tmp = [...res.data.data];
-                setChattingRoomList(tmp);
-                setChattingTriger(false);
-            })
-            .catch((res) => {
-                if(res.response.status === 401){
-                    refreshAccessToken();
-                }
-                else{
-                    alert("채팅방을 불러오지 못했습니다.");
-                }
-            });
+            agettingChattingRoomList();
         }
     }, [chattingTriger]);
 
@@ -142,11 +142,22 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
         setLeftBookState("makeNewC");
     };
 
+    //채팅방 찾는 handler
+    const findChattingRoomHandler = (event) => {
+        event.preventDefault();
+        if(chatSearchInput === "") return; //검색어가 비어있으면 아무 일도 일어나지 않는다.
+
+        //채팅방 검색 기준은 채팅방의 이름이다.
+        const searchedList = chattingRoomList.filter(d => d.name.include(chatSearchInput))
+        setChattingRoomList(searchedList);
+        setSearched(true);
+    };
+
     return(
         <div className={Style.wholeCover}>
             <div className={Style.chatList}>
                 <div className={Style.searchBarArea}>
-                    <form className={Style.flexBox}>
+                    <form className={Style.flexBox} onSubmit={findChattingRoomHandler}>
                         <input 
                             className={Style.searchBar}
                             placeholder="채팅방을 검색하세요."
@@ -160,7 +171,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
                 </div>
                 {
                     chattingRoomList.map((data, index) => (
-                        <SingleChattingRoom key={index} data={data} setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken} presetChattingRoomList={presetChattingRoomList} leftBookState={leftBookState} />
+                        <SingleChattingRoom key={index} data={data} setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken} gettingChattingRoomList={gettingChattingRoomList} leftBookState={leftBookState} searched={searched} setSearched={setSearched} />
                     ))
                 }
             </div>
