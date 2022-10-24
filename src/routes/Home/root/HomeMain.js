@@ -116,7 +116,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         setIsSubmitted(false);
         setUserSearch("");
         setSearchedList([]);
-      }, 1000);
+      }, 500);
     }
     else{
       console.log("지웁니다.");
