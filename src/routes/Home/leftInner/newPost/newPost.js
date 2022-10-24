@@ -159,6 +159,8 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         setNewPostImages(tmp2);
     };
 
+    console.log(newPostImages);//
+
     return(
         <form className={Style.WholeCover} onSubmit={uploadNewPostHandler}>
             {/* 드래그 앤 드롭 영역 */}
