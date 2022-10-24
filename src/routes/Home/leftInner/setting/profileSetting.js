@@ -83,6 +83,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
         
         if(ps_userImageSend === null){//사용자 지정 없이 그냥 제출한 경우
             setUserProfileuploaded("");
+            return;
         }
         const fileData = new FormData();
         console.log(ps_userImageSend);
