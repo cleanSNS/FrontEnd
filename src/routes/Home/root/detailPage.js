@@ -392,9 +392,9 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                 <div className={Style.CommentBox} style={{width:"100%"}}>
                     <div className={Style.CommentProfileArea}>
                         <img src={data.userDto.imgUrl} className={Style.UserImage} onClick={commentUserClickHandler}/>
-                        <pre className={Style.UserNickname} onClick={commentUserClickHandler}>{data.userDto.nickname}</pre>
+                        <p className={Style.UserNickname} onClick={commentUserClickHandler}>{data.userDto.nickname}</p>
                     </div>
-                    <p className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</p>
+                    <pre className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</pre>
                     <div className={Style.likeTimeArea}>
                         <div className={Style.cover}>
                             <img src={CIsLiked ? heartImgFill : heartImg} className={Style.buttonImg} onClick={CommentLikeClickHandler}/>
