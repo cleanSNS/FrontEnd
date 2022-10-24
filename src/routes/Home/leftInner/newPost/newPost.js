@@ -1,5 +1,5 @@
 import Style from './newPost.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import addImage from '../../root/tagImages/add.png';
 
 const HashtagList = ({deleteTag, newPostHashtag}) => {
@@ -30,6 +30,13 @@ const ImageList = ({deleteImage, renderedNewPostImages}) => {
 
 const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostImages, setNewPostImages, newPostHashtag, setNewPostHashtag, newPostContent, setNewPostContent, uploadNewPostHandler }) => {
     const [hashtag, setHashtag] = useState("");//임시로 입력되는 값 변경하는 State.
+
+    useEffect(() => {
+        setRenderedNewPostImages([]);
+        setNewPostImages([]);
+        setNewPostHashtag([]);
+        setNewPostContent("");
+    }, []);//처음 로드되면 이미지 파일, 해시태그, 글을 초기화 하는 함수
 
     //글 내용 변경 함수
     const contentHandler = (event) => {
@@ -118,9 +125,6 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         imageUploadArea.style.border="5px dashed rgb(190, 190, 190)";
     };
 
-    //이미지 미리 보기 화면 바꿔주는 함수
-
-
     //hashtag영역 바꿔주는 함수
     const hashtagHandler = (event) => {
         event.preventDefault();
@@ -163,8 +167,6 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         tmp2.splice(Number(event.target.id), 1);
         setNewPostImages(tmp2);
     };
-
-    console.log(newPostImages);//
 
     return(
         <form className={Style.WholeCover} onSubmit={uploadNewPostHandler}>
