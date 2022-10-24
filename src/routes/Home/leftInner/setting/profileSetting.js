@@ -87,6 +87,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
         btn.innerHTML = 'Submitting';
         btn.style.color = 'black';
         btn.style.backgroundColor = 'gray';
+        btn.style.cursor = 'wait';
         btn.disabled = true;
     };
 
@@ -141,6 +142,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
                 btn.innerHTML = '수정';
                 btn.style.color = 'white';
                 btn.style.backgroundColor = '#F4DEDE';
+                btn.style.cursor = 'pointer';
                 btn.disabled = false;
             })
             .catch((res) => {
