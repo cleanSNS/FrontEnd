@@ -76,11 +76,22 @@ const ProfileSetting = ({refreshAccessToken}) => {
     };
     useEffect(profileSettingPreset, []);
 
-    //submit함수 - 2개가 순차적으로 call된다.
+    //submit함수 - 3개가 순차적으로 call된다. 1.제출 클릭했으므로 스타일 변경 / 이미지 처리 / 실제 제출 후 스타일 변경
     const [userProfileUploaded, setUserProfileuploaded] = useState(null);
+    const [submitClicked, setSubmitClicked] = useState(false);//제출 클릭을 기억한다.
+
     const profileSettingSubmitHandler = (event) => {//작성필요
         event.preventDefault();
-        
+        setSubmitClicked(true);
+        const btn = document.querySelector('#profileSubmitBtn');
+        btn.innerHTML = 'Submitting';
+        btn.style.color = 'black';
+        btn.style.backgroundColor = 'gray';
+        btn.disabled = true;
+    };
+
+    useEffect(() => {
+        if(!submitClicked) return;//초기상황에 자동종료
         if(ps_userImageSend === null){//사용자 지정 없이 그냥 제출한 경우
             setUserProfileuploaded(ps_userImage);//지금꺼 그대로 적용
             return;
@@ -109,7 +120,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
                 alert("이미지 처리에 실패했습니다.");
             }
         });
-    }
+    }, [submitClicked]);
 
     useEffect(() => {
         if(userProfileUploaded !== null){//초기상황에 자동종료
@@ -125,7 +136,12 @@ const ProfileSetting = ({refreshAccessToken}) => {
             .then((res) => {
                 console.log(res);
                 alert("설정을 변경했습니다.");
-                //window.location.href = "/main";
+                setSubmitClicked(false);
+                const btn = document.querySelector('#profileSubmitBtn');
+                btn.innerHTML = '수정';
+                btn.style.color = 'white';
+                btn.style.backgroundColor = '#F4DEDE';
+                btn.disabled = false;
             })
             .catch((res) => {
                 if(res.response.status === 401){//access token이 만료된 경우이다.
@@ -294,6 +310,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
             <div className={Style.Cover}>
                 <button 
                     className={Style.submitButton}
+                    id="profileSubmitBtn"
                     type="submit">
                     수정
                 </button>
