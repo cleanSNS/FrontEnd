@@ -722,10 +722,13 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                         </div>
                     </div>
                     {/* 버튼공간 */}
-                    <div className={Style.cover}>
-                        <img src={leftArrow} className={Style.arrowButton} onClick={leftArrowClickHandler}/>
-                        <img src={rightArrow} className={Style.arrowButton} onClick={rightArrowClickHandler}/>
-                    </div>
+                    {
+                        postedImageList.length === 1 ? null :
+                        <div className={Style.cover}>
+                            <img src={leftArrow} className={Style.arrowButton} onClick={leftArrowClickHandler}/>
+                            <img src={rightArrow} className={Style.arrowButton} onClick={rightArrowClickHandler}/>
+                        </div>
+                    }
                 </div>
                 <div className={Style.ScriptArea}>
                     {/* 글 영역 */}
