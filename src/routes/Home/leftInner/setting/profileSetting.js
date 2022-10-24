@@ -82,7 +82,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
         event.preventDefault();
         
         if(ps_userImageSend === null){//사용자 지정 없이 그냥 제출한 경우
-            setUserProfileuploaded("");
+            setUserProfileuploaded(ps_userImage);//지금꺼 그대로 적용
             return;
         }
         const fileData = new FormData();
