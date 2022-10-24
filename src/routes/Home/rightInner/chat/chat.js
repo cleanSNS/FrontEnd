@@ -77,12 +77,12 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
                 </div>
             }
             <div className={Style.flexBoxcol}>
-                <div className={Style.flexBoxRight}>
+                <div className={Style.flexBoxRight} style={{height: "30%"}}>
                     <img src={deletechattingRoom} onClick={chattingRoomDeleteClickHandler} style={{cursor: "pointer"}}/>
                 </div>
                 <p className={Style.chatName} onClick={chatClickHandler}>{data.name}</p>
                 <p className={Style.lastChat} onClick={chatClickHandler}>{data.lastChat}</p>
-                <div className={Style.flexBoxRight}>
+                <div className={Style.flexBoxRight} style={{height: "20%"}}>
                     {
                         data.uncheckedChatCount === 0 ? null :
                         <p className={Style.chatNumber}>{data.uncheckedChatCount}</p>

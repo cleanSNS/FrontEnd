@@ -54,7 +54,7 @@
     grid-template-rows: 1fr;
     border-bottom: 1px solid gray;
     width: 100%;
-    height: 13%;
+    height: 16%;
 }
 
 .flexBox{
@@ -72,7 +72,6 @@
 
 .flexBoxRight{
     width: 100%;
-    height: 30%;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -134,9 +133,9 @@
 }
 
 .chatNumber{
-    width: 30px;
-    height: 24px;
-    border-radius: 12px;
+    width: 24px;
+    height: 22px;
+    border-radius: 11px;
     background-color: rgba(255, 0, 0, 0.5);
     border: 0;
     margin: 0;
