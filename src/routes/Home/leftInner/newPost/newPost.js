@@ -65,7 +65,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
     const imageDropHandler = (event) => {
         event.preventDefault();
 
-        const inputFile = [...event.dataTransfer?.files];//지금 들어온 파일이다.
+        const inputFile = [...event.dataTransfer.files];//지금 들어온 파일이다.
 
         const renderTmp = [...renderedNewPostImages];
         if(ImageValid(inputFile)){//유효한 파일인 경우 집어넣는다.
@@ -80,6 +80,9 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
             });
             const tmp = [...newPostImages];
             const next = tmp.concat(inputFile);
+            console.log(tmp);
+            console.log(inputFile);
+            console.log(next);
             setNewPostImages(next);//지금 들어온 파일을 파일 그대로 보낼 배열에 넣기
         }
 
