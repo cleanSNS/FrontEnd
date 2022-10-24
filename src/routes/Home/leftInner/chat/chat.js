@@ -113,9 +113,8 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
         if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우(당연히 채팅방 id도 있다.) disconnect하고 지금 생성한 Stomp를 넣어준다.
-            stompClient.disconnect(function(){
-                stompClient.unsubscribe(`/sub/${chattingRoomId}`);
-            });
+            stompClient.unsubscribe(`/sub/${chattingRoomId}`);
+            stompClient.disconnect();
         }
         setChattingRoomId(leftBookState.split('/')[1]);
         setChattingListStartId(987654321);//초기화 필요
