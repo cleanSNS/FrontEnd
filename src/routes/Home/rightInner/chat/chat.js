@@ -13,6 +13,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
     const chatClickHandler = () => {
         setLeftBookState(`chat/${data.chatroomId}`);
         if(searched){
+            console.log("채팅방으로 입장하여 검색 결과를 초기화합니다.");
             gettingChattingRoomList();//검색된 상태면 다시 채팅방 리스트를 불러온다.
             setSearched(false);
         }
@@ -101,6 +102,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
     const chatSearchInputChangeHandler = (event) => {
         setChatSearchInput(event.target.value);
         if(searched){
+            console.log("검색어가 변경 되어 검색 결과를 초기화 합니다.");
             gettingChattingRoomList();//검색된 상태면 다시 채팅방 리스트를 불러온다.
             setSearched(false);
         }
@@ -147,8 +149,13 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
         event.preventDefault();
         if(chatSearchInput === "") return; //검색어가 비어있으면 아무 일도 일어나지 않는다.
 
+        console.log(chattingRoomList);
+        console.log("위 리스트에서 아래 검색어를 검색합니다.");
+        console.log(chatSearchInput);
+
         //채팅방 검색 기준은 채팅방의 이름이다.
-        const searchedList = chattingRoomList.filter(d => d.name.include(chatSearchInput))
+        const searchedList = chattingRoomList.filter(d => d.name.include(chatSearchInput));
+        console.log(searchedList);
         setChattingRoomList(searchedList);
         setSearched(true);
     };
