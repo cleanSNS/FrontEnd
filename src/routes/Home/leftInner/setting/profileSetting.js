@@ -82,6 +82,8 @@ const ProfileSetting = ({refreshAccessToken}) => {
 
     const profileSettingSubmitHandler = (event) => {//작성필요
         event.preventDefault();
+        if(submitClicked) return;//이미 submit중이면 실행하지 않는다.
+        
         setSubmitClicked(true);
         const btn = document.querySelector('#profileSubmitBtn');
         btn.innerHTML = 'Submitting';
