@@ -153,6 +153,10 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         const tmp = [...renderedNewPostImages];
         tmp.splice(Number(event.target.id), 1);
         setRenderedNewPostImages(tmp);
+
+        const tmp2 = [...newPostImages];
+        tmp2.splice(Number(event.target.id), 1);
+        setNewPostImages(tmp2);
     };
 
     return(
