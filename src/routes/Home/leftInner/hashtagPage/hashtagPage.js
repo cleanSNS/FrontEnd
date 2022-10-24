@@ -17,6 +17,7 @@ const LeftHashtagPage = ({leftBookState, setPageId}) => {
   //처음에 해시태그 받는 함수
   const hashTagpreset = () => {
     setHashTag(leftBookState.split('/')[1]);
+    setHashTagPageList([]);
     setHashTagPageStartId(987654321);//초기상태로 전환
     setIsFinished(false);//초기 상태로 전환
   };
