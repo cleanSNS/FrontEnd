@@ -109,17 +109,14 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   };
 
   const dropBoxInactive = () => {//제출이 끝난 것으로 인식한다. 다시 초기 상태로 변환
-    console.log("벗어났습니다.");
-    if(isSubmitted){//검색된 상태면 잠시 후에 실행한다.
+    if(isSubmitted){//검색된 상태면 잠시 후에 실행한다. - 검색되어 화면이 넘어가고, 창을 지우기 위함
       setTimeout(() => {
-        console.log("1초 뒤 지웁니다.");
         setIsSubmitted(false);
         setUserSearch("");
         setSearchedList([]);
       }, 500);
     }
     else{
-      console.log("지웁니다.");
       setIsSubmitted(false);
       setUserSearch("");
       setSearchedList([]);
