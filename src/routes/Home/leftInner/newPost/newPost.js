@@ -78,7 +78,9 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                     setRenderedNewPostImages(renderTmp);//이유는 모르겠으나 이렇게 해야 render가 된다.
                 }
             });
-            setNewPostImages(inputFile);//지금 들어온 파일을 파일 그대로 보낼 배열에 넣기
+            const tmp = [...newPostImages];
+            tmp.concat(inputFile);
+            setNewPostImages(tmp);//지금 들어온 파일을 파일 그대로 보낼 배열에 넣기
         }
 
         //CSS는 반드시 실행된다.
