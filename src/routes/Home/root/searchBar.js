@@ -23,8 +23,7 @@ const SingleSearchList = ({data, clickFunc}) => {
     );
 };
 
-//나중에 a안에 이미지로 변경하기. 그 이미지 스타일도 만들어야함 반응형으로 만들면 좋을듯
-const SearchBar = ({userSearch, hashtagPageNumber, userSearchChangeHandler, userSearchSubmitHandler, isSubmitted, searchedList, searchedUserClickHandler, searchedHashtagClickHandler}) =>{
+const SearchBar = ({userSearch, hashtagPageNumber, userSearchChangeHandler, userSearchSubmitHandler, isSubmitted, searchedList, searchedUserClickHandler, searchedHashtagClickHandler, dropBoxInactive}) =>{
     
     //dropbox를 활성화 하는 함수
     const dropBoxActivate = () => {
@@ -45,6 +44,7 @@ const SearchBar = ({userSearch, hashtagPageNumber, userSearchChangeHandler, user
                 placeholder="검색"
                 value={userSearch}
                 onChange={userSearchChangeHandler}
+                onBlur={dropBoxInactive}
             />
             <div id="searchBarDropBox" className={Style.dropBox}>
                 {

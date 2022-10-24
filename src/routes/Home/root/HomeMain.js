@@ -108,22 +108,22 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     });
   };
 
-  const searchedUserClickHandler = (event) => {
-    event.preventDefault();
-    //제출이 끝난 것으로 인식한다. 다시 초기 상태로 변환 - 아래 3개
+  const dropBoxInactive = () => {//제출이 끝난 것으로 인식한다. 다시 초기 상태로 변환
     setIsSubmitted(false);
     setUserSearch("");
     setSearchedList([]);
+  };
+
+  const searchedUserClickHandler = (event) => {
+    event.preventDefault();
+    dropBoxInactive();
     //이제 좌측 페이지 변경
     setLeftBookState(`pList/${(event.target.id.split('_'))[1]}`);
   };
 
   const searchedHashtagClickHandler = (event) => {
     event.preventDefault();
-    //제출이 끝난 것으로 인식한다. 다시 초기 상태로 변환 - 아래 3개
-    setIsSubmitted(false);
-    setUserSearch("");
-    setSearchedList([]);
+    dropBoxInactive();
     //이제 좌측 페이지 변경
     setLeftBookState(`hashtagPage/${userSearch}`);
   };
@@ -405,7 +405,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         <div className={Style.leftHeader}>
           <Logo preset={resetPage}/>
           <div />
-          <SearchBar userSearch={userSearch} hashtagPageNumber={hashtagPageNumber} userSearchChangeHandler={userSearchChangeHandler} userSearchSubmitHandler={userSearchSubmitHandler} isSubmitted={isSubmitted} searchedList={searchedList} searchedUserClickHandler={searchedUserClickHandler} searchedHashtagClickHandler={searchedHashtagClickHandler}/>
+          <SearchBar userSearch={userSearch} hashtagPageNumber={hashtagPageNumber} userSearchChangeHandler={userSearchChangeHandler} userSearchSubmitHandler={userSearchSubmitHandler} isSubmitted={isSubmitted} searchedList={searchedList} searchedUserClickHandler={searchedUserClickHandler} searchedHashtagClickHandler={searchedHashtagClickHandler} dropBoxInactive={dropBoxInactive}/>
         </div>
       </div>
       {/* 우 상단 - 태그 */}
