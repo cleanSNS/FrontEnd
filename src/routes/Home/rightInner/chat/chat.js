@@ -154,7 +154,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
         console.log(chatSearchInput);
 
         //채팅방 검색 기준은 채팅방의 이름이다.
-        const searchedList = chattingRoomList.filter(d => d.name.include(chatSearchInput));
+        const searchedList = chattingRoomList.filter(d => d.name.includes(chatSearchInput));
         console.log(searchedList);
         setChattingRoomList(searchedList);
         setSearched(true);
