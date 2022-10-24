@@ -359,12 +359,13 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
 
   /*****************채팅 관련********************/
   const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
+  const [chattingRoomId, setChattingRoomId] = useState(-1);//채팅방의 id
 
   useEffect(() => {
     if(!leftBookState.includes('chat')){//leftBookState가 변경되었는데 그 값에 chat이 없는 경우, stompClient를 disconnect하는 작업이 필요하다.
       if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우 disconnect하고 지금 생성한 Stomp를 넣어준다.
         stompClient.disconnect(function(){
-            stompClient.unsubscribe();
+            stompClient.unsubscribe(`/sub/${chattingRoomId}`);
         })
       }
     }
@@ -461,7 +462,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
             <div className={Style.Cover}>
                 {leftBookState === "page" ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setPageId={setPageId} detailPageLikeClick={detailPageLikeClick} setDetailPageLikeClick={setDetailPageLikeClick} setLeftBookState={setLeftBookState}/> : null}
                 {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
-                {leftBookState.includes("chat") ? <LeftChat refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId} stompClient={stompClient} setStompClient={setStompClient}/> : null}
+                {leftBookState.includes("chat") ? <LeftChat chattingRoomId={chattingRoomId} setChattingRoomId={setChattingRoomId} refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId} stompClient={stompClient} setStompClient={setStompClient}/> : null}
                 {leftBookState === "makeNewC" ? <LeftNewChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} userId={userId} setChattingTriger={setChattingTriger}/> : null}
                 {leftBookState.includes("hashtagPage") ? <LeftHashtagPage leftBookState={leftBookState} setPageId={setPageId}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost renderedNewPostImages={renderedNewPostImages} setRenderedNewPostImages={setRenderedNewPostImages} newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}

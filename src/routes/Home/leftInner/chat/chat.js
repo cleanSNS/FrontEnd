@@ -52,8 +52,7 @@ const SingleChat = ({data, setLeftBookState, userId, userAndUserImg, userAndUser
     );
 };
 
-const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient}) => {
-    const [chattingRoomId, setChattingRoomId] = useState(-1);//채팅방의 id
+const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient}) => {
     const [chattingRoomName, setChattingRoomName] = useState("");//채팅방 이름
     const [chattingList, setChattingList] = useState([]);//채팅방의 채팅들
     const [chattingListStartId, setChattingListStartId] = useState(987654321);//채팅방의 채팅을 불러오는 startId
@@ -83,11 +82,6 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
     const socketConnect = () => {
         const socket = new SockJS("https://api.cleanbook.site/ws");
         const tmp = Stomp.over(socket);
-        if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우 disconnect하고 지금 생성한 Stomp를 넣어준다.
-            stompClient.disconnect(function(){
-                stompClient.unsubscribe();
-            })
-        }
         setStompClient(tmp);
     };
 
@@ -118,6 +112,11 @@ const LeftChat = ({refreshAccessToken, leftBookState, setLeftBookState, userId, 
 
     //가장 먼저 채팅방의 아이디를 가져온다.
     const presetChattingRoomId = () => {
+        if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우(당연히 채팅방 id도 있다.) disconnect하고 지금 생성한 Stomp를 넣어준다.
+            stompClient.disconnect(function(){
+                stompClient.unsubscribe(`/sub/${chattingRoomId}`);
+            });
+        }
         setChattingRoomId(leftBookState.split('/')[1]);
         setChattingListStartId(987654321);//초기화 필요
         setUserAndUserImg({});//초기화 필요

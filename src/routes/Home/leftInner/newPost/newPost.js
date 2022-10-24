@@ -87,9 +87,6 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
             });
             const tmp = [...newPostImages];
             const next = tmp.concat(inputFile);
-            console.log(tmp);
-            console.log(inputFile);
-            console.log(next);
             setNewPostImages(next);//지금 들어온 파일을 파일 그대로 보낼 배열에 넣기
         }
 
