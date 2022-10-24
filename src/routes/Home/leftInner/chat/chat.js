@@ -123,6 +123,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         setChattingList([]);//초기화 필요
         SetchattingRoomInfoSet(false);//초기화 필요
         setNoMoreChat(false);
+        document.querySelector("#userChatInput").focus();
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
 
@@ -289,6 +290,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
                     value={userChatInput}
                     onKeyDown={onUserChattingEnterClickHandler}
                     onChange={onUserChattingChangeHandler}
+                    id="userChatInput"
                 />
                 <div className={Style.userChatBtnArea}>
                     <button className={Style.userChatBtn}>제출</button>
