@@ -109,23 +109,35 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   };
 
   const dropBoxInactive = () => {//제출이 끝난 것으로 인식한다. 다시 초기 상태로 변환
-    setIsSubmitted(false);
-    setUserSearch("");
-    setSearchedList([]);
+    console.log("벗어났습니다.");
+    if(isSubmitted){//검색된 상태면 잠시 후에 실행한다.
+      setTimeout(() => {
+        console.log("1초 뒤 지웁니다.");
+        setIsSubmitted(false);
+        setUserSearch("");
+        setSearchedList([]);
+      }, 1000);
+    }
+    else{
+      console.log("지웁니다.");
+      setIsSubmitted(false);
+      setUserSearch("");
+      setSearchedList([]);
+    }
   };
 
   const searchedUserClickHandler = (event) => {
     event.preventDefault();
-    dropBoxInactive();
     //이제 좌측 페이지 변경
     setLeftBookState(`pList/${(event.target.id.split('_'))[1]}`);
+    dropBoxInactive();
   };
 
   const searchedHashtagClickHandler = (event) => {
     event.preventDefault();
-    dropBoxInactive();
     //이제 좌측 페이지 변경
     setLeftBookState(`hashtagPage/${userSearch}`);
+    dropBoxInactive();
   };
 
   /*****************************new Post 관련*********************************/
