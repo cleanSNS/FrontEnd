@@ -4,7 +4,7 @@ import addImage from '../../root/tagImages/add.png';
 
 const HashtagList = ({deleteTag, newPostHashtag}) => {
     return (
-        <div style={{width: "100%", height: "150px"}}>
+        <div style={{width: "100%", height: "100px"}}>
             {
                 newPostHashtag.map((data, index) =>(
                     <button className={Style.singleHashTag} onClick={deleteTag} key={index} value={index}>
