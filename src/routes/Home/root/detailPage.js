@@ -738,7 +738,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                             <p className={Style.UserNickname} onClick={pageUserClickHandler}>{postedPersonNickname}</p>
                         </div>
                         <div className={Style.contentArea}>
-                            <p onClick={changeCommentToPage} className={Style.content}>{postedWord}</p>
+                            <pre onClick={changeCommentToPage} className={Style.content}>{postedWord}</pre>
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
