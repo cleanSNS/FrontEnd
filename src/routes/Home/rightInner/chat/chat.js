@@ -133,7 +133,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
 
     useEffect(() => {
         if(chattingTriger){//트리거가 발생한 순간에만 로딩
-            agettingChattingRoomList();
+            gettingChattingRoomList();
         }
     }, [chattingTriger]);
 
