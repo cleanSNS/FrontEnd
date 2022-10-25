@@ -629,12 +629,38 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     };
 
     //댓글 제출 함수
+    const [commentSubmitClicked, setCommentSubmitClicked] = useState(false);
+
+    const submitAbleAgain = () => {
+        setCommentSubmitClicked(false);
+        const btn = document.querySelector('#CommentSubmitBtn');
+        btn.innerHTML = '게시';
+        btn.style.color = 'white';
+        btn.style.backgroundColor = '#F4DEDE';
+        btn.style.cursor = 'pointer';
+        btn.disabled = false;
+    };
+
     const userCommentSubmitHandler = (event) => {
         event.preventDefault();
+        if(commentSubmitClicked) return;//이미 제출중이면 종료
+
         if(userCommentInput === ""){
             alert("1자 이상의 댓글을 입력해 주세요.");
             return;
         }
+
+        setCommentSubmitClicked(true);
+        const btn = document.querySelector('#CommentSubmitBtn');
+        btn.innerHTML = "제출중";
+        btn.style.color = 'black';
+        btn.style.backgroundColor = 'gray';
+        btn.style.cursor = 'wait';
+        btn.disabled = true;
+    };
+
+    useEffect(() => {
+        if(!commentSubmitClicked) return;
 
         //정보를 바탕으로 댓글 작성
         axios.post(`${newCommentUrl}${pageId}/comment`, {
@@ -649,8 +675,10 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setCommentToWhom(["p", -1, ""]);//댓글 대상 초기화
             presetComment();//댓글 내가 쓴거까지 로드된내용 불러오기
             setIsLastComment(false);//원활하게 다시 호출 되도록 세팅
+            submitAbleAgain();
         })
         .catch((res) => {
+            submitAbleAgain();
             if(res.response.status === 401){
                 refreshAccessToken();
             }
@@ -659,7 +687,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                 alert("댓글을 작성하지 못했습니다.");
             }
         });
-    };
+    }, [commentSubmitClicked]);
 
     /*****************글 영역 - 신고*********************/
     const pageReportClickHandler = () => {
@@ -801,7 +829,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                             <textarea id="userCommentArea" type="text" className={Style.userComment} placeholder="댓글을 입력하세요..." value={userCommentInput} onChange={userCommentInputChangeHandler}/>
                         </div>
                         <div className={Style.cover}>
-                            <button type="submit" className={Style.commentSubmitBtn}>게시</button>
+                            <button id="CommentSubmitBtn" type="submit" className={Style.commentSubmitBtn}>게시</button>
                         </div>
                     </form>
                 </div>
