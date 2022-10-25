@@ -399,8 +399,14 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                         <div className={Style.cover}>
                             <img src={CIsLiked ? heartImgFill : heartImg} className={Style.buttonImg} onClick={CommentLikeClickHandler}/>
                             <p className={Style.likeandCommentCount} style={{cursor: "default"}}>{`좋아요 ${CLikeCount}개`}</p>
-                            <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
-                            <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>답글 더보기</p>
+                            {
+                                data.nestedCommentCount === 0 ?
+                                null : <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
+                            }
+                            {
+                                data.nestedCommentCount === 0 ?
+                                null : <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>{`답글 ${data.nestedCommentCount}개`}</p>
+                            }
                             <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                             {
                                 userId === data.userDto.userId ?
