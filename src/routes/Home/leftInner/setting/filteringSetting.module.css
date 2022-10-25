@@ -12,7 +12,7 @@
   width: 90%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 2fr;
 }
 
 /*기본적인 필터링 설정을 위한 CSS*/
@@ -25,7 +25,7 @@
   width: 50%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
 }
 
 /*설정 영역 label과 input을 분리*/
