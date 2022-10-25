@@ -129,9 +129,6 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
                 <div className={Style.flexBoxStart}>
                     <p className={Style.profileNickname} onClick={userProfileClickHandler}>{data.pageDto.userDto.nickname}</p>
                 </div>
-                <div className={Style.flexBoxCenter}>
-                    <img src={moreStuff} className={Style.profileSetting} />
-                </div>
             </div>
             {/* 이미지 영역 */}
             <ImageArea imgList={data.imgUrlList} pageIndex={index} pageClickFunc={pageClickFunc}/>
