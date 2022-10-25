@@ -78,7 +78,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
 
         setSubmitClicked(true);
         const btn = document.querySelector('#profileSubmitBtn');
-        btn.innerHTML = 'Submitting';
+        btn.innerHTML = '제출중';
         btn.style.color = 'black';
         btn.style.backgroundColor = 'gray';
         btn.style.cursor = 'wait';
