@@ -55,7 +55,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
 
     console.log(noticeSubmitClicked);
 
-    useState(() => {
+    useEffect(() => {
         if(!noticeSubmitClicked) return;
         axios.post(submitCurrentNoticeSettingUrl,{
             notificationFollow: notificationFollow,
