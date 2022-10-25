@@ -72,6 +72,16 @@ const ProfileSetting = ({refreshAccessToken}) => {
     const [userProfileUploaded, setUserProfileuploaded] = useState(null);
     const [profileSubmitClicked, setProfileSubmitClicked] = useState(false);//제출 클릭을 기억한다.
 
+    const submitAbleAgain = () => {
+        setProfileSubmitClicked(false);
+        const btn = document.querySelector('#profileSubmitBtn');
+        btn.innerHTML = '수정';
+        btn.style.color = 'white';
+        btn.style.backgroundColor = '#F4DEDE';
+        btn.style.cursor = 'pointer';
+        btn.disabled = false;
+    };
+
     const profileSettingSubmitHandler = (event) => {//작성필요
         event.preventDefault();
         if(profileSubmitClicked) return;//이미 submit중이면 실행하지 않는다.
@@ -136,8 +146,10 @@ const ProfileSetting = ({refreshAccessToken}) => {
                 //아래는 초기화
                 setPs_userImageSend(null);
                 setUserProfileuploaded(null);
+                submitAbleAgain();//다시 제출 가능 상태로
             })
             .catch((res) => {
+                submitAbleAgain();//다시 제출 가능 상태로
                 if(res.response.status === 401){//access token이 만료된 경우이다.
                     refreshAccessToken();
                 }
@@ -146,14 +158,6 @@ const ProfileSetting = ({refreshAccessToken}) => {
                     alert("문제가 발생했습니다.");
                 }
             });
-
-            setProfileSubmitClicked(false);
-            const btn = document.querySelector('#profileSubmitBtn');
-            btn.innerHTML = '수정';
-            btn.style.color = 'white';
-            btn.style.backgroundColor = '#F4DEDE';
-            btn.style.cursor = 'pointer';
-            btn.disabled = false;
         }
     }, [userProfileUploaded]);
 
