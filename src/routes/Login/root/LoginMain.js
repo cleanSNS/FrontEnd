@@ -23,14 +23,16 @@ const Login = ({login}) => {
         <div>
             <div className={Style.Cover}>
                 {/*스타일을 위한 부분 */}
-                <div className={Style.circle1} />
-                <div className={Style.circle2} />
-                <div className={Style.circle3} />
-                <div className={Style.circle4} />
-                <div className={Style.spring1} />
-                <div className={Style.spring2} />
-                <div className={Style.spring3} />
-                <div className={Style.spring4} />
+                <div>
+                    <div className={Style.circle1} />
+                    <div className={Style.circle2} />
+                    <div className={Style.circle3} />
+                    <div className={Style.circle4} />
+                    <div className={Style.spring1} />
+                    <div className={Style.spring2} />
+                    <div className={Style.spring3} />
+                    <div className={Style.spring4} />
+                </div>
                 {/* 실제 의미있는 부분 */}
                 <div className={Style.book}>
                     <Logo preset={toLoginPage}/>

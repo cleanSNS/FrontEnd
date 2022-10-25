@@ -4,8 +4,10 @@
     top: 50%;
     transform: translate(-50%, -50%);
 
-    height: 800px;
-    width: 650px;
+    height: 75vh;
+    min-height: 600px;
+    width: 85vw;
+    min-width: 500px;
     padding: 10px;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
