@@ -49,7 +49,7 @@ const calculateTimeFrom = (calTime) => {
 };
 
 //대댓글 부분
-const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, refreshAccessToken, pageId, leftBookChangeHandler, setToggle, setCommentOfCommentList, setCommentOfCommentStartId, setIsLastCommentOfComment}) => {
+const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, groupId, refreshAccessToken, pageId, leftBookChangeHandler, setToggle, setCommentOfCommentList, setCommentOfCommentStartId, setIsLastCommentOfComment}) => {
     const [COCIsLiked, setCOCIsLiked] = useState(false);//대댓글 좋아요 여부
     const [COCLikeCount, setCOCLikeCount] = useState(0);//대댓글 좋아요 개수
 
@@ -90,6 +90,8 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
                 setIsLastCommentOfComment(false)//대댓글 lastcomment fasle
                 setToggle(false)//토글 값 강제로 false로
                 setCommentOfCommentList([])//대댓글 지우기
+
+                document.querySelector(`#comment_${groupId}`).innerText = `답글 (${data.nestedCommentCount})개`;
             })
             .catch((res) => {
                 if(res.response.status === 401){
@@ -243,6 +245,7 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
                     setPageId={setPageId}
                     userId={userId}
                     pageId={pageId}
+                    groupId={groupId}
                     refreshAccessToken={refreshAccessToken}
                     setToggle={setToggle}
                     setCommentOfCommentList={setCommentOfCommentList}
@@ -258,6 +261,7 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
                     setPageId={setPageId}
                     userId={userId}
                     pageId={pageId}
+                    groupId={groupId}
                     refreshAccessToken={refreshAccessToken}
                     setToggle={setToggle}
                     setCommentOfCommentList={setCommentOfCommentList}
@@ -270,7 +274,7 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
 }
 
 //댓글
-const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, presetDetailPage, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
+const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
     const [CIsLiked, setCIsLiked] = useState(false);//댓글이 좋아요 된 상태인지
     const [CLikeCount, setCLikeCount] = useState(0);//댓글 좋아요 개수
@@ -284,7 +288,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
         else{
             event.target.innerText = "답글 닫기";
         }
-        setLoadCommentOfComment(Number(event.target.id));
+        setLoadCommentOfComment(Number(data.group));
     };
 
     //신고 클릭함수
@@ -406,7 +410,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                             }
                             {
                                 data.nestedCommentCount === 0 ?
-                                null : <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>{`답글 (${data.nestedCommentCount})개`}</p>
+                                null : <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={`comment_${data.group}`}>{`답글 (${data.nestedCommentCount})개`}</p>
                             }
                             <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                             {
