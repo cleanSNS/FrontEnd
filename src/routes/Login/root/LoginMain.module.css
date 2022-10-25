@@ -1,13 +1,11 @@
 .Cover{
     position: absolute;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    top: 10%;
+    transform: translate(-50%, 0);
 
-    height: 75vh;
-    min-height: 600px;
-    width: 85vw;
-    min-width: 500px;
+    height: 800px;
+    width: 650px;
     padding: 10px;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
