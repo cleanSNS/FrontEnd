@@ -53,6 +53,8 @@ const NoticeSetting = ({refreshAccessToken}) => {
         btn.disabled = true;
     };
 
+    console.log(noticeSubmitClicked);
+
     useState(() => {
         if(!noticeSubmitClicked) return;
         axios.post(submitCurrentNoticeSettingUrl,{
