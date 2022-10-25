@@ -43,6 +43,8 @@ const PasswordSetting = ({refreshAccessToken}) => {
 
     const submitHandler = (event) => {
         event.preventDefault();
+        if(passwordSubmitClicked) return;//이미 제출중이면 실행X
+
         if(previousPassword === passwordChange){
             alert("바꾸려는 비밀번호가 동일합니다.");
             return;

@@ -131,6 +131,8 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     const settingSubmitHandler = (event) => {
         event.preventDefault();
 
+        if(filterringSubmitClicked) return;//이미 실행중이면 실행X
+
         setFilteringSubmitClicked(true);
         const btn = document.querySelector('#filteringSubmitBtn');
         btn.innerHTML = "제출중";
