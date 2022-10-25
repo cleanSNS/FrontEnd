@@ -9,14 +9,14 @@ import axios from 'axios';
 
 const ProfileSetting = ({refreshAccessToken}) => {
     //api에 보낼 내용 + input에 반영해야하므로 useState로 선언
-    const [ps_userImage, setPs_UserImage] = useState(null);
-    const [ps_userImageSend, setPs_userImage] = useState(null);
-    const [ps_userName, setPs_UserName] = useState("");
-    const [ps_userAge, setPs_UserAge] = useState("");
-    const [ps_userAgeVisible, setPs_UserAgeVisible] = useState("");
-    const [ps_userGender, setPs_userGender] = useState("");
-    const [ps_userGenderVisible, setPs_UserGenderVisible] = useState("");
-    const [ps_userIntroduce, setPs_UserIntroduce] = useState("");
+    const [ps_userImage, setPs_UserImage] = useState(null);//백엔드에서 받아온 기존의 이미지 정보
+    const [ps_userImageSend, setPs_userImageSend] = useState(null);//유저가 변경한 이미지의 파일 정보
+    const [ps_userName, setPs_UserName] = useState("");//유저의 닉네임
+    const [ps_userAge, setPs_UserAge] = useState("");//유저의 나이
+    const [ps_userAgeVisible, setPs_UserAgeVisible] = useState("");//유저의 나이 공개 여부
+    const [ps_userGender, setPs_userGender] = useState("");//유저의 성별
+    const [ps_userGenderVisible, setPs_UserGenderVisible] = useState("");//유저의 성별 공개 여부
+    const [ps_userIntroduce, setPs_UserIntroduce] = useState("");//유저의 자기 소개
 
     //공개 여부 인지 후 색상 변경 함수
     const ageVisibleBtnChangeHandler = (event) => {
@@ -43,19 +43,13 @@ const ProfileSetting = ({refreshAccessToken}) => {
     const profileSettingPreset = () => {
         axios.get(getcurrentProfileUrl)
         .then((res) => {
-            console.log(res.data.data);
-            setPs_UserImage(res.data.data.imgUrl);//프로필 이미지 설정 없으면 null
+            setPs_UserImage(res.data.data.imgUrl);//url이 string의 형태로 들어온다.
             setPs_UserName(res.data.data.nickname);//이름 설정 - api upload
             setPs_UserAge(res.data.data.age);//나이 설정
             setPs_UserAgeVisible(res.data.data.ageVisible);//나이 공개
-            if(res.data.data.gender === "MALE"){//성별 설정
-                setPs_userGender(res.data.data.gender);
-            }
-            else{
-                setPs_userGender(res.data.data.gender);
-            }
+            setPs_userGender(res.data.data.gender);//성별 설정
             setPs_UserGenderVisible(res.data.data.genderVisible);//성별 공개
-            if(res.data.data.selfIntroduction === null){//자기소개 설정
+            if(res.data.data.selfIntroduction === null){//자기소개 설정<--------------------------------채민이 말에 따라 변경 가능
                 setPs_UserIntroduce("");
             }
             else{
@@ -65,12 +59,10 @@ const ProfileSetting = ({refreshAccessToken}) => {
         .catch((res) => {
             if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                profileSettingPreset();
             }
             else{
                 console.log(res);
-                alert("에러 발생");
-                //window.location.href = "/main";
+                alert("프로필 설정 상태를 불러오지 못했습니다.");
             }
         });
     };
@@ -83,7 +75,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
     const profileSettingSubmitHandler = (event) => {//작성필요
         event.preventDefault();
         if(submitClicked) return;//이미 submit중이면 실행하지 않는다.
-        
+
         setSubmitClicked(true);
         const btn = document.querySelector('#profileSubmitBtn');
         btn.innerHTML = 'Submitting';
@@ -94,7 +86,8 @@ const ProfileSetting = ({refreshAccessToken}) => {
     };
 
     useEffect(() => {
-        if(!submitClicked) return;//초기상황에 자동종료
+        if(!submitClicked) return;//초기상황에 자동종료+ true->false에서의 실행을 막는다.
+
         if(ps_userImageSend === null){//사용자 지정 없이 그냥 제출한 경우
             setUserProfileuploaded(ps_userImage);//지금꺼 그대로 적용
             return;
@@ -139,7 +132,11 @@ const ProfileSetting = ({refreshAccessToken}) => {
             .then((res) => {
                 console.log(res);
                 alert("설정을 변경했습니다.");
+                profileSettingPreset();//설정 다시 불러오기
+                //아래는 초기화
                 setSubmitClicked(false);
+                setPs_userImageSend(null);
+                setUserProfileuploaded(null);
                 const btn = document.querySelector('#profileSubmitBtn');
                 btn.innerHTML = '수정';
                 btn.style.color = 'white';
@@ -159,17 +156,16 @@ const ProfileSetting = ({refreshAccessToken}) => {
         }
     }, [userProfileUploaded]);
 
-    //이미지 변경 함수 - ps_nextUserImage를 바꾼다.
+    //이미지 변경 함수 - ps_nextUserImage를 바꾸고 받아온 이미지를 처리 한다.
     const profileImageChangeHandler = (event) => {
         event.preventDefault();
         const inputImage = event.target.files[0];
+        setPs_userImageSend(inputImage);//파일 자체를 집어넣는다.
         const reader = new FileReader();
         reader.readAsDataURL(inputImage);
         reader.onload = (imageData) => {
-            setPs_UserImage(imageData.target.result);
+            setPs_UserImage(imageData.target.result);//파일의 미리보기를 생성해서 집어넣는다.
         }
-
-        setPs_userImage(event.target.files[0]);//파일 자체를 집어넣는다.
     };
 
     //값 변경 함수
