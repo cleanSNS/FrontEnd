@@ -431,6 +431,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //채팅방에 연결되지 않은 상태에서 바뀌는 것을 막기 위함
   const [chatLoading, setChatLoading] = useState(false);
 
+  //방 새로 만들 때도 이거 세팅해야함
 
   /***********************page를 볼 수 있는 두 공간의 연결************************/
   //detailpage에서 좋아요 클릭 시 일반 pagelist에 반영하기 위해 trigger가 되는 값 - detailpage에서 좋아요를 누른 글의 id가 변수의 값이 된다.
