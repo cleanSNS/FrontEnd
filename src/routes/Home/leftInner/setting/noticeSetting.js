@@ -39,6 +39,16 @@ const NoticeSetting = ({refreshAccessToken}) => {
 
     //submit function
     const [noticeSubmitClicked, setNoticeSubmitClicked] = useState(false);//제출 상태 확인
+    
+    const submitAbleAgain = () => {
+        setNoticeSubmitClicked(false);
+        const btn = document.querySelector('#noticeSubmitBtn');
+        btn.innerHTML = '수정';
+        btn.style.color = 'white';
+        btn.style.backgroundColor = '#F4DEDE';
+        btn.style.cursor = 'pointer';
+        btn.disabled = false;
+    };
 
     const submitHandler = (event) => {
         event.preventDefault();
@@ -55,7 +65,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
 
     useEffect(() => {
         if(!noticeSubmitClicked) return;
-        
+
         axios.post(submitCurrentNoticeSettingUrl,{
             notificationFollow: notificationFollow,
             notificationComment: notificationComment,
@@ -66,8 +76,10 @@ const NoticeSetting = ({refreshAccessToken}) => {
         .then((res) => {
             alert("설정을 변경했습니다.");
             noticeSettingPreset();//초기값 다시 불러오기
+            submitAbleAgain();//다시 제출 가능하게 하기
         })
         .catch((res) => {
+            submitAbleAgain();//다시 제출 가능하게하기
             if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
@@ -77,14 +89,6 @@ const NoticeSetting = ({refreshAccessToken}) => {
                 //window.location.href = "/main";
             }
         });
-
-        setNoticeSubmitClicked(false);
-        const btn = document.querySelector('#noticeSubmitBtn');
-        btn.innerHTML = '수정';
-        btn.style.color = 'white';
-        btn.style.backgroundColor = '#F4DEDE';
-        btn.style.cursor = 'pointer';
-        btn.disabled = false;
     }, [noticeSubmitClicked]);
 
     //각 설정 클릭시 handler

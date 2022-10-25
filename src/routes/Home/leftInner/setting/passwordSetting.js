@@ -31,6 +31,16 @@ const PasswordSetting = ({refreshAccessToken}) => {
     //submit handler
     const [passwordSubmitClicked, setPasswordSubmitClicked] = useState(false);
 
+    const submitAbleAgain = () => {
+        setPasswordSubmitClicked(true);
+        const btn = document.querySelector('#passwordSubmitBtn');
+        btn.innerHTML = '수정';
+        btn.style.color = 'white';
+        btn.style.backgroundColor = '#F4DEDE';
+        btn.style.cursor = 'pointer';
+        btn.disabled = false;
+    };
+
     const submitHandler = (event) => {
         event.preventDefault();
         if(previousPassword === passwordChange){
@@ -67,8 +77,10 @@ const PasswordSetting = ({refreshAccessToken}) => {
             })
             .then((res) => {
                 alert("비밀번호가 변경되었습니다.");
+                submitAbleAgain();//다시 보낼 수 있게 설정
             })
             .catch((res) => {
+                submitAbleAgain();//다시 보낼 수 있게 설정
                 if(res.response.status === 401){//access token이 만료된 경우이다.
                     refreshAccessToken();
                 }
@@ -79,6 +91,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
             })
         })
         .catch((res) => {
+            submitAbleAgain();//다시 보낼 수 있게 설정
             if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
@@ -86,14 +99,6 @@ const PasswordSetting = ({refreshAccessToken}) => {
                 alert("기존 비밀번호가 틀립니다.");
             }
         });
-
-        setPasswordSubmitClicked(true);
-        const btn = document.querySelector('#passwordSubmitBtn');
-        btn.innerHTML = '수정';
-        btn.style.color = 'white';
-        btn.style.backgroundColor = '#F4DEDE';
-        btn.style.cursor = 'pointer';
-        btn.disabled = false;
     }, [passwordSubmitClicked])
 
     //비밀번호 동일한지 확인해서 style바꿔주는 함수
