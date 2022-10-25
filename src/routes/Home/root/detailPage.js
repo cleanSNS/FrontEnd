@@ -278,7 +278,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
     const onLoadCommentOfCommentClickHandler = (event) => {
         event.preventDefault();
         if(event.target.innerText === "답글 닫기"){
-            event.target.innerText = "답글 더보기";
+            event.target.innerText = `답글 (${data.nestedCommentCount})개`;
         }
         else{
             event.target.innerText = "답글 닫기";
@@ -405,7 +405,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                             }
                             {
                                 data.nestedCommentCount === 0 ?
-                                null : <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>{`답글 ${data.nestedCommentCount}개`}</p>
+                                null : <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={data.group}>{`답글 (${data.nestedCommentCount})개`}</p>
                             }
                             <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                             {
