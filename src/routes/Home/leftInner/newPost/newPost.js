@@ -76,6 +76,8 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         console.log(event.dataTransfer);
         console.log(event.target.dataTransfer);
         console.log(event.target);
+        const a = [...event.target];
+        console.log(a);
 
         const inputFile = [...event.dataTransfer.files];//지금 들어온 파일이다.
 
