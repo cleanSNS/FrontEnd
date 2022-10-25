@@ -52,7 +52,7 @@ const SingleChat = ({data, setLeftBookState, userId, userAndUserImg, userAndUser
     );
 };
 
-const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient}) => {
+const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient, setChatLoading}) => {
     const [chattingRoomName, setChattingRoomName] = useState("");//채팅방 이름
     const [chattingList, setChattingList] = useState([]);//채팅방의 채팅들
     const [chattingListStartId, setChattingListStartId] = useState(987654321);//채팅방의 채팅을 불러오는 startId
@@ -190,8 +190,10 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
                 setNeedScroll(true);
             }
             setChattingListStartId(res.data.startId);
+            setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
         })
         .catch((res) => {
+            setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
             if(res.response.status === 401){
                 refreshAccessToken();
             }

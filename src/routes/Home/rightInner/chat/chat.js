@@ -8,10 +8,12 @@ import {
     deleteChattingRoomUrl,
 } from '../../../../apiUrl';
 
-const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, gettingChattingRoomList, leftBookState, searched, setSearched}) => {
+const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, gettingChattingRoomList, leftBookState, searched, setSearched, chatLoading, setChatLoading}) => {
     //click Handler
     const chatClickHandler = () => {
+        if(chatLoading) return;//다른 채팅방이 아직 로딩중이면 이동하지 않음
         setLeftBookState(`chat/${data.chatroomId}`);
+        setChatLoading(true);//이동과 동시에 이제 로딩할 것이기 때문에 true로 값 변경
         if(searched){
             console.log("채팅방으로 입장하여 검색 결과를 초기화합니다.");
             gettingChattingRoomList();//검색된 상태면 다시 채팅방 리스트를 불러온다.
@@ -93,7 +95,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
     );
 };
 
-const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBookState, chattingTriger, setChattingTriger}) => {
+const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBookState, chattingTriger, setChattingTriger, chatLoading, setChatLoading}) => {
     const [chatSearchInput, setChatSearchInput] = useState("");//검색창에 입력된 정보
     const [chattingRoomList, setChattingRoomList] = useState([]);//채팅방들의 정보를 가진 리스트
     const [searched, setSearched] = useState(false);//채팅방이 검색된 상태인지 알려주는 변수
@@ -178,7 +180,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
                 </div>
                 {
                     chattingRoomList.map((data, index) => (
-                        <SingleChattingRoom key={index} data={data} setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken} gettingChattingRoomList={gettingChattingRoomList} leftBookState={leftBookState} searched={searched} setSearched={setSearched} />
+                        <SingleChattingRoom key={index} data={data} setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken} gettingChattingRoomList={gettingChattingRoomList} leftBookState={leftBookState} searched={searched} setSearched={setSearched} chatLoading={chatLoading} setChatLoading={setChatLoading} />
                     ))
                 }
             </div>
