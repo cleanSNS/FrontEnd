@@ -25,7 +25,8 @@ import { Temporal } from '@js-temporal/polyfill';
 /** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
 const calculateTimeFrom = (calTime) => {
     const now = Temporal.Now.plainDateTimeISO();//현재 시간 세팅
-    const postedDate = Temporal.PlainDateTime.from(calTime);
+    let postedDate = Temporal.PlainDateTime.from(calTime);
+    postedDate = postedDate.add({hours: 9});
     const result = now.since(postedDate);
     if(result.minutes === 0){//0분이내인 경우
         return "방금 전";
