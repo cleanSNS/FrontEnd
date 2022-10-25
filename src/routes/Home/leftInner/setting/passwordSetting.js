@@ -72,23 +72,29 @@ const PasswordSetting = ({refreshAccessToken}) => {
             password: previousPassword,
         })
         .then((res) => {
-            axios.post(passwordChangeUrl,{
-                password: passwordChange,
-            })
-            .then((res) => {
-                alert("비밀번호가 변경되었습니다.");
+            if(res.data){//일치하면
+                axios.post(passwordChangeUrl,{
+                    password: passwordChange,
+                })
+                .then((res) => {
+                    alert("비밀번호가 변경되었습니다.");
+                    submitAbleAgain();//다시 보낼 수 있게 설정
+                })
+                .catch((res) => {
+                    submitAbleAgain();//다시 보낼 수 있게 설정
+                    if(res.response.status === 401){//access token이 만료된 경우이다.
+                        refreshAccessToken();
+                    }
+                    else{
+                        console.log(res);
+                        alert("비밀번호를 변경하지 못했습니다.");
+                    }
+                })
+            }
+            else{
+                alert("기존 비밀번호가 일치하지 않습니다.");
                 submitAbleAgain();//다시 보낼 수 있게 설정
-            })
-            .catch((res) => {
-                submitAbleAgain();//다시 보낼 수 있게 설정
-                if(res.response.status === 401){//access token이 만료된 경우이다.
-                    refreshAccessToken();
-                }
-                else{
-                    console.log(res);
-                    alert("비밀번호를 변경하지 못했습니다.");
-                }
-            })
+            }
         })
         .catch((res) => {
             submitAbleAgain();//다시 보낼 수 있게 설정
@@ -96,7 +102,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
                 refreshAccessToken();
             }
             else{
-                alert("기존 비밀번호가 틀립니다.");
+                alert("비밀번호를 확인하는 과정에서 문제가 발생했습니다.");
             }
         });
     }, [passwordSubmitClicked])
