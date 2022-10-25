@@ -32,7 +32,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
     const [passwordSubmitClicked, setPasswordSubmitClicked] = useState(false);
 
     const submitAbleAgain = () => {
-        setPasswordSubmitClicked(true);
+        setPasswordSubmitClicked(false);
         const btn = document.querySelector('#passwordSubmitBtn');
         btn.innerHTML = '수정';
         btn.style.color = 'white';

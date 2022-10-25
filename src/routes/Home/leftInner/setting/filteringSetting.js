@@ -116,8 +116,33 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     };
 
     //설정 submit handler
+    const [filterringSubmitClicked, setFilteringSubmitClicked] = useState(false);
+
+    const submitAbleAgain = () => {
+        setFilteringSubmitClicked(false);
+        const btn = document.querySelector('#filteringSubmitBtn');
+        btn.innerHTML = '수정';
+        btn.style.color = 'white';
+        btn.style.backgroundColor = '#F4DEDE';
+        btn.style.cursor = 'pointer';
+        btn.disabled = false;
+    };
+
     const settingSubmitHandler = (event) => {
         event.preventDefault();
+
+        setFilteringSubmitClicked(true);
+        const btn = document.querySelector('#filteringSubmitBtn');
+        btn.innerHTML = "제출중";
+        btn.style.color = 'black';
+        btn.style.backgroundColor = 'gray';
+        btn.style.cursor = 'wait';
+        btn.disabled = true;
+    };
+
+    useEffect(() => {
+        if(!filterringSubmitClicked) return;
+
         axios.post(submitFilteringSetting,{
             filterAll: filterAll,
             filterFollower: filterFollower,
@@ -125,8 +150,10 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         })
         .then((res) =>{
             alert("설정을 변경했습니다.");
+            submitAbleAgain();
         })
         .catch((res) => {
+            submitAbleAgain();
             if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
@@ -134,8 +161,8 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
                 console.log(res);
                 alert("에러 발생");
             }
-        })
-    };
+        });
+    }, [filterringSubmitClicked])
 
     /* 하단 내용 */
 
@@ -317,7 +344,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
                         </div>
                     </div>
                     <div className={Style.Cover}>
-                        <button type="submit" className={Style.submitBtn}>제출</button>
+                        <button id="filteringSubmitBtn" type="submit" className={Style.submitBtn}>제출</button>
                     </div>
                 </form>
             </div>
