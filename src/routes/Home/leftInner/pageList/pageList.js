@@ -211,7 +211,6 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             userId: loadedUserId
         })
         .then((res) => {
-            alert("팔로우/팔로우를 취소했습니다.");
             setIsFollowed((cur) => !cur);
         })
         .catch((res) => {

@@ -645,7 +645,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             visible: true,
         })
         .then((res) => {
-            alert("댓글 작성 완료");
             setUserCommentInput("");//댓글 부분 초기화
             setCommentToWhom(["p", -1, ""]);//댓글 대상 초기화
             presetComment();//댓글 내가 쓴거까지 로드된내용 불러오기
