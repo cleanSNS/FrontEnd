@@ -328,8 +328,27 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                 <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{`팔로잉 ${followeeCount}`}</p>
             </div>
             <p style={{height:"fit-content"}}>{userIntroduce}</p>
-            {bottomStuff === "PAGE" && setted? <PageListArea bottomStuff={bottomStuff} loadedUserId={loadedUserId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} setted={setted} leftBookState={leftBookState}/> : null}
-            {(bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? <UserListArea bottomStuff={bottomStuff} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setted={setted} leftBookState={leftBookState}/> : null}
+            {
+                bottomStuff === "PAGE" && setted ? 
+                <PageListArea
+                    bottomStuff={bottomStuff}
+                    loadedUserId={loadedUserId}
+                    refreshAccessToken={refreshAccessToken}
+                    setPageId={setPageId}
+                    setted={setted}
+                    leftBookState={leftBookState}
+                /> : null
+            }
+            {
+                (bottomStuff === "FOLLOWER" || bottomStuff === "FOLLOWEE") && setted ? 
+                <UserListArea
+                    bottomStuff={bottomStuff}
+                    refreshAccessToken={refreshAccessToken}
+                    leftBookChangeHandler={leftBookChangeHandler}
+                    setted={setted}
+                    leftBookState={leftBookState}
+                /> : null
+            }
         </div>
     );
 }

@@ -16,7 +16,6 @@ import axios from 'axios';
 
 const FilteringSetting = ({refreshAccessToken, userId}) => {
     const [filterAll, setFilterAll] = useState(false);
-    const [filterFollower, setFilterFollower] = useState(false);
     const [filterFollowee, setFilterFollowee] = useState(false);
 
     const [userInput, setUserInput] = useState("");
@@ -29,7 +28,6 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         axios.get(getCurrentfilterSetting)
         .then((res) => {
             setFilterAll(res.data.data.filterAll);
-            setFilterFollower(res.data.data.filterFollower);
             setFilterFollowee(res.data.data.filterFollowee);
         })
         .catch((res) => {
@@ -75,18 +73,6 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     };
     useEffect(filterAllStyleHandler, [filterAll]);
 
-    const filterFollowerStyleHandler = () => {
-        if(filterFollower){
-            document.querySelector("#filterFollowerAllow").style.fontWeight = "600";
-            document.querySelector("#filterFollowerDenial").style.fontWeight = "400";
-        }
-        else{
-            document.querySelector("#filterFollowerAllow").style.fontWeight = "400";
-            document.querySelector("#filterFollowerDenial").style.fontWeight = "600";
-        }
-    };
-    useEffect(filterFollowerStyleHandler, [filterFollower]);
-
     const filterFolloweeStyleHandler = () => {
         if(filterFollowee){
             document.querySelector("#filterFolloweeAllow").style.fontWeight = "600";
@@ -103,11 +89,6 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     const filterAllClickHandler = (event) => {
         event.preventDefault();
         setFilterAll((cur) => !cur);
-    };
-
-    const filterFollowerClickHandler = (event) => {
-        event.preventDefault();
-        setFilterFollower((cur) => !cur);
     };
 
     const filterFolloweeClickHandler = (event) => {
@@ -147,7 +128,6 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
 
         axios.post(submitFilteringSetting,{
             filterAll: filterAll,
-            filterFollower: filterFollower,
             filterFollowee: filterFollowee,
         })
         .then((res) =>{
@@ -306,23 +286,6 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
                                     </div>
                                     <div className={Style.Cover}>
                                         <p className={Style.settingInput} id="filterAllDenial" onClick={filterAllClickHandler}>거부</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={Style.Cover}>
-                        <div className={Style.settingArea} style={{borderBottom: "1px solid rgb(216, 216, 216)"}}>
-                            <div className={Style.Cover}>
-                                <p className={Style.settingLabel}>팔로워 필터링</p>
-                            </div>
-                            <div className={Style.Cover}>
-                                <div className={Style.inputArea}>
-                                    <div className={Style.Cover}>
-                                        <p className={Style.settingInput} id="filterFollowerAllow" onClick={filterFollowerClickHandler}>허용</p>
-                                    </div>
-                                    <div className={Style.Cover}>
-                                        <p className={Style.settingInput} id="filterFollowerDenial" onClick={filterFollowerClickHandler}>거부</p>
                                     </div>
                                 </div>
                             </div>
