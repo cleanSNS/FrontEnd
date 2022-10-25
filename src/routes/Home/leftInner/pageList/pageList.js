@@ -15,6 +15,7 @@ import {
     unfollowUserUrl,
 } from '../../../../apiUrl';
 import axios from 'axios';
+import { useInView } from 'react-intersection-observer';
 
 const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, setted, leftBookState}) => {
     const [userList, setUserList] = useState([]);
@@ -77,6 +78,8 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, left
     const [userPageList, setUserPageList] = useState([]);
     const [pageStartId, setPageStartId] = useState(987654321);
     const [triger, setTriger] = useState(false);
+    const [lastPageInUserPage, inView] = useInView();
+    const [lastPage, setLastPage] = useState(false);
 
     const reset = () => {
         setUserPageList([]);
@@ -91,6 +94,9 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, left
         axios.get(getUserPageListUrl + loadedUserId.toString() + "?startId=" + pageStartId.toString())
         .then((res) => {
             const tmp = [...res.data.data];
+            if(tmp.length === 0){
+                setLastPage(true);
+            }
             const currentList = [...userPageList];
             const next = currentList.concat(tmp);
             setUserPageList(next);
@@ -113,11 +119,18 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, left
         setPageId(event.target.id);
     };
 
+    //무한 로드 함수
+    useEffect(() => {
+        if(inView && !lastPage){
+            presetUserPageList();
+        }
+    }, [inView]);
+
     return(
         <div className={Style.pageArea}>
             {
                 userPageList.map((data, index) => (
-                    <img src={data.imgUrl} className={Style.singlePage} key={index} id={data.pageId} onClick={singlePageClickHandler}/>
+                    <img src={data.imgUrl} className={Style.singlePage} key={index} id={data.pageId} onClick={singlePageClickHandler} ref={userPageList.length - 1 === index ? lastPageInUserPage : null}/>
                 ))
             }
         </div>
