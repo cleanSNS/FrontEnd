@@ -44,6 +44,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
             }
         }
     };
+    console.log(chatLoading);
 
     return(
         <div className={Style.singleChat} onClick={chatClickHandler}>
