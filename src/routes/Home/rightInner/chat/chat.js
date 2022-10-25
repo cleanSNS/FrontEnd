@@ -12,7 +12,6 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
     //click Handler
     const chatClickHandler = (event) => {
         if(chatLoading) return;//다른 채팅방이 아직 로딩중이면 작동을 하지 않음
-        if(data.chatroomId === Number(leftBookState.split('/')[1])) return;//이미 그 방에 들어와 있다면 작동을 하지 않음
 
         if(event.target.id === "chattingRoomDeleteBtn"){//닫기를 누른 경우
             if(window.confirm("정말 채팅방을 나가실 건가요?")){
@@ -35,6 +34,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
             }
         }
         else{
+            if(data.chatroomId === Number(leftBookState.split('/')[1])) return;//이미 그 방에 들어와 있다면 작동을 하지 않음
             setLeftBookState(`chat/${data.chatroomId}`);
             setChatLoading(true);//이동과 동시에 이제 로딩할 것이기 때문에 true로 값 변경
             if(searched){
