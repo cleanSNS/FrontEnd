@@ -38,7 +38,7 @@ const SingleFriend = ({data, setChosenFriendList, chosenFriendList, addStyle}) =
     );
 };
 
-const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingTriger}) => {
+const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingTriger, setChatLoading}) => {
     const [friendSearchInput, setFriendSearchInput] = useState("");//친구 검색용
     const [chattingRoomNameInput, setChattingRoomNameInput] = useState("");//채팅방 이름 입력
     const [outputFriendList, setOutputFriendList] = useState([]);//실제로 출력할 친구 리스트
@@ -142,6 +142,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
             return;
         }
         setNewChatSubmitClicked(true);
+        setChatLoading(true);//방 생성중에 다른 채팅방으로 이동 불가
         const btn = document.querySelector('#newChattingBtn');
         btn.innerHTML = "제출중";
         btn.style.color = 'black';
