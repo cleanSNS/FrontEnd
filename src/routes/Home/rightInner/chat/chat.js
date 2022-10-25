@@ -13,6 +13,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
     const chatClickHandler = (event) => {
         console.log("클릭 인지");
         if(chatLoading) return;//다른 채팅방이 아직 로딩중이면 작동을 하지 않음
+        if(data.chatroomId === Number(leftBookState.split('/')[1])) return;//이미 그 방에 들어와 있다면 작동을 하지 않음
 
         if(event.target.id === "chattingRoomDeleteBtn"){//닫기를 누른 경우
             if(window.confirm("정말 채팅방을 나가실 건가요?")){
