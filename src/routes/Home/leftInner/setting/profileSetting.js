@@ -134,15 +134,8 @@ const ProfileSetting = ({refreshAccessToken}) => {
                 alert("설정을 변경했습니다.");
                 profileSettingPreset();//설정 다시 불러오기
                 //아래는 초기화
-                setProfileSubmitClicked(false);
                 setPs_userImageSend(null);
                 setUserProfileuploaded(null);
-                const btn = document.querySelector('#profileSubmitBtn');
-                btn.innerHTML = '수정';
-                btn.style.color = 'white';
-                btn.style.backgroundColor = '#F4DEDE';
-                btn.style.cursor = 'pointer';
-                btn.disabled = false;
             })
             .catch((res) => {
                 if(res.response.status === 401){//access token이 만료된 경우이다.
@@ -153,6 +146,14 @@ const ProfileSetting = ({refreshAccessToken}) => {
                     alert("문제가 발생했습니다.");
                 }
             });
+
+            setProfileSubmitClicked(false);
+            const btn = document.querySelector('#profileSubmitBtn');
+            btn.innerHTML = '수정';
+            btn.style.color = 'white';
+            btn.style.backgroundColor = '#F4DEDE';
+            btn.style.cursor = 'pointer';
+            btn.disabled = false;
         }
     }, [userProfileUploaded]);
 

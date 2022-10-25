@@ -29,6 +29,8 @@ const PasswordSetting = ({refreshAccessToken}) => {
     };
 
     //submit handler
+    const [passwordSubmitClicked, setPasswordSubmitClicked] = useState(false);
+
     const submitHandler = (event) => {
         event.preventDefault();
         if(previousPassword === passwordChange){
@@ -44,6 +46,18 @@ const PasswordSetting = ({refreshAccessToken}) => {
             return;
         }
 
+        setPasswordSubmitClicked(true);
+        const btn = document.querySelector('#passwordSubmitBtn');
+        btn.innerHTML = "제출중";
+        btn.style.color = 'black';
+        btn.style.backgroundColor = 'gray';
+        btn.style.cursor = 'wait';
+        btn.disabled = true;
+    };
+
+    useEffect(() => {
+        if(!passwordSubmitClicked) return;//불필요한 호출 차단
+
         axios.post(passwordCheckForPasswordChangeUrl,{
             password: previousPassword,
         })
@@ -53,7 +67,6 @@ const PasswordSetting = ({refreshAccessToken}) => {
             })
             .then((res) => {
                 alert("비밀번호가 변경되었습니다.");
-                //window.location.href = '/main';
             })
             .catch((res) => {
                 if(res.response.status === 401){//access token이 만료된 경우이다.
@@ -61,8 +74,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
                 }
                 else{
                     console.log(res);
-                    alert("에러 발생");
-                    //window.location.href = '/main';
+                    alert("비밀번호를 변경하지 못했습니다.");
                 }
             })
         })
@@ -73,8 +85,16 @@ const PasswordSetting = ({refreshAccessToken}) => {
             else{
                 alert("기존 비밀번호가 틀립니다.");
             }
-        })
-    };
+        });
+
+        setPasswordSubmitClicked(true);
+        const btn = document.querySelector('#passwordSubmitBtn');
+        btn.innerHTML = '수정';
+        btn.style.color = 'white';
+        btn.style.backgroundColor = '#F4DEDE';
+        btn.style.cursor = 'pointer';
+        btn.disabled = false;
+    }, [passwordSubmitClicked])
 
     //비밀번호 동일한지 확인해서 style바꿔주는 함수
     const passwordCheckSameCheck = () => {
@@ -165,7 +185,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
                 {passwordCondition ? null : <p className={Style.alertWord}>비밀번호는 8~16자리, 소문자, 특수문자를 하나이상 포함.</p>}
             </div>
             <div className={Style.Cover}>
-                <button type="submit" className={Style.submitButton}>수정</button>
+                <button id="passwordSubmitBtn" type="submit" className={Style.submitButton}>수정</button>
             </div>
         </form>
     );
