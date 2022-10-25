@@ -12,7 +12,7 @@
   width: 90%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 2fr;
+  grid-template-rows: 2fr 3fr;
 }
 
 /*기본적인 필터링 설정을 위한 CSS*/
