@@ -201,7 +201,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                 className={Style.wordInput} />
             {/* 글 제출 영역 */}
             <div className={Style.area}>
-                <button type="submit" className={Style.submitButton}>Submit</button>
+                <button id="newPageSubmitBtn" type="submit" className={Style.submitButton}>Submit</button>
             </div>
         </form>
     );

@@ -151,8 +151,21 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
 
   //글 올리는 함수 => 좌측 페이지로 넘어가야한다. - 두가지가 순차적으로 실행
   const [uploadImages, setUploadImages] = useState([]);
+  const [newPageSumbitClicked, setNewPageSubmitClicked] = useState(false);
+
+  const submitAbleAgain = () => {
+    setNewPageSubmitClicked(false);
+    const btn = document.querySelector('#newPageSubmitBtn');
+    btn.innerHTML = 'Submit';
+    btn.style.color = 'white';
+    btn.style.backgroundColor = '#F4DEDE';
+    btn.style.cursor = 'pointer';
+    btn.disabled = false;
+};
+
   const uploadNewPostHandler = (event) => {
     event.preventDefault();
+    if(newPageSumbitClicked) return;//이미 실행중인 경우 종료
     if(newPostImages.length === 0){
       alert("이미지를 하나 이상 업로드 해주세요.");
       return;
@@ -162,6 +175,17 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       return;
     }
 
+    setNewPageSubmitClicked(true);
+    const btn = document.querySelector('#newPageSubmitBtn');
+    btn.innerHTML = "제출중";
+    btn.style.color = 'black';
+    btn.style.backgroundColor = 'gray';
+    btn.style.cursor = 'wait';
+    btn.disabled = true;
+  };
+
+  useEffect(() => {
+    if(!newPageSumbitClicked) return;
     //formData에 파일들 append하기 - 파일명은 image_파일명 으로 생성
     const fileData = new FormData();
     console.log(newPostImages);
@@ -190,7 +214,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         alert("이미지 처리에 실패했습니다.");
       }
     });
-  };
+  }, [newPageSumbitClicked]);
 
   useEffect(() => {
     if(uploadImages.length !== 0){//이미지 처리에 성공해서 렌더링할 파일이 있는 경우
@@ -220,8 +244,10 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         setNewPostWriteCommentAuth(true);
         setNewPostReadLikeAuth(true);
         resetPage();
+        submitAbleAgain();
       })
       .catch((res) => {
+        submitAbleAgain();
         if(res.response.status === 401){//access token이 만료된 경우이다.
           refreshAccessToken();
         }
