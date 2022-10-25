@@ -205,6 +205,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                 type="text" 
                 vaslue={newPostContent}
                 onChange={contentHandler}
+                maxLength={200}
                 className={Style.wordInput} />
             {/* 글 제출 영역 */}
             <div className={Style.area}>
