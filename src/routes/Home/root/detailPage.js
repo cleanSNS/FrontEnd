@@ -49,7 +49,7 @@ const calculateTimeFrom = (calTime) => {
 };
 
 //대댓글 부분
-const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, groupId, refreshAccessToken, pageId, leftBookChangeHandler, setToggle, setCommentOfCommentList, setCommentOfCommentStartId, setIsLastCommentOfComment}) => {
+const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, groupId, refreshAccessToken, pageId, leftBookChangeHandler, setToggle, setCommentOfCommentList, setCommentOfCommentStartId, setIsLastCommentOfComment, count}) => {
     const [COCIsLiked, setCOCIsLiked] = useState(false);//대댓글 좋아요 여부
     const [COCLikeCount, setCOCLikeCount] = useState(0);//대댓글 좋아요 개수
 
@@ -91,7 +91,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
                 setToggle(false)//토글 값 강제로 false로
                 setCommentOfCommentList([])//대댓글 지우기
 
-                document.querySelector(`#comment_${groupId}`).innerText = `답글 (${data.nestedCommentCount})개`;
+                document.querySelector(`#comment_${groupId}`).innerText = `답글 (${count})개`;
             })
             .catch((res) => {
                 if(res.response.status === 401){
@@ -176,7 +176,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
 };
 
 //대댓글 toggle과 불러오는 부분
-const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfComment, loadCommentOfComment, refreshAccessToken, userId, leftBookChangeHandler}) => {
+const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfComment, loadCommentOfComment, refreshAccessToken, userId, leftBookChangeHandler, count}) => {
     const [toggle, setToggle] = useState(false);//대댓글을 보여주는 toggle이다.
     const [commentOfCommentList, setCommentOfCommentList] = useState([]);//대댓글 리스트
     const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//첫 로드시에는 1이온다.
@@ -251,6 +251,7 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
                     setCommentOfCommentList={setCommentOfCommentList}
                     setCommentOfCommentStartId={setCommentOfCommentStartId}
                     setIsLastCommentOfComment={setIsLastCommentOfComment}
+                    count={count}
                 />
                 :
                 <SingleCommentOfComment 
@@ -267,6 +268,7 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
                     setCommentOfCommentList={setCommentOfCommentList}
                     setCommentOfCommentStartId={setCommentOfCommentStartId}
                     setIsLastCommentOfComment={setIsLastCommentOfComment}
+                    count={count}
                 />
             )
         : null
@@ -427,7 +429,8 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                 </div>
                 <RenderCommentOfComment 
                     pageId={pageId} 
-                    groupId={data.group} 
+                    groupId={data.group}
+                    count={data.nestedCommentCount}
                     setLoadCommentOfComment={setLoadCommentOfComment} 
                     loadCommentOfComment={loadCommentOfComment} 
                     refreshAccessToken={refreshAccessToken} 
