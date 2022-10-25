@@ -11,7 +11,6 @@ import {
 const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, gettingChattingRoomList, leftBookState, searched, setSearched, chatLoading, setChatLoading}) => {
     //click Handler
     const chatClickHandler = (event) => {
-        console.log("클릭 인지");
         if(chatLoading) return;//다른 채팅방이 아직 로딩중이면 작동을 하지 않음
         if(data.chatroomId === Number(leftBookState.split('/')[1])) return;//이미 그 방에 들어와 있다면 작동을 하지 않음
 
@@ -45,7 +44,6 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
             }
         }
     };
-    console.log(chatLoading);
 
     return(
         <div className={Style.singleChat} onClick={chatClickHandler}>

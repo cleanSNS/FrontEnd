@@ -325,7 +325,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             <div className={Style.pageFollowerFolloweeCover}>
                 <p onClick={pageClickHandler} style={{cursor:"pointer"}}>게시물</p>
                 <p onClick={followerClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{`팔로워 ${followerCount}`}</p>
-                <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{`팔로잉 ${followeeCount}`}</p>
+                <p onClick={followeeClickHandler} style={isMyPage ? {cursor:"pointer"} : null}>{`팔로우 ${followeeCount}`}</p>
             </div>
             <p style={{height:"fit-content"}}>{userIntroduce}</p>
             {
