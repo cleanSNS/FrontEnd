@@ -38,11 +38,13 @@ const NoticeSetting = ({refreshAccessToken}) => {
     useEffect(noticeSettingPreset, []);
 
     //submit function
-    const [isSubmitted, setIsSubmitted] = useState(false);//제출 상태 확인
+    const [noticeSubmitClicked, setNoticeSubmitClicked] = useState(false);//제출 상태 확인
 
     const submitHandler = (event) => {
         event.preventDefault();
-        setIsSubmitted(true);
+        if(noticeSubmitClicked) return;
+
+        setNoticeSubmitClicked(true);
         const btn = document.querySelector('#noticeSubmitBtn');
         btn.innerHTML = "제출중";
         btn.style.color = 'black';
@@ -52,7 +54,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
     };
 
     useState(() => {
-        if(!isSubmitted) return;
+        if(!noticeSubmitClicked) return;
         axios.post(submitCurrentNoticeSettingUrl,{
             notificationFollow: notificationFollow,
             notificationComment: notificationComment,
@@ -62,7 +64,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
         })
         .then((res) => {
             alert("설정을 변경했습니다.");
-            setIsSubmitted(true);
+            setNoticeSubmitClicked(false);
             const btn = document.querySelector('#noticeSubmitBtn');
             btn.innerHTML = '수정';
             btn.style.color = 'white';
@@ -80,8 +82,8 @@ const NoticeSetting = ({refreshAccessToken}) => {
                 alert("에러가 발생했습니다.");
                 //window.location.href = "/main";
             }
-        })
-    }, [isSubmitted]);
+        });
+    }, [noticeSubmitClicked]);
 
     //각 설정 클릭시 handler
     const notificationFollowClickHandler = (event) => {

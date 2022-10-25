@@ -70,13 +70,13 @@ const ProfileSetting = ({refreshAccessToken}) => {
 
     //submit함수 - 3개가 순차적으로 call된다. 1.제출 클릭했으므로 스타일 변경 / 이미지 처리 / 실제 제출 후 스타일 변경
     const [userProfileUploaded, setUserProfileuploaded] = useState(null);
-    const [submitClicked, setSubmitClicked] = useState(false);//제출 클릭을 기억한다.
+    const [profileSubmitClicked, setProfileSubmitClicked] = useState(false);//제출 클릭을 기억한다.
 
     const profileSettingSubmitHandler = (event) => {//작성필요
         event.preventDefault();
-        if(submitClicked) return;//이미 submit중이면 실행하지 않는다.
+        if(profileSubmitClicked) return;//이미 submit중이면 실행하지 않는다.
 
-        setSubmitClicked(true);
+        setProfileSubmitClicked(true);
         const btn = document.querySelector('#profileSubmitBtn');
         btn.innerHTML = '제출중';
         btn.style.color = 'black';
@@ -86,7 +86,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
     };
 
     useEffect(() => {
-        if(!submitClicked) return;//초기상황에 자동종료+ true->false에서의 실행을 막는다.
+        if(!profileSubmitClicked) return;//초기상황에 자동종료+ true->false에서의 실행을 막는다.
 
         if(ps_userImageSend === null){//사용자 지정 없이 그냥 제출한 경우
             setUserProfileuploaded(ps_userImage);//지금꺼 그대로 적용
@@ -116,7 +116,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
                 alert("이미지 처리에 실패했습니다.");
             }
         });
-    }, [submitClicked]);
+    }, [profileSubmitClicked]);
 
     useEffect(() => {
         if(userProfileUploaded !== null){//초기상황에 자동종료
@@ -134,7 +134,7 @@ const ProfileSetting = ({refreshAccessToken}) => {
                 alert("설정을 변경했습니다.");
                 profileSettingPreset();//설정 다시 불러오기
                 //아래는 초기화
-                setSubmitClicked(false);
+                setProfileSubmitClicked(false);
                 setPs_userImageSend(null);
                 setUserProfileuploaded(null);
                 const btn = document.querySelector('#profileSubmitBtn');
