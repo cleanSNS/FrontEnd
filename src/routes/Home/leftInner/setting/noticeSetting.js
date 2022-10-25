@@ -43,7 +43,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
     const submitAbleAgain = () => {
         setNoticeSubmitClicked(false);
         const btn = document.querySelector('#noticeSubmitBtn');
-        btn.innerHTML = '수정';
+        btn.innerHTML = '제출';
         btn.style.color = 'white';
         btn.style.backgroundColor = '#F4DEDE';
         btn.style.cursor = 'pointer';
@@ -301,7 +301,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
                 </div>
             </div>
             <div className={Style.Cover}>
-                <button id="noticeSubmitBtn" type="submit" className={Style.submitBtn}>수정</button>
+                <button id="noticeSubmitBtn" type="submit" className={Style.submitBtn}>제출</button>
             </div>
         </form>
     );

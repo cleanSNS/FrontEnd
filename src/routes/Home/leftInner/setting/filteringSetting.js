@@ -121,7 +121,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     const submitAbleAgain = () => {
         setFilteringSubmitClicked(false);
         const btn = document.querySelector('#filteringSubmitBtn');
-        btn.innerHTML = '수정';
+        btn.innerHTML = '제출';
         btn.style.color = 'white';
         btn.style.backgroundColor = '#F4DEDE';
         btn.style.cursor = 'pointer';

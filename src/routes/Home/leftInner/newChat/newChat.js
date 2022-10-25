@@ -122,12 +122,36 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
     useEffect(changeOutputFriendListbyClick, [chosenFriendList]);
 
     //채팅방 생성함수
+    const [newChatSubmitClicked, setNewChatSubmitClicked] = useState(false);
+
+    const submitAbleAgain = () => {
+        setNewChatSubmitClicked(false);
+        const btn = document.querySelector('#newChattingBtn');
+        btn.innerHTML = '생 성';
+        btn.style.color = 'white';
+        btn.style.backgroundColor = '#F4DEDE';
+        btn.style.cursor = 'pointer';
+        btn.disabled = false;
+    };
+
     const createChatClickHandler = (event) => {
         event.preventDefault();
+        if(newChatSubmitClicked) return;
         if(chosenFriendList.length === 0){//아무도 선택되지 않은 경우 함수 종료
             alert("1명 이상의 친구를 선택해 주세요.");
             return;
         }
+        setNewChatSubmitClicked(true);
+        const btn = document.querySelector('#newChattingBtn');
+        btn.innerHTML = "제출중";
+        btn.style.color = 'black';
+        btn.style.backgroundColor = 'gray';
+        btn.style.cursor = 'wait';
+        btn.disabled = true;
+    };
+
+    useEffect(() => {
+        if(!newChatSubmitClicked) return;
 
         const chosenFriendUserIdList = chosenFriendList.map(d => (d.userId));//id만 뽑아서 배열 생성
         chosenFriendUserIdList.push(userId);//나도 집어넣는다.
@@ -145,16 +169,18 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
         .then((res) => {
             setLeftBookState(`chat/${res.data.data.chatroomId}`);
             setChattingTriger(true);
+            submitAbleAgain();
         })
         .catch((res) => {
+            submitAbleAgain();
             if(res.response.status === 401){
                 refreshAccessToken();
             }
             else{
                 alert("채팅방을 생성하지 못했습니다.");
             }
-        })
-    };
+        });
+    }, [newChatSubmitClicked])
 
     return(
         <div className={Style.wholeCover}>
@@ -209,7 +235,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
                     onChange={chattingRoomNameInputChangeHandler}
                     value={chattingRoomNameInput}
                 />
-                <button className={Style.submitBtn} onClick={createChatClickHandler}>생 성</button>
+                <button id="newChattingBtn" type="button" className={Style.submitBtn} onClick={createChatClickHandler}>생 성</button>
             </div>
         </div>
     );
