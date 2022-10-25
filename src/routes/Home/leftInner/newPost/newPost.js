@@ -72,14 +72,13 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
     const imageDropHandler = (event) => {
         event.preventDefault();
 
-        console.log(event);
-        console.log(event.dataTransfer);
-        console.log(event.target.dataTransfer);
-        console.log(event.target.files);
-        const a = [event.target.files];
-        console.log(a);
-
-        const inputFile = [...event.dataTransfer.files];//지금 들어온 파일이다.
+        let inputFile = []
+        if(event.type === 'change'){//input에 넣은 경우
+            inputFile = [...event.target.files];
+        }
+        else{//드래그 드랍한 경우
+            inputFile = [...event.dataTransfer.files];
+        }
 
         const renderTmp = [...renderedNewPostImages];
         if(ImageValid(inputFile)){//유효한 파일인 경우 집어넣는다.
