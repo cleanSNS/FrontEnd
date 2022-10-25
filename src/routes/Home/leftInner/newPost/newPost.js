@@ -170,7 +170,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
             {/* 드래그 앤 드롭 영역 */}
             <div className={Style.pictureArea}>
                 <div className={Style.picture} id="imageUploadArea" onDrop={imageDropHandler} onDragOver={imageDragOverHandler} onDragEnter={imageDragEnterHandler} onDragLeave={imageDragLeaveHandler}>
-                    <input type="file" id="userImageInput" style={{display:"none"}}/>
+                    <input type="file" id="userImageInput" style={{display:"none"}} onChange={imageDropHandler}/>
                     <label htmlFor="userImageInput"><img src={addImage} className={Style.pictureinnerimage} id="imageUploadImage"/></label>
                     <p className={Style.pictureinnerword} id="imageUploadMent">업로드할 이미지를 여기로 옮겨주세요.</p>
                 </div>
