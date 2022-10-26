@@ -1,0 +1,52 @@
+.WholeCover{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 40%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr, 1fr;
+}
+
+.Cover{
+    position: relative;
+}
+
+.settingInput{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  
+    width: 80%;
+    height: 45%;
+    font-size: x-large;
+    border: solid 1px rgb(186, 186, 186);
+    border-radius: 0.25rem;
+    box-shadow: 1px 1px 3px rgb(137, 137, 137);
+  }
+  .settingInput:focus{
+    outline: 1px solid rgb(153, 221, 255);
+  }
+
+.submitButton{
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  
+    height: 50px;
+    width: 200px;
+    font-weight: bold;
+    font-size:large;
+  
+    background-color: #F4DEDE;
+    color: white;
+    border-radius: 0.25rem;
+    box-shadow: 1px 1px 3px rgb(152, 152, 152);
+    border: none;
+    cursor: pointer;
+}
