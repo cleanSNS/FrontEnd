@@ -299,13 +299,33 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                     }
                 </div>
                 <div className={Style.profileElementCover}>
-                    { isMyPage ? /* 타인만 필요 */
-                        null 
-                        :
-                        <div className={Style.dropBoxCover}>
-                            <img src={moreStuff} className={Style.dropBoxBtn} onClick={userDropBoxToggleClickHandler}/>
-                            {
-                                userDropBoxToggle ?
+                    <div className={Style.dropBoxCover}>
+                        <img src={moreStuff} className={Style.dropBoxBtn} onClick={userDropBoxToggleClickHandler}/>
+                        {
+                            userDropBoxToggle ?
+                            isMyPage ?
+                                <div className={Style.userDropBox}>
+                                    <div 
+                                        className={Style.settingBlock}
+                                        style={{
+                                            borderRight: "1px solid rgb(190, 190, 190)",
+                                            borderRadius: "0.5rem 0 0 0.5rem"
+                                        }}
+                                        onMouseOver={(event) => event.target.style.backgroundColor="rgb(200,200,200)"}
+                                        onMouseOut={(event) => event.target.style.backgroundColor="white"}
+                                        onClick={() => console.log("만드는중")}>
+                                        프로필 설정
+                                    </div>
+                                    <div 
+                                        className={Style.settingBlock}
+                                        style={{borderRadius: "0 0.5rem 0.5rem 0"}}
+                                        onMouseOver={(event) => event.target.style.backgroundColor="rgb(200,200,200)"}
+                                        onMouseOut={(event) => event.target.style.backgroundColor="white"}
+                                        onClick={() => setUserDropBoxToggle((cur) => !cur)}>
+                                        닫기
+                                    </div>
+                                </div>
+                            :
                                 <div className={Style.userDropBox}>
                                     <div 
                                         className={Style.settingBlock}
@@ -335,11 +355,10 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                                         닫기
                                     </div>
                                 </div>
-                                :
-                                null
-                            }
-                        </div>
-                    }
+                            :
+                            null
+                        }
+                    </div>
                 </div>
             </div>
             {/* 게시물, 팔로워, 팔로우 하는 사람을 볼 수 있는 곳으로, 내 페이지인 경우만 팔로워, 팔로우 하는 사람을 볼 수 있다. */}
