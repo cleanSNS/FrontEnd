@@ -137,7 +137,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, left
     );
 };
 
-const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId, userId}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
+const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId, userId, SettingChangeHandler}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
     const [userImage, setUserImage] = useState("");//해당 프로필의 유저 이미지
     const [userNickname, setUserNickname] = useState("");//해당 프로필의 유저 닉네임
     const [userIntroduce, setUserIntroduce] = useState("");//해당 프로필의 유저 자기소개
@@ -277,6 +277,12 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             }
         });
     };
+
+    //내 페이지에서 클릭 시 프로필 세팅 페이지로 이동
+    const myProfileSettingClickHandler = () => {
+        SettingChangeHandler("profile");
+        leftBookChangeHandler("setting");
+    }
     
     return(
         <div className={Style.wholeCover}>
@@ -314,7 +320,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                                         }}
                                         onMouseOver={(event) => event.target.style.backgroundColor="rgb(200,200,200)"}
                                         onMouseOut={(event) => event.target.style.backgroundColor="white"}
-                                        onClick={() => console.log("만드는중")}>
+                                        onClick={myProfileSettingClickHandler}>
                                         프로필 설정
                                     </div>
                                     <div 

@@ -502,7 +502,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
           <div className={Style.leftbook}>
             <div className={Style.Cover}>
                 {leftBookState === "page" ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setPageId={setPageId} detailPageLikeClick={detailPageLikeClick} setDetailPageLikeClick={setDetailPageLikeClick} setLeftBookState={setLeftBookState}/> : null}
-                {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId}/> : null}
+                {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId} SettingChangeHandler={SettingChangeHandler} /> : null}
                 {leftBookState.includes("chat") ? <LeftChat chattingRoomId={chattingRoomId} setChattingRoomId={setChattingRoomId} refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId} stompClient={stompClient} setStompClient={setStompClient} setChatLoading={setChatLoading}/> : null}
                 {leftBookState === "makeNewC" ? <LeftNewChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} userId={userId} setChattingTriger={setChattingTriger} setChatLoading={setChatLoading}/> : null}
                 {leftBookState.includes("hashtagPage") ? <LeftHashtagPage leftBookState={leftBookState} setPageId={setPageId}/> : null}
