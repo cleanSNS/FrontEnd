@@ -17,6 +17,7 @@ import {
     deletePageUrl,
     unlikeThisPageUrl,
     checkLikeUrl,
+    getCommentOFCommentNumberUrl,
 } from './../../../apiUrl';
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
@@ -49,7 +50,7 @@ const calculateTimeFrom = (calTime) => {
 };
 
 //대댓글 부분
-const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, groupId, refreshAccessToken, pageId, leftBookChangeHandler, setToggle, setCommentOfCommentList, setCommentOfCommentStartId, setIsLastCommentOfComment, count}) => {
+const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, groupId, refreshAccessToken, pageId, leftBookChangeHandler, setToggle, setCommentOfCommentList, setCommentOfCommentStartId, setIsLastCommentOfComment, commentId, getCOCCount}) => {
     const [COCIsLiked, setCOCIsLiked] = useState(false);//대댓글 좋아요 여부
     const [COCLikeCount, setCOCLikeCount] = useState(0);//대댓글 좋아요 개수
 
@@ -91,7 +92,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
                 setToggle(false)//토글 값 강제로 false로
                 setCommentOfCommentList([])//대댓글 지우기
 
-                document.querySelector(`#comment_${groupId}`).innerText = `답글 (${count})개`;
+                getCOCCount(pageId, commentId);
             })
             .catch((res) => {
                 if(res.response.status === 401){
@@ -176,7 +177,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
 };
 
 //대댓글 toggle과 불러오는 부분
-const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfComment, loadCommentOfComment, refreshAccessToken, userId, leftBookChangeHandler, count}) => {
+const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfComment, loadCommentOfComment, refreshAccessToken, userId, leftBookChangeHandler, commentId, getCOCCount}) => {
     const [toggle, setToggle] = useState(false);//대댓글을 보여주는 toggle이다.
     const [commentOfCommentList, setCommentOfCommentList] = useState([]);//대댓글 리스트
     const [commentOfCommentStartId, setCommentOfCommentStartId] = useState(1);//첫 로드시에는 1이온다.
@@ -251,7 +252,8 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
                     setCommentOfCommentList={setCommentOfCommentList}
                     setCommentOfCommentStartId={setCommentOfCommentStartId}
                     setIsLastCommentOfComment={setIsLastCommentOfComment}
-                    count={count}
+                    commentId={commentId}
+                    getCOCCount={getCOCCount}
                 />
                 :
                 <SingleCommentOfComment 
@@ -268,7 +270,8 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
                     setCommentOfCommentList={setCommentOfCommentList}
                     setCommentOfCommentStartId={setCommentOfCommentStartId}
                     setIsLastCommentOfComment={setIsLastCommentOfComment}
-                    count={count}
+                    commentId={commentId}
+                    getCOCCount={getCOCCount}
                 />
             )
         : null
@@ -280,12 +283,33 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
     const [CIsLiked, setCIsLiked] = useState(false);//댓글이 좋아요 된 상태인지
     const [CLikeCount, setCLikeCount] = useState(0);//댓글 좋아요 개수
+    const [COCCount, setCOCCount] = useState(0);//대댓글의 개수
+
+    const getCOCCount = (pid, cid) => {
+        axios.get(`${getCommentOFCommentNumberUrl}/${pid}/comment/${cid}/count`)
+        .then((res) => {
+            setCOCCount(res.data.data.count);
+        })
+        .then((res) => {
+            if(res.response.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("대댓글의 수를 불러오지 못했습니다.");
+            }
+        });
+    };
+
+    useEffect(() => {
+        setCOCCount(data.nestedCommentCount);
+    }, []);//초기에 대댓글의 수를 넣어둔다.
 
     //대댓글을 켜는 함수
     const onLoadCommentOfCommentClickHandler = (event) => {
         event.preventDefault();
         if(event.target.innerText === "답글 닫기"){
-            event.target.innerText = `답글 (${data.nestedCommentCount})개`;
+            event.target.innerText = `답글 (${COCCount})개`;
         }
         else{
             event.target.innerText = "답글 닫기";
@@ -412,7 +436,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                             }
                             {
                                 data.nestedCommentCount === 0 ?
-                                null : <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={`comment_${data.group}`}>{`답글 (${data.nestedCommentCount})개`}</p>
+                                null : <p className={Style.likeandCommentCount} onClick={onLoadCommentOfCommentClickHandler} id={`comment_${data.group}`}>{`답글 (${COCCount})개`}</p>
                             }
                             <p className={Style.likeandCommentCount} style={{cursor: "default"}}>|</p>
                             {
@@ -430,7 +454,8 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                 <RenderCommentOfComment 
                     pageId={pageId} 
                     groupId={data.group}
-                    count={data.nestedCommentCount}
+                    commentId={data.commentId}
+                    getCOCCount={getCOCCount}
                     setLoadCommentOfComment={setLoadCommentOfComment} 
                     loadCommentOfComment={loadCommentOfComment} 
                     refreshAccessToken={refreshAccessToken} 
