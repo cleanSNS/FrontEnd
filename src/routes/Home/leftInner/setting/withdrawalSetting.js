@@ -5,7 +5,7 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const WithdrawalSetting = ({refreshAccessToken}) => {
+const WithdrawalSetting = ({refreshAccessToken, userId, logout}) => {
     const [userPasswordInput, setUserPasswordInput] = useState("");
 
     const userPasswordInputChangeHandler = (event) => {
@@ -14,17 +14,29 @@ const WithdrawalSetting = ({refreshAccessToken}) => {
 
     const withdrawalSubmitHandler = (event) => {
         event.preventDefault();
+        if(userPasswordInput === "") {
+            alert("비밀번호를 입력해 주세요");
+            return;
+        }
 
-        axios.post(withdrawalUrl)
+        axios.post(withdrawalUrl, {
+            userId: userId,
+            password: userPasswordInput
+        })
         .then((res) => {
-
+            alert("회원탈퇴에 성공하였습니다. 감사합니다.");
+            logout();//로그 아웃까지
         })
         .catch((res) => {
             if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
-            else{
+            else if(res.response.statue === 400){
                 alert("잘못된 비밀번호입니다.");
+                setUserPasswordInput("");//비밀번호 초기화
+            }
+            else{
+                alert("예상치 못한 오류입니다.");
             }
         })
     };
