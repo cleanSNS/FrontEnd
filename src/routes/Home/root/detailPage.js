@@ -279,27 +279,10 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
 }
 
 //댓글
-const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
+const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler, COCCount, setCOCCount, getCOCCount}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
     const [CIsLiked, setCIsLiked] = useState(false);//댓글이 좋아요 된 상태인지
     const [CLikeCount, setCLikeCount] = useState(0);//댓글 좋아요 개수
-    const [COCCount, setCOCCount] = useState(0);//대댓글의 개수
-
-    const getCOCCount = (pid, cid) => {
-        axios.get(`${getCommentOFCommentNumberUrl}/${pid}/comment/${cid}/count`)
-        .then((res) => {
-            setCOCCount(res.data.data.count);
-        })
-        .then((res) => {
-            if(res.response.status === 401){
-                refreshAccessToken();
-            }
-            else{
-                console.log(res);
-                alert("대댓글의 수를 불러오지 못했습니다.");
-            }
-        });
-    };
 
     useEffect(() => {
         setCOCCount(data.nestedCommentCount);
@@ -371,7 +354,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
     //댓글에 대댓글을 달 수 있도록 변경하는 함수
     const changeCommentToComment = (event) => {
         event.preventDefault();
-        setCommentToWhom(["c", data.group, data.userDto.nickname]);
+        setCommentToWhom(["c", data.group, data.userDto.nickname, data.commentId]);
     };
 
     /********************************좋아요 관련************************************/
@@ -489,7 +472,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     const [isLiked, setIsLiked] = useState(false);//해당 페이지를 좋아요했는지 저장
     const [likeCountVisual, setLikeCountVisual] = useState(true);//글 작성자가 해당 페이지 좋아요 개수를 보여주도록 허용했는지 아닌지 알려주는 함수
     const [imageIndex, setImageIndex] = useState(0);//보고있는 이미지의 index
-    const [commentToWhom, setCommentToWhom] = useState(["p", -1, ""]);//[0]은 페이지에 댓글인지 댓글에 대댓글인지(c) 표시 // [1]은 대댓글인 경우 groupId를 의미 댓글이면 -1 // [2]는 대댓글인 경우 유저의 닉네임 댓글이면 ""
+    const [commentToWhom, setCommentToWhom] = useState(["p", -1, "", pageId]);//[0]은 페이지에 댓글인지 댓글에 대댓글인지(c) 표시 // [1]은 대댓글인 경우 groupId를 의미 댓글이면 -1 // [2]는 대댓글인 경우 유저의 닉네임 댓글이면 "" // [3]은 대상의 Id
     const [userCommentInput, setUserCommentInput] = useState("");//유저가 작성하고있는 댓글
 
     const [commentList, setCommentList] = useState([]); //업로드된 댓글
@@ -716,6 +699,9 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             presetComment();//댓글 내가 쓴거까지 로드된내용 불러오기
             setIsLastComment(false);//원활하게 다시 호출 되도록 세팅
             submitAbleAgain();
+            if(commentToWhom[0] !== "p"){//즉, 대댓글 입력의 경우
+                getCOCCount(pageId, commentToWhom[3]);
+            }
         })
         .catch((res) => {
             submitAbleAgain();
@@ -770,6 +756,25 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                 }
             });
         }
+    };
+
+    /**********************글 영역 - 대댓글************************/
+    const [COCCount, setCOCCount] = useState(0);//대댓글의 개수
+
+    const getCOCCount = (pid, cid) => {
+        axios.get(`${getCommentOFCommentNumberUrl}/${pid}/comment/${cid}/count`)
+        .then((res) => {
+            setCOCCount(res.data.data.count);
+        })
+        .then((res) => {
+            if(res.response.status === 401){
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("대댓글의 수를 불러오지 못했습니다.");
+            }
+        });
     };
 
     return(
@@ -843,6 +848,9 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
                                     leftBookChangeHandler={leftBookChangeHandler}
+                                    COCCount={COCCount}
+                                    setCOCCount={setCOCCount}
+                                    getCOCCount={getCOCCount}
                                 />
                                 :
                                 <RenderComment 
@@ -859,6 +867,9 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
                                     leftBookChangeHandler={leftBookChangeHandler}
+                                    COCCount={COCCount}
+                                    setCOCCount={setCOCCount}
+                                    getCOCCount={getCOCCount}
                                 />
                             ))
                         }
