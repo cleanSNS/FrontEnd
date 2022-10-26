@@ -8,11 +8,11 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 60%;
-  height: 80%;
+  height: 85%;
 
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 3fr 4fr 4fr 3fr 3fr 3fr;
+  grid-template-rows: 3fr 4fr 4fr 3fr 3fr 4fr;
 }
 
 /*설정부분 label과 input으로 분리하는 부분*/
@@ -61,9 +61,9 @@
 /*제출 버튼*/
 .submitBtn{
   position: absolute;
-  top: 30%;
+  bottom: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
 
   height: 50px;
   width: 200px;

@@ -14,16 +14,18 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
     //변수 선언
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [wrong, setWrong] = useState("0");//가능한 값, clear(문제 없음), not user(이메일이나 비번이 틀린 경우)
+    const [wrong, setWrong] = useState("clear");//가능한 값, clear(문제 없음), not user(이메일이나 비번이 틀린 경우)
 
     //input 변경시 반영해주는 함수
     const emailHandler = (event) =>{
         event.preventDefault();
         setEmail(event.target.value);
+        setWrong("clear");
     };
     const passwordHandler = (event) => {
         event.preventDefault();
         setPassword(event.target.value);
+        setWrong("clear");
     };
 
     //로그인 클릭 처리 함수
