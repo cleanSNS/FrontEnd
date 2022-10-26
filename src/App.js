@@ -155,7 +155,6 @@ function App() {
       {isLogin === "login" ? <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken} noticeEventSource={noticeEventSource} userId={userId}/> : null}
       {isLogin === "logout" ? <Login login={loginFunc}/> : null}
       {isLogin === "email" ? <Email authInfo={authInfo} /> : null}
-      <button type="button" onClick={(event) => {setIsLogin("login")}}>관리자 버튼</button>{/* 나중에 삭제해야함 */}
     </div>
   );
 }
