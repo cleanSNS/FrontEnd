@@ -45,16 +45,21 @@ const WithdrawalSetting = ({refreshAccessToken, userId, logout}) => {
         <form className={Style.WholeCover} onSubmit={withdrawalSubmitHandler}>
             <div className={Style.Cover}>
                 <div className={Style.passwordCover}>
-                    <label className={Style.settingLabel}>
-                        비밀번호
-                    </label>
-                    <input 
-                        type="password"
-                        placeholder='회원 탈퇴를 위해 비밀번호를 입력해 주세요'
-                        value={userPasswordInput}
-                        onChange={userPasswordInputChangeHandler}
-                        className={Style.settingInput}
-                    />
+                    <div className={Style.Cover}>
+                        <label className={Style.settingLabel} htmlFor="userPassword">
+                            비밀번호
+                        </label>
+                    </div>
+                    <div className={Style.Cover}>
+                        <input
+                            id="userPassword"
+                            type="password"
+                            placeholder='회원 탈퇴를 위해 비밀번호를 입력해 주세요'
+                            value={userPasswordInput}
+                            onChange={userPasswordInputChangeHandler}
+                            className={Style.settingInput}
+                        />
+                    </div>
                 </div>
             </div>
             <div className={Style.Cover}>
