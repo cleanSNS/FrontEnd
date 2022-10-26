@@ -21,6 +21,9 @@ const Setting = ({settingState, SettingChangeHandler}) => {
             <div className={Style.settingCover} id="password" onClick={settingClickHandler}>
                 <div className={Style.setting} id="password" onClick={settingClickHandler}>비밀번호 변경</div>
             </div>
+            <div className={Style.settingCover} id="withdrawal" onClick={settingClickHandler}>
+                <div className={Style.setting} id="withdrawal" onClick={settingClickHandler}>비밀번호 변경</div>
+            </div>
             <div className={Style.settingCover} id="filtering" onClick={settingClickHandler}>
                 <div className={Style.setting} id="filtering" onClick={settingClickHandler}>필터링 설정</div>
             </div>

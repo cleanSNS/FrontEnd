@@ -1,6 +1,7 @@
 import ProfileSetting from './profileSetting';
 import NoticeSetting from './noticeSetting';
 import PasswordSetting from './passwordSetting';
+import WithdrawalSetting from './withdrawalSetting';
 import FilteringSetting from './filteringSetting';
 import BlockSetting from './blockSetting';
 import Credit from './credit';
@@ -13,6 +14,7 @@ const LeftSetting = ({settingState, refreshAccessToken, userId}) => {
             { settingState === 'profile' ? <ProfileSetting refreshAccessToken={refreshAccessToken}/> : null }
             { settingState === 'Snotice' ? <NoticeSetting refreshAccessToken={refreshAccessToken}/> : null }
             { settingState === 'password' ? <PasswordSetting refreshAccessToken={refreshAccessToken}/> :null }
+            { settingState === 'withdrawal' ? <WithdrawalSetting refreshAccessToken={refreshAccessToken}/> :null }
             { settingState === 'filtering' ? <FilteringSetting refreshAccessToken={refreshAccessToken} userId={userId}/> : null }
             { settingState === 'block' ? <BlockSetting refreshAccessToken={refreshAccessToken} userId={userId}/> : null }
             { settingState === 'credit' ? <Credit /> : null }
