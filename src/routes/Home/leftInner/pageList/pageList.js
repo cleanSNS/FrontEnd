@@ -304,12 +304,13 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                         {
                             userDropBoxToggle ?
                             isMyPage ?
-                                <div className={Style.userDropBox}>
+                                <div className={Style.userDropBox} style={{width: "202px"}}>
                                     <div 
                                         className={Style.settingBlock}
                                         style={{
                                             borderRight: "1px solid rgb(190, 190, 190)",
-                                            borderRadius: "0.5rem 0 0 0.5rem"
+                                            borderRadius: "0.5rem 0 0 0.5rem",
+                                            width: "50%"
                                         }}
                                         onMouseOver={(event) => event.target.style.backgroundColor="rgb(200,200,200)"}
                                         onMouseOut={(event) => event.target.style.backgroundColor="white"}
@@ -318,7 +319,10 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                                     </div>
                                     <div 
                                         className={Style.settingBlock}
-                                        style={{borderRadius: "0 0.5rem 0.5rem 0"}}
+                                        style={{
+                                            borderRadius: "0 0.5rem 0.5rem 0",
+                                            width: "50%"
+                                        }}
                                         onMouseOver={(event) => event.target.style.backgroundColor="rgb(200,200,200)"}
                                         onMouseOut={(event) => event.target.style.backgroundColor="white"}
                                         onClick={() => setUserDropBoxToggle((cur) => !cur)}>
@@ -326,12 +330,13 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                                     </div>
                                 </div>
                             :
-                                <div className={Style.userDropBox}>
+                                <div className={Style.userDropBox} style={{width: "302px"}}>
                                     <div 
                                         className={Style.settingBlock}
                                         style={{
                                             borderRight: "1px solid rgb(190, 190, 190)",
-                                            borderRadius: "0.5rem 0 0 0.5rem"
+                                            borderRadius: "0.5rem 0 0 0.5rem",
+                                            width: "33%"
                                         }}
                                         onMouseOver={(event) => event.target.style.backgroundColor="rgb(200,200,200)"}
                                         onMouseOut={(event) => event.target.style.backgroundColor="white"}
@@ -340,7 +345,10 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                                     </div>
                                     <div 
                                         className={Style.settingBlock}
-                                        style={{borderRight: "1px solid rgb(190, 190, 190)"}}
+                                        style={{
+                                            borderRight: "1px solid rgb(190, 190, 190)",
+                                            width: "33%"
+                                        }}
                                         onMouseOver={(event) => event.target.style.backgroundColor="rgb(200,200,200)"}
                                         onMouseOut={(event) => event.target.style.backgroundColor="white"}
                                         onClick={userBlockClickHandler}>
@@ -348,7 +356,10 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                                     </div>
                                     <div 
                                         className={Style.settingBlock}
-                                        style={{borderRadius: "0 0.5rem 0.5rem 0"}}
+                                        style={{
+                                            borderRadius: "0 0.5rem 0.5rem 0",
+                                            width: "33%"
+                                        }}
                                         onMouseOver={(event) => event.target.style.backgroundColor="rgb(200,200,200)"}
                                         onMouseOut={(event) => event.target.style.backgroundColor="white"}
                                         onClick={() => setUserDropBoxToggle((cur) => !cur)}>
