@@ -440,6 +440,9 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   const [detailPageLikeClick, setDetailPageLikeClick] = useState(-1);
 
 
+  /****************************프로필 설정과 오른쪽의 friend와 chat의 연결********************************* */
+  const [chatAndFriendReloadTriger, setChatAndFriendReloadTriger] = useState(false);
+
   return(
     <div className={Style.pageCover}>
       {/* 좌 상단 - 로고와 검색창 */}
@@ -507,7 +510,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
                 {leftBookState === "makeNewC" ? <LeftNewChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} userId={userId} setChattingTriger={setChattingTriger} setChatLoading={setChatLoading}/> : null}
                 {leftBookState.includes("hashtagPage") ? <LeftHashtagPage leftBookState={leftBookState} setPageId={setPageId}/> : null}
                 {leftBookState === "newPost" ? <LeftNewPost renderedNewPostImages={renderedNewPostImages} setRenderedNewPostImages={setRenderedNewPostImages} newPostImages={newPostImages} setNewPostImages={setNewPostImages} newPostHashtag={newPostHashtag} setNewPostHashtag={setNewPostHashtag} newPostContent={newPostContent} setNewPostContent={setNewPostContent} uploadNewPostHandler={uploadNewPostHandler} /> : null}
-                {leftBookState === "setting" ? <LeftSetting settingState={settingState} refreshAccessToken={refreshAccessToken} userId={userId} logout={logout}/> : null}
+                {leftBookState === "setting" ? <LeftSetting settingState={settingState} refreshAccessToken={refreshAccessToken} userId={userId} logout={logout} setChatAndFriendReloadTriger={setChatAndFriendReloadTriger} rightBookState={rightBookState}/> : null}
             </div>
           </div>
         </div>
@@ -518,9 +521,9 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
           <div className={Style.rightbook}>
             <div className={Style.Cover}>
               { rightBookState === "newPost" ? <RightNewPost newPostLikeNotice={newPostLikeNotice} setNewPostLikeNotice={setNewPostLikeNotice} newPostCommentNotice={newPostCommentNotice} setNewPostCommentNotice={setNewPostCommentNotice} newPostReadPostAuth={newPostReadPostAuth} setNewPostReadPostAuth={setNewPostReadPostAuth} newPostReadCommentAuth={newPostReadCommentAuth} setNewPostReadCommentAuth={setNewPostReadCommentAuth} newPostWriteCommentAuth={newPostWriteCommentAuth} setNewPostWriteCommentAuth={setNewPostWriteCommentAuth} newPostReadLikeAuth={newPostReadLikeAuth} setNewPostReadLikeAuth={setNewPostReadLikeAuth}/> :  null}
-              { rightBookState === "chat" ? <RightChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} leftBookState={leftBookState} rightBookState={rightBookState} chattingTriger={chattingTriger} setChattingTriger={setChattingTriger} chatLoading={chatLoading} setChatLoading={setChatLoading}/> : null}
+              { rightBookState === "chat" ? <RightChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} leftBookState={leftBookState} rightBookState={rightBookState} chattingTriger={chattingTriger} setChattingTriger={setChattingTriger} chatLoading={chatLoading} setChatLoading={setChatLoading} chatAndFriendReloadTriger={chatAndFriendReloadTriger} setChatAndFriendReloadTriger={setChatAndFriendReloadTriger}/> : null}
               { rightBookState === "notice" ? <RightNotice leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken} setPageId={setPageId} noticeCount={noticeCount} setNoticeCount={setNoticeCount}/> : null}
-              { rightBookState === "friend" ? <RightFriend leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken}/> : null}
+              { rightBookState === "friend" ? <RightFriend leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken} chatAndFriendReloadTriger={chatAndFriendReloadTriger} setChatAndFriendReloadTriger={setChatAndFriendReloadTriger}/> : null}
               { rightBookState === "setting" ? <RightSetting settingState={settingState} SettingChangeHandler={SettingChangeHandler} logout={logout}/> : null}
             </div>
           </div>

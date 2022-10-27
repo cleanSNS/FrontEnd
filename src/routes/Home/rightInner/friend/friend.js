@@ -26,13 +26,33 @@ const RenderRightFriend = ({friendList, leftBookChangeHandler}) => {
     );
 }
 
-const RightFriend = ({leftBookChangeHandler, refreshAccessToken}) => {
+const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendReloadTriger, setChatAndFriendReloadTriger}) => {
     const [followeeList, setFolloweeList] = useState([]);
     const [followerList, setFollowerList] = useState([]);
     const [friendList, setFriendList] = useState([]);
     const [myProfileImage, setMyProfileImage] = useState("");
     const [myProfileName, setMyProfileName] = useState("");
     const [myId, setMyId] = useState("");
+
+    useEffect(() => {
+        if(!chatAndFriendReloadTriger) return;
+        axios.get(getcurrentProfileUrl)//내 정보 불러오기
+        .then((res) => {
+            setMyProfileName(res.data.data.nickname);
+            setMyProfileImage(res.data.data.imgUrl);
+            setChatAndFriendReloadTriger(false);
+        })
+        .catch((res) => {
+            if(res.response.status === 401){//access token이 만료된 경우이다.
+                refreshAccessToken();
+            }
+            else{
+                console.log(res);
+                alert("에러 발생");
+                //window.location.href = '/main';
+            }
+        });
+    }, [chatAndFriendReloadTriger])
 
     //화면 렌더링 초기 설정 함수
     const rightFriendPreset = () => {

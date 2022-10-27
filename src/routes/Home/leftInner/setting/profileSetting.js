@@ -7,7 +7,7 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const ProfileSetting = ({refreshAccessToken}) => {
+const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, rightBookState}) => {
     //api에 보낼 내용 + input에 반영해야하므로 useState로 선언
     const [ps_userImage, setPs_UserImage] = useState(null);//백엔드에서 받아온 기존의 이미지 정보
     const [ps_userImageSend, setPs_userImageSend] = useState(null);//유저가 변경한 이미지의 파일 정보
@@ -147,6 +147,9 @@ const ProfileSetting = ({refreshAccessToken}) => {
                 setPs_userImageSend(null);
                 setUserProfileuploaded(null);
                 submitAbleAgain();//다시 제출 가능 상태로
+                if(rightBookState === "chat" || rightBookState === "friend"){
+                    setChatAndFriendReloadTriger(true);
+                }
             })
             .catch((res) => {
                 submitAbleAgain();//다시 제출 가능 상태로

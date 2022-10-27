@@ -97,7 +97,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
     );
 };
 
-const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBookState, chattingTriger, setChattingTriger, chatLoading, setChatLoading}) => {
+const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBookState, chattingTriger, setChattingTriger, chatLoading, setChatLoading, chatAndFriendReloadTriger, setChatAndFriendReloadTriger}) => {
     const [chatSearchInput, setChatSearchInput] = useState("");//검색창에 입력된 정보
     const [chattingRoomList, setChattingRoomList] = useState([]);//채팅방들의 정보를 가진 리스트
     const [searched, setSearched] = useState(false);//채팅방이 검색된 상태인지 알려주는 변수
@@ -137,11 +137,18 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
     }, [rightBookState]);//초기 설정
 
 
-    useEffect(() => {
+    useEffect(() => {//이 트리거는 새로운 채팅이 올라왔을 때 발생
         if(chattingTriger){//트리거가 발생한 순간에만 로딩
             gettingChattingRoomList();
         }
     }, [chattingTriger]);
+
+    useEffect(() => {//이 트리거는 사용자가 오른쪽 페이지가 채팅일 때, 프로필 변경을 하면 발행
+        if(chatAndFriendReloadTriger){//트리거가 발생한 순간에만 로딩
+            gettingChattingRoomList();
+            setChatAndFriendReloadTriger(false);
+        }
+    }, [chatAndFriendReloadTriger]);
 
     //새 채팅방 click Handler
     const newChatClickHandler = () => {
