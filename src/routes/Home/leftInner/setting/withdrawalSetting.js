@@ -5,7 +5,7 @@ import {
 } from '../../../../apiUrl';
 import axios from 'axios';
 
-const WithdrawalSetting = ({refreshAccessToken, userId, logout}) => {
+const WithdrawalSetting = ({refreshAccessToken, logout}) => {
     const [userPasswordInput, setUserPasswordInput] = useState("");
 
     const userPasswordInputChangeHandler = (event) => {
@@ -20,7 +20,6 @@ const WithdrawalSetting = ({refreshAccessToken, userId, logout}) => {
         }
 
         axios.post(withdrawalUrl, {
-            userId: userId,
             password: userPasswordInput
         })
         .then((res) => {
@@ -54,7 +53,7 @@ const WithdrawalSetting = ({refreshAccessToken, userId, logout}) => {
                         <input
                             id="userPassword"
                             type="password"
-                            placeholder='회원 탈퇴를 위해 비밀번호를 입력해 주세요'
+                            placeholder='소셜 가입 회원의 경우 연동된 이메일을 입력해 주세요'
                             value={userPasswordInput}
                             onChange={userPasswordInputChangeHandler}
                             className={Style.settingInput}
