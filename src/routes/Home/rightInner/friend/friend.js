@@ -52,7 +52,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendRe
                 //window.location.href = '/main';
             }
         });
-    }, [chatAndFriendReloadTriger])
+    }, [chatAndFriendReloadTriger]);
 
     //화면 렌더링 초기 설정 함수
     const rightFriendPreset = () => {
