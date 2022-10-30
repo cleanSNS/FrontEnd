@@ -29,7 +29,7 @@ const SingleChat = ({data, setLeftBookState, userId, userAndUserImg, userAndUser
             return `${postedTime.hour.toString().padStart(2, "0")}:${postedTime.minute.toString().padStart(2, "0")}`;
         }
         else{//연월일이 오늘이 아니면 월 일을 쓴다.
-            return `${postedTime.month}월 ${postedTime.date}일`;
+            return `${postedTime.month}월 ${postedTime.day}일`;
         }
     };
 
