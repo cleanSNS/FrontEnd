@@ -62,6 +62,9 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendRe
             setFolloweeList(tmp);
         })
         .catch((res) => {
+            console.log(res.response.status);
+            console.log(type(res.response.status));
+            
             if(res.response.status === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }

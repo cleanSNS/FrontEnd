@@ -66,14 +66,14 @@ function App() {
     .catch((res) =>{
       if(res.response.data.message === "만료된 토큰입니다." || res.response.data.message === "access token이 존재하지 않습니다."){//너무 오래된 경우 isLogin의 상태와 무관하게 만료되면 logout한다.
         alert("장시간 로그인되어, 자동 로그아웃되었습니다. 다시 로그인해주세요.");
-        logoutFunc(); //정상작동 확인되면 앞 주석 지우기
-        return;//해당 부분만 실행한다.
+        logoutFunc();
+        return;
       }
-      if(isLogin === "logout"){//만료되지 않았으나 호출 => 새로고침 그래서 Accesstoken이 만료되지않았다는 오류가 발생
+      if(isLogin === "logout"){//만료되지 않았으나 호출. 즉, 새로고침인 경우이다. 이 경우 Accesstoken이 만료되지않았다는 오류가 발생 => 그냥 SSE를 연결하고 로그인상태로 만든다.
         getUserIdANdOpenSSEHandler();
         setIsLogin("login");
       }
-    })
+    });
   };
   useEffect(refreshAccessToken, []);//처음 화면을 켰을 때, 한번 자동으로 실행해서 실수로 껐더라도 자동 로그인이 되게 한다.
 
@@ -91,7 +91,8 @@ function App() {
       setIsLogin("logout");//로그인 화면으로 이동
     })
     .catch((res)=>{
-      //일반적으로 오류인 경우는 없다 그냥 rft가 만료되었을 뿐이다. 만료되어서 그냥 CORS에러가 뜨니까 다시 로그인 하게 만들기
+      //일반적으로 오류인 경우는 없다 그냥 rft가 만료되었을 뿐이다.
+      alert("비정상적으로 종료되었습니다.");
       localStorage.removeItem("rft");//refresh token 지우기
       setIsLogin("logout");//로그인 화면으로 이동
     });
