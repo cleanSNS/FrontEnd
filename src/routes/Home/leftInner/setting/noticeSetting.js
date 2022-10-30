@@ -25,7 +25,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
             setNotificationChat(res.data.data.notificationChat);
         })
         .catch((res) => {
-            if(res.response.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -80,7 +80,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
         })
         .catch((res) => {
             submitAbleAgain();//다시 제출 가능하게하기
-            if(res.response.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{

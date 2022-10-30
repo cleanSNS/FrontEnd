@@ -84,7 +84,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
                 })
                 .catch((res) => {
                     submitAbleAgain();//다시 보낼 수 있게 설정
-                    if(res.response.status === 401){//access token이 만료된 경우이다.
+                    if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                         refreshAccessToken();
                     }
                     else{
@@ -100,7 +100,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
         })
         .catch((res) => {
             submitAbleAgain();//다시 보낼 수 있게 설정
-            if(res.response.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{

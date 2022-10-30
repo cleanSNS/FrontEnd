@@ -24,7 +24,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
                     gettingChattingRoomList();//채팅방 다시 로드
                 })
                 .catch((res) => {
-                    if(res.response.status === 401){
+                    if(res.response.status === 401 || res.response.status === 0){
                         refreshAccessToken();
                     }
                     else{
@@ -120,7 +120,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
             setChattingTriger(false);
         })
         .catch((res) => {
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{

@@ -67,7 +67,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
                 setFollowerList(tmp2);//팔로워 저장
             })
             .catch((res) => {
-                if(res.response.status === 401){
+                if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
                 }
                 else{
@@ -76,7 +76,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
             });
         })
         .catch((res) =>{
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{
@@ -174,7 +174,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
         })
         .catch((res) => {
             submitAbleAgain();
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{

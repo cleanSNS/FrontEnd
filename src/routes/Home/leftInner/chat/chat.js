@@ -161,7 +161,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
             SetchattingRoomInfoSet(true);
         })
         .catch((res) => {
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{
@@ -194,7 +194,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         })
         .catch((res) => {
             setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{
@@ -241,7 +241,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
             console.log("채팅방 이름을 바꿨습니다.");
         })
         .catch((res) => {
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{

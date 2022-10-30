@@ -98,7 +98,7 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
             console.log("페이지에 좋아요혹은 좋아요 취소했습니다.");
         })
         .catch((res) => {
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{
@@ -167,7 +167,7 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeC
             setPageStartId(res.data.startId);
         })
         .catch((res) => {
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{

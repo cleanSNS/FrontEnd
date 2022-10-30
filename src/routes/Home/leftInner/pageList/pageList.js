@@ -44,7 +44,7 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
             setUserList(res.data.data);
         })
         .catch((res) => {
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{
@@ -103,7 +103,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, left
             setPageStartId(res.data.startId);
         })
         .catch((res) => {
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{
@@ -177,7 +177,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             setIsFollowed(res.data.data.follow);
         })
         .catch((res) => {
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{
@@ -228,7 +228,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             setUserPageAndFriendReloadTriger(true);
         })
         .catch((res) => {
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{
@@ -249,7 +249,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             alert("해당 유저를 신고했습니다.");
         })
         .catch((res) =>{
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{
@@ -269,7 +269,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             alert("해당 유저를 차단했습니다.");
         })
         .catch((res) => {
-            if(res.response.status === 401){
+            if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
             }
             else{

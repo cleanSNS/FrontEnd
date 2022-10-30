@@ -25,7 +25,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
             setAddedUserList(tmp);
         })
         .catch((res) => {
-            if(res.response.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -59,7 +59,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
                 setSearchedUserList([]);
             })
             .catch((res) => {
-                if(res.response.status === 401){//access token이 만료된 경우이다.
+                if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                     refreshAccessToken();
                 }
                 else{
@@ -69,7 +69,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
             })
         })
         .catch((res) => {
-            if(res.response.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{
@@ -142,7 +142,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
             setSearchedUserList(withoutMe);
         })
         .catch((res) => {
-            if(res.response.status === 401){//access token이 만료된 경우이다.
+            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
             }
             else{

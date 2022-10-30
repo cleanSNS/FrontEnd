@@ -18,7 +18,7 @@ function App() {
       setUserId(res.data.data.userId);
     })
     .catch((res) => {
-      if(res.response.status === 401){
+      if(res.response.status === 401 || res.response.status === 0){
         refreshAccessToken();
       }
       else{

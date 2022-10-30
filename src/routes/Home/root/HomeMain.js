@@ -88,7 +88,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         setIsSubmitted(true);
       })
       .catch((res) => {
-        if(res.response.status === 401){
+        if(res.response.status === 401 || res.response.status === 0){
           refreshAccessToken();
         }
         else{
@@ -98,7 +98,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       });
     })
     .catch((res) => {
-      if(res.response.status === 401){
+      if(res.response.status === 401 || res.response.status === 0){
         refreshAccessToken();
       }
       else{
@@ -206,7 +206,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       setUploadImages(tmp);
     })
     .catch((res) => {
-      if(res.response.status === 401){//access token이 만료된 경우이다.
+      if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
         refreshAccessToken();
       }
       else{
@@ -248,7 +248,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       })
       .catch((res) => {
         submitAbleAgain();
-        if(res.response.status === 401){//access token이 만료된 경우이다.
+        if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
           refreshAccessToken();
         }
         else{
@@ -345,7 +345,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         setNoticeCount(res.data.data.count);
       })
       .catch((res) => {
-        if(res.response.status === 401){
+        if(res.response.status === 401 || res.response.status === 0){
           refreshAccessToken();
         }
         else{
@@ -359,7 +359,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         setChatCount(res.data.data.count);
       })
       .catch((res) => {
-        if(res.response.status === 401){
+        if(res.response.status === 401 || res.response.status === 0){
           refreshAccessToken();
         }
         else{
