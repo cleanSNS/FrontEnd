@@ -26,7 +26,7 @@ const RenderRightFriend = ({friendList, leftBookChangeHandler}) => {
     );
 }
 
-const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendReloadTriger, setChatAndFriendReloadTriger}) => {
+const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendReloadTriger, setChatAndFriendReloadTriger, userPageAndFriendReloadTriger, setUserPageAndFriendReloadTriger}) => {
     const [followeeList, setFolloweeList] = useState([]);
     const [followerList, setFollowerList] = useState([]);
     const [friendList, setFriendList] = useState([]);
@@ -34,7 +34,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendRe
     const [myProfileName, setMyProfileName] = useState("");
     const [myId, setMyId] = useState("");
 
-    useEffect(() => {
+    useEffect(() => {//오른쪽 화면이 친구리스트인데 사용자가 프로필을 수정하는 경우, 사용자의 프로필을 다시 불러와서 갱신하는 함수
         if(!chatAndFriendReloadTriger) return;
         axios.get(getcurrentProfileUrl)//내 정보 불러오기
         .then((res) => {
@@ -120,6 +120,12 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendRe
         });
     };
     useEffect(rightFriendPreset, []);
+
+    useEffect(() => {//유저의 page에서 팔로우 클릭 시 친구 정보를 다시 불러온다.
+        if(!userPageAndFriendReloadTriger) return;//false인 경우 실행 X
+        rightFriendPreset();
+        setUserPageAndFriendReloadTriger(false);
+    }, [userPageAndFriendReloadTriger]);
 
     const friendListSet = () => {
         //follower와 follwee에 동시에 속한 값들은 친구로 저장

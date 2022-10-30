@@ -137,7 +137,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, left
     );
 };
 
-const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId, userId, SettingChangeHandler}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
+const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId, userId, SettingChangeHandler, setUserPageAndFriendReloadTriger}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
     const [userImage, setUserImage] = useState("");//해당 프로필의 유저 이미지
     const [userNickname, setUserNickname] = useState("");//해당 프로필의 유저 닉네임
     const [userIntroduce, setUserIntroduce] = useState("");//해당 프로필의 유저 자기소개
@@ -225,6 +225,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         })
         .then((res) => {
             setIsFollowed((cur) => !cur);
+            setUserPageAndFriendReloadTriger(true);
         })
         .catch((res) => {
             if(res.response.status === 401){
