@@ -79,7 +79,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
             submitAbleAgain();//다시 보낼 수 있게 설정
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                changePassword();
+                setTimeout(changePassword, 1000);
             }
             else{
                 console.log(res);
@@ -107,7 +107,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
             submitAbleAgain();//다시 보낼 수 있게 설정
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                submitHandlerSecondAct();
+                setTimeout(submitHandlerSecondAct, 1000);
             }
             else{
                 alert("비밀번호를 확인하는 과정에서 문제가 발생했습니다.");

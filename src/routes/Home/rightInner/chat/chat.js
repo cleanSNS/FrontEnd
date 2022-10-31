@@ -26,7 +26,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
                 .catch((res) => {
                     if(res.response.status === 401 || res.response.status === 0){
                         refreshAccessToken();
-                        chatClickHandler(event);
+                        setTimeout(() => {chatClickHandler(event);}, 1000);
                     }
                     else{
                         alert("채팅방에서 나가지 못했습니다.");
@@ -123,7 +123,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                gettingChattingRoomList();
+                setTimeout(gettingChattingRoomList, 1000);
             }
             else{
                 alert("채팅방을 불러오지 못했습니다.");

@@ -132,7 +132,7 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                likeClickHandler();
+                setTimeout(likeClickHandler, 1000);
             }
             else{
                 console.log(res);
@@ -206,7 +206,7 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeC
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                loadPageListFunc();
+                setTimeout(loadPageListFunc, 1000);
             }
             else{
                 console.log(res);

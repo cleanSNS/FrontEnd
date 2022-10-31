@@ -65,7 +65,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
         .catch((res) =>{
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                presetFollowerAndFollowee();
+                setTimeout(presetFollowerAndFollowee, 1000);
             }
             else{
                 alert("팔로잉을 불러오지 못했습니다.");
@@ -80,7 +80,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                presetFollowerAndFollowee();
+                setTimeout(presetFollowerAndFollowee, 1000);
             }
             else{
                 alert("팔로워을 불러오지 못했습니다.");
@@ -179,7 +179,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
             submitAbleAgain();
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                createChatClickHandlerSecondAct();
+                setTimeout(createChatClickHandlerSecondAct, 1000);
             }
             else{
                 alert("채팅방을 생성하지 못했습니다.");

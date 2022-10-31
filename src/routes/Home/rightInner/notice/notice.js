@@ -43,7 +43,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                onNoticeScripsClickHandler(event);
+                setTimeout(() => {onNoticeScripsClickHandler(event);}, 1000);
             }
             else{
                 console.log(res);
@@ -76,7 +76,7 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                deleteBtnClickHandler(event);
+                setTimeout(() => {deleteBtnClickHandler(event);}, 1000);
             }
             else{
                 console.log(res);
@@ -128,12 +128,11 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                NoticeRead();
+                setTimeout(NoticeRead, 1000);
             }
             else{
                 console.log(res);
-                alert("에러 발생");
-                //window.location.href = '/main';
+                alert("알림을 불러오지 못했습니다.");
             }
         })
     };

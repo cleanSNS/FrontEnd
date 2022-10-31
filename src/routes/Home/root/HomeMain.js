@@ -100,7 +100,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     .catch((res) => {
       if(res.response.status === 401 || res.response.status === 0){
         refreshAccessToken();
-        userSearchSubmitHandler(event);
+        setTimeout(() => {userSearchSubmitHandler(event);}, 1000);
       }
       else{
         alert("검색하지 못했습니다.");
@@ -209,7 +209,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     .catch((res) => {
       if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
         refreshAccessToken();
-        uploadNewPostHandlerSecondAct();
+        setTimeout(uploadNewPostHandlerSecondAct, 1000);
       }
       else{
         console.log(res);
@@ -253,7 +253,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         submitAbleAgain();
         if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
           refreshAccessToken();
-          uploadNewPostHandlerThirdAct();
+          setTimeout(uploadNewPostHandlerThirdAct, 1000);
         }
         else{
           console.log(res);
@@ -352,7 +352,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       .catch((res) => {
         if(res.response.status === 401 || res.response.status === 0){
           refreshAccessToken();
-          presetNoticeCount();
+          setTimeout(presetNoticeCount, 1000);
         }
         else{
           alert("알림의 개수를 불러오지 못했습니다.");
@@ -367,7 +367,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       .catch((res) => {
         if(res.response.status === 401 || res.response.status === 0){
           refreshAccessToken();
-          presetNoticeCount();
+          setTimeout(presetNoticeCount, 1000);
         }
         else{
           alert("채팅 알림의 개수를 불러오지 못했습니다.");

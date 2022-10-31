@@ -44,7 +44,7 @@ const RightFriend = ({userId, leftBookChangeHandler, refreshAccessToken, chatAnd
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                rightFriendAndUserProfileChangeHandler();
+                setTimeout(rightFriendAndUserProfileChangeHandler, 1000);
             }
             else{
                 console.log(res);
@@ -64,7 +64,7 @@ const RightFriend = ({userId, leftBookChangeHandler, refreshAccessToken, chatAnd
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                rightFriendPreset();
+                setTimeout(rightFriendPreset, 1000);
             }
             else{
                 console.log(res);
@@ -80,7 +80,7 @@ const RightFriend = ({userId, leftBookChangeHandler, refreshAccessToken, chatAnd
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                rightFriendPreset();
+                setTimeout(rightFriendPreset, 1000);
             }
             else{
                 console.log(res);
@@ -96,7 +96,7 @@ const RightFriend = ({userId, leftBookChangeHandler, refreshAccessToken, chatAnd
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                rightFriendPreset();
+                setTimeout(rightFriendPreset, 1000);
             }
             else{
                 console.log(res);

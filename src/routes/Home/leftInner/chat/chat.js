@@ -163,7 +163,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                preSetChattingRoomInfo();
+                setTimeout(preSetChattingRoomInfo, 1000);
             }
             else{
                 alert("채팅방의 이름을 불러오지 못했습니다.");
@@ -197,7 +197,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
             setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                gettingChattingList();
+                setTimeout(gettingChattingList, 1000);
             }
             else{
                 alert("채팅을 불러오지 못했습니다.");
@@ -245,7 +245,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                chattingRoomNamechangeSubmitHandler(event);
+                setTimeout(() => {chattingRoomNamechangeSubmitHandler(event);}, 1000);
             }
             else{
                 alert("채팅방 이름을 바꾸지 못했습니다.");

@@ -46,7 +46,7 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                presetUserListArea();
+                setTimeout(presetUserListArea, 1000);
             }
             else{
                 console.log(res);
@@ -106,7 +106,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, left
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                presetUserPageList();
+                setTimeout(presetUserPageList, 1000);
             }
             else{
                 console.log(res);
@@ -181,7 +181,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                presetUserPageList();
+                setTimeout(presetUserPageList, 1000);
             }
             else{
                 console.log(res);
@@ -233,7 +233,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                followClickHandler();
+                setTimeout(followClickHandler, 1000);
             }
             else{
                 console.log(res);
@@ -255,7 +255,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         .catch((res) =>{
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                userReportClickHandler(event);
+                setTimeout(() => {userReportClickHandler(event);}, 1000);
             }
             else{
                 console.log(res);
@@ -276,7 +276,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                userBlockClickHandler(event);
+                setTimeout(() => {userBlockClickHandler(event);}, 1000);
             }
             else{
                 console.log(res);

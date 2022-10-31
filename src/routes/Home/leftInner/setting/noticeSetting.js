@@ -27,7 +27,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                noticeSettingPreset();
+                setTimeout(noticeSettingPreset, 1000);
             }
             else{
                 console.log(res);
@@ -82,7 +82,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
             submitAbleAgain();//다시 제출 가능하게하기
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                submitHandlerSecondAct();
+                setTimeout(submitHandlerSecondAct, 1000);
             }
             else{
                 console.log(res);

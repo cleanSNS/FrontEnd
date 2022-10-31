@@ -20,7 +20,7 @@ function App() {
     .catch((res) => {
       if(res.response.status === 401 || res.response.status === 0){
         refreshAccessToken();
-        getUserIdANdOpenSSEHandler();//재실행
+        setTimeout(getUserIdANdOpenSSEHandler, 1000);
       }
       else{
         alert("유저 아이디를 불러오지 못했습니다.");

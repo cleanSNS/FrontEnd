@@ -28,7 +28,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                blockSettingInitialSetting();
+                setTimeout(blockSettingInitialSetting, 1000);
             }
             else{
                 console.log(res);
@@ -58,7 +58,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                addUserClickhandler(event);
+                setTimeout(() => {addUserClickhandler(event);}, 1000);
             }
             else{
                 console.log(res);
@@ -87,7 +87,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.stresponse.statusatus === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                deleteUserClickHandler(event);
+                setTimeout(() => {deleteUserClickHandler(event);}, 1000);
             }
             else{
                 console.log(res);
@@ -132,7 +132,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                searchHandler(event);
+                setTimeout(() => {searchHandler(event);}, 1000);
             }
             else{
                 console.log(res);

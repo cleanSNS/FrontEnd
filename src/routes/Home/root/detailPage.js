@@ -72,7 +72,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
-                    COCreportClickHandler();//재실행
+                    setTimeout(COCreportClickHandler, 1000);
                 }
                 else{
                     console.log(res);
@@ -98,7 +98,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
-                    COCdeleteClickHandler();//재실행
+                    setTimeout(COCdeleteClickHandler, 1000);
                 }
                 else{
                     console.log(res);
@@ -118,7 +118,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                presetLikeInfo();
+                setTimeout(presetLikeInfo, 1000);
             }
             else{
                 console.log(res);
@@ -145,7 +145,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                CommentOfCommentLikeHandler();
+                setTimeout(CommentOfCommentLikeHandler, 1000);
             }
             else{
                 console.log(res);
@@ -218,7 +218,7 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
             .catch((res) =>{
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
-                    loadThisCommentOfComment();
+                    setTimeout(loadThisCommentOfComment, 1000);
                 }
                 else{
                     console.log(res);
@@ -319,7 +319,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
-                    reportClickHandler();
+                    setTimeout(reportClickHandler, 1000);
                 }
                 else{
                     console.log(res);
@@ -342,7 +342,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
-                    deleteClickHandler();
+                    setTimeout(deleteClickHandler, 1000);
                 }
                 else{
                     console.log(res);
@@ -376,7 +376,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                presetLikeorNot();
+                setTimeout(presetLikeorNot, 1000);
             }
             else{
                 console.log(res);
@@ -403,7 +403,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                CommentLikeClickHandler();
+                setTimeout(CommentLikeClickHandler, 1000);
             }
             else{
                 console.log(res);
@@ -518,7 +518,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                presetDetailPage();
+                setTimeout(presetDetailPage, 1000);
             }
             else{
                 console.log(res);
@@ -533,7 +533,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                presetDetailPage();
+                setTimeout(presetDetailPage, 1000);
             }
             else{
                 console.log(res);
@@ -561,7 +561,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                presetComment();
+                setTimeout(presetComment, 1000);
             }
             else{
                 console.log(res);
@@ -628,7 +628,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                pageLikeClickHandler();
+                setTimeout(pageLikeClickHandler, 1000);
             }
             else{
                 console.log(res);
@@ -722,7 +722,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             submitAbleAgain();
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                userCommitSubmitHandlerSecondAction();
+                setTimeout(userCommitSubmitHandlerSecondAction, 1000);
             }
             else{
                 console.log(res);
@@ -745,7 +745,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
-                    pageReportClickHandler();
+                    setTimeout(pageReportClickHandler, 1000);
                 }
                 else{
                     console.log(res);
@@ -767,7 +767,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
-                    pageDeleteClickHandler();
+                    setTimeout(pageDeleteClickHandler, 1000);
                 }
                 else{
                     console.log(res);
@@ -788,7 +788,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .then((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                getCOCCount();
+                setTimeout(getCOCCount, 1000);
             }
             else{
                 console.log(res);

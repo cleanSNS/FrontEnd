@@ -59,7 +59,7 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                profileSettingPreset();
+                setTimeout(profileSettingPreset, 1000);
             }
             else{
                 console.log(res);
@@ -121,7 +121,7 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                profileSettingSubmitHandlerSecondAct();
+                setTimeout(profileSettingSubmitHandlerSecondAct, 1000);
             }
             else{
                 console.log(res);
@@ -158,7 +158,7 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
                 submitAbleAgain();//다시 제출 가능 상태로
                 if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                     refreshAccessToken();
-                    profileSettingSubmitHandlerThirdAct();
+                    setTimeout(profileSettingSubmitHandlerThirdAct, 1000);
                 }
                 else{
                     console.log(res);

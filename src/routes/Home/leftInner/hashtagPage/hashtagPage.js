@@ -42,7 +42,7 @@ const LeftHashtagPage = ({leftBookState, setPageId, refreshAccessToken}) => {
     .catch((res) => {
       if(res.response.status === 401 || res.response.status === 0){
         refreshAccessToken();
-        loadHashtagPage();
+        setTimeout(loadHashtagPage, 1000);
       }
       else{
         alert("알림의 개수를 불러오지 못했습니다.");

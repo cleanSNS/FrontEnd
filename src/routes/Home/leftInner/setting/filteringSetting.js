@@ -32,7 +32,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                gettingCurrentFilterSetting();
+                setTimeout(gettingCurrentFilterSetting, 1000);
             }
             else{
                 console.log(res);
@@ -52,7 +52,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                gettingCurrentNotFilteredUser();
+                setTimeout(gettingCurrentNotFilteredUser, 1000);
             }
             else{
                 console.log(res);
@@ -146,7 +146,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
             submitAbleAgain();
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                settingSubmitHandlerSecondAct();
+                setTimeout(settingSubmitHandlerSecondAct, 1000);
             }
             else{
                 console.log(res);
@@ -178,12 +178,11 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                addUserClickhandler(event);
+                setTimeout(() => {addUserClickhandler(event);}, 1000);
             }
             else{
                 console.log(res);
                 alert("에러 발생 - 차단 리스트에 추가하지 못함");
-                //window.location.href = '/main';
             }
         })
     };
@@ -207,7 +206,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                deleteUserClickHandler(event);
+                setTimeout(() => {deleteUserClickHandler(event);}, 1000);
             }
             else{
                 console.log(res);
@@ -259,7 +258,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
-                searchHandler(event);
+                setTimeout(() => {searchHandler(event);}, 1000);
             }
             else{
                 console.log(res);
