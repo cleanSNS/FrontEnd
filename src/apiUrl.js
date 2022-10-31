@@ -1,6 +1,3 @@
-import axios from "axios";
-import { useEffect } from "react";
-
 const apiUrl = "https://api.cleanbook.site";
 export const siteUrl = "https://cleanbook.site";
 

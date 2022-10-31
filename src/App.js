@@ -20,9 +20,10 @@ function App() {
     .catch((res) => {
       if(res.response.status === 401 || res.response.status === 0){
         refreshAccessToken();
+        getUserIdANdOpenSSEHandler();//재실행
       }
       else{
-        console.log("유저 아이디를 불러오지 못했습니다.");
+        alert("유저 아이디를 불러오지 못했습니다.");
       }
     });
 

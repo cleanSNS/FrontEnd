@@ -72,6 +72,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
+                    COCreportClickHandler();//재실행
                 }
                 else{
                     console.log(res);
@@ -97,6 +98,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
+                    COCdeleteClickHandler();//재실행
                 }
                 else{
                     console.log(res);
@@ -107,7 +109,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
     };
 
     //초기에 좋아요 관련 정보 불러오기
-    useEffect(() => {
+    const presetLikeInfo = () => {
         setCOCLikeCount(data.likeCount);
         axios.get(`${checkLikeUrl}?targetId=${data.commentId}&type=COMMENT`)
         .then((res) => {
@@ -116,13 +118,15 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                presetLikeInfo();
             }
             else{
                 console.log(res);
                 alert("삭제하지 못했습니다.");
             }
         });
-    }, []);
+    }
+    useEffect(presetLikeInfo, []);
 
     //좋아요 clickhandler
     const CommentOfCommentLikeHandler = () => {
@@ -141,6 +145,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                CommentOfCommentLikeHandler();
             }
             else{
                 console.log(res);
@@ -213,6 +218,7 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
             .catch((res) =>{
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
+                    loadThisCommentOfComment();
                 }
                 else{
                     console.log(res);
@@ -313,6 +319,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
+                    reportClickHandler();
                 }
                 else{
                     console.log(res);
@@ -335,6 +342,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
+                    deleteClickHandler();
                 }
                 else{
                     console.log(res);
@@ -359,7 +367,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
 
     /********************************좋아요 관련************************************/
     //먼저 댓글이 로드될 때마다 해당 댓글에 좋아요를 눌렀었는지 반영해야한다.
-    useEffect(() => {
+    const presetLikeorNot = () => {
         setCLikeCount(data.likeCount);
         axios.get(`${checkLikeUrl}?targetId=${data.commentId}&type=COMMENT`)
         .then((res) => {
@@ -368,16 +376,18 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                presetLikeorNot();
             }
             else{
                 console.log(res);
                 alert("삭제하지 못했습니다.");
             }
         });
-    }, []);
+    }
+    useEffect(presetLikeorNot, []);
 
     //좋아요 클릭 handler
-    const CommentLikeClickHandler = (event) => {
+    const CommentLikeClickHandler = () => {
         let url = ""
         CIsLiked ? url = unlikeThisPageUrl : url = likeThisPageUrl
 
@@ -393,6 +403,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                CommentLikeClickHandler();
             }
             else{
                 console.log(res);
@@ -507,6 +518,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                presetDetailPage();
             }
             else{
                 console.log(res);
@@ -521,6 +533,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                presetDetailPage();
             }
             else{
                 console.log(res);
@@ -548,6 +561,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                presetComment();
             }
             else{
                 console.log(res);
@@ -591,14 +605,14 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     useEffect(moveImageHandler, [imageIndex]);
 
     /********************글 영역 - 유저 클릭 관련*********************/
-    const pageUserClickHandler = (event) => {
+    const pageUserClickHandler = () => {
         setPageId(-1);//현재 페이지에서 나감
         leftBookChangeHandler(`pList/${pageUploadUserId}`);//해당 유저의 페이지로 이동
     };
 
     /*********************글 영역 - 좋아요 관련**********************/
     //글의 좋아요 클릭 handler
-    const pageLikeClickHandler = (event) => {
+    const pageLikeClickHandler = () => {
         let url = ""
         isLiked ? url = unlikeThisPageUrl : url = likeThisPageUrl
 
@@ -614,6 +628,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                pageLikeClickHandler();
             }
             else{
                 console.log(res);
@@ -681,7 +696,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         btn.disabled = true;
     };
 
-    useEffect(() => {
+    const userCommitSubmitHandlerSecondAction = () => {
         if(!commentSubmitClicked) return;
 
         //정보를 바탕으로 댓글 작성
@@ -707,13 +722,15 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             submitAbleAgain();
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                userCommitSubmitHandlerSecondAction();
             }
             else{
                 console.log(res);
                 alert("댓글을 작성하지 못했습니다.");
             }
         });
-    }, [commentSubmitClicked]);
+    }
+    useEffect(userCommitSubmitHandlerSecondAction, [commentSubmitClicked]);
 
     /*****************글 영역 - 신고*********************/
     const pageReportClickHandler = () => {
@@ -728,6 +745,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
+                    pageReportClickHandler();
                 }
                 else{
                     console.log(res);
@@ -749,6 +767,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             .catch((res) => {
                 if(res.response.status === 401 || res.response.status === 0){
                     refreshAccessToken();
+                    pageDeleteClickHandler();
                 }
                 else{
                     console.log(res);
@@ -769,6 +788,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .then((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                getCOCCount();
             }
             else{
                 console.log(res);
