@@ -201,32 +201,3 @@ export const presetChatNumber = `${apiUrl}/chat/count`;
 
 /********************************이미지 처리 관련********************************/
 export const uploadImageUrl = `${apiUrl}/upload?category=`;
-
-
-
-/************************************호출 함수***************************************/
-
-export const apiGet = (url, errorMes) => {
-    axios.get(url)
-    .then((res) => {
-        return res;
-    })
-    .catch((error) => {
-        if(error.response.status === 401 || error.response.statue === 0){//access token이 만료된 경우이다.
-            console.log("토큰 재발급을 해야함");
-        }
-        else{
-            console.log(error);
-            alert(errorMes);
-            return null;
-        }
-    });
-};
-
-export const apiPost = () => {
-
-};
-
-export const apiDelete = () => {
-
-}
