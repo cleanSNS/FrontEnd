@@ -65,9 +65,19 @@ const ImageArea = ({imgList, pageIndex, pageClickFunc}) => {
     );
 };
 
+const ContentArea = ({data}) => {
+    return(
+        data === '모자이크' ?
+        <p className={Style.pageContentSware}>{data}</p>
+        :
+        <p className={Style.pageContent}>{data}</p>
+    )
+};
+
 const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAccessToken, detailPageLikeClick, setDetailPageLikeClick}) => {
     const [isLiked, setIsLiked] = useState(false);//좋아요 여부
     const [likeCount, setLikeCount] = useState(0);//좋아요 개수
+    const [contentArray, setContentArray] = useState([]);
 
     const pageClickFunc = () => {
         setPageId(data.pageDto.pageId);
@@ -77,10 +87,30 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
         setLeftBookState(`pList/${data.pageDto.userDto.userId}`);
     };
 
+    const makeIntoArray = (str) => {//문자열을 받아서 시작부분이 욕설인지 아닌지와, 문자열을 잘라서 구분한 함수이다.
+        const TOKEN = '!모자이크!';
+        let answer = [];
+
+        for(let i = 0; i < innerContent.length; i++){
+            const pos = innerContent.indexOf(TOKEN, i);//index가 i인 지점부터 확인하여 시간을 줄인다. 토큰은 6글자이다.
+            if(pos === -1){//더 이상 없는 경우이다.
+                answer.push(str.substring(i, str.length()));//앞으로 탐색할 i지점부터 문자열의 길이 까지를 집어넣는다.
+                break;
+            }
+            if(i !== pos) answer.push(str.substring(i,pos));//같은 경우는 i = 0혹은 연속되는 지점에서 발견 가능하다.
+            answer.push(str.substring(pos,pos + TOKEN.length));//!모자이크!를 집어넣는다.
+            i = pos + TOKEN.length;//토큰이 6글자이므로 6이 들어간다.
+        }
+
+        console.log(answer);//확인용 정상작동 되면 지우기
+        return answer;
+    };
+
     //좋아요 초기 설정
     useEffect(() => {
         setLikeCount(data.pageDto.likeCount);//좋아요 개수 불러오기
         setIsLiked(data.like);//좋아요 여부 불러오기
+        setContentArray(makeIntoArray(data.pageDto.content));//받은 글을 객체로 변경
     }, [])
 
     //좋아요 클릭 handler
@@ -140,7 +170,11 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
                     <p style={{margin: "0"}}>{data.pageDto.likeReadAuth ? `좋아요 ${likeCount} 개` : `좋아요 여러 개`}</p>
                 </div>
                 <div className={Style.pageContentArea} style={{cursor: "pointer"}} onClick={pageClickFunc}>
-                    <p className={Style.pageContent}>{data.pageDto.content}</p>
+                    {
+                        contentArray.map((d, index) => (
+                            <ContentArea data={d} key={index}/>
+                        ))
+                    }
                 </div>
             </div>
         </div>
