@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
 import Email from "./routes/Email/email";
-import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl, getNoticeNumber, getMyUserIdUrl } from './apiUrl';
+import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl, getNoticeNumber, getMyUserIdUrl, apiGet } from './apiUrl';
 axios.defaults.withCredentials = true;
 
 function App() {
