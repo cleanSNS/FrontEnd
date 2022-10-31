@@ -13,6 +13,11 @@ function App() {
 
   //userId를 받고 SSE를 여는 함수
   const getUserIdANdOpenSSEHandler = () => {
+    const res = apiGet(getMyUserIdUrl, "유저 아이디를 불러오지 못했습니다.");
+    if(res !== null){
+      setUserId(res.data.data.userId);
+    }
+    /*
     axios.get(getMyUserIdUrl)
     .then((res) => {
       setUserId(res.data.data.userId);
@@ -26,6 +31,7 @@ function App() {
       }
     });
 
+    */
     const eventSourcetmp = new EventSource(getNoticeNumber, { withCredentials: true });
     setNoticeEventSource(eventSourcetmp);
   };
