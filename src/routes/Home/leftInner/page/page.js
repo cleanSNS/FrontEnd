@@ -94,7 +94,7 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
         for(let i = 0; i < str.length; i++){
             const pos = str.indexOf(TOKEN, i);//index가 i인 지점부터 확인하여 시간을 줄인다. 토큰은 6글자이다.
             if(pos === -1){//더 이상 없는 경우이다.
-                answer.push(str.substring(i, str.length()));//앞으로 탐색할 i지점부터 문자열의 길이 까지를 집어넣는다.
+                answer.push(str.substring(i, str.length));//앞으로 탐색할 i지점부터 문자열의 길이 까지를 집어넣는다.
                 break;
             }
             if(i !== pos) answer.push(str.substring(i,pos));//같은 경우는 i = 0혹은 연속되는 지점에서 발견 가능하다.
