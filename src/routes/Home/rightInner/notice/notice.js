@@ -9,7 +9,7 @@ import {
 } from '../../../../apiUrl';
 import closeBtn from './close_btn.png';
 
-const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, checked, lastNotice, leftBookChangeHandler, ListDeleteHandler, index, setPageId, setNoticeCount}) => {
+const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, checked, lastNotice, leftBookChangeHandler, ListDeleteHandler, index, setPageId, setNoticeCount, refreshAccessToken}) => {
     //초기 설정으로, 이미 읽은 알림의 경우 연하게 스타일 변경
     const noticePreset = () => {
         if(checked){
@@ -41,8 +41,14 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
             document.querySelector(`#noticeScript${notificationId}`).style.color = "gray";
         })
         .catch((res) => {
-            console.log(res);
-            console.log("에러 발생");
+            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
+                refreshAccessToken();
+                onNoticeScripsClickHandler(event);
+            }
+            else{
+                console.log(res);
+                alert("해당 알림 읽기 처리 실패");
+            }
         });
 
         //페이지 이동
@@ -68,10 +74,16 @@ const Notice = ({notificationId, userImgUrl, targetUserId, type, resourceId, che
             }
         })
         .catch((res) => {
-            console.log(res);
-            console.log("에러 발생");
-        })
-    }
+            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
+                refreshAccessToken();
+                deleteBtnClickHandler(event);
+            }
+            else{
+                console.log(res);
+                alert("해당 알림 읽기 처리 실패");
+            }
+        });
+    };
 
     return(//마지막 요소는 설정을 더해준다.
         <div className={Style.noticeCover} ref={lastNotice}>
@@ -116,6 +128,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                NoticeRead();
             }
             else{
                 console.log(res);
@@ -163,6 +176,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
                         index={index}
                         setPageId={setPageId}
                         setNoticeCount={setNoticeCount}
+                        refreshAccessToken={refreshAccessToken}
                     />
                 ))
             }

@@ -27,11 +27,11 @@ const NoticeSetting = ({refreshAccessToken}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                noticeSettingPreset();
             }
             else{
                 console.log(res);
-                alert("에러발생");
-                //window.location.href = "/main";
+                alert("설정을 불러오지 못했습니다.");
             }
         });
     };
@@ -63,7 +63,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
         btn.disabled = true;
     };
 
-    useEffect(() => {
+    const submitHandlerSecondAct = () => {
         if(!noticeSubmitClicked) return;
 
         axios.post(submitCurrentNoticeSettingUrl,{
@@ -82,14 +82,16 @@ const NoticeSetting = ({refreshAccessToken}) => {
             submitAbleAgain();//다시 제출 가능하게하기
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                submitHandlerSecondAct();
             }
             else{
                 console.log(res);
-                alert("에러가 발생했습니다.");
-                //window.location.href = "/main";
+                alert("설정을 변경하지 못했습니다.");
             }
         });
-    }, [noticeSubmitClicked]);
+    };
+
+    useEffect(submitHandlerSecondAct, [noticeSubmitClicked]);
 
     //각 설정 클릭시 handler
     const notificationFollowClickHandler = (event) => {

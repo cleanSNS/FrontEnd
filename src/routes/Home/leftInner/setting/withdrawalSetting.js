@@ -29,6 +29,7 @@ const WithdrawalSetting = ({refreshAccessToken, logout}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                withdrawalSubmitHandler();
             }
             else if(res.response.statue === 400){
                 alert("잘못된 비밀번호입니다.");

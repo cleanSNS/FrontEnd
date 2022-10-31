@@ -61,26 +61,29 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
         .then((res) => {
             const tmp = [...res.data.data];
             setFolloweeList(tmp);//팔로잉 저장
-            axios.get(getfollowerListUrl)
-            .then((res) => {
-                const tmp2 = [...res.data.data];
-                setFollowerList(tmp2);//팔로워 저장
-            })
-            .catch((res) => {
-                if(res.response.status === 401 || res.response.status === 0){
-                    refreshAccessToken();
-                }
-                else{
-                    alert("팔로워을 불러오지 못했습니다.");
-                }
-            });
         })
         .catch((res) =>{
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                presetFollowerAndFollowee();
             }
             else{
                 alert("팔로잉을 불러오지 못했습니다.");
+            }
+        });
+
+        axios.get(getfollowerListUrl)
+        .then((res) => {
+            const tmp2 = [...res.data.data];
+            setFollowerList(tmp2);//팔로워 저장
+        })
+        .catch((res) => {
+            if(res.response.status === 401 || res.response.status === 0){
+                refreshAccessToken();
+                presetFollowerAndFollowee();
+            }
+            else{
+                alert("팔로워을 불러오지 못했습니다.");
             }
         });
     };
@@ -151,7 +154,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
         btn.disabled = true;
     };
 
-    useEffect(() => {
+    const createChatClickHandlerSecondAct = () => {
         if(!newChatSubmitClicked) return;
 
         const chosenFriendUserIdList = chosenFriendList.map(d => (d.userId));//id만 뽑아서 배열 생성
@@ -176,12 +179,14 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
             submitAbleAgain();
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                createChatClickHandlerSecondAct;
             }
             else{
                 alert("채팅방을 생성하지 못했습니다.");
             }
         });
-    }, [newChatSubmitClicked])
+    };
+    useEffect(createChatClickHandlerSecondAct, [newChatSubmitClicked])
 
     return(
         <div className={Style.wholeCover}>

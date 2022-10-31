@@ -26,15 +26,14 @@ const RenderRightFriend = ({friendList, leftBookChangeHandler}) => {
     );
 }
 
-const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendReloadTriger, setChatAndFriendReloadTriger, userPageAndFriendReloadTriger, setUserPageAndFriendReloadTriger}) => {
+const RightFriend = ({userId, leftBookChangeHandler, refreshAccessToken, chatAndFriendReloadTriger, setChatAndFriendReloadTriger, userPageAndFriendReloadTriger, setUserPageAndFriendReloadTriger}) => {
     const [followeeList, setFolloweeList] = useState([]);
     const [followerList, setFollowerList] = useState([]);
     const [friendList, setFriendList] = useState([]);
     const [myProfileImage, setMyProfileImage] = useState("");
     const [myProfileName, setMyProfileName] = useState("");
-    const [myId, setMyId] = useState("");
 
-    useEffect(() => {//오른쪽 화면이 친구리스트인데 사용자가 프로필을 수정하는 경우, 사용자의 프로필을 다시 불러와서 갱신하는 함수
+    const rightFriendAndUserProfileChangeHandler = () => {//오른쪽 화면이 친구리스트인데 사용자가 프로필을 수정하는 경우, 사용자의 프로필을 다시 불러와서 갱신하는 함수
         if(!chatAndFriendReloadTriger) return;
         axios.get(getcurrentProfileUrl)//내 정보 불러오기
         .then((res) => {
@@ -45,14 +44,15 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendRe
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                rightFriendAndUserProfileChangeHandler();
             }
             else{
                 console.log(res);
-                alert("에러 발생");
-                //window.location.href = '/main';
+                alert("내 프로필을 불러오지 못했습니다.");
             }
         });
-    }, [chatAndFriendReloadTriger]);
+    };
+    useEffect(rightFriendAndUserProfileChangeHandler, [chatAndFriendReloadTriger]);
 
     //화면 렌더링 초기 설정 함수
     const rightFriendPreset = () => {
@@ -64,11 +64,11 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendRe
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                rightFriendPreset();
             }
             else{
                 console.log(res);
-                alert("에러 발생");
-                //window.location.href = '/main';
+                alert("팔로우 중인 유저를 불러오지 못했습니다.");
             }
         });
 
@@ -80,11 +80,11 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendRe
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                rightFriendPreset();
             }
             else{
                 console.log(res);
-                alert("에러 발생");
-                //window.location.href = '/main';
+                alert("나를 팔로우 중인 유저를 불러오지 못했습니다.");
             }
         });
 
@@ -96,26 +96,11 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendRe
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                rightFriendPreset();
             }
             else{
                 console.log(res);
-                alert("에러 발생");
-                //window.location.href = '/main';
-            }
-        });
-
-        axios.get(getMyUserIdUrl)//내 id불러오기
-        .then((res) => {
-            setMyId(res.data.data.userId);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-            }
-            else{
-                console.log(res);
-                alert("에러 발생");
-                //window.location.href = '/main';
+                alert("내 정보를 불러오지 못했습니다.");
             }
         });
     };
@@ -139,7 +124,7 @@ const RightFriend = ({leftBookChangeHandler, refreshAccessToken, chatAndFriendRe
     return(
         <div className={Style.wholeCover}>
             <div className={Style.Cover}>
-                <Profile img={myProfileImage} name={myProfileName} userId={myId} leftBookChangeHandler={leftBookChangeHandler}/>
+                <Profile img={myProfileImage} name={myProfileName} userId={userId} leftBookChangeHandler={leftBookChangeHandler}/>
             </div>
             <RenderRightFriend friendList={friendList} leftBookChangeHandler={leftBookChangeHandler}/>
         </div>

@@ -22,8 +22,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     const [searchedUserList, setSearchedUserList] = useState([]);//검색된 사람들
     const [AddedUserList, setAddedUserList] = useState([]);//예외로 설정된 사람들
 
-    //처음에 필터링 설정정보와 예외로 설정된 유저들의 리스트를 가져와야한다.
-    const filterSettingInitialSetting = () => {
+    const gettingCurrentFilterSetting = () => {
         //필터링 설정 정보 가져오기
         axios.get(getCurrentfilterSetting)
         .then((res) => {
@@ -33,30 +32,39 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                gettingCurrentFilterSetting();
             }
             else{
                 console.log(res);
                 alert("에러 발생");
             }
-        })
+        });
+    };
 
+    const gettingCurrentNotFilteredUser = () => {
         //필터링 하지 않을 유저 정보 가져오기
         axios.get(getCurrentNotFilteredUserUrl)
         .then((res) => {
             const tmp = [...res.data.data];
             setAddedUserList(tmp);
+            setSearchedUserList([]);
         })
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                gettingCurrentNotFilteredUser();
             }
             else{
                 console.log(res);
             alert("에러 발생");
             }
-        })
+        });
     };
-    useEffect(filterSettingInitialSetting, []);
+
+    useEffect(() => {//초기설정이다. 두 가지를 전부 로드한다.
+        gettingCurrentFilterSetting();
+        gettingCurrentNotFilteredUser();
+    }, []);
 
     /* 상단 내용 */
 
@@ -123,7 +131,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         btn.disabled = true;
     };
 
-    useEffect(() => {
+    const settingSubmitHandlerSecondAct = () => {
         if(!filterringSubmitClicked) return;
 
         axios.post(submitFilteringSetting,{
@@ -138,13 +146,15 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
             submitAbleAgain();
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                settingSubmitHandlerSecondAct();
             }
             else{
                 console.log(res);
                 alert("에러 발생");
             }
         });
-    }, [filterringSubmitClicked])
+    }
+    useEffect(settingSubmitHandlerSecondAct, [filterringSubmitClicked])
 
     /* 하단 내용 */
 
@@ -163,25 +173,12 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
             userId: event.target.id,
         })
         .then((res) => {//문제가 없는 상황이므로 추가된 차단 리스트를 불러와서 변경하기
-            axios.get(getCurrentNotFilteredUserUrl)
-            .then((res) => {
-                const tmp = [...res.data.data];
-                setAddedUserList(tmp);
-                setSearchedUserList([]);
-            })
-            .catch((res) => {
-                if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                    refreshAccessToken();
-                }
-                else{
-                    console.log(res);
-                    alert("에러 발생 - 리스트를 불러오지 못함");
-                }
-            })
+            gettingCurrentNotFilteredUser();
         })
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                addUserClickhandler(event);
             }
             else{
                 console.log(res);
@@ -210,6 +207,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                deleteUserClickHandler(event);
             }
             else{
                 console.log(res);
@@ -261,11 +259,11 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                searchHandler(event);
             }
             else{
                 console.log(res);
-                alert("에러 발생");
-                //window.location.href = "/main";
+                alert("검색하지 못했습니다.");
             }
         })
     };

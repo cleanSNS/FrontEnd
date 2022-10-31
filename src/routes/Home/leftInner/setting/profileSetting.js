@@ -59,6 +59,7 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                profileSettingPreset();
             }
             else{
                 console.log(res);
@@ -82,7 +83,7 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
         btn.disabled = false;
     };
 
-    const profileSettingSubmitHandler = (event) => {//작성필요
+    const profileSettingSubmitHandler = (event) => {
         event.preventDefault();
         if(profileSubmitClicked) return;//이미 submit중이면 실행하지 않는다.
 
@@ -95,7 +96,7 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
         btn.disabled = true;
     };
 
-    useEffect(() => {
+    const profileSettingSubmitHandlerSecondAct = () => {
         if(!profileSubmitClicked) return;//초기상황에 자동종료+ true->false에서의 실행을 막는다.
 
         if(ps_userImageSend === null){//사용자 지정 없이 그냥 제출한 경우
@@ -120,15 +121,17 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                profileSettingSubmitHandlerSecondAct();
             }
             else{
                 console.log(res);
                 alert("이미지 처리에 실패했습니다.");
             }
         });
-    }, [profileSubmitClicked]);
+    };
+    useEffect(profileSettingSubmitHandlerSecondAct, [profileSubmitClicked]);
 
-    useEffect(() => {
+    const profileSettingSubmitHandlerThirdAct = () => {
         if(userProfileUploaded !== null){//초기상황에 자동종료
             axios.post(submitProfileSettingUrl,{
                 nickname: ps_userName,
@@ -155,6 +158,7 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
                 submitAbleAgain();//다시 제출 가능 상태로
                 if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                     refreshAccessToken();
+                    profileSettingSubmitHandlerThirdAct();
                 }
                 else{
                     console.log(res);
@@ -162,7 +166,9 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
                 }
             });
         }
-    }, [userProfileUploaded]);
+    }
+
+    useEffect(profileSettingSubmitHandlerThirdAct, [userProfileUploaded]);
 
     //이미지 변경 함수 - ps_nextUserImage를 바꾸고 받아온 이미지를 처리 한다.
     const profileImageChangeHandler = (event) => {

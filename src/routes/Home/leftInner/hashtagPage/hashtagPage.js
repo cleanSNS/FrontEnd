@@ -6,7 +6,7 @@ import{
   pageLoadHashtagUrl,
 } from '../../../../apiUrl';
 
-const LeftHashtagPage = ({leftBookState, setPageId}) => {
+const LeftHashtagPage = ({leftBookState, setPageId, refreshAccessToken}) => {
   const [hashTag, setHashTag] = useState("");//받아온 해시태그
   const [hashTagPageList, setHashTagPageList] = useState([]);//글 리스트
   const [hashTagPageStartId, setHashTagPageStartId] = useState(987654321);//글 리스트의 startId
@@ -40,7 +40,13 @@ const LeftHashtagPage = ({leftBookState, setPageId}) => {
       setHashTagPageStartId(res.data.startId);
     })
     .catch((res) => {
-
+      if(res.response.status === 401 || res.response.status === 0){
+        refreshAccessToken();
+        loadHashtagPage();
+      }
+      else{
+        alert("알림의 개수를 불러오지 못했습니다.");
+      }
     })
   };
   useEffect(loadHashtagPage, [hashTag]);//해시태그 변경 시 실행한다.

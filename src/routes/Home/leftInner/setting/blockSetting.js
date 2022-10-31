@@ -23,14 +23,16 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
         .then((res) => {
             const tmp = [...res.data.data];
             setAddedUserList(tmp);
+            setSearchedUserList([]);//검색 리스트 초기화 : 이게 초기상황이든 유저가 추가한 이후든 상관없이 실행되도 된다.
         })
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                blockSettingInitialSetting();
             }
             else{
                 console.log(res);
-                alert("에러 발생");
+                alert("차단된 유저들을 가져오지 못했습니다.");
             }
         })
     };
@@ -51,30 +53,16 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
             userId: event.target.id,
         })
         .then((res) => {//문제가 없는 상황이므로 추가된 차단 리스트를 불러와서 변경하기
-            axios.get(getCurrentBlockedPersonUrl)
-            .then((res) => {
-                const tmp = [...res.data.data];
-                setAddedUserList(tmp);
-                //이후에 검색했던 리스트도 초기화
-                setSearchedUserList([]);
-            })
-            .catch((res) => {
-                if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                    refreshAccessToken();
-                }
-                else{
-                    console.log(res);
-                    alert("에러 발생 - 리스트를 불러오지 못함");
-                }
-            })
+            blockSettingInitialSetting();
         })
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                addUserClickhandler(event);
             }
             else{
                 console.log(res);
-                alert("에러 발생 - 차단 리스트에 추가하지 못함");
+                alert("해당 유저를 차단 리스트에 추가하지 못했습니다.");
                 //window.location.href = '/main';
             }
         })
@@ -99,11 +87,11 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.stresponse.statusatus === 401){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                deleteUserClickHandler(event);
             }
             else{
                 console.log(res);
-                alert("문제 발생");
-                //window.location.href="/main"; 
+                alert("해당 유저를 차단리스트에서 지우지 못했습니다.");
             }
         })
     };
@@ -144,11 +132,11 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
                 refreshAccessToken();
+                searchHandler(event);
             }
             else{
                 console.log(res);
-                alert("에러 발생");
-                //window.location.href = "/main";
+                alert("검색하지 못했습니다.");
             }
         })
     };

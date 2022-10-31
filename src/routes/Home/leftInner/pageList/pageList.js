@@ -46,6 +46,7 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                presetUserListArea();
             }
             else{
                 console.log(res);
@@ -105,6 +106,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, left
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                presetUserPageList();
             }
             else{
                 console.log(res);
@@ -179,6 +181,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                presetUserPageList();
             }
             else{
                 console.log(res);
@@ -217,7 +220,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     };
 
     //유저 팔로우/팔로우 취소 함수
-    const followClickHandler = (event) => {
+    const followClickHandler = () => {
         let followOrUnfollowUrl = "";
         isFollowed ? followOrUnfollowUrl = unfollowUserUrl : followOrUnfollowUrl = followUserUrl
         axios.post(followOrUnfollowUrl,{
@@ -230,6 +233,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                followClickHandler();
             }
             else{
                 console.log(res);
@@ -251,6 +255,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         .catch((res) =>{
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                userReportClickHandler(event);
             }
             else{
                 console.log(res);
@@ -271,6 +276,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         .catch((res) => {
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
+                userBlockClickHandler(event);
             }
             else{
                 console.log(res);
