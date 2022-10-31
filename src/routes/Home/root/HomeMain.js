@@ -100,6 +100,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     .catch((res) => {
       if(res.response.status === 401 || res.response.status === 0){
         refreshAccessToken();
+        userSearchSubmitHandler(event);
       }
       else{
         alert("검색하지 못했습니다.");
@@ -184,7 +185,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     btn.disabled = true;
   };
 
-  useEffect(() => {
+  const uploadNewPostHandlerSecondAct = () => {
     if(!newPageSumbitClicked) return;
     //formData에 파일들 append하기 - 파일명은 image_파일명 으로 생성
     const fileData = new FormData();
@@ -208,15 +209,17 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     .catch((res) => {
       if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
         refreshAccessToken();
+        uploadNewPostHandlerSecondAct();
       }
       else{
         console.log(res);
         alert("이미지 처리에 실패했습니다.");
       }
     });
-  }, [newPageSumbitClicked]);
+  };
+  useEffect(uploadNewPostHandlerSecondAct, [newPageSumbitClicked]);
 
-  useEffect(() => {
+  const uploadNewPostHandlerThirdAct = () => {
     if(uploadImages.length !== 0){//이미지 처리에 성공해서 렌더링할 파일이 있는 경우
       axios.post(newPostUrl, {
         content: newPostContent,
@@ -250,6 +253,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         submitAbleAgain();
         if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
           refreshAccessToken();
+          uploadNewPostHandlerThirdAct();
         }
         else{
           console.log(res);
@@ -257,7 +261,8 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         }
       });
     }
-  }, [uploadImages]);
+  };
+  useEffect(uploadNewPostHandlerThirdAct, [uploadImages]);
 
   //첫 render시 친구 tag를 칠해준다.
   const firstRender = () => {
@@ -347,6 +352,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       .catch((res) => {
         if(res.response.status === 401 || res.response.status === 0){
           refreshAccessToken();
+          presetNoticeCount();
         }
         else{
           alert("알림의 개수를 불러오지 못했습니다.");
@@ -361,6 +367,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       .catch((res) => {
         if(res.response.status === 401 || res.response.status === 0){
           refreshAccessToken();
+          presetNoticeCount();
         }
         else{
           alert("채팅 알림의 개수를 불러오지 못했습니다.");
