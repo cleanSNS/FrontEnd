@@ -91,8 +91,8 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
         const TOKEN = '!모자이크!';
         let answer = [];
 
-        for(let i = 0; i < innerContent.length; i++){
-            const pos = innerContent.indexOf(TOKEN, i);//index가 i인 지점부터 확인하여 시간을 줄인다. 토큰은 6글자이다.
+        for(let i = 0; i < str.length; i++){
+            const pos = str.indexOf(TOKEN, i);//index가 i인 지점부터 확인하여 시간을 줄인다. 토큰은 6글자이다.
             if(pos === -1){//더 이상 없는 경우이다.
                 answer.push(str.substring(i, str.length()));//앞으로 탐색할 i지점부터 문자열의 길이 까지를 집어넣는다.
                 break;
