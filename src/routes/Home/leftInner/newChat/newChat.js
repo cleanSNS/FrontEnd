@@ -179,7 +179,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
             submitAbleAgain();
             if(res.response.status === 401 || res.response.status === 0){
                 refreshAccessToken();
-                createChatClickHandlerSecondAct;
+                createChatClickHandlerSecondAct();
             }
             else{
                 alert("채팅방을 생성하지 못했습니다.");
