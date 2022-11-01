@@ -74,6 +74,9 @@ const PasswordSetting = ({refreshAccessToken}) => {
         .then((res) => {
             alert("비밀번호가 변경되었습니다.");
             submitAbleAgain();//다시 보낼 수 있게 설정
+            setPreviousPassword("");
+            setPasswordChange("");
+            setPasswordChangeCheck("");
         })
         .catch((res) => {
             submitAbleAgain();//다시 보낼 수 있게 설정
