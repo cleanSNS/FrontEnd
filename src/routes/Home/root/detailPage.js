@@ -481,6 +481,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     const [postedPersonImage, setPostedPersonImage] = useState("");//올린 사람의 이미지
     const [postedPersonNickname, setPostedPersonNickname] = useState("");//올린 사람의 닉네임
     const [postedWord, setPostedWord] = useState(""); //올린 글의 내용
+    const [postedWordArray, setPostedWordArray] = useState([]);//올린 글을 실제로 보여주기 위해 처리한 문자열 배열
     const [likeNumber, setLikeNumber] = useState(0); //좋아요 개수
     const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장)
     const [isLiked, setIsLiked] = useState(false);//해당 페이지를 좋아요했는지 저장
@@ -545,6 +546,11 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         });
     };
     useEffect(presetDetailPage, [commentStartId]);
+
+    const postedWordBlurAdd = () => {
+
+    };
+    useEffect(postedWordBlurAdd, [postedWord]);
 
     //댓글로드 함수 - 추가 댓글
     const presetComment = () => {

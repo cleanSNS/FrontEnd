@@ -143,21 +143,3 @@
   width: 90%;
   cursor: pointer;
 }
-
-.pageContent{
-  display: inline;
-  width: 100%;
-  margin-top : 0;
-  word-break: break-all;
-  overflow: hidden;
-}
-
-.pageContentSware{
-  display: inline;
-  width: 100%;
-  margin-top : 0;
-  word-break: break-all;
-  overflow: hidden;
-  color: transparent;
-  text-shadow: 0px 0px 20px #000000
-}

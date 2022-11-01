@@ -106,9 +106,6 @@
 
 /*작성자가 쓴 글이 나오는 공간*/
 .contentArea{
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 80%;
     height: fit-content;
 }
