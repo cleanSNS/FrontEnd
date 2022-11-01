@@ -845,7 +845,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     <ContentArea data={d} key={index} />
                                 ))
                             }
-                            <pre className={Style.content}>{postedWord}</pre>
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>
