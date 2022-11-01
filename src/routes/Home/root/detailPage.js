@@ -323,7 +323,7 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
     };
 
     useEffect(() => {
-        if(COCAddedTriger === -1) return;//트리거가 없는 경우는 실행 X
+        if(COCAddedTriger !== data.commentId) return;//해당되지 않는 경우 실행 X
         getCOCCount(pageId, COCAddedTriger);//개수 불러오기
         setCOCAddedTriger(-1);
     }, [COCAddedTriger])
@@ -763,7 +763,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         .then((res) => {
             console.log("댓글 작성완료");
             setUserCommentInput("");//댓글 부분 초기화
-            setCommentToWhom(["p", -1, ""]);//댓글 대상 초기화
+            setCommentToWhom(["p", -1, "", pageId]);//댓글 대상 초기화
             presetComment();//댓글 내가 쓴거까지 로드된내용 불러오기
             setIsLastComment(false);//원활하게 다시 호출 되도록 세팅
             submitAbleAgain();
