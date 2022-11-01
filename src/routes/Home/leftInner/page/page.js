@@ -168,7 +168,7 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeC
                     "imgUrl": "https://cleanbook-bucket.s3.ap-northeast-2.amazonaws.com/page/0d835296-1538-48f9-a56d-a1a6cbb0bfd5.jpeg"
                 },
                 "pageId": 1,
-                "content": "!모자이크!!모자이크! 자 이제 다른 곳으로 들어가도 이상한지 안 이상한지 확인해보자! !모자이크! 겁나 시간 없다 !모자이크!!모자이크! !모자이크!",
+                "content": "!모자이크!!모자이크! 자 이제 다른 곳으로 들어가도 이상한지 안 이상한지 확인해보자!\n!모자이크! 겁나 시간 없다 !모자이크!!모자이크! !모자이크!",
                 "likeCount": 1,
                 "likeReadAuth": true,
                 "createdDate": "2022-10-01T19:05:57.278163"
