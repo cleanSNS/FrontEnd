@@ -305,6 +305,8 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
     const [commentContentArray, setCommentContentArray] = useState([]);//실제로 출력할 내용이다.
 
     useEffect(() => {
+        console.log("댓글 초기 설정");
+        console.log(data.nestedCommentCount);
         setCOCCount(data.nestedCommentCount);//초기에 대댓글의 수를 넣어둔다.
         setCommentContentArray(makeIntoArray(data.content));//내용도 배열로 만든다.
     }, []);
@@ -565,7 +567,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     };
     useEffect(presetDetailPage, [commentStartId]);
 
-    const postedWordBlurAdd = () => {
+    const postedWordBlurAdd = () => {//글을 입력 받으면 그 글을 배열 형태로 변경하는 작업
         setPostedWordArray(makeIntoArray(postedWord));
     };
     useEffect(postedWordBlurAdd, [postedWord]);
