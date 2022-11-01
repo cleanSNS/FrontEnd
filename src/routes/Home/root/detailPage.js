@@ -24,6 +24,7 @@ import {
 } from '../../../makeStringIntoArray';
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
+import ContentArea from './contentArea';
 
 //시간 계산 함수
 /** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
@@ -548,7 +549,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     useEffect(presetDetailPage, [commentStartId]);
 
     const postedWordBlurAdd = () => {
-
+        setPostedWordArray(makeIntoArray(postedWord));
     };
     useEffect(postedWordBlurAdd, [postedWord]);
 
@@ -838,8 +839,13 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                             <img src={postedPersonImage} className={Style.UserImage} onClick={pageUserClickHandler}/>
                             <p className={Style.UserNickname} onClick={pageUserClickHandler}>{postedPersonNickname}</p>
                         </div>
-                        <div className={Style.contentArea}>
-                            <pre onClick={changeCommentToPage} className={Style.content}>{postedWord}</pre>
+                        <div className={Style.contentArea} onClick={changeCommentToPage}>
+                            {
+                                postedWordArray.map((d, index) => (
+                                    <ContentArea data={d} key={index} />
+                                ))
+                            }
+                            <pre className={Style.content}>{postedWord}</pre>
                         </div>
                         <div className={Style.likeTimeArea}>
                             <div className={Style.cover}>

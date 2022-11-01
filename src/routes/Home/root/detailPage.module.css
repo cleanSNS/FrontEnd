@@ -109,14 +109,7 @@
     width: 80%;
     height: fit-content;
     cursor: pointer;
-}
-
-.content{
-    width: 100%;
-    height: fit-content;
-    margin: 0;
     padding-top: 20px;
-    white-space: inherit;
 }
 
 /*좋아요와 좋아요 개수와 시간이 올라오는 공간*/

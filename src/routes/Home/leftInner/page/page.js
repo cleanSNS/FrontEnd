@@ -159,7 +159,7 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
 
 const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeClick, setDetailPageLikeClick, setLeftBookState}) => {
     const [pageStartId, setPageStartId] = useState(987654321);//글 리스트의 startId
-    const [pageList, setPageList] = useState([
+    const [pageList, setPageList] = useState([//테스트 후 비우기
         {
             "pageDto": {
                 "userDto": {

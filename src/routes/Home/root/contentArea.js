@@ -3,9 +3,9 @@ import Style from './contentArea.module.css';
 const ContentArea = ({data}) => {
     return(
         data === '!모자이크!' ?
-        <p className={Style.pageContentSware}>{data}</p>
+        <pre className={Style.pageContentSware}>{data}</pre>
         :
-        <p className={Style.pageContent}>{data}</p>
+        <pre className={Style.pageContent}>{data}</pre>
     )
 };
 

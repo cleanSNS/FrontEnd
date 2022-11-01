@@ -4,6 +4,7 @@
     margin-top : 0;
     word-break: break-all;
     overflow: hidden;
+    white-space: inherit;
   }
   
   .pageContentSware{
@@ -13,5 +14,6 @@
     word-break: break-all;
     overflow: hidden;
     color: transparent;
-    text-shadow: 0px 0px 20px #000000
+    text-shadow: 0px 0px 20px #000000;
+    white-space: inherit;
   }
