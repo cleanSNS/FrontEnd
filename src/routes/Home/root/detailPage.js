@@ -298,7 +298,7 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
 }
 
 //댓글
-const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler}) => {
+const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAccessToken, userId, setCommentStartId, setIsLastComment, setCommentList, setPageId, leftBookChangeHandler, COCAddedTriger, setCOCAddedTriger}) => {
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
     const [CIsLiked, setCIsLiked] = useState(false);//댓글이 좋아요 된 상태인지
     const [CLikeCount, setCLikeCount] = useState(0);//댓글 좋아요 개수
@@ -321,6 +321,12 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
             }
         });
     };
+
+    useEffect(() => {
+        if(COCAddedTriger === -1) return;//트리거가 없는 경우는 실행 X
+        getCOCCount(pageId, COCAddedTriger);//개수 불러오기
+        setCOCAddedTriger(-1);
+    }, [COCAddedTriger])
 
     useEffect(() => {
         setCOCCount(data.nestedCommentCount);//초기에 대댓글의 수를 넣어둔다.
@@ -530,6 +536,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     const [commentStartId, setCommentStartId] = useState(0);//불러올 댓글의 index
     const [isLastComment, setIsLastComment] = useState(false);//마지막 댓글이 불린 경우 true로 설정
     const [lastComment, inView] = useInView();//마지막 댓글을 인식할 inView
+
+    const [COCAddedTriger, setCOCAddedTriger] = useState(-1);//대댓글을 쓴 경우, 이 값을 대댓글이 달린 댓글의 id로 설정한다.
 
     /*********************초기 화면 세팅**********************/
     //초기 화면 로드 - 글 내용 + 초기 댓글
@@ -760,7 +768,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
             setIsLastComment(false);//원활하게 다시 호출 되도록 세팅
             submitAbleAgain();
             if(commentToWhom[0] !== "p"){//즉, 대댓글 입력의 경우
-                getCOCCount(pageId, commentToWhom[3]);
+                setCOCAddedTriger(commentToWhom[3]);
             }
         })
         .catch((res) => {
@@ -897,6 +905,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
                                     leftBookChangeHandler={leftBookChangeHandler}
+                                    COCAddedTriger={COCAddedTriger}
+                                    setCOCAddedTriger={setCOCAddedTriger}
                                 />
                                 :
                                 <RenderComment 
@@ -913,6 +923,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     setIsLastComment={setIsLastComment}
                                     setCommentList={setCommentList}
                                     leftBookChangeHandler={leftBookChangeHandler}
+                                    COCAddedTriger={COCAddedTriger}
+                                    setCOCAddedTriger={setCOCAddedTriger}
                                 />
                             ))
                         }
