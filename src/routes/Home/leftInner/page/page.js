@@ -70,7 +70,7 @@ const ImageArea = ({imgList, pageIndex, pageClickFunc}) => {
 
 const ContentArea = ({data}) => {
     return(
-        data === '모자이크' ?
+        data === '!모자이크!' ?
         <p className={Style.pageContentSware}>{data}</p>
         :
         <p className={Style.pageContent}>{data}</p>
@@ -153,7 +153,7 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
                     <img src={isLiked ? heartFillBtn : heartBtn} className={Style.pageLikeBtn} onClick={likeClickHandler}/>
                     <p style={{margin: "0"}}>{data.pageDto.likeReadAuth ? `좋아요 ${likeCount} 개` : `좋아요 여러 개`}</p>
                 </div>
-                <div className={Style.pageContentArea} style={{cursor: "pointer"}} onClick={pageClickFunc}>
+                <div className={Style.pageContentArea} onClick={pageClickFunc}>
                     {
                         contentArray.map((d, index) => (
                             <ContentArea data={d} key={index}/>
