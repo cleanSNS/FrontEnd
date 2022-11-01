@@ -109,7 +109,7 @@
     width: 80%;
     height: fit-content;
     cursor: pointer;
-    padding-top: 20px;
+    padding: 20px 0px;
 }
 
 /*좋아요와 좋아요 개수와 시간이 올라오는 공간*/
@@ -182,11 +182,10 @@
     height: fit-content;
 }
 
-.commentText{
+.commentTextArea{
     margin: 0;
     height: fit-content;
     width: fit-content;
-    white-space: inherit;
     margin: 15px 0px 10px 40px;
 }
 

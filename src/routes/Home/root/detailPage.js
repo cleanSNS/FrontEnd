@@ -57,6 +57,7 @@ const calculateTimeFrom = (calTime) => {
 const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, groupId, refreshAccessToken, pageId, leftBookChangeHandler, setToggle, setCommentOfCommentList, setCommentOfCommentStartId, setIsLastCommentOfComment, commentId, getCOCCount}) => {
     const [COCIsLiked, setCOCIsLiked] = useState(false);//대댓글 좋아요 여부
     const [COCLikeCount, setCOCLikeCount] = useState(0);//대댓글 좋아요 개수
+    const [COCContentArray, setCOCContentArray] = useState([]);//대댓글 출력용 배열
 
     const CommentofCommentUserClickHandler = () => {
         setPageId(-1);//현재 페이지에서 나감
@@ -112,7 +113,7 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
         }
     };
 
-    //초기에 좋아요 관련 정보 불러오기
+    //초기에 좋아요 관련 정보 불러오기 및 출력 내용 바꾸기
     const presetLikeInfo = () => {
         setCOCLikeCount(data.likeCount);
         axios.get(`${checkLikeUrl}?targetId=${data.commentId}&type=COMMENT`)
@@ -129,6 +130,8 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
                 alert("삭제하지 못했습니다.");
             }
         });
+
+        setCOCContentArray(makeIntoArray(data.content));
     }
     useEffect(presetLikeInfo, []);
 
@@ -164,7 +167,13 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
                 <img src={data.userDto.imgUrl} className={Style.UserImage} onClick={CommentofCommentUserClickHandler}/>
                 <p className={Style.UserNickname} onClick={CommentofCommentUserClickHandler}>{data.userDto.nickname}</p>
             </div>
-            <p className={Style.commentText}>{data.content}</p>
+            <div className={Style.commentTextArea}>
+                {
+                    COCContentArray.map((d, index) => (
+                        <ContentArea data={d} key={index} />
+                    ))
+                }
+            </div>
             <div className={Style.likeTimeArea}>
                 <div className={Style.cover}>
                     <img src={COCIsLiked ? heartImgFill : heartImg} className={Style.buttonImg} onClick={CommentOfCommentLikeHandler}/>
@@ -293,10 +302,12 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
     const [loadCommentOfComment, setLoadCommentOfComment] = useState(0);//대댓글 켜는 버튼
     const [CIsLiked, setCIsLiked] = useState(false);//댓글이 좋아요 된 상태인지
     const [CLikeCount, setCLikeCount] = useState(0);//댓글 좋아요 개수
+    const [commentContentArray, setCommentContentArray] = useState([]);//실제로 출력할 내용이다.
 
     useEffect(() => {
-        setCOCCount(data.nestedCommentCount);
-    }, []);//초기에 대댓글의 수를 넣어둔다.
+        setCOCCount(data.nestedCommentCount);//초기에 대댓글의 수를 넣어둔다.
+        setCommentContentArray(makeIntoArray(data.content));//내용도 배열로 만든다.
+    }, []);
 
     //대댓글을 켜는 함수
     const onLoadCommentOfCommentClickHandler = (event) => {
@@ -423,7 +434,13 @@ const RenderComment = ({data, pageId, lastComment, setCommentToWhom, refreshAcce
                         <img src={data.userDto.imgUrl} className={Style.UserImage} onClick={commentUserClickHandler}/>
                         <p className={Style.UserNickname} onClick={commentUserClickHandler}>{data.userDto.nickname}</p>
                     </div>
-                    <pre className={Style.commentText} style={{cursor: "pointer"}} onClick={changeCommentToComment}>{data.content}</pre>
+                    <div className={Style.commentTextArea} style={{cursor: "pointer"}} onClick={changeCommentToComment}>
+                        {
+                            commentContentArray.map((d, index) => (
+                                <ContentArea data={d} key={index} />
+                            ))
+                        }
+                    </div>
                     <div className={Style.likeTimeArea}>
                         <div className={Style.cover}>
                             <img src={CIsLiked ? heartImgFill : heartImg} className={Style.buttonImg} onClick={CommentLikeClickHandler}/>
