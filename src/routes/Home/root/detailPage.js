@@ -19,6 +19,9 @@ import {
     checkLikeUrl,
     getCommentOFCommentNumberUrl,
 } from './../../../apiUrl';
+import {
+    makeIntoArray
+} from '../../../makeStringIntoArray';
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
 

@@ -167,7 +167,26 @@ const Pages = ({data, lastPage, index, setPageId, setLeftBookState, refreshAcces
 
 const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeClick, setDetailPageLikeClick, setLeftBookState}) => {
     const [pageStartId, setPageStartId] = useState(987654321);//글 리스트의 startId
-    const [pageList, setPageList] = useState([]); //글 리스트
+    const [pageList, setPageList] = useState([
+        {
+            "pageDto": {
+                "userDto": {
+                    "userId": 2,
+                    "nickname": "min",
+                    "imgUrl": "https://cleanbook-bucket.s3.ap-northeast-2.amazonaws.com/default/profile_img.png"
+                },
+                "pageId": 1,
+                "content": "!모자이크!!모자이크! 이런식으로 하는 방법밖에 없다는게 너무 슬퍼 !모자이크! !모자이크!!모자이크! 모자이크 <---이건 정상임 걱정마시오 !모자이크!!모자이크!!모자이크! 안녕 !모자이크!",
+                "likeCount": 1,
+                "likeReadAuth": true,
+                "createdDate": "2022-10-01T19:05:57.278163"
+            },
+            "imgUrlList": [
+                "https://cleanbook-bucket.s3.ap-northeast-2.amazonaws.com/page/d922e0a7-de3f-48ef-92bc-a4d7e7cb8e26.jpg"
+            ],
+            "like": true
+        }
+    ]); //글 리스트
     const [lastPage, inView] = useInView(); //이게 ref된 요소가 화면에 보이면 inView가 true로 변경
     const [isLoadFinish, setIsLoadFinish] = useState(false);//false면 더 이상 로드할 내용이 남은 경우, true면 로드할 내용이 더 없는 경우이다.
 
