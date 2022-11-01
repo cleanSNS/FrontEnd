@@ -540,7 +540,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         </div>
       </div>
       {pageId === -1 ? null : <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} leftBookChangeHandler={leftBookChangeHandler} userId={userId} resetPage={resetPage} setDetailPageLikeClick={setDetailPageLikeClick} leftBookState={leftBookState}/>}
-      <DetailPage pageId={pageId} refreshAccessToken={refreshAccessToken} setPageId={setPageId} leftBookChangeHandler={leftBookChangeHandler} userId={userId} resetPage={resetPage} setDetailPageLikeClick={setDetailPageLikeClick} leftBookState={leftBookState}/>
     </div>
   );
 }
