@@ -74,7 +74,7 @@ const RightFriend = ({userId, leftBookChangeHandler, refreshAccessToken, chatAnd
 
         setLoaded(false);
     };
-    useEffect(rightFriendPreset, []);
+    useEffect(() => {rightFriendPreset();}, []);
 
     useEffect(() => {//유저의 page에서 팔로우 클릭 시 친구 정보를 다시 불러온다.
         if(!userPageAndFriendReloadTriger) return;//false인 경우 실행 X
