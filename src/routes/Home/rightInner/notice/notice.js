@@ -15,9 +15,12 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
     const [noticeStartId, setNoticeStartId] = useState(987654321);
     const [noMoreNotice, setNomoreNotice] = useState(false);
 
+    const [loading, setLoading] = useState(true);
+
     //알림 불러오는 함수
     const NoticeRead = async () => {
         const res = await getAxios(`${getNoticeUrl}${noticeStartId}`, refreshAccessToken);
+        setLoading(false);
         if(res.data.data.length === 0) {
             setNomoreNotice(true);
             return;
@@ -27,9 +30,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
         const next = current.concat(tmp);
         setNoticeList(next);
         setNoticeStartId(res.data.startId);
-        setLoading(false);
     };
-    const [loading, setLoading] = useState(true);
     useEffect(() => {NoticeRead();}, [noticeCount]);//알림의 수가 달라질 때마다 부른다.
 
     //마지막 요소를 보는 중이며, 아직 알림이 남은 경우 notice를 더 불러오게 하는 함수
