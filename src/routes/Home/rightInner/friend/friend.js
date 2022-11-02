@@ -6,8 +6,10 @@ import {
     getFolloweeListUrl,
     getfollowerListUrl,
     getcurrentProfileUrl,
-    getMyUserIdUrl,
 } from '../../../../apiUrl';
+import {
+    getAxios
+} from '../../../../apiCall';
 
 const RenderRightFriend = ({friendList, leftBookChangeHandler}) => {
     return(
@@ -55,54 +57,22 @@ const RightFriend = ({userId, leftBookChangeHandler, refreshAccessToken, chatAnd
     useEffect(rightFriendAndUserProfileChangeHandler, [chatAndFriendReloadTriger]);
 
     //화면 렌더링 초기 설정 함수
-    const rightFriendPreset = () => {
-        axios.get(getFolloweeListUrl)//내가 팔로우 중인 유저 불러오기
-        .then((res) => {
-            const tmp = [...res.data.data];
-            setFolloweeList(tmp);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(rightFriendPreset, 1000);
-            }
-            else{
-                console.log(res);
-                alert("팔로우 중인 유저를 불러오지 못했습니다.");
-            }
-        });
+    const [loading, setLoaded] = useState(true);
+    const rightFriendPreset = async () => {
+        const res1 = await getAxios(getFolloweeListUrl, refreshAccessToken)//내가 팔로우 중인 유저 불러오기
+        const tmp1 = [...res1.data.data];
+        setFolloweeList(tmp1);
 
-        axios.get(getfollowerListUrl)//나를 팔로우 중인 유저 불러오기
-        .then((res) => {
-            const tmp = [...res.data.data];
-            setFollowerList(tmp);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(rightFriendPreset, 1000);
-            }
-            else{
-                console.log(res);
-                alert("나를 팔로우 중인 유저를 불러오지 못했습니다.");
-            }
-        });
+        const res2 = await getAxios(getfollowerListUrl, refreshAccessToken)//나를 팔로우 중인 유저 불러오기
+        const tmp2 = [...res2.data.data];
+        setFollowerList(tmp2);
 
+        const res3 = await getAxios(getcurrentProfileUrl, refreshAccessToken)//내 정보 불러오기
         axios.get(getcurrentProfileUrl)//내 정보 불러오기
-        .then((res) => {
-            setMyProfileName(res.data.data.nickname);
-            setMyProfileImage(res.data.data.imgUrl);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(rightFriendPreset, 1000);
-            }
-            else{
-                console.log(res);
-                alert("내 정보를 불러오지 못했습니다.");
-            }
-        });
+        setMyProfileName(res3.data.data.nickname);
+        setMyProfileImage(res3.data.data.imgUrl);
+
+        setLoaded(false);
     };
     useEffect(rightFriendPreset, []);
 
@@ -122,6 +92,7 @@ const RightFriend = ({userId, leftBookChangeHandler, refreshAccessToken, chatAnd
     useEffect(friendListSet, [followerList, followeeList]);
 
     return(
+        loading ? null :
         <div className={Style.wholeCover}>
             <div className={Style.Cover}>
                 <Profile img={myProfileImage} name={myProfileName} userId={userId} leftBookChangeHandler={leftBookChangeHandler}/>
