@@ -76,3 +76,5 @@ const SingleNotice = ({notificationId, userImgUrl, targetUserId, type, resourceI
         </div>
     );
 };
+
+export default SingleNotice;
