@@ -32,9 +32,11 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
     };
 
     /*****************채팅창 불러오기******************/
+    const [loading, setLoading] = useState(true);//초기에만 true로 설정됨 첫 로드 이후에는 false로 정상 처리 된다.
     useEffect(() => {
         if(rightBookState === "chat"){//오른쪽이 chat일 때만 실행
             gettingChattingRoomList();
+            setLoading(false);
         }
     }, [rightBookState]);//초기 설정
 
@@ -74,6 +76,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
     };
 
     return(
+        loading ? null :
         <div className={Style.wholeCover}>
             <div className={Style.chatList}>
                 <div className={Style.searchBarArea}>
