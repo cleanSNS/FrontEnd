@@ -1,4 +1,5 @@
 import Style from './notice.module.css';
+import SingleNotice from './singleNotice';
 import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
