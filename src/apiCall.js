@@ -6,7 +6,7 @@ export const getAxios = async (url, refreshfunc) => {
         const res = await axios.get(url);
         return res;
     } catch(error) {
-        if(res.response.status === 401 || res.response.status === 0){
+        if(error.response.status === 401 || error.response.status === 0){
             const message = await refreshfunc();
             if(message === "refresh success"){
                 const res = await axios.get(url);
@@ -21,7 +21,7 @@ export const postAxios = async (url, body, refreshfunc) => {
         const res = await axios.post(url, body);
         return res;
     } catch(error) {
-        if(res.response.status === 401 || res.response.status === 0){
+        if(error.response.status === 401 || error.response.status === 0){
             await refreshfunc();
             getAxios(url, body, refreshfunc);
         }
@@ -33,7 +33,7 @@ export const deleteAxios = async (url, refreshfunc) => {
         const res = await axios.delete(url);
         return res;
     } catch(error) {
-        if(res.response.status === 401 || res.response.status === 0){
+        if(error.response.status === 401 || error.response.status === 0){
             await refreshfunc();
             getAxios(url, refreshfunc);
         }
