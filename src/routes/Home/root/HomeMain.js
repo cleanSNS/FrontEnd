@@ -53,10 +53,10 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   const [newPostReadLikeAuth, setNewPostReadLikeAuth] = useState(true);//좋아요 읽기 권한
 
   //글 올리는 함수 => 좌측 페이지로 넘어가야한다. - 두가지가 순차적으로 실행
-  const [uploadImages, setUploadImages] = useState([]);
+  const [uploadImages, setUploadImages] = useState([]);//실제로 업로드 될 이미지의 리스트
   const [newPageSumbitClicked, setNewPageSubmitClicked] = useState(false);
 
-  const submitAbleAgain = () => {
+  const submitAbleAgain = () => {//제출 버튼 재활성화 함수
     setNewPageSubmitClicked(false);
     const btn = document.querySelector('#newPageSubmitBtn');
     btn.innerHTML = 'Submit';
@@ -64,9 +64,9 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     btn.style.backgroundColor = '#F4DEDE';
     btn.style.cursor = 'pointer';
     btn.disabled = false;
-};
+  };
 
-  const uploadNewPostHandler = (event) => {
+  const uploadNewPostHandler = (event) => {//제출 버튼 클릭 시 실행
     event.preventDefault();
     if(newPageSumbitClicked) return;//이미 실행중인 경우 종료
     if(newPostImages.length === 0){
@@ -87,7 +87,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     btn.disabled = true;
   };
 
-  const uploadNewPostHandlerSecondAct = async () => {
+  const uploadNewPostHandlerSecondAct = async () => {//트리거 되어, 2번째로 실행 => 이미지를 처리 한다.
     if(!newPageSumbitClicked) return;
     //formData에 파일들 append하기 - 파일명은 image_파일명 으로 생성
     const fileData = new FormData();
@@ -106,7 +106,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   };
   useEffect(() => {uploadNewPostHandlerSecondAct();}, [newPageSumbitClicked]);
 
-  const uploadNewPostHandlerThirdAct = async () => {
+  const uploadNewPostHandlerThirdAct = async () => {//트리거 되어, 3번째로 실행 => 글을 업로드 한다.
     if(uploadImages.length !== 0){//이미지 처리에 성공해서 렌더링할 파일이 있는 경우
       const sendBody = {
         content: newPostContent,
@@ -138,7 +138,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     }
   };
   useEffect(() => {uploadNewPostHandlerThirdAct();}, [uploadImages]);
-  /************************************************************************************************************************************************************/
+  /*****************************************************************메인 페이지 기본 설정***********************************************************************************/
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
   const [rightBookState, setRightBookState] = useState("friend");
   //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting // makeNewC // hastTagPage
@@ -146,11 +146,36 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
   const [settingState, setSettingState] = useState("initial");
 
-  //첫 render시 친구 tag를 칠해준다.
+  const [pageId, setPageId] = useState(-1);//detail page를 위한 pageId state. -1인 경우, 비활성화 되고, 그 외의 값의 경우 해당 page를 불러오며, detailpage를 띄운다.
+
+  //초기에 진행하는 함수 초기값 설정은 여기서 진행한다.
+  useEffect(() => {
+    firstRender();
+    presetNoticeCount();
+  }, []);
+
+  //화면을 초기 상태로 만드는 함수
+  const resetPage = () => {
+    setRightBookState("friend");
+    setLeftBookState("page");
+    setSettingState("initial");
+    setPageId(-1);
+  };
+
+  //채팅, 알림, 친구의 경우 이 함수를 사용해야 좌측이 달라진다.
+  const leftBookChangeHandler = (val) => {
+    setLeftBookState(val);
+  };
+
+  //setting 변경 함수
+  const SettingChangeHandler = (val) => {
+    setSettingState(val);
+  };
+
+  //친구 tag를 클릭 상태로 CSS변경 - 초기설정을 위해 필요
   const firstRender = () => {
     document.querySelector("#friend").style.backgroundColor = "rgb(145, 145, 145)";
   };
-  useEffect(firstRender, []);
 
   //우측 태그 클릭 hander
   const tagClickHandler = (event) =>{
@@ -183,22 +208,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   };
   useEffect(tagColorChangeHandler, [rightBookState]);
 
-  //우측 내용 클릭시 좌측 내용 변화 함수
-  //채팅, 알림, 친구의 경우 이 함수를 사용해야 좌측이 달라진다.
-  const leftBookChangeHandler = (val) => {
-    setLeftBookState(val);
-  };
-
-  //setting 변경 함수
-  const SettingChangeHandler = (val) => {
-    setSettingState(val);
-  };
-
-  //페이지에서 글을 클릭하면 글 중앙으로 오게 하기 - 가운데 글을 위한 UseState
-  const [pageId, setPageId] = useState(-1);
-
-
-  //뒤로가기 이벤트를 처리하기 위한 두 함수
+  /***************************************************************뒤로가기, 앞으로 가기 등 처리함수************************************************************************/
   const [goBack, setGoBack] = useState(false);//뒤로가기 이벤트로 이동한 경우, true로 세팅된다.
   window.onpopstate = function(event) {//뒤로가기 이벤트를 캐치합니다.
     console.log(event.state);
@@ -220,46 +230,24 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   };
   useEffect(pushStateHandler, [rightBookState, leftBookState]);
 
-  /*************************알림 관련******************************/
+  /***************************************************************************알림 관련*****************************************************************************/
   const [noticeCount, setNoticeCount] = useState(-1);
   const [chatCount, setChatCount] = useState(-1);
 
-  //처음 로그인 시 알림의 수를 받아오는 함수
-  const presetNoticeCount = () => {
-    if(noticeCount === -1){//초기상태에서만 이 함수를 이용한다.
-      axios.get(presetNoticeNumeber)
-      .then((res) => {
-        setNoticeCount(res.data.data.count);
-      })
-      .catch((res) => {
-        if(res.response.status === 401 || res.response.status === 0){
-          refreshAccessToken();
-          setTimeout(presetNoticeCount, 1000);
-        }
-        else{
-          alert("알림의 개수를 불러오지 못했습니다.");
-        }
-      })
+  //처음 로그인 시 알림의 수를 받아오는 함수 - 초기 상태에서만 실행된다.
+  const presetNoticeCount = async () => {
+    if(noticeCount === -1){
+      const res = await getAxios(presetNoticeNumeber);
+      setNoticeCount(res.data.data.count);
     }
-    if(chatCount === -1){//초기상태에서만 이 함수를 이용한다.
+    if(chatCount === -1){
       axios.get(presetChatNumber)
-      .then((res) => {
-        setChatCount(res.data.data.count);
-      })
-      .catch((res) => {
-        if(res.response.status === 401 || res.response.status === 0){
-          refreshAccessToken();
-          setTimeout(presetNoticeCount, 1000);
-        }
-        else{
-          alert("채팅 알림의 개수를 불러오지 못했습니다.");
-        }
-      })
+      const res = await getAxios(presetChatNumber);
+      setChatCount(res.data.data.count);
     }
   };
-  useEffect(presetNoticeCount, []);//초기상태에서만 진행
 
-  //SSE이벤트 오픈 - notice개수 및 
+  //SSE이벤트 오픈 - notice와 chat의 초기값을 불러온 이후부터는 SSE로 그 값을 업데이트한다.
   useEffect(() => {
     if(noticeEventSource === null) return;
     noticeEventSource.addEventListener("sse", function (event) {
@@ -273,15 +261,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     });
   }, [noticeCount]);
 
-  /**************로고에 넣을 함수 - 초기 상태로 만드는 함수****************/
-  const resetPage = () => {
-    setRightBookState("friend");
-    setLeftBookState("page");
-    setSettingState("initial");
-    setPageId(-1);
-  };
-
-  /*****************채팅 관련********************/
+  /**********************************************************************채팅 관련************************************************************************/
   const [stompClient, setStompClient] = useState(null);//소켓 연결이 된 친구
   const [chattingRoomId, setChattingRoomId] = useState(-1);//채팅방의 id
 
@@ -315,24 +295,22 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     }
   }, [rightBookState]);
 
+  /************************************************************다른 페이지들간의 트리거 변수****************************************************************************/
+  //좌측 채팅방에서 로드가 되지 않은 상태에서 우측에서 채팅방 클릭 시 에러발생 - 이를 막기 위한 연결 변수
   //먼저, right의 chat에서 클릭 시, 이 값을 true로 만든다. 이후, leftchat에서 로드가 끝나면 이 값을 false로 만든다.
   //동시에 right에서 chat을 클릭할 때, 이 값이 false인지 확인해야한다.
   //채팅방에 연결되지 않은 상태에서 바뀌는 것을 막기 위함
   const [chatLoading, setChatLoading] = useState(false);
 
-  //방 새로 만들 때도 이거 세팅해야함
-
-  /***********************page를 볼 수 있는 두 공간의 연결************************/
   //detailpage에서 좋아요 클릭 시 일반 pagelist에 반영하기 위해 trigger가 되는 값 - detailpage에서 좋아요를 누른 글의 id가 변수의 값이 된다.
   //detailpage에서 변경 시 leftBookState가 page인지 확인하고 누르기
   //단, page에 띄워져있는 리스트에 해당 글이 없는 경우도 존재할 수 있으니 고려해야한다.
   const [detailPageLikeClick, setDetailPageLikeClick] = useState(-1);
 
-
-  /****************************프로필 설정과 오른쪽의 friend와 chat의 연결********************************* */
+  //프로필 설정과 오른쪽의 friend와 chat의 연결
   const [chatAndFriendReloadTriger, setChatAndFriendReloadTriger] = useState(false);
 
-  /**********************개인 페이지(좌)와 friend페이지(우)의 연결*************************/
+  //개인 페이지(좌)와 friend페이지(우)의 연결
   const [userPageAndFriendReloadTriger, setUserPageAndFriendReloadTriger] = useState(false);
 
   return(
