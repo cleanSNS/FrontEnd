@@ -187,7 +187,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     const searchHandler = async (event) => {//제출 시, 차단할 유저를 api에 넘기고, 블록된 사람들을 다시 불러온다.
         event.preventDefault();
 
-        const res = await getAxios(`${searchUserUrl}${userInput}`);
+        const res = await getAxios(`${searchUserUrl}${userInput}`, {}, refreshAccessToken);
         const tmp = [...res.data.data]
         const withoutMe = tmp.filter((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다. 내가 없는 검색된 리스트
 

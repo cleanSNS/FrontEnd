@@ -236,11 +236,11 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //처음 로그인 시 알림의 수를 받아오는 함수 - 초기 상태에서만 실행된다.
   const presetNoticeCount = async () => {
     if(noticeCount === -1){
-      const res = await getAxios(presetNoticeNumeber);
+      const res = await getAxios(presetNoticeNumeber, {}, refreshAccessToken);
       setNoticeCount(res.data.data.count);
     }
     if(chatCount === -1){
-      const res = await getAxios(presetChatNumber);
+      const res = await getAxios(presetChatNumber, {}, refreshAccessToken);
       setChatCount(res.data.data.count);
     }
   };

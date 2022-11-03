@@ -263,7 +263,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     /******************글 영역- 삭제*********************/
     const pageDeleteClickHandler = async () => {
         if(window.confirm("정말 삭제하시겠습니까?")){
-            await deleteAxios(`${deletePageUrl}${pageId}`);
+            await deleteAxios(`${deletePageUrl}${pageId}`, {}, refreshAccessToken);
             alert("글을 삭제했습니다.");
             setPageId(-1);
             resetPage();
