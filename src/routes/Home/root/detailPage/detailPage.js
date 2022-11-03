@@ -38,7 +38,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     const [postedImageList, setPostedImageList] = useState([]);//올린 이미지 list
     const [postedPersonImage, setPostedPersonImage] = useState("");//올린 사람의 이미지
     const [postedPersonNickname, setPostedPersonNickname] = useState("");//올린 사람의 닉네임
-    const [postedWord, setPostedWord] = useState(""); //올린 글의 내용
     const [postedWordArray, setPostedWordArray] = useState([]);//올린 글을 실제로 보여주기 위해 처리한 문자열 배열
     const [likeNumber, setLikeNumber] = useState(0); //좋아요 개수
     const [postedTime, setPostedTime] = useState("");//업로드 시간(n분전같은 글로 저장)
@@ -68,7 +67,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         setPageUploadUserId(res.data.data.pageDto.userDto.userId);
         setPostedPersonImage(res.data.data.pageDto.userDto.imgUrl);
         setPostedPersonNickname(res.data.data.pageDto.userDto.nickname);
-        setPostedWord(res.data.data.pageDto.content);
+        setPostedWordArray(makeIntoArray(res.data.data.pageDto.content));
         setLikeNumber(res.data.data.pageDto.likeCount);
         setLikeCountVisual(res.data.data.pageDto.likeReadAuth);
         //댓글 초기 세팅 부분
@@ -84,13 +83,6 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         setLoading(false);
     };
     useEffect(() => {presetDetailPage();}, [commentStartId]);
-
-    //글을 입력 받으면 그 글을 배열 형태로 변경하는 작업
-    const postedWordBlurAdd = () => {
-        if(loading) return;
-        setPostedWordArray(makeIntoArray(postedWord));
-    };
-    useEffect(postedWordBlurAdd, [postedWord]);
 
     //댓글로드 함수 - 추가 댓글
     const presetComment = async () => {
