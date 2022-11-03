@@ -103,24 +103,13 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       fileData.append(`file`, newPostImages[i]);
     }
 
-    axios.post(`${uploadImageUrl}page`, fileData, {
+    const res = await postAxios(`${uploadImageUrl}page`, fileData, {
       headers:{
         'Content-Type': 'multipart/form-data',
-    }})
-    .then((res) => {
-      const tmp = [...res.data]
-      setUploadImages(tmp);
-    })
-    .catch((res) => {
-      if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-        refreshAccessToken();
-        setTimeout(uploadNewPostHandlerSecondAct, 1000);
       }
-      else{
-        console.log(res);
-        alert("이미지 처리에 실패했습니다.");
-      }
-    });
+    }, refreshAccessToken);
+    const tmp = [...res.data]
+    setUploadImages(tmp);
   };
   useEffect(() => {uploadNewPostHandlerSecondAct();}, [newPageSumbitClicked]);
 
