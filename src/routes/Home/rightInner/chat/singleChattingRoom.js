@@ -18,7 +18,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
                 if(leftBookState === `chat/${data.chatroomId}`){//나간 방에 들어와 있는 상태라면 나가야한다.
                     setLeftBookState("page");//다른 화면으로 강제 전환시킨다.
                 }
-                gettingChattingRoomList();//채팅방 다시 로드
+                await gettingChattingRoomList();//채팅방 다시 로드
             }
         }
         else{//닫기가 아닌 그냥 채팅방을 클릭한 경우
@@ -27,7 +27,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
             setChatLoading(true);//이동과 동시에 이제 로딩할 것이기 때문에 true로 값 변경
             if(searched){
                 console.log("채팅방으로 입장하여 검색 결과를 초기화합니다.");
-                gettingChattingRoomList();//검색된 상태면 다시 채팅방 리스트를 불러온다.
+                await gettingChattingRoomList();//검색된 상태면 다시 채팅방 리스트를 불러온다.
                 setSearched(false);
             }
         }
