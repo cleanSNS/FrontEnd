@@ -13,7 +13,7 @@ const SingleChattingRoom = ({data, setLeftBookState, refreshAccessToken, getting
 
         if(event.target.id === "chattingRoomDeleteBtn"){//닫기를 누른 경우
             if(window.confirm("정말 채팅방을 나가실 건가요?")){
-                await deleteAxios(`${deleteChattingRoomUrl}/${data.chatroomId}`, refreshAccessToken);
+                await deleteAxios(`${deleteChattingRoomUrl}/${data.chatroomId}`, {}, refreshAccessToken);
                 alert("채팅방에서 나갔습니다.");
                 if(leftBookState === `chat/${data.chatroomId}`){//나간 방에 들어와 있는 상태라면 나가야한다.
                     setLeftBookState("page");//다른 화면으로 강제 전환시킨다.

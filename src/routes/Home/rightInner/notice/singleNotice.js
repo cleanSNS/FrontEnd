@@ -33,7 +33,7 @@ const SingleNotice = ({notificationId, userImgUrl, targetUserId, type, resourceI
         //읽음 처리
         await postAxios(`${readNoticeUrl}${notificationId}`, {
             notificationId: notificationId,
-        }, refreshAccessToken);
+        }, {}, refreshAccessToken);
         if(document.querySelector(`#noticeScript${notificationId}`).style.color !== "gray"){//이미 읽은것으로 처리되어있는 경우가 아닐 때 1을 뺀다.
             setNoticeCount((cur) => cur - 1);//알림 하나 읽은 것으로 처리
         }
@@ -52,7 +52,7 @@ const SingleNotice = ({notificationId, userImgUrl, targetUserId, type, resourceI
         event.preventDefault();
 
         //api로 삭제 처리
-        await deleteAxios(`${deleteNoticeUrl}${notificationId}`, refreshAccessToken);
+        await deleteAxios(`${deleteNoticeUrl}${notificationId}`, {}, refreshAccessToken);
         ListDeleteHandler(event);//보이는 내용 처리
         if(document.querySelector(`#noticeScript${notificationId}`).style.color !== "gray"){//이미 읽은것으로 처리되어있는 경우가 아닐 때 1을 뺀다.
             setNoticeCount((cur) => cur - 1);//알림 하나 읽은 것으로 처리

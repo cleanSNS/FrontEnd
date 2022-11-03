@@ -25,7 +25,7 @@ const RightChat = ({refreshAccessToken, setLeftBookState, leftBookState, rightBo
     };
 
     const gettingChattingRoomList = async () => {
-        const res = await getAxios(getChattingRoomListUrl, refreshAccessToken);
+        const res = await getAxios(getChattingRoomListUrl, {}, refreshAccessToken);
         const tmp = [...res.data.data];
         setChattingRoomList(tmp);
         setChattingTriger(false);

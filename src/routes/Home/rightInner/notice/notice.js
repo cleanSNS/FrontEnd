@@ -19,7 +19,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
 
     //알림 불러오는 함수
     const NoticeRead = async () => {
-        const res = await getAxios(`${getNoticeUrl}${noticeStartId}`, refreshAccessToken);
+        const res = await getAxios(`${getNoticeUrl}${noticeStartId}`, {}, refreshAccessToken);
         setLoading(false);
         if(res.data.data.length === 0) {
             setNomoreNotice(true);

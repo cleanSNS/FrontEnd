@@ -21,7 +21,7 @@ const RightFriend = ({userId, leftBookChangeHandler, refreshAccessToken, chatAnd
     const rightFriendAndUserProfileChangeHandler = async () => {//오른쪽 화면이 친구리스트인데 사용자가 프로필을 수정하는 경우, 사용자의 프로필을 다시 불러와서 갱신하는 함수
         if(!chatAndFriendReloadTriger) return;
         
-        const res = getAxios(getcurrentProfileUrl);//내 정보 불러오기
+        const res = await getAxios(getcurrentProfileUrl, {}, refreshAccessToken);//내 정보 불러오기
         setMyProfileName(res.data.data.nickname);
         setMyProfileImage(res.data.data.imgUrl);
         setChatAndFriendReloadTriger(false);
@@ -31,15 +31,15 @@ const RightFriend = ({userId, leftBookChangeHandler, refreshAccessToken, chatAnd
     //화면 렌더링 초기 설정 함수
     const [loading, setLoaded] = useState(true);
     const rightFriendPreset = async () => {
-        const res1 = await getAxios(getFolloweeListUrl, refreshAccessToken);//내가 팔로우 중인 유저 불러오기
+        const res1 = await getAxios(getFolloweeListUrl, {}, refreshAccessToken);//내가 팔로우 중인 유저 불러오기
         const tmp1 = [...res1.data.data];
         setFolloweeList(tmp1);
 
-        const res2 = await getAxios(getfollowerListUrl, refreshAccessToken);//나를 팔로우 중인 유저 불러오기
+        const res2 = await getAxios(getfollowerListUrl, {}, refreshAccessToken);//나를 팔로우 중인 유저 불러오기
         const tmp2 = [...res2.data.data];
         setFollowerList(tmp2);
 
-        const res3 = await getAxios(getcurrentProfileUrl, refreshAccessToken);//내 정보 불러오기
+        const res3 = await getAxios(getcurrentProfileUrl, {}, refreshAccessToken);//내 정보 불러오기
         setMyProfileName(res3.data.data.nickname);
         setMyProfileImage(res3.data.data.imgUrl);
 
