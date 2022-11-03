@@ -18,7 +18,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
 
     //처음에 설정현황을 불러오는 함수
     const noticeSettingPreset = async () => {
-        const res = await getAxios(getCurrentNoticeSettingUrl);
+        const res = await getAxios(getCurrentNoticeSettingUrl, {}, refreshAccessToken);
         setNotificationFollow(res.data.data.notificationFollow);
         setNotificationComment(res.data.data.notificationComment)
         setNotificationLike(res.data.data.notificationLike);

@@ -4,7 +4,7 @@ import {
     passwordCheckForPasswordChangeUrl,
     passwordChangeUrl
 } from '../../../../apiUrl';
-import axios from 'axios';
+import { postAxios } from '../../../../apiCall';
 
 const PasswordSetting = ({refreshAccessToken}) => {
     //useState 선언
@@ -67,57 +67,35 @@ const PasswordSetting = ({refreshAccessToken}) => {
         btn.disabled = true;
     };
 
-    const changePassword = () => {
-        axios.post(passwordChangeUrl,{
+    const changePassword = async () => {
+        const sendBody = {
             password: passwordChange,
-        })
-        .then((res) => {
-            alert("비밀번호가 변경되었습니다.");
-            submitAbleAgain();//다시 보낼 수 있게 설정
-            setPreviousPassword("");
-            setPasswordChange("");
-            setPasswordChangeCheck("");
-        })
-        .catch((res) => {
-            submitAbleAgain();//다시 보낼 수 있게 설정
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(changePassword, 1000);
-            }
-            else{
-                console.log(res);
-                alert("비밀번호를 변경하지 못했습니다.");
-            }
-        });
+        };
+
+        await postAxios(passwordChangeUrl, sendBody, {}, refreshAccessToken);
+        alert("비밀번호가 변경되었습니다.");
+        submitAbleAgain();//다시 보낼 수 있게 설정
+        setPreviousPassword("");
+        setPasswordChange("");
+        setPasswordChangeCheck("");
     };
 
-    const submitHandlerSecondAct = () => {
+    const submitHandlerSecondAct = async () => {
         if(!passwordSubmitClicked) return;//불필요한 호출 차단
 
-        axios.post(passwordCheckForPasswordChangeUrl,{
+        const sendBody = {
             password: previousPassword,
-        })
-        .then((res) => {
-            if(res.data){//일치하면
-                changePassword();
-            }
-            else{
-                alert("기존 비밀번호가 일치하지 않습니다.");
-                submitAbleAgain();//다시 보낼 수 있게 설정
-            }
-        })
-        .catch((res) => {
+        };
+        const res = await postAxios(passwordCheckForPasswordChangeUrl, sendBody, {}, refreshAccessToken);
+        if(res.data){//일치하면
+            await changePassword();
+        }
+        else{
+            alert("기존 비밀번호가 일치하지 않습니다.");
             submitAbleAgain();//다시 보낼 수 있게 설정
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(submitHandlerSecondAct, 1000);
-            }
-            else{
-                alert("비밀번호를 확인하는 과정에서 문제가 발생했습니다.");
-            }
-        });
+        }
     };
-    useEffect(submitHandlerSecondAct, [passwordSubmitClicked])
+    useEffect(() => {submitHandlerSecondAct();}, [passwordSubmitClicked])
 
     //비밀번호 동일한지 확인해서 style바꿔주는 함수
     const passwordCheckSameCheck = () => {
