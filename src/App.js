@@ -75,7 +75,7 @@ function App() {
       }
     };
   };
-  useEffect(refreshAccessToken, []);//처음 화면을 켰을 때, 한번 자동으로 실행해서 실수로 껐더라도 자동 로그인이 되게 한다.
+  useEffect(() => {refreshAccessToken();}, []);//처음 화면을 켰을 때, 한번 자동으로 실행해서 실수로 껐더라도 자동 로그인이 되게 한다.
 
   //로그아웃 함수
   const logoutFunc = () => {
