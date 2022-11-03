@@ -87,6 +87,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
 
     //글을 입력 받으면 그 글을 배열 형태로 변경하는 작업
     const postedWordBlurAdd = () => {
+        if(loading) return;
         setPostedWordArray(makeIntoArray(postedWord));
     };
     useEffect(postedWordBlurAdd, [postedWord]);
@@ -136,6 +137,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     };
 
     const moveImageHandler = () => {
+        if(loading) return;
         document.querySelector("#onlyImageArea").style.transform = `translate(-${(imageIndex * 100) / postedImageList.length}%)`;
     };
     useEffect(moveImageHandler, [imageIndex]);
