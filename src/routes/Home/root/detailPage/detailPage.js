@@ -1,9 +1,9 @@
 //가운데에 띄우는 화면
 import Style from './detailPage.module.css';
-import heartImg from './heart_outline.png';
-import heartImgFill from './heart_fill.png';
-import leftArrow from './caret_left.png';
-import rightArrow from './caret_right.png';
+import heartImg from '../heart_outline.png';
+import heartImgFill from '../heart_fill.png';
+import leftArrow from '../caret_left.png';
+import rightArrow from '../caret_right.png';
 
 import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
