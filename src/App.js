@@ -47,33 +47,34 @@ function App() {
     if(rft === null) return;//rft가 없다면 종료한다.
     if(rft === "kakao" || rft === "naver") return;//소셜 로그인된 상황이므로, 해당 함수 그냥 종료.
 
-    try{
-      const response = await axios.get(refreshNewAccessTokenUrl, {
-        headers:{
-          Authorization: rft
-        }
-      });
+    await axios.get(refreshNewAccessTokenUrl, {
+      headers:{
+        Authorization: rft
+      }
+    })
+    .then((response) => {
       console.log(response);
       console.log("토큰 재발급 되었습니다.");
       if(isLogin === "logout"){
         //새로고침했는데 마침 AT만 시간초과된 경우.
         //JS에 선언된SSE, userId가 유실된 상태이므로 복구하고 login상태로 만든다.
-        await getUserIdANdOpenSSEHandler();
+        getUserIdANdOpenSSEHandler();
         setIsLogin("login");
         return "refresh success";
       }
-    } catch(error) {
+    })
+    .catch((error) => {
       if(error.response.data.message === "만료된 토큰입니다." || error.response.data.message === "access token이 존재하지 않습니다."){//너무 오래된 경우 isLogin의 상태와 무관하게 만료되면 logout한다.
         alert("장시간 로그인되어, 자동 로그아웃되었습니다. 다시 로그인해주세요.");
         logoutFunc();
         return "refresh Fail";
       }
       if(isLogin === "logout"){//만료되지 않았으나 호출. 즉, 새로고침인 경우이다. 이 경우 Accesstoken이 만료되지않았다는 오류가 발생 => 그냥 SSE를 연결하고 로그인상태로 만든다.
-        await getUserIdANdOpenSSEHandler();
+        getUserIdANdOpenSSEHandler();
         setIsLogin("login");
         return "refresh success";
       }
-    };
+    });
   };
   useEffect(() => {refreshAccessToken();}, []);//처음 화면을 켰을 때, 한번 자동으로 실행해서 실수로 껐더라도 자동 로그인이 되게 한다.
 
