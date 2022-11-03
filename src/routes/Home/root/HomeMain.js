@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import Style from "./HomeMain.module.css";
 import Logo from "../../../logo/Logo";
-import SearchBar from "./searchBar";
-import NumberNotice from "./numberNotice";
-import DetailPage from './detailPage';
+import SearchBar from "./searchBar/searchBar";
+import NumberNotice from "./numberNotice/numberNotice";
+import DetailPage from './detailPage/detailPage';
 
 import LeftPage from "../leftInner/page/page";
 import LeftPageList from "../leftInner/pageList/pageList";

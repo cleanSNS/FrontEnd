@@ -1,5 +1,5 @@
 import Style from './friend.module.css';
-import Profile from '../../root/profile';
+import Profile from '../../root/profile/profile';
 import { useState, useEffect } from 'react';
 import RenderRightFriend from './renderRightFriend';
 import {

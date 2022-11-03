@@ -1,7 +1,7 @@
 //피드 여러개 띄우는 화면
 import { useState, useEffect } from 'react';
 import { useInView } from "react-intersection-observer";
-import ContentArea from '../../root/contentArea';
+import ContentArea from '../../root/contentArea/contentArea';
 import moreStuff from './moreStuff.png';
 import leftArrow from './caret_left.png';
 import rightArrow from './caret_right.png'

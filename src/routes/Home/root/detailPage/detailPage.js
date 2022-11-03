@@ -18,13 +18,13 @@ import {
     unlikeThisPageUrl,
     checkLikeUrl,
     getCommentOFCommentNumberUrl,
-} from './../../../apiUrl';
+} from '../../../../apiUrl';
 import {
     makeIntoArray
-} from '../../../makeStringIntoArray';
+} from '../../../../makeStringIntoArray';
 import axios from 'axios';
 import { Temporal } from '@js-temporal/polyfill';
-import ContentArea from './contentArea';
+import ContentArea from '../contentArea/contentArea';
 
 //시간 계산 함수
 /** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
