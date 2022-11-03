@@ -22,7 +22,7 @@ export const postAxios = async (url, body, header, refreshfunc) => {
         return res;
     } catch(error) {
         if(url === withdrawalUrl && error.response.status === 400){//비밀번호가 틀린 경우이다.
-            return {message: "error"};   
+            return "fail";   
         }
         if(error.response.status === 401 || error.response.status === 0){
             await refreshfunc();
