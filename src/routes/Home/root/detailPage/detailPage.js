@@ -1,4 +1,4 @@
-//가운데에 띄우는 화면
+//가운데에 띄우는 화면 총괄 - 계층상 1단계
 import Style from './detailPage.module.css';
 import heartImg from '../heart_outline.png';
 import heartImgFill from '../heart_fill.png';

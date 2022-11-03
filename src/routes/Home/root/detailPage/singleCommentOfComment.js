@@ -1,3 +1,5 @@
+//대댓글 하나를 띄우는 컴포넌트 - 계층상 4단계
+
 import Style from './detailPage.module.css';
 import heartImg from '../heart_outline.png';
 import heartImgFill from '../heart_fill.png';
@@ -13,6 +15,7 @@ import {
 import { makeIntoArray } from '../../../../makeStringIntoArray';
 import axios from 'axios';
 import { calculateTimeFrom } from '../../../../timeCalculation';
+import ContentArea from '../contentArea/contentArea';
 
 //대댓글 부분
 const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, refreshAccessToken, pageId, leftBookChangeHandler, setToggle, setCommentOfCommentList, setCommentOfCommentStartId, setIsLastCommentOfComment, commentId, getCOCCount}) => {
