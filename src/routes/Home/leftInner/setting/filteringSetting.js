@@ -42,7 +42,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     useEffect(() => {//초기설정이다. 두 가지를 전부 로드한다.
         gettingCurrentFilterSetting();
         gettingCurrentNotFilteredUser();
-        setLoading(true);
+        setLoading(false);
     }, []);
 
     /* 상단 내용 */
