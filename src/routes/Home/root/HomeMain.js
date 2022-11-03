@@ -94,7 +94,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     btn.disabled = true;
   };
 
-  const uploadNewPostHandlerSecondAct = () => {
+  const uploadNewPostHandlerSecondAct = async () => {
     if(!newPageSumbitClicked) return;
     //formData에 파일들 append하기 - 파일명은 image_파일명 으로 생성
     const fileData = new FormData();
@@ -103,14 +103,10 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       fileData.append(`file`, newPostImages[i]);
     }
 
-    axios({
-      url: `${uploadImageUrl}page`,
-      method: 'POST',
-      data: fileData,
+    axios.post(`${uploadImageUrl}page`, fileData, {
       headers:{
         'Content-Type': 'multipart/form-data',
-      },
-    })
+    }})
     .then((res) => {
       const tmp = [...res.data]
       setUploadImages(tmp);
@@ -126,7 +122,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       }
     });
   };
-  useEffect(uploadNewPostHandlerSecondAct, [newPageSumbitClicked]);
+  useEffect(() => {uploadNewPostHandlerSecondAct();}, [newPageSumbitClicked]);
 
   const uploadNewPostHandlerThirdAct = () => {
     if(uploadImages.length !== 0){//이미지 처리에 성공해서 렌더링할 파일이 있는 경우
