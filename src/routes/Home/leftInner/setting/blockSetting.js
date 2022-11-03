@@ -17,12 +17,14 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
     const [searchedUserList, setSearchedUserList] = useState([]);//검색된 사람들
     const [AddedUserList, setAddedUserList] = useState([]);//차단된 사람들
 
+    const [loading, setLoading] = useState(true);
     //처음에 차단된 유저들의 리스트를 먼저 가져와야한다.
     const blockSettingInitialSetting = async() => {
         const res = await getAxios(getCurrentBlockedPersonUrl, {}, refreshAccessToken);
         const tmp = [...res.data.data];
         setAddedUserList(tmp);
         setSearchedUserList([]);//검색 리스트 초기화 : 이게 초기상황이든 유저가 추가한 이후든 상관없이 실행되도 된다.
+        setLoading(false);
     };
     useEffect(() => {blockSettingInitialSetting()}, []);
 
@@ -93,6 +95,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
     };
 
     return(
+        loading ? null :
         <form className={Style.searchAndAddArea} onSubmit={searchHandler}>
             <div className={Style.Cover}>
                 <label
