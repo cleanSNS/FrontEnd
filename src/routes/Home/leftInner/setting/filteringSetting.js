@@ -37,12 +37,12 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         const tmp = [...res.data.data];
         setAddedUserList(tmp);
         setSearchedUserList([]);
-        setLoading(false);
     };
 
     useEffect(() => {//초기설정이다. 두 가지를 전부 로드한다.
         gettingCurrentFilterSetting();
         gettingCurrentNotFilteredUser();
+        setLoading(false);
     }, []);
 
     /* 상단 내용 */
