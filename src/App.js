@@ -12,8 +12,8 @@ function App() {
   const [userId, setUserId] = useState(-1);
 
   //userId를 받고 SSE를 여는 함수
-  const getUserIdANdOpenSSEHandler = () => {
-    axios.get(getMyUserIdUrl)
+  const getUserIdANdOpenSSEHandler = async () => {
+    await axios.get(getMyUserIdUrl)
     .then((res) => {
       setUserId(res.data.data.userId);
     })
@@ -58,7 +58,7 @@ function App() {
       if(isLogin === "logout"){
         //새로고침했는데 마침 AT만 시간초과된 경우.
         //JS에 선언된SSE, userId가 유실된 상태이므로 복구하고 login상태로 만든다.
-        getUserIdANdOpenSSEHandler();
+        await getUserIdANdOpenSSEHandler();
         setIsLogin("login");
         return "refresh success";
       }
@@ -69,7 +69,7 @@ function App() {
         return "refresh Fail";
       }
       if(isLogin === "logout"){//만료되지 않았으나 호출. 즉, 새로고침인 경우이다. 이 경우 Accesstoken이 만료되지않았다는 오류가 발생 => 그냥 SSE를 연결하고 로그인상태로 만든다.
-        getUserIdANdOpenSSEHandler();
+        await getUserIdANdOpenSSEHandler();
         setIsLogin("login");
         return "refresh success";
       }
