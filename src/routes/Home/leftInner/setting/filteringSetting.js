@@ -123,7 +123,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         alert("설정을 변경했습니다.");
         submitAbleAgain();
     }
-    useEffect(settingSubmitHandlerSecondAct, [filterringSubmitClicked])
+    useEffect(() => {settingSubmitHandlerSecondAct();}, [filterringSubmitClicked])
 
     /* 하단 내용 */
 

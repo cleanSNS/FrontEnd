@@ -69,7 +69,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
         noticeSettingPreset();//초기값 다시 불러오기
         submitAbleAgain();//다시 제출 가능하게 하기
     };
-    useEffect(submitHandlerSecondAct, [noticeSubmitClicked]);
+    useEffect(() => {submitHandlerSecondAct();}, [noticeSubmitClicked]);
 
     //각 설정 클릭시 handler
     const notificationFollowClickHandler = (event) => {
