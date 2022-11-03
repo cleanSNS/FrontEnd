@@ -176,6 +176,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
 
     //댓글 작성 대상 변경시, placeholder변경 함수
     const changePlaceholder = () => {
+        if(loading) return;
         setUserCommentInput("");
         if(commentToWhom[0] === 'p'){//댓글을 작성
             document.querySelector("#userCommentArea").placeholder = "댓글을 입력하세요...";
