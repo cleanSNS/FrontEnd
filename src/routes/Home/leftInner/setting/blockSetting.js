@@ -10,7 +10,7 @@ import {
     blockUserUrl,
     searchUserUrl,
 } from '../../../../apiUrl';
-import axios from 'axios';
+import { getAxios, postAxios } from '../../../../apiCall';
 
 const BlockSetting = ({refreshAccessToken, userId}) => {
     const [userInput, setUserInput] = useState("");
@@ -18,25 +18,13 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
     const [AddedUserList, setAddedUserList] = useState([]);//차단된 사람들
 
     //처음에 차단된 유저들의 리스트를 먼저 가져와야한다.
-    const blockSettingInitialSetting = () => {
-        axios.get(getCurrentBlockedPersonUrl)
-        .then((res) => {
-            const tmp = [...res.data.data];
-            setAddedUserList(tmp);
-            setSearchedUserList([]);//검색 리스트 초기화 : 이게 초기상황이든 유저가 추가한 이후든 상관없이 실행되도 된다.
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(blockSettingInitialSetting, 1000);
-            }
-            else{
-                console.log(res);
-                alert("차단된 유저들을 가져오지 못했습니다.");
-            }
-        })
+    const blockSettingInitialSetting = async() => {
+        const res = await getAxios(getCurrentBlockedPersonUrl, {}, refreshAccessToken);
+        const tmp = [...res.data.data];
+        setAddedUserList(tmp);
+        setSearchedUserList([]);//검색 리스트 초기화 : 이게 초기상황이든 유저가 추가한 이후든 상관없이 실행되도 된다.
     };
-    useEffect(blockSettingInitialSetting, []);
+    useEffect(() => {blockSettingInitialSetting()}, []);
 
     //유저 내용 입력 Handler
     const userInputChangeHandler = (event) => {
@@ -45,55 +33,30 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
     };
 
     //유저 추가 버튼 클릭 처리 Handler
-    const addUserClickhandler = (event) => {
+    const addUserClickhandler = async (event) => {
         event.preventDefault();
 
         //차단하는 api호출 event.target.id이용
-        axios.post(blockUserUrl, {
+        const sendBody = {
             userId: event.target.id,
-        })
-        .then((res) => {//문제가 없는 상황이므로 추가된 차단 리스트를 불러와서 변경하기
-            blockSettingInitialSetting();
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(() => {addUserClickhandler(event);}, 1000);
-            }
-            else{
-                console.log(res);
-                alert("해당 유저를 차단 리스트에 추가하지 못했습니다.");
-                //window.location.href = '/main';
-            }
-        })
+        };
+        await postAxios(blockUserUrl, sendBody, {}, refreshAccessToken);
+        await blockSettingInitialSetting();
     };
 
     //유저 삭제 버튼 클릭 처리 Handler
-    const deleteUserClickHandler = (event) => {
+    const deleteUserClickHandler = async (event) => {
         event.preventDefault();
 
         //차단 취소하는 api호출 event.target.id이용
-        axios.post(blockUserCancleUrl,{
+        const sendBody = {
             userId: event.target.id,
-        })
-        .then((res) => {//문제가 없는 상황이므로 삭제하기.
-            console.log(res);
-            //AddedList 리스트에서 삭제 event.target.value이용
-            const tmp = [...AddedUserList];
-            tmp.splice(Number(event.target.value), 1);
-            setAddedUserList(tmp);
-            setSearchedUserList([]);//삭제하고 나면 검색된 유저들 초기화
-        })
-        .catch((res) => {
-            if(res.stresponse.statusatus === 401){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(() => {deleteUserClickHandler(event);}, 1000);
-            }
-            else{
-                console.log(res);
-                alert("해당 유저를 차단리스트에서 지우지 못했습니다.");
-            }
-        })
+        };
+        await postAxios(blockUserCancleUrl, sendBody, {}, refreshAccessToken);
+        const tmp = [...AddedUserList];
+        tmp.splice(Number(event.target.value), 1);
+        setAddedUserList(tmp);
+        setSearchedUserList([]);//삭제하고 나면 검색된 유저들 초기화
     };
 
     //유저 추가 버튼 마우스 올렸을 때 이미지 스타일 변경 Handler
@@ -118,29 +81,16 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
     const deleteUserMouseOutHandler = (event) => {
         event.preventDefault();
         event.target.src = deleteBtn;
-    }
-
-    const searchHandler = (event) => {//제출 시, 차단할 유저를 api에 넘기고, 블록된 사람들을 다시 불러온다.
-        event.preventDefault();
-
-        axios.get(searchUserUrl + userInput)
-        .then((res) => {
-            const tmp = [...res.data.data]
-            const withoutMe = tmp.filter((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다.
-            setSearchedUserList(withoutMe);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(() => {searchHandler(event);}, 1000);
-            }
-            else{
-                console.log(res);
-                alert("검색하지 못했습니다.");
-            }
-        })
     };
 
+    const searchHandler = async (event) => {//제출 시, 차단할 유저를 api에 넘기고, 블록된 사람들을 다시 불러온다.
+        event.preventDefault();
+
+        const res = await getAxios(`${searchUserUrl}${userInput}`, {}, refreshAccessToken);
+        const tmp = [...res.data.data]
+        const withoutMe = tmp.filter((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다.
+        setSearchedUserList(withoutMe);
+    };
 
     return(
         <form className={Style.searchAndAddArea} onSubmit={searchHandler}>
