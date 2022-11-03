@@ -21,7 +21,7 @@ export const postAxios = async (url, body, header, refreshfunc) => {
         const res = await axios.post(url, body, header);
         return res;
     } catch(error) {
-        console.log(error.message);
+        console.log(error.response.data.message);
 
         if(url === withdrawalUrl && error.response.message === "이메일 혹은 비밀번호가 틀립니다."){
             return "fail";   
@@ -41,7 +41,7 @@ export const deleteAxios = async (url, header, refreshfunc) => {
     } catch(error) {
         if(error.response.status === 401 || error.response.status === 0){
             await refreshfunc();
-            const res = await axios.delete(url, header)
+            const res = await axios.delete(url, header);
             return res;
         }
     }
