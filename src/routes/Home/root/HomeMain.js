@@ -28,13 +28,12 @@ import userTagImg from "./tagImages/user.png";
 import {
   newPostUrl,
   presetNoticeNumeber,
-  getUserNicknameAndImageUrl,
-  pageloadHashtagNumUrl,
   uploadImageUrl,
   getChatTriger,
   presetChatNumber,
 } from "../../../apiUrl";
 import axios from 'axios';
+import { getAxios, postAxios } from '../../../apiCall';
 
 const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
@@ -44,111 +43,21 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
   const [settingState, setSettingState] = useState("initial");
 
-  //아래는 우측 페이지로 이동할 정보
-  //좋아요 알림
-  const [newPostLikeNotice, setNewPostLikeNotice] = useState(true);
-  //댓글 알림
-  const [newPostCommentNotice, setNewPostCommentNotice] = useState(true);
-  //읽기 권한
-  const [newPostReadPostAuth, setNewPostReadPostAuth] = useState("ALL");
-  //댓글 읽기 권한
-  const [newPostReadCommentAuth, setNewPostReadCommentAuth] = useState(true);
-  //댓글 쓰기 권한
-  const [newPostWriteCommentAuth, setNewPostWriteCommentAuth] = useState(true);
-  //좋아요 읽기 권한
-  const [newPostReadLikeAuth, setNewPostReadLikeAuth] = useState(true);
-
-  /*************************글 검색 부분****************************/
-  //필요 변수 선언
-  const [userSearch, setUserSearch] = useState("");//사용자의 search input이다.
-  const [isSubmitted, setIsSubmitted] = useState(false);//제출된 상태인지 입력중인 상태인지를 나타낸다.
-  const [searchedList, setSearchedList] = useState([]);//검색 결과 list이다.
-  const [hashtagPageNumber, setHashtagPageNumber] = useState(0);//해당 해시태그에 속하는 글의 수이다.
-
-  //사용자의 input에 따라 input의 value를 바꾸는 함수
-  const userSearchChangeHandler = (event) => {
-    event.preventDefault();
-    setIsSubmitted(false);//검색을 입력 중에는 submit된 상태가 아니므로 false로 만든다
-    setUserSearch(event.target.value);
-  }
-
-  //사용자의 input을 검색하는 함수
-  const userSearchSubmitHandler = (event) => {
-    event.preventDefault();
-    if(userSearch === '') return;
-    
-    //유저 검색해서 리스트 업데이트
-    axios.get(`${getUserNicknameAndImageUrl}search?nickname=${userSearch}`)
-    .then((res) => {
-      setSearchedList(res.data.data);
-      //해시태그의 게시글 숫자 검색
-      axios.get(`${pageloadHashtagNumUrl}${userSearch}`)
-      .then((res) => {
-        setHashtagPageNumber(res.data.data.count);//여기 좀 다를 수 있음
-        setIsSubmitted(true);
-      })
-      .catch((res) => {
-        if(res.response.status === 401 || res.response.status === 0){
-          refreshAccessToken();
-        }
-        else{
-          alert("해시태그의 수를 불러오지 못했습니다.");
-          setIsSubmitted(false);
-        }
-      });
-    })
-    .catch((res) => {
-      if(res.response.status === 401 || res.response.status === 0){
-        refreshAccessToken();
-        setTimeout(() => {userSearchSubmitHandler(event);}, 1000);
-      }
-      else{
-        alert("검색하지 못했습니다.");
-        setIsSubmitted(false);
-      }
-    });
-  };
-
-  const dropBoxInactive = () => {//제출이 끝난 것으로 인식한다. 다시 초기 상태로 변환
-    if(isSubmitted){//검색된 상태면 잠시 후에 실행한다. - 검색되어 화면이 넘어가고, 창을 지우기 위함
-      setTimeout(() => {
-        setIsSubmitted(false);
-        setUserSearch("");
-        setSearchedList([]);
-      }, 500);
-    }
-    else{
-      setIsSubmitted(false);
-      setUserSearch("");
-      setSearchedList([]);
-    }
-  };
-
-  const searchedUserClickHandler = (event) => {
-    event.preventDefault();
-    //이제 좌측 페이지 변경
-    setLeftBookState(`pList/${(event.target.id.split('_'))[1]}`);
-    dropBoxInactive();
-  };
-
-  const searchedHashtagClickHandler = (event) => {
-    event.preventDefault();
-    //이제 좌측 페이지 변경
-    setLeftBookState(`hashtagPage/${userSearch}`);
-    dropBoxInactive();
-  };
-
-  /*****************************new Post 관련*********************************/
-  /* 좌, 우로 나뉘어져있는 정보를 추합해서 서버에 보내야 하기 때문에 상위 요소에서 작성 */
+  /*******************************************************************new Post 관련****************************************************************************/
+  /* 좌, 우 페이지로 나뉘어져있는 정보를 추합해서 서버에 보내야 하기 때문에 상위 요소에서 작성 */
   //아래는 좌측 페이지로 이동할 정보
-  //이미지 리스트 - 파일을 api에 보낼 수 있게 처리한 리스트이다.
-  const [newPostImages, setNewPostImages] = useState([]);
-  //이미지 리스트 - 파일을 임시로 띄우기 위해 렌더링한 리스트이다.
-  const [renderedNewPostImages, setRenderedNewPostImages] = useState([]);
-  //해시태그 리스트
-  const [newPostHashtag, setNewPostHashtag] = useState([]);
-  //글
-  const [newPostContent, setNewPostContent] = useState("");
+  const [newPostImages, setNewPostImages] = useState([]);//이미지 리스트 - 파일을 api에 보낼 수 있게 처리한 리스트이다.
+  const [renderedNewPostImages, setRenderedNewPostImages] = useState([]);//이미지 리스트 - 파일을 임시로 미리보기를 하기 위해 만든 리스트이다.
+  const [newPostHashtag, setNewPostHashtag] = useState([]);//해시태그 리스트
+  const [newPostContent, setNewPostContent] = useState("");//글
+
+  //아래는 우측 페이지로 이동할 정보
+  const [newPostLikeNotice, setNewPostLikeNotice] = useState(true);//좋아요 알림
+  const [newPostCommentNotice, setNewPostCommentNotice] = useState(true);//댓글 알림
+  const [newPostReadPostAuth, setNewPostReadPostAuth] = useState("ALL");//읽기 권한
+  const [newPostReadCommentAuth, setNewPostReadCommentAuth] = useState(true);//댓글 읽기 권한
+  const [newPostWriteCommentAuth, setNewPostWriteCommentAuth] = useState(true);//댓글 쓰기 권한
+  const [newPostReadLikeAuth, setNewPostReadLikeAuth] = useState(true);//좋아요 읽기 권한
 
   //글 올리는 함수 => 좌측 페이지로 넘어가야한다. - 두가지가 순차적으로 실행
   const [uploadImages, setUploadImages] = useState([]);
@@ -460,7 +369,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         <div className={Style.leftHeader}>
           <Logo preset={resetPage}/>
           <div />
-          <SearchBar userSearch={userSearch} hashtagPageNumber={hashtagPageNumber} userSearchChangeHandler={userSearchChangeHandler} userSearchSubmitHandler={userSearchSubmitHandler} isSubmitted={isSubmitted} searchedList={searchedList} searchedUserClickHandler={searchedUserClickHandler} searchedHashtagClickHandler={searchedHashtagClickHandler} dropBoxInactive={dropBoxInactive}/>
+          <SearchBar setLeftBookState={setLeftBookState} />
         </div>
       </div>
       {/* 우 상단 - 태그 */}

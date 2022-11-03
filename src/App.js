@@ -16,7 +16,7 @@ function App() {
 
   //userId를 받고 SSE를 여는 함수
   const getUserIdANdOpenSSEHandler = async () => {
-    const res = await getAxios(getMyUserIdUrl);
+    const res = await getAxios(getMyUserIdUrl, refreshAccessToken);
     setUserId(res.data.data.userId);
 
     const eventSourcetmp = new EventSource(getNoticeNumber, { withCredentials: true });
