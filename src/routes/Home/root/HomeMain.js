@@ -36,13 +36,6 @@ import axios from 'axios';
 import { getAxios, postAxios } from '../../../apiCall';
 
 const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
-  //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
-  const [rightBookState, setRightBookState] = useState("friend");
-  //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting // makeNewC // hastTagPage
-  const [leftBookState, setLeftBookState] = useState("page");
-  //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
-  const [settingState, setSettingState] = useState("initial");
-
   /*******************************************************************new Post 관련****************************************************************************/
   /* 좌, 우 페이지로 나뉘어져있는 정보를 추합해서 서버에 보내야 하기 때문에 상위 요소에서 작성 */
   //아래는 좌측 페이지로 이동할 정보
@@ -113,9 +106,9 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   };
   useEffect(() => {uploadNewPostHandlerSecondAct();}, [newPageSumbitClicked]);
 
-  const uploadNewPostHandlerThirdAct = () => {
+  const uploadNewPostHandlerThirdAct = async () => {
     if(uploadImages.length !== 0){//이미지 처리에 성공해서 렌더링할 파일이 있는 경우
-      axios.post(newPostUrl, {
+      const sendBody = {
         content: newPostContent,
         pageSetting : {
           notificationLike: newPostLikeNotice,
@@ -127,36 +120,31 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         },
         imgUrlList: uploadImages,
         pageHashtagList: newPostHashtag,
-      })
-      .then((res) => {
-        alert("업로드 되었습니다.");
-        setNewPostImages([]);
-        setNewPostHashtag([]);
-        setRenderedNewPostImages([]);
-        setNewPostContent("");
-        setNewPostLikeNotice(true);
-        setNewPostCommentNotice(true);
-        setNewPostReadPostAuth("ALL");
-        setNewPostReadCommentAuth(true);
-        setNewPostWriteCommentAuth(true);
-        setNewPostReadLikeAuth(true);
-        resetPage();
-        submitAbleAgain();
-      })
-      .catch((res) => {
-        submitAbleAgain();
-        if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-          refreshAccessToken();
-          setTimeout(uploadNewPostHandlerThirdAct, 1000);
-        }
-        else{
-          console.log(res);
-          alert("글을 올리지 못했습니다.");
-        }
-      });
+      };
+      await postAxios(newPostUrl, sendBody, {}, refreshAccessToken);
+      alert("업로드 되었습니다.");
+      setNewPostImages([]);
+      setNewPostHashtag([]);
+      setRenderedNewPostImages([]);
+      setNewPostContent("");
+      setNewPostLikeNotice(true);
+      setNewPostCommentNotice(true);
+      setNewPostReadPostAuth("ALL");
+      setNewPostReadCommentAuth(true);
+      setNewPostWriteCommentAuth(true);
+      setNewPostReadLikeAuth(true);
+      resetPage();
+      submitAbleAgain();
     }
   };
-  useEffect(uploadNewPostHandlerThirdAct, [uploadImages]);
+  useEffect(() => {uploadNewPostHandlerThirdAct();}, [uploadImages]);
+  /************************************************************************************************************************************************************/
+  //오른쪽 책의 내용을 바꿔주는 state => newPost // chat // notice // friend // setting
+  const [rightBookState, setRightBookState] = useState("friend");
+  //왼쪽 책의 내용을 바꿔주는 state => page(글) // pList // chat // newPost // setting // makeNewC // hastTagPage
+  const [leftBookState, setLeftBookState] = useState("page");
+  //setting의 내용을 바꿔주는 state => initial(클릭 없음) // profile // Snotice // password // filtering // block
+  const [settingState, setSettingState] = useState("initial");
 
   //첫 render시 친구 tag를 칠해준다.
   const firstRender = () => {
