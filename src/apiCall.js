@@ -8,13 +8,10 @@ export const getAxios = async (url, refreshfunc) => {
         console.log("문제 발생");
         console.log(error.response.status);
         if(error.response.status === 401 || error.response.status === 0){
-            const message = await refreshfunc();
-            console.log(message);
-            if(message === "refresh success"){
-                const res = await axios.get(url);
-                console.log(res);
-                return res;
-            }
+            await refreshfunc();
+            const res = await axios.get(url);
+            console.log(res);
+            return res;
         }
     }
 };
