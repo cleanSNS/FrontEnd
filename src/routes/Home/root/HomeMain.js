@@ -32,7 +32,6 @@ import {
   getChatTriger,
   presetChatNumber,
 } from "../../../apiUrl";
-import axios from 'axios';
 import { getAxios, postAxios } from '../../../apiCall';
 
 const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
@@ -241,7 +240,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       setNoticeCount(res.data.data.count);
     }
     if(chatCount === -1){
-      axios.get(presetChatNumber)
       const res = await getAxios(presetChatNumber);
       setChatCount(res.data.data.count);
     }
