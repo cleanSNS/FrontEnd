@@ -55,6 +55,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
 
     const [COCAddedTriger, setCOCAddedTriger] = useState(-1);//대댓글을 쓴 경우, 이 값을 대댓글이 달린 댓글의 id로 설정한다.
 
+    const [loading, setLoading] = useState(true);
+
     //초기 화면 로드 - 글 내용 + 초기 댓글
     const presetDetailPage = async () => {
         if(pageId === -1) return;
@@ -78,6 +80,8 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
 
         const res2 = await getAxios(`${checkILikedThisPageOrComment}?targetId=${pageId}&type=PAGE`, {}, refreshAccessToken);
         setIsLiked(res2.data.data.like);
+
+        setLoading(false);
     };
     useEffect(() => {presetDetailPage();}, [commentStartId]);
 
@@ -264,6 +268,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     };
 
     return(
+        loading ? null :
         <div className={Style.wholeCover} onClick={closePage} id="outSide">
             <div className={Style.ImageAndScriptCover}>
                 <div className={Style.imageArea}>
