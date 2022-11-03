@@ -1,4 +1,5 @@
 //댓글 영역을 띄우는 컴포넌트 - 계층상 2단계
+
 import Style from './detailPage.module.css';
 import heartImg from '../heart_outline.png';
 import heartImgFill from '../heart_fill.png';

@@ -13,7 +13,7 @@ import {
     checkLikeUrl,
 } from '../../../../apiUrl';
 import { makeIntoArray } from '../../../../makeStringIntoArray';
-import axios from 'axios';
+import { getAxios, postAxios, deleteAxios} from '../../../../apiCall';
 import { calculateTimeFrom } from '../../../../timeCalculation';
 import ContentArea from '../contentArea/contentArea';
 
@@ -29,100 +29,52 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
     };
 
     //신고 클릭함수
-    const COCreportClickHandler = () => {
+    const COCreportClickHandler = async () => {
         if(window.confirm("정말 신고하시겠습니까?")){//다시 한 번 물어보고 실행
-            axios.post(ReportUrl, {
+            const sendBody = {
                 targetId: data.commentId,
                 type: "COMMENT",
-            })
-            .then((res) => {
-                alert("신고가 접수되었습니다.");
-            })
-            .catch((res) => {
-                if(res.response.status === 401 || res.response.status === 0){
-                    refreshAccessToken();
-                    setTimeout(COCreportClickHandler, 1000);
-                }
-                else{
-                    console.log(res);
-                    alert("신고하지 못했습니다.");
-                }
-            });
+            };
+            await postAxios(ReportUrl, sendBody, {}, refreshAccessToken);
+            alert("신고가 접수되었습니다.");
         }
     };
     
     //삭제 클릭 함수
-    const COCdeleteClickHandler = () => {
+    const COCdeleteClickHandler = async () => {
         if(window.confirm("정말 삭제하시겠습니까?")){
-            axios.delete(`${deleteCommentUrl}${pageId}/comment/${data.commentId}`)
-            .then((res) => {
-                alert("삭제되었습니다.");
-                setCommentOfCommentStartId(1)//대댓글 startId 초기화
-                setIsLastCommentOfComment(false)//대댓글 lastcomment fasle
-                setToggle(false)//토글 값 강제로 false로
-                setCommentOfCommentList([])//대댓글 지우기
-
-                getCOCCount(pageId, commentId);
-            })
-            .catch((res) => {
-                if(res.response.status === 401 || res.response.status === 0){
-                    refreshAccessToken();
-                    setTimeout(COCdeleteClickHandler, 1000);
-                }
-                else{
-                    console.log(res);
-                    alert("삭제하지 못했습니다.");
-                }
-            })
+            await deleteAxios(`${deleteCommentUrl}${pageId}/comment/${data.commentId}`, {}, refreshAccessToken);
+            alert("삭제되었습니다.");
+            setCommentOfCommentStartId(1)//대댓글 startId 초기화
+            setIsLastCommentOfComment(false)//대댓글 lastcomment fasle
+            setToggle(false)//토글 값 강제로 false로
+            setCommentOfCommentList([])//대댓글 지우기
+            getCOCCount(pageId, commentId);
         }
     };
 
     //초기에 좋아요 관련 정보 불러오기 및 출력 내용 바꾸기
-    const presetLikeInfo = () => {
+    const presetLikeInfo = async () => {
         setCOCLikeCount(data.likeCount);
-        axios.get(`${checkLikeUrl}?targetId=${data.commentId}&type=COMMENT`)
-        .then((res) => {
-            setCOCIsLiked(res.data.data.like);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(presetLikeInfo, 1000);
-            }
-            else{
-                console.log(res);
-                alert("삭제하지 못했습니다.");
-            }
-        });
-
+        const res = await getAxios(`${checkLikeUrl}?targetId=${data.commentId}&type=COMMENT`, {}, refreshAccessToken);
+        setCOCIsLiked(res.data.data.like);
         setCOCContentArray(makeIntoArray(data.content));
     }
     useEffect(presetLikeInfo, []);
 
     //좋아요 clickhandler
-    const CommentOfCommentLikeHandler = () => {
+    const CommentOfCommentLikeHandler = async () => {
         let url = ""
         COCIsLiked ? url = unlikeThisPageUrl : url = likeThisPageUrl
-
-        axios.post(url, {
+        const sendBody = {
             targetId: data.commentId,
             type: "COMMENT"
-        })
-        .then((res) => {
-            COCIsLiked ? setCOCLikeCount(cur => cur - 1) : setCOCLikeCount(cur => cur + 1) //임시로라도 반영
-            setCOCIsLiked((cur) => !cur);
-            console.log("페이지에 좋아요혹은 좋아요 취소했습니다.");
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(CommentOfCommentLikeHandler, 1000);
-            }
-            else{
-                console.log(res);
-                alert("좋아요정보를 보내지 못했습니다.");
-            }
-        });
+        };
+
+        await postAxios(url, sendBody, {}, refreshAccessToken);
+        COCIsLiked ? setCOCLikeCount(cur => cur - 1) : setCOCLikeCount(cur => cur + 1) //임시로라도 반영
+        setCOCIsLiked((cur) => !cur);
+        console.log("페이지에 좋아요혹은 좋아요 취소했습니다.");
     }
 
     return(
