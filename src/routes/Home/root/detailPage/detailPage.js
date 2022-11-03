@@ -23,35 +23,8 @@ import {
     makeIntoArray
 } from '../../../../makeStringIntoArray';
 import axios from 'axios';
-import { Temporal } from '@js-temporal/polyfill';
+import { calculateTimeFrom } from '../../../../timeCalculation';
 import ContentArea from '../contentArea/contentArea';
-
-//시간 계산 함수
-/** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
-const calculateTimeFrom = (calTime) => {
-    const now = Temporal.Now.plainDateTimeISO();//현재 시간 세팅
-    let postedDate = Temporal.PlainDateTime.from(calTime);
-    postedDate = postedDate.add({hours: 9});
-    const result = now.since(postedDate);
-    if(result.minutes === 0){//0분이내인 경우
-        return "방금 전";
-    }
-    else if(result.hours === 0){//1시간보다는 아래인 경우
-        return `${result.minutes}분 전`;
-    }
-    else if(result.days === 0){//1일보다는 아래인 경우
-        return `${result.hours}시간 전`;
-    }
-    else if(result.months === 0){//1달보다는 아래인 경우
-        return `${result.days}일 전`;
-    }
-    else if(result.years === 0){//1년보다는 아래인 경우
-        return `${result.months}달 전`;
-    }
-    else{//1년 이상인 경우
-        return `${result.years}년 전`;
-    }
-};
 
 //대댓글 부분
 const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, groupId, refreshAccessToken, pageId, leftBookChangeHandler, setToggle, setCommentOfCommentList, setCommentOfCommentStartId, setIsLastCommentOfComment, commentId, getCOCCount}) => {

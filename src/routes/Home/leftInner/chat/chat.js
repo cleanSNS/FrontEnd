@@ -10,27 +10,13 @@ import {
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import Stomp from 'stomp-websocket';
-import { Temporal } from '@js-temporal/polyfill';
+import { chatCalculateTimeFrom } from '../../../../timeCalculation';
 
 const SingleChat = ({data, setLeftBookState, userId, userAndUserImg, userAndUserNickname, oldestChat}) => {
     //유저의 이미지나 이름을 클릭하면 해당 유저의 페이지로 이동한다.
     const goToThatUserPage = (event) => {
         event.preventDefault();
         setLeftBookState(`pList/${data.userDto.userId}`);
-    };
-
-    //시간 계산 함수
-    /** claTime: 업로드된 시간. output: 안에 들어갈 문자열  */
-    const calculateTimeFrom = (calTime) => {
-        const now = Temporal.Now.plainDateTimeISO();
-        let postedTime = Temporal.PlainDateTime.from(calTime);
-        postedTime = postedTime.add({hours: 9});//9시간을 추가한다.
-        if(postedTime.year === now.year &&postedTime.month === now.month && postedTime.day === now.day){//연,월,일이 오늘이면, 시간과 분을 쓰고,
-            return `${postedTime.hour.toString().padStart(2, "0")}:${postedTime.minute.toString().padStart(2, "0")}`;
-        }
-        else{//연월일이 오늘이 아니면 월 일을 쓴다.
-            return `${postedTime.month}월 ${postedTime.day}일`;
-        }
     };
 
     return(
@@ -46,7 +32,7 @@ const SingleChat = ({data, setLeftBookState, userId, userAndUserImg, userAndUser
                 }
                 {/* 유저의 채팅 내용이 오는 곳 */}
                 <div className={Style.chattingText} style={userId !== data.userId ? null : {backgroundColor: "#F4DEDE"}}>{data.message}</div>
-                <p className={Style.chatTime}>{calculateTimeFrom(data.createdDate)}</p>
+                <p className={Style.chatTime}>{chatCalculateTimeFrom(data.createdDate)}</p>
             </div>
         </div>
     );
