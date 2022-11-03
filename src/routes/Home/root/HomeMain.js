@@ -369,7 +369,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         <div className={Style.leftHeader}>
           <Logo preset={resetPage}/>
           <div />
-          <SearchBar setLeftBookState={setLeftBookState} />
+          <SearchBar setLeftBookState={setLeftBookState} refreshAccessToken={refreshAccessToken} />
         </div>
       </div>
       {/* 우 상단 - 태그 */}

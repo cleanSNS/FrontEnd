@@ -6,9 +6,9 @@ import{
     getUserNicknameAndImageUrl,
     pageloadHashtagNumUrl,
 } from '../../../../apiUrl';
-import { getAxios } from '../../../apiCall';
+import { getAxios } from '../../../../apiCall';
 
-const SearchBar = ({setLeftBookState}) =>{
+const SearchBar = ({setLeftBookState, refreshAccessToken}) =>{
   const [userSearch, setUserSearch] = useState("");//사용자의 search input이다.
   const [isSubmitted, setIsSubmitted] = useState(false);//제출된 상태인지 입력중인 상태인지를 나타낸다.
   const [searchedList, setSearchedList] = useState([]);//검색 결과 list이다.
