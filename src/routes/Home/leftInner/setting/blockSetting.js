@@ -26,7 +26,7 @@ const BlockSetting = ({refreshAccessToken, userId}) => {
         setSearchedUserList([]);//검색 리스트 초기화 : 이게 초기상황이든 유저가 추가한 이후든 상관없이 실행되도 된다.
         setLoading(false);
     };
-    useEffect(() => {blockSettingInitialSetting()}, []);
+    useEffect(() => {blockSettingInitialSetting();}, []);
 
     //유저 내용 입력 Handler
     const userInputChangeHandler = (event) => {

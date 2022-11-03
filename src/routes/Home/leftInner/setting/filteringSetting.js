@@ -37,12 +37,12 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         const tmp = [...res.data.data];
         setAddedUserList(tmp);
         setSearchedUserList([]);
+        setLoading(false);
     };
 
     useEffect(() => {//초기설정이다. 두 가지를 전부 로드한다.
         gettingCurrentFilterSetting();
         gettingCurrentNotFilteredUser();
-        setLoading(false);
     }, []);
 
     /* 상단 내용 */
@@ -142,7 +142,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
             userId: event.target.id,
         };
         await postAxios(addNotFilteredUserUrl, sendBody, {}, refreshAccessToken);
-        gettingCurrentNotFilteredUser();
+        await gettingCurrentNotFilteredUser();
     };
 
     //유저 삭제 버튼 클릭 처리 Handler
