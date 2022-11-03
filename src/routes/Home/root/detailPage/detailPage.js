@@ -18,7 +18,7 @@ import {
     unlikeThisPageUrl,
 } from '../../../../apiUrl';
 import { makeIntoArray } from '../../../../makeStringIntoArray';
-import axios from 'axios';
+import { getAxios, postAxios, deleteAxios } from '../../../../apiCall';
 import { calculateTimeFrom } from '../../../../timeCalculation';
 
 import ContentArea from '../contentArea/contentArea';
@@ -55,88 +55,51 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
 
     const [COCAddedTriger, setCOCAddedTriger] = useState(-1);//대댓글을 쓴 경우, 이 값을 대댓글이 달린 댓글의 id로 설정한다.
 
-    /*********************초기 화면 세팅**********************/
     //초기 화면 로드 - 글 내용 + 초기 댓글
-    const presetDetailPage = () => {
+    const presetDetailPage = async () => {
         if(pageId === -1) return;
         if(commentStartId !== 0) return;//초기에 댓글을 로드한 상황이 아니면 실행하지 않는다.
 
-        axios.get(`${LoadDetailPageUrl}${pageId}/detail`)//글 불러오기
-        .then((res) => {
-            setPostedImageList(res.data.data.imgUrlList);
-            setPageUploadUserId(res.data.data.pageDto.userDto.userId);
-            setPostedPersonImage(res.data.data.pageDto.userDto.imgUrl);
-            setPostedPersonNickname(res.data.data.pageDto.userDto.nickname);
-            setPostedWord(res.data.data.pageDto.content);
-            setLikeNumber(res.data.data.pageDto.likeCount);
-            setLikeCountVisual(res.data.data.pageDto.likeReadAuth);
+        const res = await getAxios(`${LoadDetailPageUrl}${pageId}/detail`, {}, refreshAccessToken);
+        //기본적인 내용 초기 세팅 부분
+        setPostedImageList(res.data.data.imgUrlList);
+        setPageUploadUserId(res.data.data.pageDto.userDto.userId);
+        setPostedPersonImage(res.data.data.pageDto.userDto.imgUrl);
+        setPostedPersonNickname(res.data.data.pageDto.userDto.nickname);
+        setPostedWord(res.data.data.pageDto.content);
+        setLikeNumber(res.data.data.pageDto.likeCount);
+        setLikeCountVisual(res.data.data.pageDto.likeReadAuth);
+        //댓글 초기 세팅 부분
+        const tmp = [...res.data.data.commentDtoList.data];
+        setCommentList(tmp);
+        setCommentStartId(res.data.data.commentDtoList.startId);
+        //시간 연산부분
+        setPostedTime(calculateTimeFrom(res.data.data.pageDto.createdDate));
 
-            //댓글 초기 세팅 부분
-            const tmp = [...res.data.data.commentDtoList.data];
-            setCommentList(tmp);
-            setCommentStartId(res.data.data.commentDtoList.startId);
-
-            //시간 연산부분
-            setPostedTime(calculateTimeFrom(res.data.data.pageDto.createdDate));
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(presetDetailPage, 1000);
-            }
-            else{
-                console.log(res);
-                alert("글을 불러오지 못했습니다.");
-            }
-        });
-
-        axios.get(`${checkILikedThisPageOrComment}?targetId=${pageId}&type=PAGE`)//좋아요 여부 불러오기
-        .then((res) => {
-            setIsLiked(res.data.data.like);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(presetDetailPage, 1000);
-            }
-            else{
-                console.log(res);
-                alert("좋아요 여부를 불러오지 못했습니다.");
-            }
-        });
+        const res2 = await getAxios(`${checkILikedThisPageOrComment}?targetId=${pageId}&type=PAGE`, {}, refreshAccessToken);
+        setIsLiked(res2.data.data.like);
     };
-    useEffect(presetDetailPage, [commentStartId]);
+    useEffect(() => {presetDetailPage();}, [commentStartId]);
 
-    const postedWordBlurAdd = () => {//글을 입력 받으면 그 글을 배열 형태로 변경하는 작업
+    //글을 입력 받으면 그 글을 배열 형태로 변경하는 작업
+    const postedWordBlurAdd = () => {
         setPostedWordArray(makeIntoArray(postedWord));
     };
     useEffect(postedWordBlurAdd, [postedWord]);
 
     //댓글로드 함수 - 추가 댓글
-    const presetComment = () => {
+    const presetComment = async () => {
         if(pageId === -1) return;
-        axios.get(`${LoadDetailPageUrl}${pageId}/comment?startId=${commentStartId}`)
-        .then((res) => {
-            const cur = [...commentList];//기존의 댓글 리스트
-            const tmp = [...res.data.data];//불러온 댓글들
-            if(tmp.length === 0){//불러온 리스트가 빈 배열인 경우 - 즉, 더 댓글이 없는 경우 : 이 경우 이후 과정이 필요 없으므로 그냥 return
-                setIsLastComment(true); //더 불러올 댓글이 없다고 세팅한다. - inView에 의해 과도하게 api호출을 막기 위함
-                return;
-            }
-            const next = cur.concat(tmp);//기존의 리스트에 불러온 댓글을 붙여넣는다
-            setCommentList(next); //댓글 리스트 업데이트
-            setCommentStartId(res.data.startId); // startId업데이트
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(presetComment, 1000);
-            }
-            else{
-                console.log(res);
-                alert("댓글을 불러오지 못했습니다.");
-            }
-        });
+        const res = await getAxios(`${LoadDetailPageUrl}${pageId}/comment?startId=${commentStartId}`, {}, refreshAccessToken);
+        const cur = [...commentList];//기존의 댓글 리스트
+        const tmp = [...res.data.data];//불러온 댓글들
+        if(tmp.length === 0){//불러온 리스트가 빈 배열인 경우 - 즉, 더 댓글이 없는 경우 : 이 경우 이후 과정이 필요 없으므로 그냥 return
+            setIsLastComment(true); //더 불러올 댓글이 없다고 세팅한다. - inView에 의해 과도하게 api호출을 막기 위함
+            return;
+        }
+        const next = cur.concat(tmp);//기존의 리스트에 불러온 댓글을 붙여넣는다
+        setCommentList(next); //댓글 리스트 업데이트
+        setCommentStartId(res.data.startId); // startId업데이트
     };
 
     //가장 하단의 댓글이 사용자에게 읽혔을 때, 댓글을 더 불러오기 위해 조건을 확인하는 함수
@@ -181,29 +144,18 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
 
     /*********************글 영역 - 좋아요 관련**********************/
     //글의 좋아요 클릭 handler
-    const pageLikeClickHandler = () => {
+    const pageLikeClickHandler = async () => {
         let url = ""
         isLiked ? url = unlikeThisPageUrl : url = likeThisPageUrl
 
-        axios.post(url, {
+        const sendBody = {
             targetId: pageId,
             type: "PAGE"
-        })
-        .then((res) => {
-            isLiked ? setLikeNumber(cur => cur - 1) : setLikeNumber(cur => cur + 1) //임시로라도 반영
-            setIsLiked((cur) => !cur);
-            console.log("페이지에 좋아요혹은 좋아요 취소했습니다.");
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(pageLikeClickHandler, 1000);
-            }
-            else{
-                console.log(res);
-                alert("좋아요정보를 보내지 못했습니다.");
-            }
-        });
+        };
+        await postAxios(url, sendBody, {}, refreshAccessToken);
+        isLiked ? setLikeNumber(cur => cur - 1) : setLikeNumber(cur => cur + 1) //임시로라도 반영
+        setIsLiked((cur) => !cur);
+
         if(leftBookState.includes("page")){//좌측 페이지가 page들이 있는 페이지 상태라면 좋아요를 triger줘야한다.
             setDetailPageLikeClick(pageId);
         }
@@ -265,84 +217,49 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         btn.disabled = true;
     };
 
-    const userCommitSubmitHandlerSecondAction = () => {
+    const userCommitSubmitHandlerSecondAction = async () => {
         if(!commentSubmitClicked) return;
 
         //정보를 바탕으로 댓글 작성
-        axios.post(`${newCommentUrl}${pageId}/comment`, {
+        const sendBody = {
             pageId: Number(pageId),
             content: userCommentInput,
             group: commentToWhom[0] === "p" ? 0 : commentToWhom[1],
             nested: !(commentToWhom[0] === "p"),
             visible: true,
-        })
-        .then((res) => {
-            console.log("댓글 작성완료");
-            setUserCommentInput("");//댓글 부분 초기화
-            setCommentToWhom(["p", -1, "", pageId]);//댓글 대상 초기화
-            presetComment();//댓글 내가 쓴거까지 로드된내용 불러오기
-            setIsLastComment(false);//원활하게 다시 호출 되도록 세팅
-            submitAbleAgain();
-            if(commentToWhom[0] !== "p"){//즉, 대댓글 입력의 경우
-                setCOCAddedTriger(commentToWhom[3]);
-            }
-        })
-        .catch((res) => {
-            submitAbleAgain();
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(userCommitSubmitHandlerSecondAction, 1000);
-            }
-            else{
-                console.log(res);
-                alert("댓글을 작성하지 못했습니다.");
-            }
-        });
+        };
+        await postAxios(`${newCommentUrl}${pageId}/comment`, sendBody, {}, refreshAccessToken);
+        console.log("댓글 작성완료");
+        setUserCommentInput("");//댓글 부분 초기화
+        setCommentToWhom(["p", -1, "", pageId]);//댓글 대상 초기화
+        presetComment();//댓글 내가 쓴거까지 로드된내용 불러오기
+        setIsLastComment(false);//원활하게 다시 호출 되도록 세팅
+        submitAbleAgain();
+        if(commentToWhom[0] !== "p"){//즉, 대댓글 입력의 경우
+            setCOCAddedTriger(commentToWhom[3]);
+        }
     }
-    useEffect(userCommitSubmitHandlerSecondAction, [commentSubmitClicked]);
+    useEffect(() => {userCommitSubmitHandlerSecondAction();}, [commentSubmitClicked]);
 
     /*****************글 영역 - 신고*********************/
-    const pageReportClickHandler = () => {
+    const pageReportClickHandler = async() => {
         if(window.confirm("정말 신고하시겠습니까?")){
-            axios.post(ReportUrl, {
+            const sendBody = {
                 targetId: pageId,
                 type: "PAGE",
-            })
-            .then((res) => {
-                alert("게시글을 신고했습니다.");
-            })
-            .catch((res) => {
-                if(res.response.status === 401 || res.response.status === 0){
-                    refreshAccessToken();
-                    setTimeout(pageReportClickHandler, 1000);
-                }
-                else{
-                    console.log(res);
-                    alert("게시글을 신고하지 못했습니다.");
-                }
-            });
+            };
+            await postAxios(ReportUrl, sendBody, {}, refreshAccessToken);
+            alert("게시글을 신고했습니다.");
         }
     };
 
     /******************글 영역- 삭제*********************/
-    const pageDeleteClickHandler = () => {
+    const pageDeleteClickHandler = async () => {
         if(window.confirm("정말 삭제하시겠습니까?")){
-            axios.delete(`${deletePageUrl}${pageId}`)
-            .then((res) => {
-                alert("글을 삭제했습니다.");
-                setPageId(-1);
-                resetPage();
-            })
-            .catch((res) => {
-                if(res.response.status === 401 || res.response.status === 0){
-                    refreshAccessToken();
-                    setTimeout(pageDeleteClickHandler, 1000);
-                }
-                else{
-                    console.log(res);
-                    alert("게시글을 삭제하지 못했습니다.");
-                }
-            });
+            await deleteAxios(`${deletePageUrl}${pageId}`);
+            alert("글을 삭제했습니다.");
+            setPageId(-1);
+            resetPage();
         }
     };
 

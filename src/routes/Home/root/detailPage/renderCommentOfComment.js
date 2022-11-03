@@ -1,12 +1,10 @@
 //대댓글을 불러오고 toggle하는 컴포넌트 - 계층상 3단계
-
 import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
     LoadDetailPageUrl,
 } from '../../../../apiUrl';
-import axios from 'axios';
-
+import { getAxios } from '../../../../apiCall';
 import SingleCommentOfComment from './singleCommentOfComment';
 
 
@@ -30,33 +28,21 @@ const RenderCommentOfComment = ({pageId, groupId, setPageId, setLoadCommentOfCom
     useEffect(setToggleFunc, [loadCommentOfComment]);
 
     //toggle이되고, 그 값이 true면 그 그룹에 해당하는 대댓글을 불러와야한다.
-    const loadThisCommentOfComment = () => {
+    const loadThisCommentOfComment = async () => {
         if(toggle){
-            axios.get(`${LoadDetailPageUrl}${pageId}/nested?group=${groupId}&startId=${commentOfCommentStartId}`)
-            .then((res) => {
-                const tmp = [...res.data.data];
-                if(tmp.length === 0){
-                    setIsLastCommentOfComment(true);
-                    return;//이후의 작업은 불필요하다.
-                }
-                const cur = [...commentOfCommentList];
-                const next = cur.concat(tmp);
-                setCommentOfCommentList(next);
-                setCommentOfCommentStartId(res.data.startId);
-            })
-            .catch((res) =>{
-                if(res.response.status === 401 || res.response.status === 0){
-                    refreshAccessToken();
-                    setTimeout(loadThisCommentOfComment, 1000);
-                }
-                else{
-                    console.log(res);
-                    alert("대댓글을 불러오지 못했습니다.");
-                }
-            });
+            const res = await getAxios(`${LoadDetailPageUrl}${pageId}/nested?group=${groupId}&startId=${commentOfCommentStartId}`, {}, refreshAccessToken);
+            const tmp = [...res.data.data];
+            if(tmp.length === 0){
+                setIsLastCommentOfComment(true);
+                return;//이후의 작업은 불필요하다.
+            }
+            const cur = [...commentOfCommentList];
+            const next = cur.concat(tmp);
+            setCommentOfCommentList(next);
+            setCommentOfCommentStartId(res.data.startId);
         }
     };
-    useEffect(loadThisCommentOfComment, [toggle]);
+    useEffect(() => {loadThisCommentOfComment();}, [toggle]);
 
     //맨 아래 요소가 보이면 대댓글을 부른다.
     const lastCommentOfCommentSeen = () => {

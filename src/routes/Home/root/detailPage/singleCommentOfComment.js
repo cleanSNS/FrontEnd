@@ -23,6 +23,16 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
     const [COCLikeCount, setCOCLikeCount] = useState(0);//대댓글 좋아요 개수
     const [COCContentArray, setCOCContentArray] = useState([]);//대댓글 출력용 배열
 
+    //초기에 좋아요 관련 정보 불러오기 및 출력 내용 바꾸기
+    const presetLikeInfo = async () => {
+        setCOCLikeCount(data.likeCount);
+        const res = await getAxios(`${checkLikeUrl}?targetId=${data.commentId}&type=COMMENT`, {}, refreshAccessToken);
+        setCOCIsLiked(res.data.data.like);
+        setCOCContentArray(makeIntoArray(data.content));
+    }
+    useEffect(() => {presetLikeInfo();}, []);
+
+    //대댓글의 유저 클릭 시 해당 유저 페이지로 이동
     const CommentofCommentUserClickHandler = () => {
         setPageId(-1);//현재 페이지에서 나감
         leftBookChangeHandler(`pList/${data.userDto.userId}`);//해당 유저의 페이지로 이동
@@ -49,18 +59,9 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
             setIsLastCommentOfComment(false)//대댓글 lastcomment fasle
             setToggle(false)//토글 값 강제로 false로
             setCommentOfCommentList([])//대댓글 지우기
-            getCOCCount(pageId, commentId);
+            await getCOCCount(pageId, commentId);
         }
     };
-
-    //초기에 좋아요 관련 정보 불러오기 및 출력 내용 바꾸기
-    const presetLikeInfo = async () => {
-        setCOCLikeCount(data.likeCount);
-        const res = await getAxios(`${checkLikeUrl}?targetId=${data.commentId}&type=COMMENT`, {}, refreshAccessToken);
-        setCOCIsLiked(res.data.data.like);
-        setCOCContentArray(makeIntoArray(data.content));
-    }
-    useEffect(presetLikeInfo, []);
 
     //좋아요 clickhandler
     const CommentOfCommentLikeHandler = async () => {
@@ -74,7 +75,6 @@ const SingleCommentOfComment = ({data, lastCommentOfComment, setPageId, userId, 
         await postAxios(url, sendBody, {}, refreshAccessToken);
         COCIsLiked ? setCOCLikeCount(cur => cur - 1) : setCOCLikeCount(cur => cur + 1) //임시로라도 반영
         setCOCIsLiked((cur) => !cur);
-        console.log("페이지에 좋아요혹은 좋아요 취소했습니다.");
     }
 
     return(
