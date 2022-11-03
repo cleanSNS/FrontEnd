@@ -18,7 +18,7 @@ const WithdrawalSetting = ({refreshAccessToken, logout}) => {
             alert("비밀번호를 입력해 주세요");
             return;
         }
-
+        
         axios.post(withdrawalUrl, {
             password: userPasswordInput
         })

@@ -4,7 +4,7 @@ import {
     getCurrentNoticeSettingUrl,
     submitCurrentNoticeSettingUrl,
 } from "../../../../apiUrl";
-import axios from 'axios';
+import { getAxios, postAxios } from '../../../../apiCall';
 
 const NoticeSetting = ({refreshAccessToken}) => {
     //설정들
@@ -14,28 +14,19 @@ const NoticeSetting = ({refreshAccessToken}) => {
     const [notificationFollowAccept, setNotificationFollowAccept] = useState("");
     const [notificationChat, setNotificationChat] = useState("");
 
+    const [loading, setLoading] = useState(true);
+
     //처음에 설정현황을 불러오는 함수
-    const noticeSettingPreset = () => {
-        axios.get(getCurrentNoticeSettingUrl)
-        .then((res) => {
-            setNotificationFollow(res.data.data.notificationFollow);
-            setNotificationComment(res.data.data.notificationComment)
-            setNotificationLike(res.data.data.notificationLike);
-            setNotificationFollowAccept(res.data.data.notificationFollowAccept);
-            setNotificationChat(res.data.data.notificationChat);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(noticeSettingPreset, 1000);
-            }
-            else{
-                console.log(res);
-                alert("설정을 불러오지 못했습니다.");
-            }
-        });
+    const noticeSettingPreset = async () => {
+        const res = await getAxios(getCurrentNoticeSettingUrl);
+        setNotificationFollow(res.data.data.notificationFollow);
+        setNotificationComment(res.data.data.notificationComment)
+        setNotificationLike(res.data.data.notificationLike);
+        setNotificationFollowAccept(res.data.data.notificationFollowAccept);
+        setNotificationChat(res.data.data.notificationChat);
+        setLoading(false);
     };
-    useEffect(noticeSettingPreset, []);
+    useEffect(() => {noticeSettingPreset();}, []);
 
     //submit function
     const [noticeSubmitClicked, setNoticeSubmitClicked] = useState(false);//제출 상태 확인
@@ -63,34 +54,21 @@ const NoticeSetting = ({refreshAccessToken}) => {
         btn.disabled = true;
     };
 
-    const submitHandlerSecondAct = () => {
+    const submitHandlerSecondAct = async () => {
         if(!noticeSubmitClicked) return;
 
-        axios.post(submitCurrentNoticeSettingUrl,{
+        const sendBody = {
             notificationFollow: notificationFollow,
             notificationComment: notificationComment,
             notificationLike: notificationLike,
             notificationFollowAccept: notificationFollowAccept,
             notificationChat: notificationChat,
-        })
-        .then((res) => {
-            alert("설정을 변경했습니다.");
-            noticeSettingPreset();//초기값 다시 불러오기
-            submitAbleAgain();//다시 제출 가능하게 하기
-        })
-        .catch((res) => {
-            submitAbleAgain();//다시 제출 가능하게하기
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(submitHandlerSecondAct, 1000);
-            }
-            else{
-                console.log(res);
-                alert("설정을 변경하지 못했습니다.");
-            }
-        });
+        };
+        await postAxios(submitCurrentNoticeSettingUrl, sendBody, {}, refreshAccessToken);
+        alert("설정을 변경했습니다.");
+        noticeSettingPreset();//초기값 다시 불러오기
+        submitAbleAgain();//다시 제출 가능하게 하기
     };
-
     useEffect(submitHandlerSecondAct, [noticeSubmitClicked]);
 
     //각 설정 클릭시 handler
@@ -133,6 +111,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
 
     //각 요소 스타일 변경 handler
     const notificationFollowStyleChanger = () => {
+        if(loading) return;
         if(notificationFollow){
             document.querySelector("#notificationFollowTrue").style.fontWeight = "600";
             document.querySelector("#notificationFollowFalse").style.fontWeight = "400";
@@ -145,6 +124,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
     useEffect(notificationFollowStyleChanger, [notificationFollow]);
 
     const notificationCommentStyleChanger = () => {
+        if(loading) return;
         if(notificationComment === "ALL"){
             document.querySelector("#notificationCommentAll").style.fontWeight = "600";
             document.querySelector("#notificationCommentFollowOnly").style.fontWeight = "400";
@@ -164,6 +144,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
     useEffect(notificationCommentStyleChanger, [notificationComment]);
 
     const notificationLikeStyleChanger = () => {
+        if(loading) return;
         if(notificationLike === "ALL"){
             document.querySelector("#notificationLikeAll").style.fontWeight = "600";
             document.querySelector("#notificationLikeFollowOnly").style.fontWeight = "400";
@@ -184,6 +165,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
     useEffect(notificationLikeStyleChanger, [notificationLike]);
 
     const notificationFollowAcceptStyleChanger = () => {
+        if(loading) return;
         if(notificationFollowAccept){
             document.querySelector("#notificationFollowAcceptTrue").style.fontWeight = "600";
             document.querySelector("#notificationFollowAcceptFalse").style.fontWeight = "400";
@@ -196,6 +178,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
     useEffect(notificationFollowAcceptStyleChanger, [notificationFollowAccept]);
 
     const notificationChatStyleChanger = () => {
+        if(loading) return;
         if(notificationChat){
             document.querySelector("#notificationChatTrue").style.fontWeight = "600";
             document.querySelector("#notificationChatFalse").style.fontWeight = "400";
@@ -210,6 +193,7 @@ const NoticeSetting = ({refreshAccessToken}) => {
 
 
     return(
+        loading ? null :
         <form className={Style.WholeCover} onSubmit={submitHandler}>
             <div className={Style.Cover}>
                 <div className={Style.settingLabelInputSplit} style={{borderBottom:"1px solid rgb(216, 216, 216)"}}>

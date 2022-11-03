@@ -5,7 +5,7 @@ import {
     submitProfileSettingUrl,
     uploadImageUrl,
 } from '../../../../apiUrl';
-import axios from 'axios';
+import { getAxios, postAxios } from '../../../../apiCall';
 
 const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, rightBookState}) => {
     //api에 보낼 내용 + input에 반영해야하므로 useState로 선언
@@ -18,8 +18,11 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
     const [ps_userGenderVisible, setPs_UserGenderVisible] = useState("");//유저의 성별 공개 여부
     const [ps_userIntroduce, setPs_UserIntroduce] = useState("");//유저의 자기 소개
 
+    const [loading, setLoading] = useState(true);
+
     //공개 여부 인지 후 색상 변경 함수
     const ageVisibleBtnChangeHandler = (event) => {
+        if(loading) return;
         if(ps_userAgeVisible){//나이가 공개로 되어있는 경우
             document.querySelector("#ageVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
         }
@@ -30,6 +33,7 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
     useEffect(ageVisibleBtnChangeHandler, [ps_userAgeVisible]);
 
     const genderVisibleBtnChangeHandler = (event) => {
+        if(loading) return;
         if(ps_userGenderVisible){//성별이 공개로 되어있는 경우
             document.querySelector("#genderVisibleBtn").style.backgroundColor = "rgb(160, 160, 160)";
         }
@@ -40,34 +44,18 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
     useEffect(genderVisibleBtnChangeHandler, [ps_userGenderVisible]);
 
     //초기 상태 명시용 함수
-    const profileSettingPreset = () => {
-        axios.get(getcurrentProfileUrl)
-        .then((res) => {
-            setPs_UserImage(res.data.data.imgUrl);//url이 string의 형태로 들어온다.
-            setPs_UserName(res.data.data.nickname);//이름 설정 - api upload
-            setPs_UserAge(res.data.data.age);//나이 설정
-            setPs_UserAgeVisible(res.data.data.ageVisible);//나이 공개
-            setPs_userGender(res.data.data.gender);//성별 설정
-            setPs_UserGenderVisible(res.data.data.genderVisible);//성별 공개
-            if(res.data.data.selfIntroduction === null){//자기소개 설정<--------------------------------채민이 말에 따라 변경 가능
-                setPs_UserIntroduce("");
-            }
-            else{
-                setPs_UserIntroduce(res.data.data.selfIntroduction);
-            }
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(profileSettingPreset, 1000);
-            }
-            else{
-                console.log(res);
-                alert("프로필 설정 상태를 불러오지 못했습니다.");
-            }
-        });
+    const profileSettingPreset = async () => {
+        const res = await getAxios(getcurrentProfileUrl, {}, refreshAccessToken);
+        setPs_UserImage(res.data.data.imgUrl);//url이 string의 형태로 들어온다.
+        setPs_UserName(res.data.data.nickname);//이름 설정 - api upload
+        setPs_UserAge(res.data.data.age);//나이 설정
+        setPs_UserAgeVisible(res.data.data.ageVisible);//나이 공개
+        setPs_userGender(res.data.data.gender);//성별 설정
+        setPs_UserGenderVisible(res.data.data.genderVisible);//성별 공개
+        setPs_UserIntroduce(res.data.data.selfIntroduction);
+        setLoading(false);
     };
-    useEffect(profileSettingPreset, []);
+    useEffect(() => {profileSettingPreset();}, []);
 
     //submit함수 - 3개가 순차적으로 call된다. 1.제출 클릭했으므로 스타일 변경 / 이미지 처리 / 실제 제출 후 스타일 변경
     const [userProfileUploaded, setUserProfileuploaded] = useState(null);
@@ -96,7 +84,7 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
         btn.disabled = true;
     };
 
-    const profileSettingSubmitHandlerSecondAct = () => {
+    const profileSettingSubmitHandlerSecondAct = async () => {
         if(!profileSubmitClicked) return;//초기상황에 자동종료+ true->false에서의 실행을 막는다.
 
         if(ps_userImageSend === null){//사용자 지정 없이 그냥 제출한 경우
@@ -107,33 +95,18 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
         console.log(ps_userImageSend);
         fileData.append('file', ps_userImageSend);
 
-        axios({
-            url: `${uploadImageUrl}profile`,
-            method: 'POST',
-            data: fileData,
+        const res = await postAxios(`${uploadImageUrl}profile`, fileData, {
             headers:{
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        .then((res) => {
-            setUserProfileuploaded(res.data[0]);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(profileSettingSubmitHandlerSecondAct, 1000);
+            'Content-Type': 'multipart/form-data',
             }
-            else{
-                console.log(res);
-                alert("이미지 처리에 실패했습니다.");
-            }
-        });
+        }, refreshAccessToken);
+        setUserProfileuploaded(res.data[0]);
     };
-    useEffect(profileSettingSubmitHandlerSecondAct, [profileSubmitClicked]);
+    useEffect(() => {profileSettingSubmitHandlerSecondAct();}, [profileSubmitClicked]);
 
-    const profileSettingSubmitHandlerThirdAct = () => {
+    const profileSettingSubmitHandlerThirdAct = async () => {
         if(userProfileUploaded !== null){//초기상황에 자동종료
-            axios.post(submitProfileSettingUrl,{
+            const sendBody = {
                 nickname: ps_userName,
                 age: ps_userAge,
                 gender: ps_userGender,
@@ -141,34 +114,21 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
                 genderVisible:ps_userGenderVisible,
                 imgUrl: userProfileUploaded,
                 selfIntroduction: ps_userIntroduce,
-            })
-            .then((res) => {
-                console.log(res);
-                alert("설정을 변경했습니다.");
-                profileSettingPreset();//설정 다시 불러오기
-                //아래는 초기화
-                setPs_userImageSend(null);
-                setUserProfileuploaded(null);
-                submitAbleAgain();//다시 제출 가능 상태로
-                if(rightBookState === "chat" || rightBookState === "friend"){
-                    setChatAndFriendReloadTriger(true);
-                }
-            })
-            .catch((res) => {
-                submitAbleAgain();//다시 제출 가능 상태로
-                if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                    refreshAccessToken();
-                    setTimeout(profileSettingSubmitHandlerThirdAct, 1000);
-                }
-                else{
-                    console.log(res);
-                    alert("문제가 발생했습니다.");
-                }
-            });
-        }
-    }
+            };
 
-    useEffect(profileSettingSubmitHandlerThirdAct, [userProfileUploaded]);
+            await postAxios(submitProfileSettingUrl, sendBody, {}, refreshAccessToken);
+            alert("설정을 변경했습니다.");
+            profileSettingPreset();//설정 다시 불러오기
+            //아래는 초기화
+            setPs_userImageSend(null);
+            setUserProfileuploaded(null);
+            submitAbleAgain();//다시 제출 가능 상태로
+            if(rightBookState === "chat" || rightBookState === "friend"){
+                setChatAndFriendReloadTriger(true);
+            }
+        }
+    };
+    useEffect(() => {profileSettingSubmitHandlerThirdAct()}, [userProfileUploaded]);
 
     //이미지 변경 함수 - ps_nextUserImage를 바꾸고 받아온 이미지를 처리 한다.
     const profileImageChangeHandler = (event) => {
@@ -209,6 +169,7 @@ const ProfileSetting = ({refreshAccessToken, setChatAndFriendReloadTriger, right
 
 
     return(
+        loading? null :
         <form className={Style.profileSettingCover} onSubmit={profileSettingSubmitHandler}>
             <div className={Style.Cover}>
                 <div className={Style.MyprofileExample}>

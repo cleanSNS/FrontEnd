@@ -12,7 +12,7 @@ import {
     deleteNotFilteredUserUrl,
     searchUserUrl,
 } from '../../../../apiUrl';
-import axios from 'axios';
+import { getAxios, postAxios } from '../../../../apiCall';
 
 const FilteringSetting = ({refreshAccessToken, userId}) => {
     const [filterAll, setFilterAll] = useState(false);
@@ -22,54 +22,34 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     const [searchedUserList, setSearchedUserList] = useState([]);//검색된 사람들
     const [AddedUserList, setAddedUserList] = useState([]);//예외로 설정된 사람들
 
-    const gettingCurrentFilterSetting = () => {
+    const [loading, setLoading] = useState(true);
+
+    const gettingCurrentFilterSetting = async () => {
         //필터링 설정 정보 가져오기
-        axios.get(getCurrentfilterSetting)
-        .then((res) => {
-            setFilterAll(res.data.data.filterAll);
-            setFilterFollowee(res.data.data.filterFollowee);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(gettingCurrentFilterSetting, 1000);
-            }
-            else{
-                console.log(res);
-                alert("에러 발생");
-            }
-        });
+        const res = await getAxios(getCurrentfilterSetting, {}, refreshAccessToken);
+        setFilterAll(res.data.data.filterAll);
+        setFilterFollowee(res.data.data.filterFollowee);
     };
 
-    const gettingCurrentNotFilteredUser = () => {
+    const gettingCurrentNotFilteredUser = async () => {
         //필터링 하지 않을 유저 정보 가져오기
-        axios.get(getCurrentNotFilteredUserUrl)
-        .then((res) => {
-            const tmp = [...res.data.data];
-            setAddedUserList(tmp);
-            setSearchedUserList([]);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(gettingCurrentNotFilteredUser, 1000);
-            }
-            else{
-                console.log(res);
-            alert("에러 발생");
-            }
-        });
+        const res = await getAxios(getCurrentNotFilteredUserUrl, {}, refreshAccessToken);
+        const tmp = [...res.data.data];
+        setAddedUserList(tmp);
+        setSearchedUserList([]);
     };
 
     useEffect(() => {//초기설정이다. 두 가지를 전부 로드한다.
         gettingCurrentFilterSetting();
         gettingCurrentNotFilteredUser();
+        setLoading(true);
     }, []);
 
     /* 상단 내용 */
 
     //정보에 따라 스타일 변경해주는 함수
     const filterAllStyleHandler = () => {
+        if(loading) return;
         if(filterAll){
             document.querySelector("#filterAllAllow").style.fontWeight = "600";
             document.querySelector("#filterAllDenial").style.fontWeight = "400";
@@ -82,6 +62,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     useEffect(filterAllStyleHandler, [filterAll]);
 
     const filterFolloweeStyleHandler = () => {
+        if(loading) return;
         if(filterFollowee){
             document.querySelector("#filterFolloweeAllow").style.fontWeight = "600";
             document.querySelector("#filterFolloweeDenial").style.fontWeight = "400";
@@ -131,28 +112,16 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         btn.disabled = true;
     };
 
-    const settingSubmitHandlerSecondAct = () => {
+    const settingSubmitHandlerSecondAct = async () => {
         if(!filterringSubmitClicked) return;
 
-        axios.post(submitFilteringSetting,{
+        const sendBody = {
             filterAll: filterAll,
             filterFollowee: filterFollowee,
-        })
-        .then((res) =>{
-            alert("설정을 변경했습니다.");
-            submitAbleAgain();
-        })
-        .catch((res) => {
-            submitAbleAgain();
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(settingSubmitHandlerSecondAct, 1000);
-            }
-            else{
-                console.log(res);
-                alert("에러 발생");
-            }
-        });
+        };
+        await postAxios(submitFilteringSetting, sendBody, {}, refreshAccessToken);
+        alert("설정을 변경했습니다.");
+        submitAbleAgain();
     }
     useEffect(settingSubmitHandlerSecondAct, [filterringSubmitClicked])
 
@@ -165,56 +134,30 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
     };
 
     //유저 추가 버튼 클릭 처리 Handler
-    const addUserClickhandler = (event) => {
+    const addUserClickhandler = async (event) => {
         event.preventDefault();
 
         //차단하는 api호출 event.target.id이용
-        axios.post(addNotFilteredUserUrl, {
+        const sendBody = {
             userId: event.target.id,
-        })
-        .then((res) => {//문제가 없는 상황이므로 추가된 차단 리스트를 불러와서 변경하기
-            gettingCurrentNotFilteredUser();
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(() => {addUserClickhandler(event);}, 1000);
-            }
-            else{
-                console.log(res);
-                alert("에러 발생 - 차단 리스트에 추가하지 못함");
-            }
-        })
+        };
+        await postAxios(addNotFilteredUserUrl, sendBody, {}, refreshAccessToken);
+        gettingCurrentNotFilteredUser();
     };
 
     //유저 삭제 버튼 클릭 처리 Handler
-    const deleteUserClickHandler = (event) => {
+    const deleteUserClickHandler = async (event) => {
         event.preventDefault();
 
         //차단 취소하는 api호출 event.target.id이용
-        axios.post(deleteNotFilteredUserUrl,{
+        const sendBody = {
             userId: event.target.id,
-        })
-        .then((res) => {//문제가 없는 상황이므로 삭제하기.
-            console.log(res);
-            //AddedList 리스트에서 삭제 event.target.value이용
-            const tmp = [...AddedUserList];
-            tmp.splice(Number(event.target.value), 1);
-            setAddedUserList(tmp);
-            setSearchedUserList([]);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(() => {deleteUserClickHandler(event);}, 1000);
-            }
-            else{
-                console.log(res);
-                alert("문제 발생");
-                //window.location.href="/main"; 
-            }
-        })
-
+        };
+        await postAxios(deleteNotFilteredUserUrl, sendBody, {}, refreshAccessToken);
+        const tmp = [...AddedUserList];
+        tmp.splice(Number(event.target.value), 1);
+        setAddedUserList(tmp);
+        setSearchedUserList([]);
     };
 
     //유저 추가 버튼 마우스 올렸을 때 이미지 스타일 변경 Handler
@@ -241,33 +184,22 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         event.target.src = deleteBtn;
     }
 
-    const searchHandler = (event) => {//제출 시, 차단할 유저를 api에 넘기고, 블록된 사람들을 다시 불러온다.
+    const searchHandler = async (event) => {//제출 시, 차단할 유저를 api에 넘기고, 블록된 사람들을 다시 불러온다.
         event.preventDefault();
 
-        axios.get(searchUserUrl + userInput)
-        .then((res) => {
-            const tmp = [...res.data.data]
-            const withoutMe = tmp.filter((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다. 내가 없는 검색된 리스트
+        const res = await getAxios(`${searchUserUrl}${userInput}`);
+        const tmp = [...res.data.data]
+        const withoutMe = tmp.filter((d) => d.userId !== userId);//tmp중에서 나 자신은 리스트에 뜨면 안된다. 내가 없는 검색된 리스트
 
-            //이제 검색된 리스트에서 기존에 추가되어있던 유저들은 검색되지 않아야한다.
-            const JSONWithoutMeList = withoutMe.map(d => JSON.stringify(d));
-            const JSONAlreadyAddedList = AddedUserList.map(d => JSON.stringify(d));
-            const JSONFriendList = JSONWithoutMeList.filter(x => !JSONAlreadyAddedList.includes(x));
-            setSearchedUserList(JSONFriendList.map(d => JSON.parse(d)));
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){//access token이 만료된 경우이다.
-                refreshAccessToken();
-                setTimeout(() => {searchHandler(event);}, 1000);
-            }
-            else{
-                console.log(res);
-                alert("검색하지 못했습니다.");
-            }
-        })
+        //이제 검색된 리스트에서 기존에 추가되어있던 유저들은 검색되지 않아야한다.
+        const JSONWithoutMeList = withoutMe.map(d => JSON.stringify(d));
+        const JSONAlreadyAddedList = AddedUserList.map(d => JSON.stringify(d));
+        const JSONFriendList = JSONWithoutMeList.filter(x => !JSONAlreadyAddedList.includes(x));
+        setSearchedUserList(JSONFriendList.map(d => JSON.parse(d)));
     };
 
     return(
+        loading ? null :
         <div className={Style.wholeCover}>
             <div className={Style.Cover}>
                 <form className={Style.filterSettingArea} onSubmit={settingSubmitHandler}>
