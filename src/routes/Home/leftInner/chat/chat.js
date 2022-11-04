@@ -1,3 +1,13 @@
+/***
+ * 
+ * 불필요하게 함수가 트리거로 구성되어있음 이거 await로 해결가능하니까 함수 따로 선언해서 합치는 작업하기
+ * 
+ * 
+ * 
+ */
+
+
+
 import Style from './chat.module.css';
 import editImg from './edit.png';
 import { useState, useEffect } from 'react';
@@ -98,7 +108,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     }, [newChatting]);
 
 
-    //가장 먼저 채팅방의 아이디를 가져온다.
+    //가장 먼저 채팅방의 아이디를 가져온다. - 초기함수 1번
     const presetChattingRoomId = () => {
         if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우(당연히 채팅방 id도 있다.) disconnect하고 지금 생성한 Stomp를 넣어준다.
             stompClient.unsubscribe(`/sub/${chattingRoomId}`);
@@ -111,26 +121,10 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         setChattingList([]);//초기화 필요
         SetchattingRoomInfoSet(false);//초기화 필요
         setNoMoreChat(false);
-        document.querySelector("#userChatInput").focus();
     }
-    useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다.
+    useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다. - 이건 바꾸면 안됨 채팅 종류만 달라질 수 있음 이 경우 leftBookState가 안달라짐
 
-    //채팅이 추가되면 자동으로 스크롤 해주는 함수
-    const [needScroll, setNeedScroll] = useState(false);
-    const [currentScrollHeight, setCurrentScrollHeight] = useState(0);
-    useEffect(() => {
-        if(loading) return;//로딩중이면 실행 X
-        if(needScroll){//채팅이 하나 추가된 것이나, 첫 상황으로 아래로 그냥 내려가면 된다. 이 때의 높이를 기록한다.
-            document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
-            setNeedScroll(false);
-        }
-        else{//상단에 추가된 경우
-            document.querySelector("#chatbox").scrollTop = (document.querySelector("#chatbox").scrollHeight - currentScrollHeight);
-        }
-        setCurrentScrollHeight(document.querySelector("#chatbox").scrollHeight);
-    }, [chattingList]);
-
-    //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다.
+    //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다. - 초기함수 2번
     const [chattingroomInfoSet, SetchattingRoomInfoSet] = useState(false);//다음 함수 트리거용
     const preSetChattingRoomInfo = () => {
         if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
@@ -161,7 +155,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     };
     useEffect(preSetChattingRoomInfo, [chattingRoomId]);
 
-    const gettingChattingList = () => {
+    const gettingChattingList = () => {//초기실행 3번
         if(!chattingroomInfoSet) return;//아직 정보를 불러오지 않은 상태이므로 종료
 
         axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
@@ -182,6 +176,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
             setChattingListStartId(res.data.startId);
             setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
             setLoading(false);//채팅방 로딩이 종료되었으므로 화면을 띄운다
+            document.querySelector("#userChatInput").focus();
         })
         .catch((res) => {
             setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
@@ -195,6 +190,21 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         });
     };
     useEffect(gettingChattingList, [chattingroomInfoSet]);//채팅방 이름이 업데이트 되면 진행
+
+    //채팅이 추가되면 자동으로 스크롤 해주는 함수
+    const [needScroll, setNeedScroll] = useState(false);
+    const [currentScrollHeight, setCurrentScrollHeight] = useState(0);
+    useEffect(() => {
+        if(loading) return;//로딩중이면 실행 X
+        if(needScroll){//채팅이 하나 추가된 것이나, 첫 상황으로 아래로 그냥 내려가면 된다. 이 때의 높이를 기록한다.
+            document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
+            setNeedScroll(false);
+        }
+        else{//상단에 추가된 경우
+            document.querySelector("#chatbox").scrollTop = (document.querySelector("#chatbox").scrollHeight - currentScrollHeight);
+        }
+        setCurrentScrollHeight(document.querySelector("#chatbox").scrollHeight);
+    }, [chattingList]);
 
     //채팅 제출함수
     const userChattingSubmitHandler = (event) => {
