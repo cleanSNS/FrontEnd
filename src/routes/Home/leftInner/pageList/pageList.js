@@ -23,20 +23,22 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [followerCount, setFollowerCount] = useState(0);//팔로워 숫자
     const [followeeCount, setFolloweeCount] = useState(0);//팔로잉 숫자
     const [isFollowed, setIsFollowed] = useState(false);//해당 유저를 내가 이미 팔로우 중인지 확인
-    const [isMyPage, setIsMyPage] = useState(false);
+    const [isMyPage, setIsMyPage] = useState(false);//내 페이지를 불러왔으면 true로 설정한다.
     const [bottomStuff, setBottomStuff] = useState("PAGE");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
-    const [setted, setSetted] = useState(false);
+    const [setted, setSetted] = useState(false);//id를 불러왔으면 true로 설정한다.
     const [userDropBoxToggle, setUserDropBoxToggle] = useState(false);//...누르면 뜨는거 활성화 toggle
-    const [loadedUserId, setLoadedUserId] = useState("");
+    const [loadedUserId, setLoadedUserId] = useState("");//불러온 id이다.
 
     const [loading, setLoading] = useState(true);
 
     /**************************초기 설정******************************/
     const loadLoadedUserId = () => {//지금 어떤 페이지로 들어왔는지 확인한다.
+        console.log("유저 페이지로 이동합니다.");//<======================================================================확인하고 지우기
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
         setLoadedUserId(Number(leftBookState.split('/')[1]));
-        setLoading(true);//로딩을 해야한다.
+        setSetted(true);//id를 받아왔으므로 api들을 호출 할 수 있는 상태가 되었다.
         setBottomStuff("PAGE");//또한 기존에 이 페이지가 로드되어있었을 수 있으므로 초기화한다.
+
         if(userId === Number(leftBookState.split('/')[1])){//자기 자신의 페이지를 불러온 경우
             setIsMyPage(true);
         }
@@ -47,7 +49,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     useEffect(loadLoadedUserId, [leftBookState]);//이미 들어와있는 페이지를 누르면 실행되지 않는다.
 
     const presetUserPageList = async () => {
-        if(loadedUserId === "") return;//초기 상황인 경우 즉시 종료한다.
+        if(!setted) return;//id를 아직 받아오지 않은 경우, 아무것도 실행 X
 
         const res = await getAxios(`${getUserNicknameAndImageUrl}${loadedUserId}/profile`);
         setUserImage(res.data.data.imgUrl);
@@ -55,10 +57,9 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         setUserIntroduce(res.data.data.selfIntroduction);
         setFollowerCount(res.data.data.followerCount);
         setFolloweeCount(res.data.data.followeeCount);
-        setSetted(true);
         setIsFollowed(res.data.data.follow);
     };
-    useEffect(() => {presetUserPageList();}, [loadedUserId]);
+    useEffect(() => {presetUserPageList();}, [setted]);
 
     /**************************관리 부분*****************************/
     //게시물 클릭 시 handler
@@ -240,7 +241,6 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                     refreshAccessToken={refreshAccessToken}
                     setPageId={setPageId}
                     setted={setted}
-                    leftBookState={leftBookState}
                     setLoading={setLoading}
                 /> : null
             }
@@ -251,7 +251,6 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                     refreshAccessToken={refreshAccessToken}
                     leftBookChangeHandler={leftBookChangeHandler}
                     setted={setted}
-                    leftBookState={leftBookState}
                 /> : null
             }
         </div>

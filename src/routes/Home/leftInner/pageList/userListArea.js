@@ -6,14 +6,16 @@ import {
 } from '../../../../apiUrl';
 import { getAxios } from '../../../../apiCall';
 
-const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, setted, leftBookState}) => {
+const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, setted}) => {
   const [userList, setUserList] = useState([]);
 
   //페이지 이동 시 초기화함수
   const reset = () => {
+    if(setted){
       setUserList([]);
+    }
   };
-  useEffect(reset, [leftBookState]);
+  useEffect(reset, [setted]);
 
   //팔로워/팔로잉을 불러오는 함수
   const presetUserListArea = async () => {

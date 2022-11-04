@@ -6,7 +6,7 @@ import {
 import { useInView } from 'react-intersection-observer';
 import { getAxios } from '../../../../apiCall';
 
-const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, leftBookState, setLoading}) => {
+const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, setLoading}) => {
   const [userPageList, setUserPageList] = useState([]);
   const [pageStartId, setPageStartId] = useState(987654321);
   const [triger, setTriger] = useState(false);
@@ -19,7 +19,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, left
       setPageStartId(987654321);
       setTriger(true);
   };
-  useEffect(reset, [leftBookState]);
+  useEffect(reset, [setted]);
 
   const presetUserPageList = async () => {
       setTriger(false);
