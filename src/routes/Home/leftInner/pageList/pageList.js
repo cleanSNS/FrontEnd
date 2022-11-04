@@ -17,8 +17,8 @@ import {
 } from '../../../../apiUrl';
 import { getAxios, postAxios } from '../../../../apiCall';
 
-import PageListArea from './pageListArea';
-import UserListArea from './userListArea';
+import SinglePage from './singlePage';
+import SingleUser from './singleUser';
 
 const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId, userId, SettingChangeHandler, setUserPageAndFriendReloadTriger}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
     const [userImage, setUserImage] = useState("");//해당 프로필의 유저 이미지
@@ -284,23 +284,23 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                     bottomStuff === "PAGE" ? 
                     userPageList.map((data, index) => (
                         index === userPageList.length - 1 ?
-                        <PageListArea data={data} setPageId={setPageId} key={index} lastPageInUserPage={lastPageInUserPage}/>
+                        <SinglePage data={data} setPageId={setPageId} key={index} lastPageInUserPage={lastPageInUserPage}/>
                         :
-                        <PageListArea data={data} setPageId={setPageId} key={index} lastPageInUserPage={null}/>
+                        <SinglePage data={data} setPageId={setPageId} key={index} lastPageInUserPage={null}/>
                     ))
                     : null
                 }
                 {
                     (bottomStuff === "FOLLOWER") ?
                     followerList.map((data, index) => (
-                        <UserListArea data={data} leftBookChangeHandler={leftBookChangeHandler} key={index}/>
+                        <SingleUser data={data} leftBookChangeHandler={leftBookChangeHandler} key={index}/>
                     ))
                     : null
                 }
                 {
                     (bottomStuff === "FOLLOWEE") ? 
                     followeeList.map((data, index) => (
-                        <UserListArea data={data} leftBookChangeHandler={leftBookChangeHandler} key={index}/>
+                        <SingleUser data={data} leftBookChangeHandler={leftBookChangeHandler} key={index}/>
                     ))
                     : null
                 }

@@ -1,6 +1,6 @@
 import Style from './pageList.module.css';
 
-const PageListArea = ({data, setPageId, lastPageInUserPage}) => {
+const SinglePage = ({data, setPageId, lastPageInUserPage}) => {
   const singlePageClickHandler = (event) => {
     event.preventDefault();
     setPageId(event.target.id);
@@ -11,4 +11,4 @@ const PageListArea = ({data, setPageId, lastPageInUserPage}) => {
   );
 };
 
-export default PageListArea;
+export default SinglePage;

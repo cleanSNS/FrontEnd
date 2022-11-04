@@ -1,6 +1,6 @@
 import Style from './pageList.module.css';
 
-const UserListArea = ({data, leftBookChangeHandler}) => {
+const SingleUser = ({data, leftBookChangeHandler}) => {
   const userClickHander = (event) => {
       event.preventDefault();
       leftBookChangeHandler("pList/" + event.target.id.split('_')[1]);
@@ -14,4 +14,4 @@ const UserListArea = ({data, leftBookChangeHandler}) => {
   );
 };
 
-export default UserListArea;
+export default SingleUser;
