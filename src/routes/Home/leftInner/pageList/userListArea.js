@@ -7,7 +7,7 @@ const UserListArea = ({data, leftBookChangeHandler}) => {
   };
 
   return(
-    <div className={Style.userArea} key={index} onClick={userClickHander} id={`pageListUserId_${data.userId}`}>
+    <div className={Style.userArea} onClick={userClickHander} id={`pageListUserId_${data.userId}`}>
         <img src={data.imgUrl} className={Style.userImg} id={`pageListUserId_${data.userId}`}/>
         <p className={Style.userNickname} id={`pageListUserId_${data.userId}`}>{data.nickname}</p>
     </div>

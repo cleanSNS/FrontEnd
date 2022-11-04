@@ -85,9 +85,6 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     };
     useEffect(() => {presetUserPageList();}, [loadedUserId]);
 
-
-    /******************pageList에서 불러온거 */  
-  
     //사용자가 올린 페이지를 불러오는 함수
     const getUserPageList = async () => {
         const res = await getAxios(`${getUserPageListUrl}${loadedUserId}?startId=${pageStartId}`, {}, refreshAccessToken);
@@ -101,7 +98,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         setPageStartId(res.data.startId);
     };
   
-    //무한 로드 함수
+    //사용자가 올린 페이지를 무한 로드하는 함수
     useEffect(() => {
         if(inView && !lastPage){
             getUserPageList();
