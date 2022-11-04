@@ -5,139 +5,13 @@ import followAftImg from './user_check.png';
 import moreStuff from '../../root/moreStuff.png';
 import { useState, useEffect } from 'react';
 import {
-    getUserPageListUrl,
     getUserNicknameAndImageUrl,
-    getFolloweeListUrl,
-    getfollowerListUrl,
     ReportUrl,
     BlockUserURl,
     followUserUrl,
     unfollowUserUrl,
 } from '../../../../apiUrl';
-import axios from 'axios';
-import { useInView } from 'react-intersection-observer';
-
-const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, setted, leftBookState}) => {
-    const [userList, setUserList] = useState([]);
-
-    //페이지 이동 시 초기화함수
-    const reset = () => {
-        setUserList([]);
-    };
-    useEffect(reset, [leftBookState]);
-
-    //팔로워/팔로잉을 불러오는 함수
-    const presetUserListArea = () => {
-        if(!setted) return;
-        let followerOfFolloweeUrl = "";
-        bottomStuff === "FOLLOWER" ? 
-        followerOfFolloweeUrl = getfollowerListUrl
-        :
-        bottomStuff === "FOLLOWEE" ?
-            followerOfFolloweeUrl = getFolloweeListUrl
-            :
-            followerOfFolloweeUrl = ""
-        if(followerOfFolloweeUrl === "") return; //에러상황
-
-        axios.get(followerOfFolloweeUrl)
-        .then((res) =>{
-            setUserList(res.data.data);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(presetUserListArea, 1000);
-            }
-            else{
-                console.log(res);
-                alert("팔로워/팔로잉를 불러오지 못했습니다.");
-            }
-        });
-    };
-    useEffect(presetUserListArea, [bottomStuff]);
-
-    const userClickHander = (event) => {
-        event.preventDefault();
-        leftBookChangeHandler("pList/" + event.target.id.split('_')[1]);
-    };
-
-    return(
-        <div className={Style.pageArea}>
-            {
-                userList.map((data, index) => (
-                    <div className={Style.userArea} key={index} onClick={userClickHander} id={`pageListUserId_${data.userId}`}>
-                        <img src={data.imgUrl} className={Style.userImg} id={`pageListUserId_${data.userId}`}/>
-                        <p className={Style.userNickname} id={`pageListUserId_${data.userId}`}>{data.nickname}</p>
-                    </div>
-                ))
-            }
-        </div>
-    );
-};
-
-const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, leftBookState}) => {
-    const [userPageList, setUserPageList] = useState([]);
-    const [pageStartId, setPageStartId] = useState(987654321);
-    const [triger, setTriger] = useState(false);
-    const [lastPageInUserPage, inView] = useInView();
-    const [lastPage, setLastPage] = useState(false);
-
-    const reset = () => {
-        setUserPageList([]);
-        setPageStartId(987654321);
-        setTriger(true);
-    };
-    useEffect(reset, [leftBookState]);
-
-    const presetUserPageList = () => {
-        setTriger(false);
-        if(!setted) return;
-        axios.get(getUserPageListUrl + loadedUserId.toString() + "?startId=" + pageStartId.toString())
-        .then((res) => {
-            const tmp = [...res.data.data];
-            if(tmp.length === 0){
-                setLastPage(true);
-            }
-            const currentList = [...userPageList];
-            const next = currentList.concat(tmp);
-            setUserPageList(next);
-            setPageStartId(res.data.startId);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(presetUserPageList, 1000);
-            }
-            else{
-                console.log(res);
-                alert("글을 불러오지 못했습니다.");
-            }
-        });
-    };
-    useEffect(presetUserPageList, [triger]);
-
-    const singlePageClickHandler = (event) => {
-        event.preventDefault();
-        setPageId(event.target.id);
-    };
-
-    //무한 로드 함수
-    useEffect(() => {
-        if(inView && !lastPage){
-            presetUserPageList();
-        }
-    }, [inView]);
-
-    return(
-        <div className={Style.pageArea}>
-            {
-                userPageList.map((data, index) => (
-                    <img src={data.imgUrl} className={Style.singlePage} key={index} id={data.pageId} onClick={singlePageClickHandler} ref={userPageList.length - 1 === index ? lastPageInUserPage : null}/>
-                ))
-            }
-        </div>
-    );
-};
+import { getAxios, postAxios } from '../../../../apiCall';
 
 const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId, userId, SettingChangeHandler, setUserPageAndFriendReloadTriger}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
     const [userImage, setUserImage] = useState("");//해당 프로필의 유저 이미지
@@ -152,10 +26,13 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [userDropBoxToggle, setUserDropBoxToggle] = useState(false);//...누르면 뜨는거 활성화 toggle
     const [loadedUserId, setLoadedUserId] = useState("");
 
+    const [loading, setLoading] = useState(true);
+
     /**************************초기 설정******************************/
     const loadLoadedUserId = () => {//지금 어떤 페이지로 들어왔는지 확인한다.
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
         setLoadedUserId(Number(leftBookState.split('/')[1]));
+        setLoading(true);//로딩을 해야한다.
         setBottomStuff("PAGE");//또한 기존에 이 페이지가 로드되어있었을 수 있으므로 초기화한다.
         if(userId === Number(leftBookState.split('/')[1])){//자기 자신의 페이지를 불러온 경우
             setIsMyPage(true);
@@ -164,32 +41,21 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             setIsMyPage(false);
         }
     };
-    useEffect(loadLoadedUserId, [leftBookState]);
+    useEffect(loadLoadedUserId, [leftBookState]);//이미 들어와있는 페이지를 누르면 실행되지 않는다.
 
-    const presetUserPageList = () => {
+    const presetUserPageList = async () => {
         if(loadedUserId === "") return;//초기 상황인 경우 즉시 종료한다.
-        axios.get(getUserNicknameAndImageUrl + loadedUserId + "/profile")
-        .then((res) => {
-            setUserImage(res.data.data.imgUrl);
-            setUserNickname(res.data.data.nickname);
-            setUserIntroduce(res.data.data.selfIntroduction);
-            setFollowerCount(res.data.data.followerCount);
-            setFolloweeCount(res.data.data.followeeCount);
-            setSetted(true);
-            setIsFollowed(res.data.data.follow);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(presetUserPageList, 1000);
-            }
-            else{
-                console.log(res);
-                alert("이미지와 닉네임을 불러오지 못했습니다.");
-            }
-        });
+
+        const res = await getAxios(`${getUserNicknameAndImageUrl}${loadedUserId}/profile`);
+        setUserImage(res.data.data.imgUrl);
+        setUserNickname(res.data.data.nickname);
+        setUserIntroduce(res.data.data.selfIntroduction);
+        setFollowerCount(res.data.data.followerCount);
+        setFolloweeCount(res.data.data.followeeCount);
+        setSetted(true);
+        setIsFollowed(res.data.data.follow);
     };
-    useEffect(presetUserPageList, [loadedUserId]);
+    useEffect(() => {presetUserPageList();}, [loadedUserId]);
 
     /**************************관리 부분*****************************/
     //게시물 클릭 시 handler
@@ -220,69 +86,39 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     };
 
     //유저 팔로우/팔로우 취소 함수
-    const followClickHandler = () => {
-        let followOrUnfollowUrl = "";
-        isFollowed ? followOrUnfollowUrl = unfollowUserUrl : followOrUnfollowUrl = followUserUrl
-        axios.post(followOrUnfollowUrl,{
+    const followClickHandler = async () => {
+        let url = "";
+        isFollowed ? url = unfollowUserUrl : url = followUserUrl
+
+        const sendBody = {
             userId: loadedUserId
-        })
-        .then((res) => {
-            setIsFollowed((cur) => !cur);
-            setUserPageAndFriendReloadTriger(true);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(followClickHandler, 1000);
-            }
-            else{
-                console.log(res);
-                alert("해당 유저를 팔로우/ 팔로우 취소하지 못했습니다.");
-            }
-        });
+        };
+        await postAxios(url, sendBody, {}, refreshAccessToken);
+        setIsFollowed((cur) => !cur);
+        setUserPageAndFriendReloadTriger(true);
     };
 
     //유저 신고함수
-    const userReportClickHandler = (event) => {
+    const userReportClickHandler = async (event) => {
         event.preventDefault();
-        axios.post(ReportUrl, {
+
+        const sendBody = {
             targetId: loadedUserId,
             type: "USER",
-        })
-        .then((res) => {
-            alert("해당 유저를 신고했습니다.");
-        })
-        .catch((res) =>{
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(() => {userReportClickHandler(event);}, 1000);
-            }
-            else{
-                console.log(res);
-                alert("해당 유저를 신고하지 못했습니다.");
-            }
-        })
+        };
+        await postAxios(ReportUrl, sendBody, {}, refreshAccessToken);
+        alert("해당 유저를 신고했습니다.");
     };
 
     //유저 차단함수
-    const userBlockClickHandler = (event) => {
+    const userBlockClickHandler = async (event) => {
         event.preventDefault();
-        axios.post(BlockUserURl, {
+
+        const sendBody = {
             userId: loadedUserId,
-        })
-        .then((res) => {
-            alert("해당 유저를 차단했습니다.");
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(() => {userBlockClickHandler(event);}, 1000);
-            }
-            else{
-                console.log(res);
-                alert("해당 유저를 차단하지 못했습니다.");
-            }
-        });
+        };
+        await postAxios(BlockUserURl, sendBody, {}, refreshAccessToken);
+        alert("해당 유저를 차단했습니다.");
     };
 
     //내 페이지에서 클릭 시 프로필 세팅 페이지로 이동
@@ -292,6 +128,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     }
     
     return(
+        loading ? null :
         <div className={Style.wholeCover}>
             <div className={Style.profileCover}>
                 <div className={Style.profileElementCover}>
@@ -401,6 +238,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                     setPageId={setPageId}
                     setted={setted}
                     leftBookState={leftBookState}
+                    setLoading={setLoading}
                 /> : null
             }
             {
