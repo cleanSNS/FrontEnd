@@ -35,7 +35,6 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => 
       const next = currentList.concat(tmp);
       setUserPageList(next);
       setPageStartId(res.data.startId);
-      setLoading(false);
   };
   useEffect(() => {presetUserPageList();}, [triger]);
 
