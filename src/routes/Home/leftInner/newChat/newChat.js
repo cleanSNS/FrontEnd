@@ -1,42 +1,11 @@
 import Style from './newChat.module.css';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
     getFolloweeListUrl,
     getfollowerListUrl,
     makeNewChattingRoomUrl,
 } from '../../../../apiUrl';
-
-const SingleFriend = ({data, setChosenFriendList, chosenFriendList, addStyle}) => {
-    //유저를 클릭하면 chosenfriendList를 변경한다. => 이미 선택중이면 거기서 제외되고, 선택중이 아니면 추가된다.
-    const addFriend = () => {
-        if(addStyle === null){
-            const tmp = [...chosenFriendList];//지금까지 선택된 친구들
-            tmp.push(data);//클릭된 유저를 집어넣는다.
-            setChosenFriendList(tmp);//선택된 유저를 변경한다.
-        }
-        else{
-            const tmp = [...chosenFriendList];//지금까지 선택된 친구들
-            const JSONtmp = tmp.map(d => JSON.stringify(d));
-            const JSONdata = JSON.stringify(data);
-            const JSONnext = JSONtmp.filter(x => x !== JSONdata);//선택되지 않은 친구들만 집어넣는다.
-            setChosenFriendList(JSONnext.map(d => JSON.parse(d)));
-        }
-    };
-
-    return(
-        <div className={Style.singleFriendCover}>
-            <div className={Style.singleFriend} onClick={addFriend} style={addStyle}>
-                <div className={Style.flexBox}>
-                    <img src={data.imgUrl} className={Style.friendImg} />
-                </div>
-                <div className={Style.flexBox}>
-                    <p className={Style.friendNickname}>{data.nickname}</p>
-                </div>
-            </div>
-        </div>
-    );
-};
+import { getAxios, postAxios } from "../../../../apiCall";
 
 const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingTriger, setChatLoading}) => {
     const [friendSearchInput, setFriendSearchInput] = useState("");//친구 검색용
@@ -47,6 +16,8 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
     const [followerList, setFollowerList] = useState([]);//친구를 받기 위해 followerList를 받아온다.
     const [followeeList, setFolloweeList] = useState([]);//친구를 받기 위해 followeeList를 받아온다.
 
+    const [loading, setLoading] = useState(true);
+
     const friendSearchInputChangeHandler = (event) => {
         setFriendSearchInput(event.target.value);
     };
@@ -56,38 +27,16 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
     };
 
     //팔로워와 팔로잉을 불러오는 함수
-    const presetFollowerAndFollowee = () => {
-        axios.get(getFolloweeListUrl)
-        .then((res) => {
-            const tmp = [...res.data.data];
-            setFolloweeList(tmp);//팔로잉 저장
-        })
-        .catch((res) =>{
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(presetFollowerAndFollowee, 1000);
-            }
-            else{
-                alert("팔로잉을 불러오지 못했습니다.");
-            }
-        });
+    const presetFollowerAndFollowee = async () => {
+        const res1 = await getAxios(getFolloweeListUrl, {}, refreshAccessToken);
+        const tmp = [...res1.data.data];
+        setFolloweeList(tmp);//팔로잉 저장
 
-        axios.get(getfollowerListUrl)
-        .then((res) => {
-            const tmp2 = [...res.data.data];
-            setFollowerList(tmp2);//팔로워 저장
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(presetFollowerAndFollowee, 1000);
-            }
-            else{
-                alert("팔로워을 불러오지 못했습니다.");
-            }
-        });
+        const res2 = await getAxios(getfollowerListUrl, {}, refreshAccessToken);
+        const tmp2 = [...res2.data.data];
+        setFollowerList(tmp2);//팔로워 저장
     };
-    useEffect(presetFollowerAndFollowee, []);//초기 상황에만 진행
+    useEffect(() => {presetFollowerAndFollowee();}, []);//초기 상황에만 진행
 
     //팔로워와 팔로잉을 바탕으로 친구 리스트를 파악하는 함수
     const presetFriendList = () => {
@@ -103,6 +52,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
     const presetOutputFriendList = () => {
         const tmp = [...wholeFriendList];
         setOutputFriendList(tmp);
+        setLoading(false);
     };
     useEffect(presetOutputFriendList, [wholeFriendList]);
 
@@ -154,7 +104,7 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
         btn.disabled = true;
     };
 
-    const createChatClickHandlerSecondAct = () => {
+    const createChatClickHandlerSecondAct = async () => {
         if(!newChatSubmitClicked) return;
 
         const chosenFriendUserIdList = chosenFriendList.map(d => (d.userId));//id만 뽑아서 배열 생성
@@ -166,29 +116,20 @@ const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingT
             chattingRoomName = `${chosenFriendList[0].nickname} 외 ${chosenFriendList.length - 1}명과의 대화`
         }
 
-        axios.post(makeNewChattingRoomUrl, {
+        const sendBody ={
             name: chattingRoomName,
             userIdList: chosenFriendUserIdList,
-        })
-        .then((res) => {
-            setLeftBookState(`chat/${res.data.data.chatroomId}`);
-            setChattingTriger(true);
-            submitAbleAgain();
-        })
-        .catch((res) => {
-            submitAbleAgain();
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(createChatClickHandlerSecondAct, 1000);
-            }
-            else{
-                alert("채팅방을 생성하지 못했습니다.");
-            }
-        });
+        };
+
+        const res = await postAxios(makeNewChattingRoomUrl, sendBody, {}, refreshAccessToken);
+        setLeftBookState(`chat/${res.data.data.chatroomId}`);
+        setChattingTriger(true);
+        submitAbleAgain();
     };
-    useEffect(createChatClickHandlerSecondAct, [newChatSubmitClicked])
+    useEffect(() => {createChatClickHandlerSecondAct();}, [newChatSubmitClicked]);
 
     return(
+        loading ? null :
         <div className={Style.wholeCover}>
             {/* 검색창 */}
             <form className={Style.flexBoxLeft} onSubmit={changeOutputFriendListbySearch}>
