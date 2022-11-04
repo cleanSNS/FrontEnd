@@ -23,6 +23,7 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeC
         const tmp = [...res.data.data];
         if(tmp.length === 0){
             setIsLoadFinish(true);//더 이상 글이 없는 경우이다.
+            setLoading(false);
             return;
         }
         const next = cur.concat(tmp);
