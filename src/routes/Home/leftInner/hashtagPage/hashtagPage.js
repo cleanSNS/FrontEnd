@@ -1,10 +1,10 @@
 import Style from './hashtagPage.module.css';
 import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import axios from 'axios';
 import{
   pageLoadHashtagUrl,
 } from '../../../../apiUrl';
+import { getAxios } from "../../../../apiCall";
 
 const LeftHashtagPage = ({leftBookState, setPageId, refreshAccessToken}) => {
   const [hashTag, setHashTag] = useState("");//받아온 해시태그
@@ -12,6 +12,8 @@ const LeftHashtagPage = ({leftBookState, setPageId, refreshAccessToken}) => {
   const [hashTagPageStartId, setHashTagPageStartId] = useState(987654321);//글 리스트의 startId
   const [isFinished, setIsFinished] = useState(false);//페이지 로딩이 끝난 경우 더 이상 불리지 않게 세팅한다.
   const [lastHashtagPage, InView] = useInView();//마지막 페이지에 세팅한다.
+
+  const [loading, setLoading] = useState(true);
 
   /***************************초기 세팅 함수********************************/
   //처음에 해시태그 받는 함수
@@ -24,32 +26,23 @@ const LeftHashtagPage = ({leftBookState, setPageId, refreshAccessToken}) => {
   useEffect(hashTagpreset, [leftBookState]);//state변경 시 실행
 
   //해시태그로 검색한 게시글을 불러오는 함수
-  const loadHashtagPage = () => {
+  const loadHashtagPage = async () => {
     if(hashTag === "") return; //빈 문자열인 경우 종료
 
-    axios.get(`${pageLoadHashtagUrl}${hashTag}&startId=${hashTagPageStartId}`)
-    .then((res) => {
-      const tmp = [...res.data.data];
-      if(tmp.length === 0){
-        setIsFinished(true);
-        return;
-      }
-      const cur = [...hashTagPageList];
-      const next = cur.concat(tmp);
-      setHashTagPageList(next);
-      setHashTagPageStartId(res.data.startId);
-    })
-    .catch((res) => {
-      if(res.response.status === 401 || res.response.status === 0){
-        refreshAccessToken();
-        setTimeout(loadHashtagPage, 1000);
-      }
-      else{
-        alert("알림의 개수를 불러오지 못했습니다.");
-      }
-    })
+    const res = await getAxios(`${pageLoadHashtagUrl}${hashTag}&startId=${hashTagPageStartId}`, {}, refreshAccessToken);
+    const tmp = [...res.data.data];
+    if(tmp.length === 0){
+      setIsFinished(true);
+      setLoading(false);
+      return;
+    }
+    const cur = [...hashTagPageList];
+    const next = cur.concat(tmp);
+    setHashTagPageList(next);
+    setHashTagPageStartId(res.data.startId);
+    setLoading(false);
   };
-  useEffect(loadHashtagPage, [hashTag]);//해시태그 변경 시 실행한다.
+  useEffect(() => {loadHashtagPage();}, [hashTag]);//해시태그 변경 시 실행한다.
 
   //마지막 요소가 보이면 로드한다.
   const lastPageSeen = () => {
@@ -65,6 +58,7 @@ const LeftHashtagPage = ({leftBookState, setPageId, refreshAccessToken}) => {
   };
 
   return(
+    loading ? null :
     <div className={Style.wholeCover}>
       <p className={Style.AnswerText}>{`검색하신 "#${hashTag}"에 대한 게시물입니다.`}</p>
       {
