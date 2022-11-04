@@ -89,7 +89,7 @@ export const getCurrentNoticeSettingUrl = `${apiUrl}/user/mypage/push`;
 export const submitCurrentNoticeSettingUrl = `${apiUrl}/user/mypage/push`;
 
 //비민번호 변경을 위해 현 비밀번호 확인하는 Url
-export const passwordCheckForPasswordChangeUrl = `${apiUrl}/user/mypage/password/check`;
+export const passwordCheck = `${apiUrl}/user/mypage/password/check`;
 
 //비밀번호 변경을 하는 Url
 export const passwordChangeUrl = `${apiUrl}/user/mypage/password/change`;

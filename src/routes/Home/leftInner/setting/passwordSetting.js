@@ -1,7 +1,7 @@
 import Style from './passwordSetting.module.css';
 import {useState, useEffect} from 'react';
 import {
-    passwordCheckForPasswordChangeUrl,
+    passwordCheck,
     passwordChangeUrl
 } from '../../../../apiUrl';
 import { postAxios } from '../../../../apiCall';
@@ -86,7 +86,7 @@ const PasswordSetting = ({refreshAccessToken}) => {
         const sendBody = {
             password: previousPassword,
         };
-        const res = await postAxios(passwordCheckForPasswordChangeUrl, sendBody, {}, refreshAccessToken);
+        const res = await postAxios(passwordCheck, sendBody, {}, refreshAccessToken);
         if(res.data){//일치하면
             await changePassword();
         }

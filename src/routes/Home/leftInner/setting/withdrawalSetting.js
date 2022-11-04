@@ -1,7 +1,8 @@
 import Style from './withdrawalSetting.module.css';
 import {useState} from 'react';
 import {
-    withdrawalUrl
+    withdrawalUrl,
+    passwordCheck
 } from '../../../../apiUrl';
 import { postAxios } from '../../../../apiCall';
 
@@ -19,17 +20,17 @@ const WithdrawalSetting = ({refreshAccessToken, logout}) => {
             return;
         }
 
-        const sendBocy = {
-            password: userPasswordInput
-        }
-        const res = await postAxios(withdrawalUrl, sendBocy, {}, refreshAccessToken);
-        if(res === "fail"){
-            alert("잘못된 비밀번호입니다.");
-            setUserPasswordInput("");//비밀번호 초기화
+        const sendBody = {
+            password: userPasswordInput,
+        };
+        const res = await postAxios(passwordCheck, sendBody, {}, refreshAccessToken);
+        if(res.data){//일치하면
+            await postAxios(withdrawalUrl, {}, {}, refreshAccessToken);
+            logout();
         }
         else{
-            alert("회원탈퇴에 성공하였습니다. 감사합니다.");
-            logout();//로그 아웃까지
+            alert("기존 비밀번호가 일치하지 않습니다.");
+            setUserPasswordInput("");
         }
     };
 
