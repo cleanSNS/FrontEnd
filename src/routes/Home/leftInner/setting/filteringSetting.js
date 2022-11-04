@@ -15,8 +15,8 @@ import {
 import { getAxios, postAxios } from '../../../../apiCall';
 
 const FilteringSetting = ({refreshAccessToken, userId}) => {
-    const [filterAll, setFilterAll] = useState(false);
-    const [filterFollowee, setFilterFollowee] = useState(false);
+    const [filterAll, setFilterAll] = useState("");
+    const [filterFollowee, setFilterFollowee] = useState("");
 
     const [userInput, setUserInput] = useState("");
     const [searchedUserList, setSearchedUserList] = useState([]);//검색된 사람들
@@ -186,6 +186,7 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         event.target.src = deleteBtn;
     }
 
+    //유저 검색 함수
     const searchHandler = async (event) => {//제출 시, 차단할 유저를 api에 넘기고, 블록된 사람들을 다시 불러온다.
         event.preventDefault();
 
