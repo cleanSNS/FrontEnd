@@ -49,6 +49,8 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     const [userAndUserImg, setUserAndUserImg] = useState({});//해당 채팅방의 유저 id와 그 유저의 프로필의 value를 넣어둔다. key=id, value=imgUrl
     const [userAndUserNickname, setUserAndUserNickname] = useState({});//해당 채팅방의 유저 id와 그 유저의 닉네임의 value를 넣어둔다. key=id, value=닉네임
 
+    const [loading, setLoading] = useState(true);
+
     const onUserChattingChangeHandler = (event) => {
         setUserChatInput(event.target.value);
     };
@@ -178,6 +180,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
             }
             setChattingListStartId(res.data.startId);
             setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
+            setLoading(false);//채팅방 로딩이 종료되었으므로 화면을 띄운다
         })
         .catch((res) => {
             setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
@@ -192,7 +195,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     };
     useEffect(gettingChattingList, [chattingroomInfoSet]);//채팅방 이름이 업데이트 되면 진행
 
-    //채팅 제출함수<-----------------------------여기 바꿔야함
+    //채팅 제출함수
     const userChattingSubmitHandler = (event) => {
         if(event !== null) {//이벤트가 submit일 수도 있고 그냥 엔터눌러서 온 걸 수도 있다. 엔터면 그냥 넘어가고 submit이면 preventDefault()한다.
             event.preventDefault();
@@ -239,7 +242,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         });
     };
 
-    //채팅방 이름 더블클릭 시 변경 가능하게 바꾸기
+    //채팅방 이름 변경 함수
     const onChatnameClickHandler = (event) => {
         event.preventDefault();
         console.log("클릭함");
@@ -248,6 +251,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     }
 
     return(
+        loading ? null :
         <div className={Style.wholeCover}>
             <form className={Style.chattingRoomNameArea} onSubmit={chattingRoomNamechangeSubmitHandler}>
                 <div className={Style.flexBoxRight}>
