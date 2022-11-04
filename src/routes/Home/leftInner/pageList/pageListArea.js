@@ -24,7 +24,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, setL
 
   const presetUserPageList = async () => {
       setTriger(false);
-      if(!setted) return;
+      if(!triger) return;//실행 X
 
       const res = await getAxios(`${getUserPageListUrl}${loadedUserId}?startId=${pageStartId}`, {}, refreshAccessToken);
       const tmp = [...res.data.data];
