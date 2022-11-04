@@ -55,10 +55,10 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
 
         //초기화 부분
         setBottomStuff("PAGE");
-        setUserList([]);
+        setFollowerList([]);
+        setFolloweeList([]);
         setUserPageList([]);
         setPageStartId(987654321);
-        setTriger(true);
     };
     useEffect(loadLoadedUserId, [leftBookState]);
 
@@ -90,8 +90,6 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
   
     //사용자가 올린 페이지를 불러오는 함수
     const getUserPageList = async () => {
-        setTriger(false);
-  
         const res = await getAxios(`${getUserPageListUrl}${loadedUserId}?startId=${pageStartId}`, {}, refreshAccessToken);
         const tmp = [...res.data.data];
         if(tmp.length === 0){
