@@ -13,9 +13,6 @@ import {
 } from '../../../../apiUrl';
 import { getAxios, postAxios } from '../../../../apiCall';
 
-import PageListArea from './pageListArea';
-import UserListArea from './userListArea';
-
 const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler, setPageId, userId, SettingChangeHandler, setUserPageAndFriendReloadTriger}) => {//일단 leftBookState를 확인해야한다. pageList/{userId}로 되어있음 userId의 유저 게시글과 이미지, 이름을 불러와서 로딩한다.
     const [userImage, setUserImage] = useState("");//해당 프로필의 유저 이미지
     const [userNickname, setUserNickname] = useState("");//해당 프로필의 유저 닉네임
@@ -23,11 +20,11 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const [followerCount, setFollowerCount] = useState(0);//팔로워 숫자
     const [followeeCount, setFolloweeCount] = useState(0);//팔로잉 숫자
     const [isFollowed, setIsFollowed] = useState(false);//해당 유저를 내가 이미 팔로우 중인지 확인
-    const [isMyPage, setIsMyPage] = useState(false);//내 페이지를 불러왔으면 true로 설정한다.
+    const [isMyPage, setIsMyPage] = useState(false);
     const [bottomStuff, setBottomStuff] = useState("PAGE");//PAGE, FOLLOWEE, FOLLOWER가 가능한 값이다. 이 값에 따라 하단 내용이 달라진다.
-    const [setted, setSetted] = useState(false);//id를 불러왔으면 true로 설정한다.
+    const [setted, setSetted] = useState(false);
     const [userDropBoxToggle, setUserDropBoxToggle] = useState(false);//...누르면 뜨는거 활성화 toggle
-    const [loadedUserId, setLoadedUserId] = useState("");//불러온 id이다.
+    const [loadedUserId, setLoadedUserId] = useState("");
 
     const [loading, setLoading] = useState(true);
 
@@ -35,9 +32,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
     const loadLoadedUserId = () => {//지금 어떤 페이지로 들어왔는지 확인한다.
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
         setLoadedUserId(Number(leftBookState.split('/')[1]));
-        setSetted(true);//id를 받아왔으므로 api들을 호출 할 수 있는 상태가 되었다.
         setBottomStuff("PAGE");//또한 기존에 이 페이지가 로드되어있었을 수 있으므로 초기화한다.
-
         if(userId === Number(leftBookState.split('/')[1])){//자기 자신의 페이지를 불러온 경우
             setIsMyPage(true);
         }
@@ -45,10 +40,10 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
             setIsMyPage(false);
         }
     };
-    useEffect(loadLoadedUserId, [leftBookState]);//이미 들어와있는 페이지를 누르면 실행되지 않는다.
+    useEffect(loadLoadedUserId, [leftBookState]);
 
     const presetUserPageList = async () => {
-        if(!setted) return;//id를 아직 받아오지 않은 경우, 아무것도 실행 X
+        if(loadedUserId === "") return;//초기 상황인 경우 즉시 종료한다.
 
         const res = await getAxios(`${getUserNicknameAndImageUrl}${loadedUserId}/profile`);
         setUserImage(res.data.data.imgUrl);
@@ -56,10 +51,11 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         setUserIntroduce(res.data.data.selfIntroduction);
         setFollowerCount(res.data.data.followerCount);
         setFolloweeCount(res.data.data.followeeCount);
+        setSetted(true);
         setIsFollowed(res.data.data.follow);
-        setLoading(false);
+        setLoading(false)
     };
-    useEffect(() => {presetUserPageList();}, [setted]);
+    useEffect(() => {presetUserPageList();}, [loadedUserId]);
 
     /**************************관리 부분*****************************/
     //게시물 클릭 시 handler
@@ -241,6 +237,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                     refreshAccessToken={refreshAccessToken}
                     setPageId={setPageId}
                     setted={setted}
+                    leftBookState={leftBookState}
                 /> : null
             }
             {
@@ -250,6 +247,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                     refreshAccessToken={refreshAccessToken}
                     leftBookChangeHandler={leftBookChangeHandler}
                     setted={setted}
+                    leftBookState={leftBookState}
                 /> : null
             }
         </div>

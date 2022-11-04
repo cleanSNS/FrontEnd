@@ -6,7 +6,7 @@ import {
 import { useInView } from 'react-intersection-observer';
 import { getAxios } from '../../../../apiCall';
 
-const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => {
+const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, leftBookState}) => {
   const [userPageList, setUserPageList] = useState([]);
   const [pageStartId, setPageStartId] = useState(987654321);
   const [triger, setTriger] = useState(false);
@@ -15,16 +15,15 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted}) => 
 
   //첫 로드시 원래 있던 값들을 초기화해주는 부분
   const reset = () => {
-      if(!setted) return;
       setUserPageList([]);
       setPageStartId(987654321);
       setTriger(true);
   };
-  useEffect(reset, [setted]);
+  useEffect(reset, [leftBookState]);
 
   const presetUserPageList = async () => {
       setTriger(false);
-      if(!triger) return;//실행 X
+      if(!setted) return;
 
       const res = await getAxios(`${getUserPageListUrl}${loadedUserId}?startId=${pageStartId}`, {}, refreshAccessToken);
       const tmp = [...res.data.data];
