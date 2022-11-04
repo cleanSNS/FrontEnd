@@ -7,6 +7,8 @@ import {
 } from '../../../../apiUrl';
 import { getAxios, postAxios } from "../../../../apiCall";
 
+import SingleFriend from './singleFriend';
+
 const LeftNewChat = ({refreshAccessToken, setLeftBookState, userId, setChattingTriger, setChatLoading}) => {
     const [friendSearchInput, setFriendSearchInput] = useState("");//친구 검색용
     const [chattingRoomNameInput, setChattingRoomNameInput] = useState("");//채팅방 이름 입력
