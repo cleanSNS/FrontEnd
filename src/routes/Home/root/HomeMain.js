@@ -90,7 +90,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
     if(!newPageSumbitClicked) return;
     //formData에 파일들 append하기 - 파일명은 image_파일명 으로 생성
     const fileData = new FormData();
-    console.log(newPostImages);
     for(let i = 0; i < newPostImages.length; i++){
       fileData.append(`file`, newPostImages[i]);
     }
@@ -210,7 +209,6 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   /***************************************************************뒤로가기, 앞으로 가기 등 처리함수************************************************************************/
   const [goBack, setGoBack] = useState(false);//뒤로가기 이벤트로 이동한 경우, true로 세팅된다.
   window.onpopstate = function(event) {//뒤로가기 이벤트를 캐치합니다.
-    console.log(event.state);
     if(event.state === null) return;
     setRightBookState(event.state.rightBookState);
     setLeftBookState(event.state.leftBookState);
