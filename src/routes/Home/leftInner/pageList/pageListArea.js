@@ -15,6 +15,7 @@ const PageListArea = ({loadedUserId, refreshAccessToken, setPageId, setted, setL
 
   //첫 로드시 원래 있던 값들을 초기화해주는 부분
   const reset = () => {
+      if(!setted) return;
       setUserPageList([]);
       setPageStartId(987654321);
       setTriger(true);

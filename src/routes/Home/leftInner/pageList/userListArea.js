@@ -11,9 +11,8 @@ const UserListArea = ({bottomStuff, refreshAccessToken, leftBookChangeHandler, s
 
   //페이지 이동 시 초기화함수
   const reset = () => {
-    if(setted){
+      if(!setted) return;
       setUserList([]);
-    }
   };
   useEffect(reset, [setted]);
 
