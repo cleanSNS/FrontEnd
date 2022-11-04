@@ -26,6 +26,7 @@ const WithdrawalSetting = ({refreshAccessToken, logout}) => {
         const res = await postAxios(passwordCheck, sendBody, {}, refreshAccessToken);
         if(res.data){//일치하면
             await postAxios(withdrawalUrl, {}, {}, refreshAccessToken);
+            alert("회원 탈퇴되셨습니다. 이용해 주셔서 감사합니다.");
             logout();
         }
         else{
