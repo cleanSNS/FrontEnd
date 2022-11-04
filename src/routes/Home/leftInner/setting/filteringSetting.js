@@ -24,28 +24,28 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
 
     const [loading, setLoading] = useState(true);
 
+    //필터링 설정 정보 가져오기
     const gettingCurrentFilterSetting = async () => {
-        //필터링 설정 정보 가져오기
         const res = await getAxios(getCurrentfilterSetting, {}, refreshAccessToken);
         setFilterAll(res.data.data.filterAll);
         setFilterFollowee(res.data.data.filterFollowee);
     };
 
+    //필터링 하지 않을 유저 정보 가져오기
     const gettingCurrentNotFilteredUser = async () => {
-        //필터링 하지 않을 유저 정보 가져오기
         const res = await getAxios(getCurrentNotFilteredUserUrl, {}, refreshAccessToken);
         const tmp = [...res.data.data];
         setAddedUserList(tmp);
         setSearchedUserList([]);
     };
 
-    useEffect(() => {//초기설정이다. 두 가지를 전부 로드한다.
+    //초기 설정 함수
+    const presetFilteringSetting = async () => {
         gettingCurrentFilterSetting();
         gettingCurrentNotFilteredUser();
-        setLoading(false);
-        filterAllStyleHandler();//스타일도 반영
-        filterFolloweeStyleHandler();//스타일도 반영
-    }, []);
+    };
+
+    useEffect(() => {presetFilteringSetting(); setLoading(false);}, []);
 
     /* 상단 내용 */
 
