@@ -73,11 +73,13 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         setFolloweeCount(res.data.data.followeeCount);
         setIsFollowed(res.data.data.follow);
 
-        const res2 = await getAxios(getfollowerListUrl, {}, refreshAccessToken);//팔로워 불러오기
-        setFollowerList(res2.data.data);
+        if(isMyPage){
+            const res2 = await getAxios(getfollowerListUrl, {}, refreshAccessToken);//팔로워 불러오기
+            setFollowerList(res2.data.data);
 
-        const res3 = await getAxios(getFolloweeListUrl, {}, refreshAccessToken);//팔로워 불러오기
-        setFolloweeList(res3.data.data);
+            const res3 = await getAxios(getFolloweeListUrl, {}, refreshAccessToken);//팔로워 불러오기
+            setFolloweeList(res3.data.data);
+        }
 
         await getUserPageList();//pageList초기 설정
 
