@@ -119,6 +119,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     const [needScroll, setNeedScroll] = useState(false);
     const [currentScrollHeight, setCurrentScrollHeight] = useState(0);
     useEffect(() => {
+        if(loading) return;//로딩중이면 실행 X
         if(needScroll){//채팅이 하나 추가된 것이나, 첫 상황으로 아래로 그냥 내려가면 된다. 이 때의 높이를 기록한다.
             document.querySelector("#chatbox").scrollTop = document.querySelector("#chatbox").scrollHeight;
             setNeedScroll(false);
