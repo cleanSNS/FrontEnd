@@ -59,6 +59,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         setFolloweeList([]);
         setUserPageList([]);
         setPageStartId(987654321);
+        setUserDropBoxToggle(false);
     };
     useEffect(loadLoadedUserId, [leftBookState]);
 
