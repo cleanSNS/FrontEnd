@@ -43,6 +43,8 @@ const FilteringSetting = ({refreshAccessToken, userId}) => {
         gettingCurrentFilterSetting();
         gettingCurrentNotFilteredUser();
         setLoading(false);
+        filterAllStyleHandler();//스타일도 반영
+        filterFolloweeStyleHandler();//스타일도 반영
     }, []);
 
     /* 상단 내용 */
