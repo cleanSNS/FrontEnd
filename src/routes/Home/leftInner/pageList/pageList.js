@@ -33,7 +33,6 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
 
     /**************************초기 설정******************************/
     const loadLoadedUserId = () => {//지금 어떤 페이지로 들어왔는지 확인한다.
-        console.log("유저 페이지로 이동합니다.");//<======================================================================확인하고 지우기
         //먼저 나의 id와 지금 들어온 id가 동일하면, isMyPage를 true로 바꿔주고 작업한다.
         setLoadedUserId(Number(leftBookState.split('/')[1]));
         setSetted(true);//id를 받아왔으므로 api들을 호출 할 수 있는 상태가 되었다.
@@ -58,6 +57,7 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
         setFollowerCount(res.data.data.followerCount);
         setFolloweeCount(res.data.data.followeeCount);
         setIsFollowed(res.data.data.follow);
+        setLoading(false);
     };
     useEffect(() => {presetUserPageList();}, [setted]);
 
@@ -241,7 +241,6 @@ const LeftPageList = ({leftBookState, refreshAccessToken, leftBookChangeHandler,
                     refreshAccessToken={refreshAccessToken}
                     setPageId={setPageId}
                     setted={setted}
-                    setLoading={setLoading}
                 /> : null
             }
             {
