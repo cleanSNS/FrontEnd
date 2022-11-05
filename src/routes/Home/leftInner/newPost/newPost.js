@@ -57,6 +57,8 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         setRenderedNewPostImages(nextRenderImage);
     };
 
+    console.log(renderedNewPostImages);//확인용
+
     //지금 들어온 파일을 파일 그대로 보낼 state에 넣기
     const loadImageFiles = (inputFile) => {
         const tmp = [...newPostImages];
