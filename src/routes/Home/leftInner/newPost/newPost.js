@@ -43,14 +43,15 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
     };
 
     //이미지를 랜더링 해서 집어넣는다.
-    const renderImageFiles = async (inputFile) => {
+    const renderImageFiles = (inputFile) => {
         const renderTmp = [...renderedNewPostImages];//지금까지 미리보기로 되어있는 이미지들의 배열
-        await inputFile.forEach((data) => {
+        inputFile.forEach((data) => {
             const reader = new FileReader();
             reader.readAsDataURL(data);
             reader.onload = (imageData) => {
                 console.log(imageData.target.result);
                 renderTmp.push(imageData.target.result);
+                setRenderedNewPostImages(renderTmp);
             }
         });
         return renderTmp;
@@ -77,7 +78,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         }
         if(!ImageValid(inputFile)) return;//입력된 파일이 유효하지 않은 경우 실행X
 
-        setRenderedNewPostImages(renderImageFiles(inputFile));//이미지 렌더링 처리
+        renderImageFiles(inputFile);//이미지 렌더링 처리
         loadImageFiles(inputFile);//api에 보낼 수 있도록 파일 자체의 세팅
 
         //CSS는 반드시 실행된다.
