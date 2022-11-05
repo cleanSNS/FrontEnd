@@ -1,13 +1,3 @@
-/***
- * 
- * 불필요하게 함수가 트리거로 구성되어있음 이거 await로 해결가능하니까 함수 따로 선언해서 합치는 작업하기
- * 
- * 
- * 
- */
-
-
-
 import Style from './chat.module.css';
 import editImg from './edit.png';
 import { useState, useEffect } from 'react';
@@ -17,36 +7,10 @@ import {
     getChattingRoomStuffUrl,
     changeChattingRoomNameUrl,
 } from '../../../../apiUrl';
-import axios from 'axios';
+import { getAxios, postAxios } from "../../../../apiCall";
 import SockJS from 'sockjs-client';
 import Stomp from 'stomp-websocket';
-import { chatCalculateTimeFrom } from '../../../../timeCalculation';
-
-const SingleChat = ({data, setLeftBookState, userId, userAndUserImg, userAndUserNickname, oldestChat}) => {
-    //유저의 이미지나 이름을 클릭하면 해당 유저의 페이지로 이동한다.
-    const goToThatUserPage = (event) => {
-        event.preventDefault();
-        setLeftBookState(`pList/${data.userDto.userId}`);
-    };
-
-    return(
-        <div className={userId !== data.userId ? Style.singleOtherChattingArea : Style.singleMyChattingArea} ref={oldestChat}>            
-            {/* 유저의 프로필 이미지가 오는 곳 */
-                userId !== data.userId ?
-               <img src={userAndUserImg[data.userId]} className={Style.chatUserimg} onClick={goToThatUserPage}/> : null
-            }
-            <div className={Style.userchatFlexBox}>
-                {/* 유저의 이름이 오는 곳 */
-                    userId !== data.userId ?
-                    <p className={Style.chatuserName} onClick={goToThatUserPage}>{userAndUserNickname[data.userId]}</p> : null
-                }
-                {/* 유저의 채팅 내용이 오는 곳 */}
-                <div className={Style.chattingText} style={userId !== data.userId ? null : {backgroundColor: "#F4DEDE"}}>{data.message}</div>
-                <p className={Style.chatTime}>{chatCalculateTimeFrom(data.createdDate)}</p>
-            </div>
-        </div>
-    );
-};
+import SingleChat from './singleChat';
 
 const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient, setChatLoading}) => {
     const [chattingRoomName, setChattingRoomName] = useState("");//채팅방 이름
@@ -61,14 +25,17 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
 
     const [loading, setLoading] = useState(true);
 
+    //사용자 채팅 입력 처리
     const onUserChattingChangeHandler = (event) => {
         setUserChatInput(event.target.value);
     };
 
+    //채팅방 이름 변경 처리
     const onChattingRoomNameChangeHandler = (event) => {
         setChattingRoomName(event.target.value)
     }
 
+    //엔터 입력 시 event를 없애고 submitHandler를 실행한다.
     const onUserChattingEnterClickHandler = (event) => {
         if(event.keyCode === 13){//엔터 입력 시
             event.preventDefault();
@@ -83,8 +50,8 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         setStompClient(tmp);
     };
 
-    //새로 채팅이 불리면 내용을 저장
-    const [newChatting, setNewChatting] = useState("");
+    //소켓에 의해 채팅이 들어오면 newChatting에 값을 세팅해준다.
+    const [newChatting, setNewChatting] = useState("");//새로 로드된 채팅 - 소캣에서 인식된 하나의 채팅이다.
     useEffect(() => {
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
@@ -104,92 +71,63 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         tmp.push(newChatting);
         setChattingList(tmp);
         setNeedScroll(true);
-
+        setNewChatting("");
     }, [newChatting]);
 
-
-    //가장 먼저 채팅방의 아이디를 가져온다. - 초기함수 1번
-    const presetChattingRoomId = () => {
+    //초기 실행 함수
+    const presetChattingRoomId = async () => {
         if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우(당연히 채팅방 id도 있다.) disconnect하고 지금 생성한 Stomp를 넣어준다.
             stompClient.unsubscribe(`/sub/${chattingRoomId}`);
             stompClient.disconnect();
         }
+        const chattingRoomIdTmp = leftBookState.split('/')[1];//현함수를 위해 tmp값으로 설정해서 api들을 불러준다.
         setChattingRoomId(leftBookState.split('/')[1]);
         setChattingListStartId(987654321);//초기화 필요
         setUserAndUserImg({});//초기화 필요
         setUserAndUserNickname({});//초기화 필요
         setChattingList([]);//초기화 필요
-        SetchattingRoomInfoSet(false);//초기화 필요
         setNoMoreChat(false);
+
+        const res1 = await getAxios(`${getChattingRoomStuffUrl}/${chattingRoomIdTmp}`, {}, refreshAccessToken);//채팅방 정보 가져오기
+        setChattingRoomName(res1.data.data.name);
+        const tmpNickname = {};
+        const tmpUserImg = {};
+        res1.data.data.userDto.map((data) => {
+            tmpNickname[data.userId] = data.nickname;
+            tmpUserImg[data.userId] = data.imgUrl;
+        });
+        setUserAndUserNickname(tmpNickname);//유저id와 이름 페어 지정
+        setUserAndUserImg(tmpUserImg);//유저id와 프로필 이미지 페어 지정
+
+        await gettingChattingList();
+        setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
+        setLoading(false);//채팅방 로딩이 종료되었으므로 화면을 띄운다
+
+        socketConnect();//소캣도 연결한다.
     }
     useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다. - 이건 바꾸면 안됨 채팅 종류만 달라질 수 있음 이 경우 leftBookState가 안달라짐
 
-    //id가 주어졌을 때 이제 해당 채팅방의 채팅들을 불러오고 소캣을 연결한다. - 초기함수 2번
-    const [chattingroomInfoSet, SetchattingRoomInfoSet] = useState(false);//다음 함수 트리거용
-    const preSetChattingRoomInfo = () => {
-        if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
-
-        axios.get(`${getChattingRoomStuffUrl}/${chattingRoomId}`)
-        .then((res) => {
-            setChattingRoomName(res.data.data.name);
-            const tmpNickname = {};
-            const tmpUserImg = {};
-            res.data.data.userDto.map((data) => {
-                tmpNickname[data.userId] = data.nickname;
-                tmpUserImg[data.userId] = data.imgUrl;
-            });
-            setUserAndUserNickname(tmpNickname);//유저id와 이름 페어 지정
-            setUserAndUserImg(tmpUserImg);//유저id와 프로필 이미지 페어 지정
-            socketConnect();//소캣도 연결한다.
-            SetchattingRoomInfoSet(true);
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(preSetChattingRoomInfo, 1000);
-            }
-            else{
-                alert("채팅방의 이름을 불러오지 못했습니다.");
-            }
-        });
+    //채팅을 불러오는 함수
+    const gettingChattingList = async () => {
+        const res2 = await getAxios(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`, {}, refreshAccessToken);//채팅방의 기존 채팅 가져오기
+        const cur = [...chattingList];//지금의 채팅방 채팅 리스트
+        const tmp = [...res2.data.data];//받아온 채팅방 채팅 리스트
+        if(tmp.length === 0){
+            setNoMoreChat(true);
+        }
+        else{
+            const revTmp = tmp.reverse();
+            const next = revTmp.concat(cur);
+            setChattingList(next);
+        }
+        if(chattingListStartId === 987654321){
+            setNeedScroll(true);
+        }
+        setChattingListStartId(res2.data.startId);
     };
-    useEffect(preSetChattingRoomInfo, [chattingRoomId]);
 
-    const gettingChattingList = () => {//초기실행 3번
-        if(!chattingroomInfoSet) return;//아직 정보를 불러오지 않은 상태이므로 종료
-
-        axios.get(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`)
-        .then((res) => {
-            const cur = [...chattingList];//지금의 채팅방 채팅 리스트
-            const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
-            if(tmp.length === 0){
-                setNoMoreChat(true);
-            }
-            else{
-                const revTmp = tmp.reverse();
-                const next = revTmp.concat(cur);
-                setChattingList(next);
-            }
-            if(chattingListStartId === 987654321){
-                setNeedScroll(true);
-            }
-            setChattingListStartId(res.data.startId);
-            setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
-            setLoading(false);//채팅방 로딩이 종료되었으므로 화면을 띄운다
-            document.querySelector("#userChatInput").focus();
-        })
-        .catch((res) => {
-            setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(gettingChattingList, 1000);
-            }
-            else{
-                alert("채팅을 불러오지 못했습니다.");
-            }
-        });
-    };
-    useEffect(gettingChattingList, [chattingroomInfoSet]);//채팅방 이름이 업데이트 되면 진행
+    //loading이후 화면이 렌더링 되고 아래 채팅 부분에 커서가 가게 하는 함수
+    useEffect(() => {if(!loading) document.querySelector("#userChatInput").focus();}, [loading]);
 
     //채팅이 추가되면 자동으로 스크롤 해주는 함수
     const [needScroll, setNeedScroll] = useState(false);
@@ -232,25 +170,14 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     }, [inView]);
 
     //채팅방 이름 변경
-    const chattingRoomNamechangeSubmitHandler = (event) => {
+    const chattingRoomNamechangeSubmitHandler = async (event) => {
         event.preventDefault();
         document.querySelector("#chattingRoomName").disabled = true;
-        axios.post(`${changeChattingRoomNameUrl}/${chattingRoomId}`,{
+
+        const sendBody = {
             name: chattingRoomName,
-        })
-        .then((res) =>{
-            console.log(res);
-            console.log("채팅방 이름을 바꿨습니다.");
-        })
-        .catch((res) => {
-            if(res.response.status === 401 || res.response.status === 0){
-                refreshAccessToken();
-                setTimeout(() => {chattingRoomNamechangeSubmitHandler(event);}, 1000);
-            }
-            else{
-                alert("채팅방 이름을 바꾸지 못했습니다.");
-            }
-        });
+        };
+        await postAxios(`${changeChattingRoomNameUrl}/${chattingRoomId}`, sendBody, {}, refreshAccessToken);
     };
 
     //채팅방 이름 변경 함수
