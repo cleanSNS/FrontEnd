@@ -69,6 +69,8 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         setNewPostImages(next);
     };
 
+    console.log(newPostImages);//파일 확인용
+
     //이미지 영역에 파일을 드랍한 경우 - ondrop
     const imageDropHandler = (event) => {
         event.preventDefault();
