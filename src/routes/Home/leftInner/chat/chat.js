@@ -86,7 +86,6 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         setUserAndUserImg({});//초기화 필요
         setUserAndUserNickname({});//초기화 필요
         setChattingList([]);//초기화 필요
-        SetchattingRoomInfoSet(false);//초기화 필요
         setNoMoreChat(false);
         setLoading(true);//로딩을 다시 해야함
     }
@@ -111,9 +110,11 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         await gettingChattingList();
         setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
         setLoading(false);//채팅방 로딩이 종료되었으므로 화면을 띄운다
-        document.querySelector("#userChatInput").focus();
     };
     useEffect(() => {preSetChattingRoomInfo()}, [chattingRoomId]);
+
+    //로딩이 끝나면 커서를 아래로 넣어주는 함수
+    useEffect(() => {if(!loading) document.querySelector("#userChatInput").focus();}, [loading]);
 
     //채팅 리스트를 불러오는 함수
     const gettingChattingList = async () => {//초기실행 3번
