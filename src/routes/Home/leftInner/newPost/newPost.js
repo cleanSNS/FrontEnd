@@ -52,7 +52,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         else{//드래그 드랍한 경우
             inputFile = [...event.dataTransfer.files];
         }
-        if(!ImageValid(inputFile)) return;//입력된 파일이 유효하지 않은 경우 실행X
+        if(!ImageValid(inputFile, newPostImages)) return;//입력된 파일이 유효하지 않은 경우 실행X
 
         renderImageFiles(inputFile);//이미지 렌더링 처리
         loadImageFiles(inputFile);//api에 보낼 수 있도록 파일 자체의 세팅
