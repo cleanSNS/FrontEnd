@@ -75,7 +75,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     }, [newChatting]);
 
     //초기 실행 함수
-    const presetChattingRoomId = async () => {
+    const presetChattingRoom = async () => {
         if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우(당연히 채팅방 id도 있다.) disconnect하고 지금 생성한 Stomp를 넣어준다.
             stompClient.unsubscribe(`/sub/${chattingRoomId}`);
             stompClient.disconnect();
@@ -105,7 +105,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
 
         socketConnect();//소캣도 연결한다.
     }
-    useEffect(presetChattingRoomId, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다. - 이건 바꾸면 안됨 채팅 종류만 달라질 수 있음 이 경우 leftBookState가 안달라짐
+    useEffect(() =>  {presetChattingRoom();}, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다. - 이건 바꾸면 안됨 채팅 종류만 달라질 수 있음 이 경우 leftBookState가 안달라짐
 
     //채팅을 불러오는 함수
     const gettingChattingList = async () => {
