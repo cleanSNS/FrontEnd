@@ -1,46 +1,24 @@
 import Style from './newPost.module.css';
 import { useEffect, useState } from 'react';
 import addImage from '../../root/tagImages/add.png';
+import { ImageValid } from '../../../../ImageValidCheck';
 
 const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostImages, setNewPostImages, newPostHashtag, setNewPostHashtag, newPostContent, setNewPostContent, uploadNewPostHandler }) => {
     const [hashtag, setHashtag] = useState("");//임시로 입력되는 값 변경하는 State.
 
+    //처음 로드되면 이미지 파일, 해시태그, 글을 초기화 하는 함수
     useEffect(() => {
         setRenderedNewPostImages([]);
         setNewPostImages([]);
         setNewPostHashtag([]);
         setNewPostContent("");
-    }, []);//처음 로드되면 이미지 파일, 해시태그, 글을 초기화 하는 함수
+    }, []);
 
     //글 내용 변경 함수
     const contentHandler = (event) => {
         event.preventDefault();
         setNewPostContent(event.target.value);
     }
-
-    //받은 파일리스트가 유효한지 검사하는 함수
-    const ImageValid = (data) => {
-        let answer = true;
-
-        //받은 input들에 대해서 이미지 여부, 용량 여부(5메가 이하),
-        data.map((d) => {
-            if(!(d.type === 'image/png' || d.type === 'image/jpg' || d.type === 'image/jpeg')){
-                alert(`이미지 파일만 업로드 가능합니다.\n${d.name}`);
-                answer = false;
-            }
-            if(d.size > 1024 * 1024 * 10){
-                alert(`10MB 이상의 이미지는 업로드 불가합니다.\n${d.name}`);
-                answer = false;
-            }
-            newPostImages.map((cd) => {
-                if(cd.name === d.name){
-                    alert(`같은 이름의 파일이 이미 업로드 되어있습니다.\n${d.name}`);
-                    answer = false;
-                }
-            });
-        });
-        return answer;
-    };
 
     //이미지를 랜더링 해서 집어넣는다.
     const renderImageFiles = (inputFile) => {
