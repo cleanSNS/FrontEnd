@@ -2,9 +2,6 @@ import Style from './newPost.module.css';
 import { useEffect, useState } from 'react';
 import addImage from '../../root/tagImages/add.png';
 
-import ImageList from './imageList';
-import HashtagList from './hashtagList';
-
 const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostImages, setNewPostImages, newPostHashtag, setNewPostHashtag, newPostContent, setNewPostContent, uploadNewPostHandler }) => {
     const [hashtag, setHashtag] = useState("");//임시로 입력되는 값 변경하는 State.
 
@@ -171,7 +168,13 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
             </div>
             {/* 올린 이미지 미리 보기 영역 */}
             <div className={Style.ListArea} style={{overflow: "auto"}}>
-                <ImageList deleteImage={deleteImage} renderedNewPostImages={renderedNewPostImages} />
+                <div style={{width: `${renderedNewPostImages.length * 200}px`, height: "100%"}}>
+                    {
+                        renderedNewPostImages.map((data, index) =>(
+                            <img className={Style.singlepicture} src={data} key={index} id={index} onClick={deleteImage} />
+                        ))
+                    }
+                </div>
             </div>
             {/* hashtag label 영역 */}
             <p className={Style.hashtag}>키워드 (띄어쓰기로 분리해주세요)</p>
@@ -184,7 +187,13 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
             />
             {/* hashtag list 영역 */}
             <div className={Style.ListArea} style={{overflow: "auto"}}>
-                <HashtagList deleteTag={deleteTag} newPostHashtag={newPostHashtag}/>
+                <div style={{width: "100%", height: "100px"}}>
+                    {
+                        newPostHashtag.map((data, index) =>(
+                            <button className={Style.singleHashTag} onClick={deleteTag} key={index} value={index}>#{data}</button>
+                        ))
+                    }
+                </div>
             </div>
             {/* word label 영역 */}
             <p className={Style.word}>글을 입력해 주세요</p>
