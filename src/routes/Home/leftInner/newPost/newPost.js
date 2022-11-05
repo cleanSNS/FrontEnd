@@ -48,7 +48,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         let newRenderImage = [];
         for(let i = 0; i < inputFile.length; i++){
             const reader = new FileReader();
-            reader.readAsDataURL(data);
+            reader.readAsDataURL(inputFile[i]);
             reader.onload = (imageData) => {
                 newRenderImage.push(imageData.target.result);
             }
