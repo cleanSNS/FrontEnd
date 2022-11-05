@@ -53,8 +53,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                 renderTmp.push(imageData.target.result);
             }
         });
-        console.log(renderTmp);
-        setRenderedNewPostImages(renderTmp);
+        return renderTmp;
     };
     useEffect(() => {console.log(renderedNewPostImages);}, [renderedNewPostImages]);
 
@@ -66,7 +65,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
     };
 
     //이미지 영역에 파일을 드랍한 경우 - ondrop
-    const imageDropHandler = (event) => {
+    const imageDropHandler = async (event) => {
         event.preventDefault();
 
         //들어온 파일을 인식하여 inputFile에 집어넣는다.
@@ -79,7 +78,8 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         }
         if(!ImageValid(inputFile)) return;//입력된 파일이 유효하지 않은 경우 실행X
 
-        renderImageFiles(inputFile);//렌더링 해서 미리보기 처리
+        const renderedImage = renderImageFiles(inputFile);
+        await setRenderedNewPostImages(renderedImage);//렌더링 해서 미리보기 처리
         loadImageFiles(inputFile);//api에 보낼 수 있도록 파일 자체의 세팅
 
         //CSS는 반드시 실행된다.
