@@ -46,7 +46,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
     const renderImageFiles = (inputFile) => {
         const renderTmp = [...renderedNewPostImages];//지금까지 미리보기로 되어있는 이미지들의 배열
         let newRenderImage = [];//지금 로드된 이미지들의 미리보기를 넣을 배열
-        inputFile.map((data) => {
+        inputFile.foreach((data) => {
             const reader = new FileReader();
             reader.readAsDataURL(data);
             reader.onload = (imageData) => {
@@ -55,6 +55,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                 newRenderImage.push(renderedImg);
             }
         });
+        console.log(newRenderImage);
         const nextRenderImage = renderTmp.concat(newRenderImage);
         console.log(nextRenderImage);
         setRenderedNewPostImages(nextRenderImage);
