@@ -99,7 +99,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         setUserAndUserNickname(tmpNickname);//유저id와 이름 페어 지정
         setUserAndUserImg(tmpUserImg);//유저id와 프로필 이미지 페어 지정
 
-        await gettingChattingList();
+        await gettingChattingList(chattingRoomIdTmp);
         setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
         setLoading(false);//채팅방 로딩이 종료되었으므로 화면을 띄운다
 
@@ -108,7 +108,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     useEffect(() =>  {presetChattingRoom();}, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다. - 이건 바꾸면 안됨 채팅 종류만 달라질 수 있음 이 경우 leftBookState가 안달라짐
 
     //채팅을 불러오는 함수
-    const gettingChattingList = async () => {
+    const gettingChattingList = async (chattingRoomId) => {
         const res2 = await getAxios(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`, {}, refreshAccessToken);//채팅방의 기존 채팅 가져오기
         const cur = [...chattingList];//지금의 채팅방 채팅 리스트
         const tmp = [...res2.data.data];//받아온 채팅방 채팅 리스트
@@ -165,7 +165,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     //무한 로딩 함수 - 작동 확인함
     useEffect(() => {
         if(inView && !noMoreChat){
-            gettingChattingList();
+            gettingChattingList(chattingRoomId);
         }
     }, [inView]);
 
