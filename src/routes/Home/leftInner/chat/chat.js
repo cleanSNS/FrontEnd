@@ -52,27 +52,19 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     };
 
     //소켓에 의해 채팅이 들어오면 newChatting에 값을 세팅해준다.
-    const [newChatting, setNewChatting] = useState("");//새로 로드된 채팅 - 소캣에서 인식된 하나의 채팅이다.
     useEffect(() => {
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
             stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
                 const tmpchat = JSON.parse(chatMessage.body);
-                setNewChatting(tmpchat);
+
+                const NextChattingList = [...chattingList];
+                NextChattingList.push(tmpchat);
+                setChattingList(NextChattingList);
+                setNeedScroll(true);
             });
         });
     }, [stompClient]);
-
-    //새로 불린 내용이 있으면 chattingList에 넣기
-    useEffect(() => {
-        if(newChatting === "") return;
-
-        const tmp = [...chattingList];
-        tmp.push(newChatting);
-        setChattingList(tmp);
-        setNeedScroll(true);
-        setNewChatting("");
-    }, [newChatting]);
 
     //초기함수 1번 - id를 가져오고 초기화를 하는함수
     const presetChattingRoomId = () => {
