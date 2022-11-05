@@ -57,8 +57,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         if(stompClient === null) return; //초기 상황에는 그냥 종료
         stompClient.connect({}, function (frame) {
             stompClient.subscribe(`/sub/${chattingRoomId}`, function (chatMessage) {//구독
-                let tmpchat = chatMessage.body;
-                tmpchat = JSON.parse(tmpchat);
+                const tmpchat = JSON.parse(chatMessage.body);
                 setNewChatting(tmpchat);
             });
         });
