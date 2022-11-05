@@ -50,10 +50,12 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
             const reader = new FileReader();
             reader.readAsDataURL(data);
             reader.onload = (imageData) => {
-                newRenderImage.push(imageData.target.result);
+                const renderedImg = imageData.target.result
+                newRenderImage.push(renderedImg);
             }
         });
         const nextRenderImage = renderTmp.concat(newRenderImage);
+        console.log(nextRenderImage);
         setRenderedNewPostImages(nextRenderImage);
     };
 
