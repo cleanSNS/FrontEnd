@@ -43,10 +43,9 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
     };
 
     //이미지를 랜더링 해서 집어넣는다.
-    const [newRenderedImageUpdate, setNewRenderedImageUpdate] = useState([]);
-    const renderImageFiles = (inputFile) => {
+    const renderImageFiles = async (inputFile) => {
         const renderTmp = [...renderedNewPostImages];//지금까지 미리보기로 되어있는 이미지들의 배열
-        inputFile.forEach((data) => {
+        await inputFile.forEach((data) => {
             const reader = new FileReader();
             reader.readAsDataURL(data);
             reader.onload = (imageData) => {
@@ -54,12 +53,8 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
                 renderTmp.push(imageData.target.result);
             }
         });
-        setNewRenderedImageUpdate(renderTmp);
+        setRenderedNewPostImages(renderTmp);
     };
-    useEffect(() => {
-        const tmp = [...newRenderedImageUpdate];
-        setRenderedNewPostImages(tmp);
-    }, [newRenderedImageUpdate]);
 
     //지금 들어온 파일을 파일 그대로 보낼 state에 넣기
     const loadImageFiles = (inputFile) => {
