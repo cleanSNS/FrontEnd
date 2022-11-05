@@ -49,12 +49,10 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
             const reader = new FileReader();
             reader.readAsDataURL(data);
             reader.onload = (imageData) => {
-                console.log(imageData.target.result);
                 renderTmp.push(imageData.target.result);
                 setRenderedNewPostImages(renderTmp);
             }
         });
-        return renderTmp;
     };
 
     //지금 들어온 파일을 파일 그대로 보낼 state에 넣기
