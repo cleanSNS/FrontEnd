@@ -45,18 +45,15 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
     //이미지를 랜더링 해서 집어넣는다.
     const renderImageFiles = (inputFile) => {
         const renderTmp = [...renderedNewPostImages];//지금까지 미리보기로 되어있는 이미지들의 배열
-        let newRenderImage = [];
-        for(let i = 0; i < inputFile.length; i++){
+        inputFile.forEach((data) => {
             const reader = new FileReader();
-            reader.readAsDataURL(inputFile[i]);
+            reader.readAsDataURL(data);
             reader.onload = (imageData) => {
-                newRenderImage.push(imageData.target.result);
+                renderTmp.push(imageData.target.result);
             }
-        }
-        console.log(newRenderImage);
-        const nextRenderImage = renderTmp.concat(newRenderImage);
-        console.log(nextRenderImage);
-        setRenderedNewPostImages(nextRenderImage);
+        });
+        console.log(renderTmp);
+        setRenderedNewPostImages(renderTmp);
     };
     console.log(renderedNewPostImages);//확인용
 
