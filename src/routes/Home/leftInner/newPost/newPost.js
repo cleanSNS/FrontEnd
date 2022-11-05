@@ -2,31 +2,8 @@ import Style from './newPost.module.css';
 import { useEffect, useState } from 'react';
 import addImage from '../../root/tagImages/add.png';
 
-const HashtagList = ({deleteTag, newPostHashtag}) => {
-    return (
-        <div style={{width: "100%", height: "100px"}}>
-            {
-                newPostHashtag.map((data, index) =>(
-                    <button className={Style.singleHashTag} onClick={deleteTag} key={index} value={index}>
-                        #{data} 
-                    </button>
-                ))
-            }
-        </div>
-    );
-};
-
-const ImageList = ({deleteImage, renderedNewPostImages}) => {
-    return (
-        <div style={{width: `${renderedNewPostImages.length * 200}px`, height: "100%"}}>
-            {
-                renderedNewPostImages.map((data, index) =>(
-                    <img className={Style.singlepicture} src={data} key={index} id={index} onClick={deleteImage} />
-                ))
-            }
-        </div>
-    );
-};
+import ImageList from './imageList';
+import HashtagList from './hashtagList';
 
 const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostImages, setNewPostImages, newPostHashtag, setNewPostHashtag, newPostContent, setNewPostContent, uploadNewPostHandler }) => {
     const [hashtag, setHashtag] = useState("");//임시로 입력되는 값 변경하는 State.
@@ -44,7 +21,7 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         setNewPostContent(event.target.value);
     }
 
-    //받은 파일리스트가 유효한지 검사하는 함수<-------------------이거 좀 수정하면 될듯
+    //받은 파일리스트가 유효한지 검사하는 함수
     const ImageValid = (data) => {
         let answer = true;
 
@@ -68,10 +45,33 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         return answer;
     };
 
+    //이미지를 랜더링 해서 집어넣는다.
+    const renderImageFiles = (inputFile) => {
+        const renderTmp = [...renderedNewPostImages];//지금까지 미리보기로 되어있는 이미지들의 배열
+        let newRenderImage = [];//지금 로드된 이미지들의 미리보기를 넣을 배열
+        inputFile.map((data) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(data);
+            reader.onload = (imageData) => {
+                newRenderImage.push(imageData.target.result);
+            }
+        });
+        const nextRenderImage = renderTmp.concat(newRenderImage);
+        setRenderedNewPostImages(nextRenderImage);
+    };
+
+    //지금 들어온 파일을 파일 그대로 보낼 state에 넣기
+    const loadImageFiles = (inputFile) => {
+        const tmp = [...newPostImages];
+        const next = tmp.concat(inputFile);
+        setNewPostImages(next);
+    };
+
     //이미지 영역에 파일을 드랍한 경우 - ondrop
     const imageDropHandler = (event) => {
         event.preventDefault();
 
+        //들어온 파일을 인식하여 inputFile에 집어넣는다.
         let inputFile = []
         if(event.type === 'change'){//input에 넣은 경우
             inputFile = [...event.target.files];
@@ -79,22 +79,10 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         else{//드래그 드랍한 경우
             inputFile = [...event.dataTransfer.files];
         }
+        if(!ImageValid(inputFile)) return;//입력된 파일이 유효하지 않은 경우 실행X
 
-        const renderTmp = [...renderedNewPostImages];
-        if(ImageValid(inputFile)){//유효한 파일인 경우 집어넣는다.
-            //이미지를 랜더링 해서 집어넣는다.
-            inputFile.map((data) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(data);
-                reader.onload = (imageData) => {
-                    renderTmp.push(imageData.target.result);
-                    setRenderedNewPostImages(renderTmp);//이유는 모르겠으나 이렇게 해야 render가 된다.
-                }
-            });
-            const tmp = [...newPostImages];
-            const next = tmp.concat(inputFile);
-            setNewPostImages(next);//지금 들어온 파일을 파일 그대로 보낼 배열에 넣기
-        }
+        renderImageFiles(inputFile);//렌더링 해서 미리보기 처리
+        loadImageFiles(inputFile);//api에 보낼 수 있도록 파일 자체의 세팅
 
         //CSS는 반드시 실행된다.
         const imageUploadArea = document.querySelector("#imageUploadArea");
