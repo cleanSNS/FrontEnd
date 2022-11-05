@@ -45,19 +45,19 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
     //이미지를 랜더링 해서 집어넣는다.
     const renderImageFiles = (inputFile) => {
         const renderTmp = [...renderedNewPostImages];//지금까지 미리보기로 되어있는 이미지들의 배열
-        const newRenderImage = inputFile.forEach((data) => {//지금 로드된 이미지들의 미리보기를 넣을 배열
+        let newRenderImage = [];
+        for(let i = 0; i < inputFile.length; i++){
             const reader = new FileReader();
             reader.readAsDataURL(data);
             reader.onload = (imageData) => {
-                return imageData.target.result;
+                newRenderImage.push(imageData.target.result);
             }
-        });
+        }
         console.log(newRenderImage);
         const nextRenderImage = renderTmp.concat(newRenderImage);
         console.log(nextRenderImage);
         setRenderedNewPostImages(nextRenderImage);
     };
-
     console.log(renderedNewPostImages);//확인용
 
     //지금 들어온 파일을 파일 그대로 보낼 state에 넣기
@@ -66,8 +66,6 @@ const LeftNewPost = ({renderedNewPostImages, setRenderedNewPostImages, newPostIm
         const next = tmp.concat(inputFile);
         setNewPostImages(next);
     };
-
-    console.log(newPostImages);//파일 확인용
 
     //이미지 영역에 파일을 드랍한 경우 - ondrop
     const imageDropHandler = (event) => {
