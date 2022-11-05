@@ -10,6 +10,7 @@ import {
 import { getAxios, postAxios } from "../../../../apiCall";
 import SockJS from 'sockjs-client';
 import Stomp from 'stomp-websocket';
+
 import SingleChat from './singleChat';
 
 const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient, setChatLoading}) => {
@@ -74,21 +75,28 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         setNewChatting("");
     }, [newChatting]);
 
-    //초기 실행 함수
-    const presetChattingRoom = async () => {
+    //초기함수 1번 - id를 가져오고 초기화를 하는함수
+    const presetChattingRoomId = () => {
         if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우(당연히 채팅방 id도 있다.) disconnect하고 지금 생성한 Stomp를 넣어준다.
             stompClient.unsubscribe(`/sub/${chattingRoomId}`);
             stompClient.disconnect();
         }
-        const chattingRoomIdTmp = leftBookState.split('/')[1];//현함수를 위해 tmp값으로 설정해서 api들을 불러준다.
         setChattingRoomId(leftBookState.split('/')[1]);
         setChattingListStartId(987654321);//초기화 필요
         setUserAndUserImg({});//초기화 필요
         setUserAndUserNickname({});//초기화 필요
         setChattingList([]);//초기화 필요
+        SetchattingRoomInfoSet(false);//초기화 필요
         setNoMoreChat(false);
+        setLoading(true);//로딩을 다시 해야함
+    }
+    useEffect(() => {presetChattingRoomId();}, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다. - 이건 바꾸면 안됨 채팅 종류만 달라질 수 있음 이 경우 leftBookState가 안달라짐
 
-        const res1 = await getAxios(`${getChattingRoomStuffUrl}/${chattingRoomIdTmp}`, {}, refreshAccessToken);//채팅방 정보 가져오기
+    //초기함수 2번 - id를 받은 이후 이를 활용하여 채팅방 정보와 채팅 내역을 불러오는 함수
+    const preSetChattingRoomInfo = async () => {
+        if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
+
+        const res1 = await getAxios(`${getChattingRoomStuffUrl}/${chattingRoomId}`, {}, refreshAccessToken);
         setChattingRoomName(res1.data.data.name);
         const tmpNickname = {};
         const tmpUserImg = {};
@@ -98,20 +106,20 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         });
         setUserAndUserNickname(tmpNickname);//유저id와 이름 페어 지정
         setUserAndUserImg(tmpUserImg);//유저id와 프로필 이미지 페어 지정
+        socketConnect();//소캣도 연결한다.
 
-        await gettingChattingList(chattingRoomIdTmp);
+        await gettingChattingList();
         setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
         setLoading(false);//채팅방 로딩이 종료되었으므로 화면을 띄운다
+        document.querySelector("#userChatInput").focus();
+    };
+    useEffect(() => {preSetChattingRoomInfo()}, [chattingRoomId]);
 
-        socketConnect();//소캣도 연결한다.
-    }
-    useEffect(() =>  {presetChattingRoom();}, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다. - 이건 바꾸면 안됨 채팅 종류만 달라질 수 있음 이 경우 leftBookState가 안달라짐
-
-    //채팅을 불러오는 함수
-    const gettingChattingList = async (chattingRoomId) => {
-        const res2 = await getAxios(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`, {}, refreshAccessToken);//채팅방의 기존 채팅 가져오기
+    //채팅 리스트를 불러오는 함수
+    const gettingChattingList = async () => {//초기실행 3번
+        const res = await getAxios(`${getChattingListUrl}/${chattingRoomId}?startId=${chattingListStartId}`, {}, refreshAccessToken);
         const cur = [...chattingList];//지금의 채팅방 채팅 리스트
-        const tmp = [...res2.data.data];//받아온 채팅방 채팅 리스트
+        const tmp = [...res.data.data];//받아온 채팅방 채팅 리스트
         if(tmp.length === 0){
             setNoMoreChat(true);
         }
@@ -123,11 +131,8 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         if(chattingListStartId === 987654321){
             setNeedScroll(true);
         }
-        setChattingListStartId(res2.data.startId);
+        setChattingListStartId(res.data.startId);
     };
-
-    //loading이후 화면이 렌더링 되고 아래 채팅 부분에 커서가 가게 하는 함수
-    useEffect(() => {if(!loading) document.querySelector("#userChatInput").focus();}, [loading]);
 
     //채팅이 추가되면 자동으로 스크롤 해주는 함수
     const [needScroll, setNeedScroll] = useState(false);
@@ -165,7 +170,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     //무한 로딩 함수 - 작동 확인함
     useEffect(() => {
         if(inView && !noMoreChat){
-            gettingChattingList(chattingRoomId);
+            gettingChattingList();
         }
     }, [inView]);
 
@@ -176,7 +181,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
 
         const sendBody = {
             name: chattingRoomName,
-        };
+        }
         await postAxios(`${changeChattingRoomNameUrl}/${chattingRoomId}`, sendBody, {}, refreshAccessToken);
     };
 
