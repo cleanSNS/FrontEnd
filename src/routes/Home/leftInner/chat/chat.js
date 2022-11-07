@@ -189,7 +189,6 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     //채팅방 이름 변경 함수
     const onChatnameClickHandler = (event) => {
         event.preventDefault();
-        console.log("클릭함");
         document.querySelector("#chattingRoomName").disabled = false;
         document.querySelector("#chattingRoomName").select();
     }

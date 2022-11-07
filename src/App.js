@@ -83,7 +83,7 @@ function App() {
       localStorage.removeItem("rft");//refresh token 지우기
       setIsLogin("logout");//로그인 화면으로 이동
     })
-    .catch((res)=>{
+    .catch(()=>{
       //일반적으로 오류인 경우는 없다 그냥 rft가 만료되었을 뿐이다.
       alert("비정상적으로 종료되었습니다.");
       localStorage.removeItem("rft");//refresh token 지우기
@@ -99,7 +99,6 @@ function App() {
       console.log(code);
       axios.post(KakaoTokenUrl + code)
       .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
-        console.log(res);
         loginFunc(res);
       })
       .catch((res) => {
@@ -115,7 +114,6 @@ function App() {
       console.log(code);
       axios.post(NaverTokenUrl + code)
       .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
-        console.log(res);
         loginFunc(res);
       })
       .catch((res) => {
