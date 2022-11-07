@@ -5,7 +5,7 @@ const SingleChat = ({data, setLeftBookState, userId, userAndUserImg, userAndUser
   //유저의 이미지나 이름을 클릭하면 해당 유저의 페이지로 이동한다.
   const goToThatUserPage = (event) => {
       event.preventDefault();
-      setLeftBookState(`pList/${data.userDto.userId}`);
+      setLeftBookState(`pList/${data.userId}`);
   };
 
   return(
