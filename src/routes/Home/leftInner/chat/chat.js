@@ -208,7 +208,6 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
                     onChange={onChattingRoomNameChangeHandler}
                     maxLength={10}
                     disabled={true}
-                    style={{cursor: "pointer"}}
                 />
             </form>
             <div id="chatbox" className={Style.chattingListArea}>
