@@ -13,7 +13,7 @@ import Stomp from 'stomp-websocket';
 
 import SingleChat from './singleChat';
 
-const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient, setChatLoading}) => {
+const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBookState, setLeftBookState, userId, stompClient, setStompClient, setChatLoading, setChattingTriger}) => {
     const [chattingRoomName, setChattingRoomName] = useState("");//채팅방 이름
     const [chattingList, setChattingList] = useState([]);//채팅방의 채팅들
     const [chattingListStartId, setChattingListStartId] = useState(987654321);//채팅방의 채팅을 불러오는 startId
@@ -183,6 +183,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
             name: chattingRoomName,
         }
         await postAxios(`${changeChattingRoomNameUrl}/${chattingRoomId}`, sendBody, {}, refreshAccessToken);
+        setChattingTriger(true);
     };
 
     //채팅방 이름 변경 함수
