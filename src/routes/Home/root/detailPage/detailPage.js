@@ -367,16 +367,29 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                     {/* 댓글 입력 영역 */}
                     <form className={Style.userCommentArea} onSubmit={userCommentSubmitHandler}>
                         <div className={Style.cover}>
-                            <textarea 
-                                id="userCommentArea"
-                                type="text"
-                                className={Style.userComment}
-                                maxLength={200}
-                                placeholder="댓글을 입력하세요..."
-                                value={userCommentInput}
-                                onChange={userCommentInputChangeHandler}
-                                disabled={commentAble ? false : true}
+                            {
+                                commentAble ?
+                                <textarea 
+                                    id="userCommentArea"
+                                    type="text"
+                                    className={Style.userComment}
+                                    maxLength={200}
+                                    placeholder="댓글을 입력하세요..."
+                                    value={userCommentInput}
+                                    onChange={userCommentInputChangeHandler}
                                 />
+                                :
+                                <textarea 
+                                    id="userCommentArea"
+                                    type="text"
+                                    className={Style.userComment}
+                                    maxLength={200}
+                                    placeholder="댓글을 입력하세요..."
+                                    value={userCommentInput}
+                                    onChange={userCommentInputChangeHandler}
+                                    disabled={true}
+                                />
+                            }
                         </div>
                         <div className={Style.cover}>
                             <button id="CommentSubmitBtn" type="submit" className={Style.commentSubmitBtn}>게시</button>
