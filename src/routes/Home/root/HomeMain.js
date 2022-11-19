@@ -335,7 +335,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
                 <img src={messageTagImg} className={Style.tagImg} onClick={tagClickHandler} id="chat" />
               </div>
               <div className={Style.noticeArea}>
-                {chatCount === 0 || chatCount === -1 || rightBookState === "chat"? null : <NumberNotice number={chatCount} />}
+                {chatCount === -1 || chatCount === 0 ? null : <NumberNotice number={chatCount} />}
               </div>
             </div>
           </div>
@@ -345,7 +345,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
                 <img src={notificationTagImg} className={Style.tagImg} onClick={tagClickHandler} id="notice" />
               </div>
               <div className={Style.noticeArea}>
-                {noticeCount === -1 || noticeCount === 0 || rightBookState === "notice"? null : <NumberNotice number={noticeCount} />}
+                {noticeCount === -1 || noticeCount === 0 ? null : <NumberNotice number={noticeCount} />}
               </div>
             </div>
           </div>
