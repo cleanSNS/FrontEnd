@@ -146,7 +146,7 @@ function App() {
       {isLogin === "login" ? <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken} noticeEventSource={noticeEventSource} userId={userId}/> : null}
       {isLogin === "logout" ? <Login login={loginFunc}/> : null}
       {isLogin === "email" ? <Email authInfo={authInfo} /> : null}
-      {socialState !== "" ? <SocialLoginStatePage /> : null}
+      {socialState !== "" ? <SocialLoginStatePage socialState={socialState}/> : null}
     </div>
   );
 }
