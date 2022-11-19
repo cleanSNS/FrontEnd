@@ -18,26 +18,43 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
     const [loading, setLoading] = useState(true);
 
     //알림 불러오는 함수
-    const NoticeRead = async () => {
-        const res = await getAxios(`${getNoticeUrl}${noticeStartId}`, {}, refreshAccessToken);
-        setLoading(false);
-        if(res.data.data.length === 0) {
-            setNomoreNotice(true);
-            return;
+    const NoticeRead = async (state) => {
+        if(state === "newNotice"){
+            const res = await getAxios(`${getNoticeUrl}${987654321}`, {}, refreshAccessToken);
+            setLoading(false);
+            if(res.data.data.length === 0) {
+                setNomoreNotice(true);
+                return;
+            }
+            setNomoreNotice(false);
+            const current = [...noticeList];
+            const newNotice = res.data.data[0];
+            const tmp = [];
+            tmp.push(newNotice);
+            const next = tmp.concat(current);
+            setNoticeList(next);
         }
-        setNomoreNotice(false);
-        const current = [...noticeList];
-        const tmp = [...res.data.data];
-        const next = current.concat(tmp);
-        setNoticeList(next);
-        setNoticeStartId(res.data.startId);
+        else{
+            const res = await getAxios(`${getNoticeUrl}${noticeStartId}`, {}, refreshAccessToken);
+            setLoading(false);
+            if(res.data.data.length === 0) {
+                setNomoreNotice(true);
+                return;
+            }
+            setNomoreNotice(false);
+            const current = [...noticeList];
+            const tmp = [...res.data.data];
+            const next = current.concat(tmp);
+            setNoticeList(next);
+            setNoticeStartId(res.data.startId);
+        }
     };
-    useEffect(() => {NoticeRead();}, [noticeCount]);//알림의 수가 달라질 때마다 부른다.
+    useEffect(() => {NoticeRead(state="newNotice");}, [noticeCount]);//알림의 수가 달라질 때마다 부른다.
 
     //마지막 요소를 보는 중이며, 아직 알림이 남은 경우 notice를 더 불러오게 하는 함수
     const infiniteLoad = () => {
         if(inView & !noMoreNotice){
-            NoticeRead();
+            NoticeRead(state="");
         }
     }
     useEffect(infiniteLoad, [inView]);
