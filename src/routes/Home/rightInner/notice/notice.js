@@ -32,7 +32,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
         setNoticeList(next);
         setNoticeStartId(res.data.startId);
     };
-    useState(() => {NoticeRead();}, [noticeCount]);//초기 실행
+    useState(() => {NoticeRead();}, [noticeCount]);//숫자 변경시 실행
 
     //마지막 요소를 보는 중이며, 아직 알림이 남은 경우 notice를 더 불러오게 하는 함수
     const infiniteLoad = () => {

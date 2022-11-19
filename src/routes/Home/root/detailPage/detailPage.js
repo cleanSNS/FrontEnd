@@ -46,6 +46,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
     const [imageIndex, setImageIndex] = useState(0);//보고있는 이미지의 index
     const [commentToWhom, setCommentToWhom] = useState(["p", -1, "", pageId]);//[0]은 페이지에 댓글인지 댓글에 대댓글인지(c) 표시 // [1]은 대댓글인 경우 groupId를 의미 댓글이면 -1 // [2]는 대댓글인 경우 유저의 닉네임 댓글이면 "" // [3]은 대상(comment)의 Id
     const [userCommentInput, setUserCommentInput] = useState("");//유저가 작성하고있는 댓글
+    const [commentAble, setCommentAble] = useState(false);
 
     const [commentList, setCommentList] = useState([]); //업로드된 댓글
     const [commentStartId, setCommentStartId] = useState(0);//불러올 댓글의 index
@@ -70,6 +71,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
         setPostedWordArray(makeIntoArray(res.data.data.pageDto.content));
         setLikeNumber(res.data.data.pageDto.likeCount);
         setLikeCountVisual(res.data.data.pageDto.likeReadAuth);
+        setCommentAble(res.data.data.pageDto.commentAuth);
         //댓글 초기 세팅 부분
         const tmp = [...res.data.data.commentDtoList.data];
         setCommentList(tmp);
@@ -373,6 +375,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                 placeholder="댓글을 입력하세요..."
                                 value={userCommentInput}
                                 onChange={userCommentInputChangeHandler}
+                                disabled={!commentAble}
                                 />
                         </div>
                         <div className={Style.cover}>
