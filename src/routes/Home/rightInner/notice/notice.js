@@ -49,12 +49,12 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
             setNoticeStartId(res.data.startId);
         }
     };
-    useEffect(() => {NoticeRead(state="newNotice");}, [noticeCount]);//알림의 수가 달라질 때마다 부른다.
+    useEffect(() => {NoticeRead("newNotice");}, [noticeCount]);//알림의 수가 달라질 때마다 부른다.
 
     //마지막 요소를 보는 중이며, 아직 알림이 남은 경우 notice를 더 불러오게 하는 함수
     const infiniteLoad = () => {
         if(inView & !noMoreNotice){
-            NoticeRead(state="");
+            NoticeRead("");
         }
     }
     useEffect(infiniteLoad, [inView]);
