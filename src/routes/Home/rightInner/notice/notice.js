@@ -14,7 +14,6 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
     const [lastNotice, inView] = useInView();
     const [noticeStartId, setNoticeStartId] = useState(987654321);
     const [noMoreNotice, setNomoreNotice] = useState(false);
-    const [noticeCountBef, setNoticeCountBef] = useState(noticeCount);
 
     const [loading, setLoading] = useState(true);
 
@@ -33,23 +32,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
         setNoticeList(next);
         setNoticeStartId(res.data.startId);
     };
-    useState(() => {NoticeRead();}, []);//초기 실행
-
-    const NoticeReadLatest = async () => {
-        setNoticeCountBef(noticeCount);//값반영
-        if(noticeCountBef > noticeCount){//변경된 값이 더 작아진 경우, 삭제의 경우이다. 이 경우에는 실행 X
-            return;
-        }
-        const res = await getAxios(`${getNoticeUrl}${noticeStartId}`, {}, refreshAccessToken);
-        setLoading(false);
-        const current = [...noticeList];
-        const newNotice = res.data.data[0];
-        const tmp = [];
-        tmp.push(newNotice);
-        const next = tmp.concat(current);
-        setNoticeList(next);       
-    }
-    useEffect(() => {NoticeReadLatest();}, [noticeCount]);//알림의 수가 달라질 때마다 부른다.
+    useState(() => {NoticeRead();}, [noticeCount]);//초기 실행
 
     //마지막 요소를 보는 중이며, 아직 알림이 남은 경우 notice를 더 불러오게 하는 함수
     const infiniteLoad = () => {
