@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Home from "./routes/Home/root/HomeMain";
 import Login from "./routes/Login/root/LoginMain";
 import Email from "./routes/Email/email";
+import SocialLoginStatePage from './socialLoginStatePage';
 import { logoutApiUrl, KakaoTokenUrl, NaverTokenUrl, refreshNewAccessTokenUrl, getNoticeNumber, getMyUserIdUrl } from './apiUrl';
 import {
   getAxios,
@@ -92,14 +93,26 @@ function App() {
   };
 
   //카카오 로그인 시 토큰을 프론트로 받게 되는 경우 처리하는 함수
+  const [socialState, setSocialState] = useState("");
   const socialLogin = () => {
     if(localStorage.getItem("rft") === "kakao"){//소셜 처리중인 경우
-      const params = new URL(window.location.href).searchParams;
+      setSocialState(KakaoTokenUrl);
+    }
+    else if(localStorage.getItem("rft") === "naver"){//소셜 처리중인 경우
+      setSocialState(NaverTokenUrl);
+    }
+  };
+  useEffect(socialLogin, []);
+
+  const socialLoginStart = (url) => {
+    if(socialState === "") return;//초기상황의 경우 종료
+
+    const params = new URL(window.location.href).searchParams;
       const code = params.get("code");
-      console.log(code);
-      axios.post(KakaoTokenUrl + code)
+      axios.post(url + code)
       .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
         loginFunc(res);
+        setSocialState("");//소셜 로그인도 꺼준다.
       })
       .catch((res) => {
         console.log(res);
@@ -107,24 +120,10 @@ function App() {
         localStorage.removeItem("rft");//소셜 상태를 종료한다.
         window.location.href = "/";//다시 원래의 로그인 url로 이동한다. => 이건 이게 맞는듯 하다 ?code=을 없애기 위해
       });
-    }
-    else if(localStorage.getItem("rft") === "naver"){//소셜 처리중인 경우
-      const params = new URL(window.location.href).searchParams;
-      const code = params.get("code");
-      console.log(code);
-      axios.post(NaverTokenUrl + code)
-      .then((res) => {//문제가 없는 경우이므로, 로그인 해준다.
-        loginFunc(res);
-      })
-      .catch((res) => {
-        console.log(res);
-        alert("네이버 소셜 로그인에 문제가 발생했습니다.");
-        localStorage.removeItem("rft");//소셜 상태를 종료한다.
-        window.location.href = "/";//다시 원래의 로그인 url로 이동한다.
-      });
-    }
-  };
-  useEffect(socialLogin, []);
+  }
+  useEffect(
+    () => {socialLoginStart(socialState);}
+  , [socialState])
 
   //이메일 인증을 위해 페이지로 들어온 것인지 여부를 확인
   const [authInfo, setAuthInfo] = useState({});
@@ -147,6 +146,7 @@ function App() {
       {isLogin === "login" ? <Home logout={logoutFunc} refreshAccessToken={refreshAccessToken} noticeEventSource={noticeEventSource} userId={userId}/> : null}
       {isLogin === "logout" ? <Login login={loginFunc}/> : null}
       {isLogin === "email" ? <Email authInfo={authInfo} /> : null}
+      {socialState !== "" ? <SocialLoginStatePage /> : null}
     </div>
   );
 }
