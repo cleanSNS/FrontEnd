@@ -387,7 +387,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                     placeholder="댓글을 입력하세요..."
                                     value={userCommentInput}
                                     onChange={userCommentInputChangeHandler}
-                                    disabled={true}
+                                    disabled
                                 />
                             }
                         </div>
