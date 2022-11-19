@@ -375,7 +375,7 @@ const DetailPage = ({pageId, refreshAccessToken, setPageId, leftBookChangeHandle
                                 placeholder="댓글을 입력하세요..."
                                 value={userCommentInput}
                                 onChange={userCommentInputChangeHandler}
-                                disabled={commentAble ? "false" : "true"}
+                                disabled={commentAble ? false : true}
                                 />
                         </div>
                         <div className={Style.cover}>
