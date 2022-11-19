@@ -64,6 +64,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
                         type={data.type}//알림의 타입
                         resourceId={data.resourceId}//근원지 (FOLLOW의 경우 null이다.)
                         checked={data.checked}//해당 알림을 확인했었는지 안했는지
+                        content={data.content}
                         key={index}
                         lastNotice={index === (noticeList.length - 1) ? lastNotice : null}
                         leftBookChangeHandler={leftBookChangeHandler}

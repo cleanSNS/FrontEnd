@@ -10,7 +10,7 @@ import {
 } from '../../../../apiCall';
 import closeBtn from './close_btn.png';
 
-const SingleNotice = ({notificationId, userImgUrl, targetUserId, type, resourceId, checked, lastNotice, leftBookChangeHandler, ListDeleteHandler, index, setPageId, setNoticeCount, refreshAccessToken}) => {
+const SingleNotice = ({notificationId, userImgUrl, targetUserId, type, resourceId, checked, content, lastNotice, leftBookChangeHandler, ListDeleteHandler, index, setPageId, setNoticeCount, refreshAccessToken}) => {
     //초기 설정으로, 이미 읽은 알림의 경우 연하게 스타일 변경
     const noticePreset = () => {
         if(checked){
@@ -65,10 +65,7 @@ const SingleNotice = ({notificationId, userImgUrl, targetUserId, type, resourceI
                     <img src={userImgUrl} className={Style.noticeImg} onClick={onUserImageClickHandler}/>
                 </div>
                 <div className={Style.Cover}>
-                    {type === "COMMENT" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 댓글이 달렸습니다.</p> : null}
-                    {type === "FOLLOW" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>팔로우를 했습니다.</p> : null}
-                    {type === "NESTED" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 댓글에 답글이 달렸습니다.</p> : null}
-                    {type === "LIKE" ? <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>내 글에 좋아요가 눌렸습니다.</p> : null}
+                    <p id={`noticeScript${notificationId}`} className={Style.script} onClick={onNoticeScripsClickHandler}>{content}</p>
                 </div>
                 <div className={Style.Cover}>
                     <img src={closeBtn} className={Style.deleteBtn} onClick={deleteBtnClickHandler} id={index}/>
