@@ -75,12 +75,12 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
     }, [newChatting]);
 
     //초기함수 1번 - id를 가져오고 초기화를 하는함수
+    const [secondFuncTriger, setSecondFuncTriger] = useState(false)
     const presetChattingRoomId = () => {
         if(stompClient !== null){//이전에 할당받은 친구가 있었던 경우(당연히 채팅방 id도 있다.) disconnect하고 지금 생성한 Stomp를 넣어준다.
             stompClient.unsubscribe(`/sub/${chattingRoomId}`);
             stompClient.disconnect();
         }
-        console.log(leftBookState)
         setChattingRoomId(leftBookState.split('/')[1]);
         setChattingListStartId(987654321);//초기화 필요
         setUserAndUserImg({});//초기화 필요
@@ -88,12 +88,13 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         setChattingList([]);//초기화 필요
         setNoMoreChat(false);
         setLoading(true);//로딩을 다시 해야함
+        setSecondFuncTriger(true);
     }
     useEffect(() => {presetChattingRoomId();}, [leftBookState]);//초기 실행 - leftBookState가 바뀌면 실행한다. - 이건 바꾸면 안됨 채팅 종류만 달라질 수 있음 이 경우 leftBookState가 안달라짐
 
     //초기함수 2번 - id를 받은 이후 이를 활용하여 채팅방 정보와 채팅 내역을 불러오는 함수
     const preSetChattingRoomInfo = async () => {
-        if(chattingRoomId === -1) return;//초기상황에서는 그냥 종료
+        if(!secondFuncTriger) return;//초기상황에서는 그냥 종료
 
         const res1 = await getAxios(`${getChattingRoomStuffUrl}/${chattingRoomId}`, {}, refreshAccessToken);
         setChattingRoomName(res1.data.data.name);
@@ -110,8 +111,9 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
         await gettingChattingList();
         setChatLoading(false);//이제 다른 방으로 이동 가능하게 한다.
         setLoading(false);//채팅방 로딩이 종료되었으므로 화면을 띄운다
+        setSecondFuncTriger(false);
     };
-    useEffect(() => {preSetChattingRoomInfo()}, [chattingRoomId]);
+    useEffect(() => {preSetChattingRoomInfo()}, [secondFuncTriger]);
 
     //로딩이 끝나면 커서를 아래로 넣어주는 함수
     useEffect(() => {if(!loading) document.querySelector("#userChatInput").focus();}, [loading]);
