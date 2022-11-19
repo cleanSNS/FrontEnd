@@ -25,6 +25,7 @@ const RightNotice = ({leftBookChangeHandler, refreshAccessToken, setPageId, noti
             setNomoreNotice(true);
             return;
         }
+        setNomoreNotice(false);
         const current = [...noticeList];
         const tmp = [...res.data.data];
         const next = current.concat(tmp);
