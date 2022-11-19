@@ -1,8 +1,8 @@
 .wholeCover{
     width: 100vw;
-    min-width: 1350px;
+    min-width: 930px;
     height: 100vh;
-    min-height: 1100px;
+    min-height: 600px;
     background-color: rgba(0, 0, 0, 0.3);
     position: fixed;
     top:0;

@@ -80,6 +80,7 @@ const LeftChat = ({chattingRoomId, setChattingRoomId, refreshAccessToken, leftBo
             stompClient.unsubscribe(`/sub/${chattingRoomId}`);
             stompClient.disconnect();
         }
+        console.log(leftBookState)
         setChattingRoomId(leftBookState.split('/')[1]);
         setChattingListStartId(987654321);//초기화 필요
         setUserAndUserImg({});//초기화 필요
