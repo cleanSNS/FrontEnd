@@ -20,4 +20,7 @@
     border: 0;
     border-radius: 0.5rem;
     box-shadow: 2px 2px 5px rgb(145, 145, 145);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
