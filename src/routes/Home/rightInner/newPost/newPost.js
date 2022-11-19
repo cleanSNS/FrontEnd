@@ -1,7 +1,7 @@
 import Style from './newPost.module.css';
 import {useEffect} from 'react';
 
-const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNotice, setNewPostCommentNotice, newPostReadPostAuth, setNewPostReadPostAuth, newPostReadCommentAuth, setNewPostReadCommentAuth, newPostWriteCommentAuth, setNewPostWriteCommentAuth, newPostReadLikeAuth, setNewPostReadLikeAuth}) => {
+const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNotice, setNewPostCommentNotice, newPostReadPostAuth, setNewPostReadPostAuth, newPostCommentAuth, setNewPostCommentAuth, newPostReadLikeAuth, setNewPostReadLikeAuth}) => {
     //초기에 모든 허용을 진하게 만드는 함수
     const firstColoring = () => {
         //좋아요 알림부분 반영
@@ -42,23 +42,13 @@ const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNo
         }
 
         //댓글 읽기 반영
-        if(newPostReadCommentAuth){
-            document.querySelector("#readCommentAuthAllow").style.fontWeight = "600";
-            document.querySelector("#readCommentAuthDenial").style.fontWeight = "400";
+        if(newPostCommentAuth){
+            document.querySelector("#commentAuthAllow").style.fontWeight = "600";
+            document.querySelector("#commentAuthDenial").style.fontWeight = "400";
         }
         else{
             document.querySelector("#readCommentAuthAllow").style.fontWeight = "400";
             document.querySelector("#readCommentAuthDenial").style.fontWeight = "600";
-        }
-
-        //댓글 쓰기 반영
-        if(newPostWriteCommentAuth){
-            document.querySelector("#writeCommentAuthAllow").style.fontWeight = "600";
-            document.querySelector("#writeCommentAuthDenial").style.fontWeight = "400";
-        }
-        else{
-            document.querySelector("#writeCommentAuthAllow").style.fontWeight = "400";
-            document.querySelector("#writeCommentAuthDenial").style.fontWeight = "600";
         }
         
         //좋아요 읽기 반영
@@ -138,39 +128,21 @@ const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNo
             }
         }
     };
-    //댓글 읽기 권한
+    //댓글 관련 권한
     const readCommentAuthClickHandler = (event) => {
         const clicked = event.target.id;
-        if(newPostReadCommentAuth){//지금 허용이 눌려있는 상황
-            if(clicked === "readCommentAuthDenial"){//근데 거부를 누른 경우
-                document.querySelector("#readCommentAuthAllow").style.fontWeight = "400";//허용을 없앤다.
-                document.querySelector("#readCommentAuthDenial").style.fontWeight = "600";//거부를 누른다.
-                setNewPostReadCommentAuth(false);//거부로 변경
+        if(newPostCommentAuth){//지금 허용이 눌려있는 상황
+            if(clicked === "commentAuthDenial"){//근데 거부를 누른 경우
+                document.querySelector("#commentAuthAllow").style.fontWeight = "400";//허용을 없앤다.
+                document.querySelector("#commentAuthDenial").style.fontWeight = "600";//거부를 누른다.
+                setNewPostCommentAuth(false);//거부로 변경
             }
         }
         else{//거부가 눌려있는 상황
-            if(clicked === "readCommentAuthAllow"){//근데 허용을 누른 경우
-                document.querySelector("#readCommentAuthAllow").style.fontWeight = "600";//허용을 누른다.
-                document.querySelector("#readCommentAuthDenial").style.fontWeight = "400";//거부를 없앤다.
-                setNewPostReadCommentAuth(true);//허용으로 설정
-            }
-        }
-    };
-    //댓글 쓰기 권한
-    const writeCommentAuthHandler = (event) => {
-        const clicked = event.target.id;
-        if(newPostWriteCommentAuth){//지금 허용이 눌려있는 상황
-            if(clicked === "writeCommentAuthDenial"){//근데 거부를 누른 경우
-                document.querySelector("#writeCommentAuthAllow").style.fontWeight = "400";//허용을 없앤다.
-                document.querySelector("#writeCommentAuthDenial").style.fontWeight = "600";//거부를 누른다.
-                setNewPostWriteCommentAuth(false);//거부로 변경
-            }
-        }
-        else{//거부가 눌려있는 상황
-            if(clicked === "writeCommentAuthAllow"){//근데 허용을 누른 경우
-                document.querySelector("#writeCommentAuthAllow").style.fontWeight = "600";//허용을 누른다.
-                document.querySelector("#writeCommentAuthDenial").style.fontWeight = "400";//거부를 없앤다.
-                setNewPostWriteCommentAuth(true);//허용으로 설정
+            if(clicked === "commentAuthAllow"){//근데 허용을 누른 경우
+                document.querySelector("#commentAuthAllow").style.fontWeight = "600";//허용을 누른다.
+                document.querySelector("#commentAuthDenial").style.fontWeight = "400";//거부를 없앤다.
+                setNewPostCommentAuth(true);//허용으로 설정
             }
         }
     };
@@ -253,32 +225,15 @@ const RightNewPost = ({newPostLikeNotice, setNewPostLikeNotice, newPostCommentNo
             <div className={Style.Cover}>
                 <div className={Style.settingCover} style={{borderBottom:"1px solid rgb(216, 216, 216)"}}>
                     <div className={Style.Cover}>
-                        <div className={Style.settingName}>댓글 읽기 권한</div>
+                        <div className={Style.settingName}>댓글 관련 권한</div>
                     </div>
                     <div className={Style.Cover}>
                         <div className={Style.twoSetting}>
                             <div className={Style.Cover}>
-                                <div className={Style.settingTag} id="readCommentAuthAllow" onClick={readCommentAuthClickHandler}>허용</div>
+                                <div className={Style.settingTag} id="commentAuthAllow" onClick={readCommentAuthClickHandler}>허용</div>
                             </div>
                             <div className={Style.Cover}>
-                                <div className={Style.settingTag} id="readCommentAuthDenial" onClick={readCommentAuthClickHandler}>거부</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className={Style.Cover}>
-                <div className={Style.settingCover} style={{borderBottom:"1px solid rgb(216, 216, 216)"}}>
-                    <div className={Style.Cover}>
-                        <div className={Style.settingName}>댓글 쓰기 권한</div>
-                    </div>
-                    <div className={Style.Cover}>
-                        <div className={Style.twoSetting}>
-                            <div className={Style.Cover}>
-                                <div className={Style.settingTag} id="writeCommentAuthAllow" onClick={writeCommentAuthHandler}>허용</div>
-                            </div>
-                            <div className={Style.Cover}>
-                                <div className={Style.settingTag} id="writeCommentAuthDenial" onClick={writeCommentAuthHandler}>거부</div>
+                                <div className={Style.settingTag} id="commentAuthDenial" onClick={readCommentAuthClickHandler}>거부</div>
                             </div>
                         </div>
                     </div>

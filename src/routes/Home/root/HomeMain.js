@@ -47,8 +47,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   const [newPostLikeNotice, setNewPostLikeNotice] = useState(true);//좋아요 알림
   const [newPostCommentNotice, setNewPostCommentNotice] = useState(true);//댓글 알림
   const [newPostReadPostAuth, setNewPostReadPostAuth] = useState("ALL");//읽기 권한
-  const [newPostReadCommentAuth, setNewPostReadCommentAuth] = useState(true);//댓글 읽기 권한
-  const [newPostWriteCommentAuth, setNewPostWriteCommentAuth] = useState(true);//댓글 쓰기 권한
+  const [newPostCommentAuth, setNewPostCommentAuth] = useState(true);//댓글 관련 권한
   const [newPostReadLikeAuth, setNewPostReadLikeAuth] = useState(true);//좋아요 읽기 권한
 
   //글 올리는 함수 => 좌측 페이지로 넘어가야한다. - 두가지가 순차적으로 실행
@@ -112,8 +111,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
           notificationLike: newPostLikeNotice,
           notificationComment: newPostCommentNotice,
           readAuth: newPostReadPostAuth,
-          commentReadAuth: newPostReadCommentAuth,
-          commentWriteAuth: newPostWriteCommentAuth,
+          commentAuth: newPostCommentAuth,
           likeReadAuth: newPostReadLikeAuth,
         },
         imgUrlList: uploadImages,
@@ -128,8 +126,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       setNewPostLikeNotice(true);
       setNewPostCommentNotice(true);
       setNewPostReadPostAuth("ALL");
-      setNewPostReadCommentAuth(true);
-      setNewPostWriteCommentAuth(true);
+      setNewPostCommentAuth(true);
       setNewPostReadLikeAuth(true);
       resetPage();
       submitAbleAgain();
@@ -386,7 +383,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
       <div className={Style.bookCover}>
           <div className={Style.rightbook}>
             <div className={Style.Cover}>
-              { rightBookState === "newPost" ? <RightNewPost newPostLikeNotice={newPostLikeNotice} setNewPostLikeNotice={setNewPostLikeNotice} newPostCommentNotice={newPostCommentNotice} setNewPostCommentNotice={setNewPostCommentNotice} newPostReadPostAuth={newPostReadPostAuth} setNewPostReadPostAuth={setNewPostReadPostAuth} newPostReadCommentAuth={newPostReadCommentAuth} setNewPostReadCommentAuth={setNewPostReadCommentAuth} newPostWriteCommentAuth={newPostWriteCommentAuth} setNewPostWriteCommentAuth={setNewPostWriteCommentAuth} newPostReadLikeAuth={newPostReadLikeAuth} setNewPostReadLikeAuth={setNewPostReadLikeAuth}/> :  null}
+              { rightBookState === "newPost" ? <RightNewPost newPostLikeNotice={newPostLikeNotice} setNewPostLikeNotice={setNewPostLikeNotice} newPostCommentNotice={newPostCommentNotice} setNewPostCommentNotice={setNewPostCommentNotice} newPostReadPostAuth={newPostReadPostAuth} setNewPostReadPostAuth={setNewPostReadPostAuth} newPostCommentAuth={newPostCommentAuth} setNewPostCommentAuth={setNewPostCommentAuth} newPostReadLikeAuth={newPostReadLikeAuth} setNewPostReadLikeAuth={setNewPostReadLikeAuth}/> :  null}
               { rightBookState === "chat" ? <RightChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} leftBookState={leftBookState} rightBookState={rightBookState} chattingTriger={chattingTriger} setChattingTriger={setChattingTriger} chatLoading={chatLoading} setChatLoading={setChatLoading} chatAndFriendReloadTriger={chatAndFriendReloadTriger} setChatAndFriendReloadTriger={setChatAndFriendReloadTriger}/> : null}
               { rightBookState === "notice" ? <RightNotice leftBookChangeHandler={leftBookChangeHandler} refreshAccessToken={refreshAccessToken} setPageId={setPageId} noticeCount={noticeCount} setNoticeCount={setNoticeCount}/> : null}
               { rightBookState === "friend" ? <RightFriend leftBookChangeHandler={leftBookChangeHandler} userId={userId} refreshAccessToken={refreshAccessToken} chatAndFriendReloadTriger={chatAndFriendReloadTriger} setChatAndFriendReloadTriger={setChatAndFriendReloadTriger} userPageAndFriendReloadTriger={userPageAndFriendReloadTriger} setUserPageAndFriendReloadTriger={setUserPageAndFriendReloadTriger}/> : null}
