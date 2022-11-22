@@ -1,5 +1,5 @@
 export const makeIntoArray = (str) => {//문자열을 받아서 시작부분이 욕설인지 아닌지와, 문자열을 잘라서 구분한 함수이다.
-    const TOKEN = '!모자이크!';
+    const TOKEN = '!검열!';
     let answer = [];
 
     if(str === null) return ['AI 서버에 문제가 있어서 불러오지 못했습니다.'];//이건 문제 해결되면 지우기
