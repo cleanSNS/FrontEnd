@@ -1,5 +1,5 @@
 import Style from "./socialLoginStatePage.module.css";
-import {KakaoTokenUrl, NaverTokenUrl} from './apiUrl';
+import {KakaoTokenUrl} from './apiUrl';
 
 const SocialLoginStatePage = ({socialState}) => {
     return(
