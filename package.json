@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "export PORT=443 && HTTPS=true SSL_CRT_FILE=../certificate.crt SSL_KEY_FILE=../private.key react-scripts start",
-    "build": "react-scripts build",
+    "build": "export PORT=443 && HTTPS=true SSL_CRT_FILE=../certificate.crt SSL_KEY_FILE=../private.key react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
