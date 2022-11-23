@@ -1,8 +1,8 @@
 //로그인의 초기 화면. id, 비번을 쓰는 곳이 있다.
 import { useState } from 'react';
 import Style from './innerMain.module.css';
-import KakaoImg from '../socialImg/Kakao.png';
-import NaverImg from '../socialImg/Naver.png';
+import KakaoImg from '../socialImg/kakao_login.png';
+import NaverImg from '../socialImg/naver_login.png';
 import axios from 'axios';
 import {
     loginApiUrl,
@@ -130,20 +130,10 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
                 <div className={Style.splitCover}>
                     <div />
                     <div className={Style.Cover}>
-                        <button className={Style.Socialbtn} onClick={kakaoLoginHandler}>
-                            <div id="KakaoContainer" className={Style.kakao}>
-                                <img id="symbol" src={KakaoImg} className={Style.kakaoSymbol}/>
-                                <span id="label" className={Style.kakaoLabel}>로그인</span>
-                            </div>
-                        </button>
+                        <img src={KakaoImg} onClick={kakaoLoginHandler}/>
                     </div>
                     <div className={Style.Cover}>
-                        <button className={Style.Socialbtn} onClick={naverLoginHandler}>
-                            <div id="NaverContainer" className={Style.naver}>
-                                <img id="symbol" src={NaverImg} className={Style.naverSymbol}/>
-                                <span id="label" className={Style.naverLabel}>로그인</span>
-                            </div>
-                        </button>
+                        <img src={NaverImg} onClick={naverLoginHandler}/>
                     </div>
                     <div />
                 </div>
