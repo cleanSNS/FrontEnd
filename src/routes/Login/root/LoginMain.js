@@ -20,7 +20,7 @@ const Login = ({login}) => {
     };
 
     return(
-        <div className={Style.WholeCover}>
+        <div>
             <div className={Style.Cover}>
                 {/*스타일을 위한 부분 */}
                 <div>
