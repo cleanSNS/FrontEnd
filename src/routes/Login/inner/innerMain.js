@@ -130,10 +130,13 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
                 <div className={Style.splitCover}>
                     <div />
                     <div className={Style.Cover}>
-                        <img src={KakaoImg} onClick={kakaoLoginHandler}/>
+                        <div className={Style.kakaoContainer} onClick={kakaoLoginHandler}>
+                            <img src={KakaoImg}/>
+                            <p>로그인</p>
+                        </div>
                     </div>
                     <div className={Style.Cover}>
-                        <img src={NaverImg} onClick={naverLoginHandler}/>
+                        <img className={Style.naverBtn} src={NaverImg} onClick={naverLoginHandler}/>
                     </div>
                     <div />
                 </div>

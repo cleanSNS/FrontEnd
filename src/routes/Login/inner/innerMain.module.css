@@ -96,7 +96,7 @@
   cursor: pointer;
   z-index: 0;
 }
-
+/*
 .kakao{
   background-color: #FEE500;
   width: 150px;
@@ -148,4 +148,26 @@
   position: relative;
   top: 27%;
   right: -10%;
+}
+*/
+
+.naverBtn {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  width: 160px;
+  height: 55px;
+  cursor: pointer;
+}
+
+.kakaoContainer {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  width: 160px;
+  height: 55px;
+  background-color: #FFE500;
+  cursor: pointer;
 }
