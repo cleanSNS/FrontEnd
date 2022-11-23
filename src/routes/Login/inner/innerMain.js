@@ -131,8 +131,8 @@ const Main = ({toFindPasswordPage, toSignUpPage, login}) => {
                     <div />
                     <div className={Style.Cover}>
                         <div className={Style.kakaoContainer} onClick={kakaoLoginHandler}>
-                            <img src={KakaoImg}/>
-                            <p>로그인</p>
+                            <img className={Style.kakaoSymbol} src={KakaoImg}/>
+                            <p className={Style.kakaoLabel}>로그인</p>
                         </div>
                     </div>
                     <div className={Style.Cover}>

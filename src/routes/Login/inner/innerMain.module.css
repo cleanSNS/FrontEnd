@@ -170,4 +170,13 @@
   height: 55px;
   background-color: #FFE500;
   cursor: pointer;
+  border-radius: 0.3rem;
+}
+
+.kakaoSymbol {
+
+}
+
+.kakaoLabel {
+
 }
