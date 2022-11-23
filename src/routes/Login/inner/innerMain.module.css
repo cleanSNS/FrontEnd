@@ -96,60 +96,6 @@
   cursor: pointer;
   z-index: 0;
 }
-/*
-.kakao{
-  background-color: #FEE500;
-  width: 150px;
-  height: 45px;
-  border-radius: 12px;
-
-  position: relative;
-}
-
-.kakaoSymbol {
-  display: inline;
-  height: 30px;
-
-  position: absolute;
-  top: 14%;
-  left: 18%;
-}
-
-.kakaoLabel {
-  color: rgba(0,0,0, 0.85);
-  font-weight: 900;
-
-  position: absolute;
-  top: 28%;
-  right: 25%;
-}
-
-.naver{
-  background-color: #03C75A;
-  width: 150px;
-  height: 45px;
-  border-radius: 12px;
-
-  position: relative;
-}
-
-.naverSymbol {
-  display: inline;
-  height: 45px;
-
-  position: absolute;
-  left: 15%;
-}
-
-.naverLabel {
-  color: #FFFFFF;
-  font-weight: 900;
-
-  position: relative;
-  top: 27%;
-  right: -10%;
-}
-*/
 
 .naverBtn {
   position: absolute;
@@ -171,12 +117,19 @@
   background-color: #FFE500;
   cursor: pointer;
   border-radius: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .kakaoSymbol {
-
+  height: 40%;
 }
 
 .kakaoLabel {
-
+  margin: 0px 0px 0px 10px;
+  font-size: large;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1
 }
