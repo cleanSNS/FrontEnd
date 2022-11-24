@@ -150,11 +150,15 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
   }, []);
 
   //화면을 초기 상태로 만드는 함수
+  const [reloadPages, setReloadPages] = useState(false);
   const resetPage = () => {
     setRightBookState("friend");
     setLeftBookState("page");
     setSettingState("initial");
     setPageId(-1);
+    if(leftBookState === "page"){
+      setReloadPages(true);
+    }
   };
 
   //채팅, 알림, 친구의 경우 이 함수를 사용해야 좌측이 달라진다.
@@ -367,7 +371,7 @@ const Home = ({ logout, refreshAccessToken, noticeEventSource, userId }) => {
         <div className={Style.bookCover}>
           <div className={Style.leftbook}>
             <div className={Style.Cover}>
-                {leftBookState === "page" ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setPageId={setPageId} detailPageLikeClick={detailPageLikeClick} setDetailPageLikeClick={setDetailPageLikeClick} setLeftBookState={setLeftBookState}/> : null}
+                {leftBookState === "page" ? <LeftPage refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setPageId={setPageId} detailPageLikeClick={detailPageLikeClick} setDetailPageLikeClick={setDetailPageLikeClick} setLeftBookState={setLeftBookState} reloadPages={reloadPages} setReloadPages={setReloadPages}/> : null}
                 {leftBookState.includes("pList") ? <LeftPageList leftBookState={leftBookState} refreshAccessToken={refreshAccessToken} leftBookChangeHandler={leftBookChangeHandler} setPageId={setPageId} userId={userId} SettingChangeHandler={SettingChangeHandler} setUserPageAndFriendReloadTriger={setUserPageAndFriendReloadTriger}/> : null}
                 {leftBookState.includes("chat") ? <LeftChat chattingRoomId={chattingRoomId} setChattingRoomId={setChattingRoomId} refreshAccessToken={refreshAccessToken} leftBookState={leftBookState} setLeftBookState={setLeftBookState} userId={userId} stompClient={stompClient} setStompClient={setStompClient} setChatLoading={setChatLoading} setChattingTriger={setChattingTriger}/> : null}
                 {leftBookState === "makeNewC" ? <LeftNewChat refreshAccessToken={refreshAccessToken} setLeftBookState={setLeftBookState} userId={userId} setChattingTriger={setChattingTriger} setChatLoading={setChatLoading}/> : null}
