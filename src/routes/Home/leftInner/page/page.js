@@ -8,7 +8,7 @@ import {
 import SinglePage from './singlePage';
 import { getAxios } from "../../../../apiCall";
 
-const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeClick, setDetailPageLikeClick, setLeftBookState, reloadPages, setReloadPages}) => {
+const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeClick, setDetailPageLikeClick, setLeftBookState}) => {
     const [pageStartId, setPageStartId] = useState(987654321);//글 리스트의 startId
     const [pageList, setPageList] = useState([]); //글 리스트
     const [lastPage, inView] = useInView(); //이게 ref된 요소가 화면에 보이면 inView가 true로 변경
@@ -30,9 +30,8 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeC
         setPageList(next);
         setPageStartId(res.data.startId);
         setLoading(false);
-        setReloadPages(false);
     };
-    useEffect(() => {loadPageListFunc();}, [leftBookState, triger]);//state가 바뀌면 다시 load
+    useEffect(() => {loadPageListFunc();}, [leftBookState]);//state가 바뀌면 다시 load
 
     //화면의 마지막이 읽히면 조건을 확인해서 글을 로드하는 함수
     const loadMorePageFunc = () => {
@@ -41,19 +40,6 @@ const LeftPage = ({refreshAccessToken, leftBookState, setPageId, detailPageLikeC
         }
     };
     useEffect(loadMorePageFunc, [inView]);
-
-    //글 삭제시 기존에 보던 글 리스트 지우고 다시 로드
-    const [triger, setTriger] = useState(false);//이 함수가 트리거가 된다.
-    useEffect(() => {
-        if(!reloadPages) return;
-
-        setPageStartId(987654321);
-        setPageList([]);
-        setIsLoadFinish();
-        setLoading(true);
-        setTriger(true);
-
-    }, [reloadPages])
 
     return(
         loading ? null :
